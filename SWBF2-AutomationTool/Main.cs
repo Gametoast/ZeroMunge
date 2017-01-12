@@ -10,11 +10,21 @@ using System.Windows.Forms;
 
 namespace SWBF2_AutomationTool
 {
-    public partial class Form1 : Form
+    public partial class AutomationTool : Form
     {
-        public Form1()
+        public AutomationTool()
         {
             InitializeComponent();
+        }
+
+        private void AutomationTool_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_Submit_Click(object sender, EventArgs e)
+        {
+            lbl_TestLabel.Text = tbox_TestTextBox.Text;
         }
     }
 }
