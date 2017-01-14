@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -24,53 +25,116 @@ namespace SWBF2_AutomationTool
         }
 
 
-        // When user clicks the 'Add...' button
-        private void btn_AddFiles_Click(object sender, EventArgs e)
+
+        // ***************************
+        // ** FILE PROCESSING
+        // ***************************
+
+        /// <summary>
+        /// Goes through the specified list of files and executes the ones that are checked.
+        /// </summary>
+        /// <param name="fileList">List of file names.</param>
+        private void ProcessFiles(CheckedListBox fileList)
         {
-            // Open the 'Add Files' prompt
-            openDlg_AddFilesPrompt.ShowDialog();
-        }
+            // Current file's associated process
+            Process proc;
 
+            Thread enterThread = new Thread(() => {
+                LogOutputProc("**************************************************************");
+                LogOutputProc("******** AutomationTool: Entered");
+                LogOutputProc("**************************************************************");
+                LogOutputProc(Environment.NewLine, false);
+            });
+            enterThread.Start();
 
-        // When user clicks the 'Remove' button
-        private void btn_RemoveFiles_Click(object sender, EventArgs e)
-        {
-            // Remove the currently selected file from the list
-            clist_Files.Items.RemoveAt(clist_Files.SelectedIndex);
-        }
-
-
-        // When user clicks the 'OK' button in the 'Add Files...' prompt
-        private void openDlg_AddFilesPrompt_FileOk(object sender, CancelEventArgs e)
-        {
-            // Add the selected files to the list
-            foreach (String file in openDlg_AddFilesPrompt.FileNames)
-            {
-                clist_Files.Items.Add(file, true);
-            }
-        }
-
-
-        // When user clicks the 'Run' button
-        private void btn_Submit_Click(object sender, EventArgs e)
-        {
-            // Go through each file in the list
-            for (int curFile = 0; curFile < clist_Files.Items.Count; curFile++)
+            for (int curFile = 0; curFile < fileList.Items.Count; curFile++)
             {
                 // Execute each file that is checked
                 if (clist_Files.GetItemChecked(curFile) == true)
                 {
-                    ExecuteFile(clist_Files.GetItemText(clist_Files.Items[curFile]));
+                    proc = ExecuteFile(fileList.GetItemText(fileList.Items[curFile]));
+                    proc.Exited += ((sender, e) =>
+                    {
+                        //outputThread.Abort();
+
+                        Thread procExitThread = new Thread(() => {
+                            LogOutputProc("AutomationTool: File done");
+                        });
+                        procExitThread.Start();
+                    });
+                    // TODO: needs to go through each file one at a time while printing to output log in realtime
+                    proc.WaitForExit();     // TODO: this currently prevents realtime logging
                 }
             }
-        }
 
-        // TODO: add functionality to execute each file one after the other as they finish like a playlist
+            Thread exitThread = new Thread(() => {
+                LogOutputProc(Environment.NewLine, false);
+                LogOutputProc("**************************************************************");
+                LogOutputProc("******** AutomationTool: Exited");
+                LogOutputProc("**************************************************************");
+                EnableUIProc(true);
+            });
+            exitThread.Start();
+        }
+        
+
         /// <summary>
-        /// Executes the specified file.
+        /// Executes the specified file in a new process.
         /// </summary>
         /// <param name="filePath">Full path of the file to execute.</param>
-        private void ExecuteFile(string filePath)
+        /// <returns>Process that was executed.</returns>
+        private Process ExecuteFile(string filePath)
+        {
+
+            // Initilialize process start info
+            ProcessStartInfo startInfo = new ProcessStartInfo(@filePath)
+            {
+                WorkingDirectory = GetFileDirectory(filePath),
+                WindowStyle = ProcessWindowStyle.Hidden,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                CreateNoWindow = true
+            };
+            
+            // Initialize the process
+            Process proc = new Process();
+            proc.StartInfo = startInfo;
+            proc.EnableRaisingEvents = true;
+
+            // Log any output data that's received
+            proc.OutputDataReceived += ((sender, e) =>
+            {
+                Thread outputThread = new Thread(() => LogOutputProc(e.Data));
+                outputThread.Start();
+            });
+
+
+            // Print the file path before starting
+            Thread initOutputThread = new Thread(() =>
+            {
+                LogOutputProc("AutomationTool: Executing file " + filePath);
+                LogOutputProc(Environment.NewLine, false);
+            });
+            initOutputThread.Start();
+
+
+            // Start the process
+            proc.Start();
+            proc.BeginOutputReadLine();
+            //proc.WaitForExit();
+            //Thread.Sleep(5000);
+
+            return proc;
+        }
+
+
+        /// <summary>
+        /// Returns the folder path of the specified file path.  
+        /// Example: Inputting "C:\Documents\foo.bar" would return "C:\Documents"
+        /// </summary>
+        /// <param name="filePath">Path of file to get folder path from.</param>
+        /// <returns>Folder path of the specified file path.</returns>
+        private string GetFileDirectory(string filePath)
         {
             // Get the file's directory
             string filePathDir = "";
@@ -80,48 +144,92 @@ namespace SWBF2_AutomationTool
                 filePathDir = filePath.Substring(0, index); // or index + 1 to keep slash
             }
 
-            ProcessStartInfo startInfo = new ProcessStartInfo(@filePath)
-            {
-                WorkingDirectory = filePathDir,
-                WindowStyle = ProcessWindowStyle.Hidden,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                CreateNoWindow = true
-            };
-            
-            Process proc = new Process();
-            proc.StartInfo = startInfo;
-            proc.EnableRaisingEvents = true;
-            proc.OutputDataReceived += ((sender, e) =>
-            {
-                Thread outputThread = new Thread(() => LogOutputProc(e.Data, true));
-                outputThread.Start();
-            });
-
-            proc.Start();
-            proc.BeginOutputReadLine();
-            //proc.WaitForExit();
-            //Thread.Sleep(5000);
+            return filePathDir;
         }
+
+
+
+        // ***************************
+        // ** TOGGLE UI
+        // ***************************
+
+        // This method is executed on the worker thread and makes a thread-safe call on the UI controls.
+        /// <summary>
+        /// Sets the enabled state of the application's UI controls.
+        /// </summary>
+        /// <param name="enabled">True to enable UI interactivity, false to disable.</param>
+        private void EnableUIProc(bool enabled)
+        {
+            EnableUI(enabled);
+        }
+        
+
+        // This delegate enables asynchronous calls for setting the enabled property on the UI control.
+        delegate void EnableUICallback(bool enabled);
+        
+
+        /// <summary>
+        /// Sets the enabled state of the application's UI controls.  
+        /// WARNING: Don't call this directly, please call `ToggleUIProc` instead.
+        /// </summary>
+        /// <param name="enabled">True to enable UI interactivity, false to disable.</param>
+        private void EnableUI(bool enabled)
+        {
+            // InvokeRequired required compares the thread ID of the 
+            // calling thread to the thread ID of the creating thread. 
+            // If these threads are different, it returns true.
+            if (InvokeRequired)
+            {
+                EnableUICallback cb = new EnableUICallback(EnableUI);
+                BeginInvoke(cb, new object[] { enabled });
+            }
+            else
+            {
+                // Buttons
+                btn_Submit.Enabled = enabled;
+                btn_AddFiles.Enabled = enabled;
+                btn_RemoveFiles.Enabled = enabled;
+                btn_CopyLog.Enabled = enabled;
+                btn_SaveLog.Enabled = enabled;
+                btn_ClearLog.Enabled = enabled;
+
+                // File list
+                clist_Files.Enabled = enabled;
+            }
+        }
+
+
+
+        // ***************************
+        // ** OUTPUT LOG
+        // ***************************
 
         // This method is executed on the worker thread and makes a thread-safe call on the RichTextBox control.
-        private void LogOutputProc(string message, bool newLine = false)
-        {
-            LogOutput(message, newLine);
-        }
-
-        // This delegate enables asynchronous calls for setting the text property on a RichTextBox control.
-        delegate void LogOutputCallback(string message, bool newLine = false);
-        
         /// <summary>
         /// Prints the specified text to the output log.
         /// </summary>
         /// <param name="message">Text to print.</param>
         /// <param name="newLine">Optional: True to append a new line to the end of the message.</param>
-        private void LogOutput(string message, bool newLine = false)
+        private void LogOutputProc(string message, bool newLine = true)
         {
-            // InvokeRequired required compares the thread ID of the
-            // calling thread to the thread ID of the creating thread.
+            LogOutput(message, newLine);
+        }
+        
+
+        // This delegate enables asynchronous calls for setting the text property on a RichTextBox control.
+        delegate void LogOutputCallback(string message, bool newLine = true);
+
+
+        /// <summary>
+        /// Prints the specified text to the output log.  
+        /// WARNING: Don't call this directly, please call `LogOutputProc` instead.
+        /// </summary>
+        /// <param name="message">Text to print.</param>
+        /// <param name="newLine">Optional: True to append a new line to the end of the message.</param>
+        private void LogOutput(string message, bool newLine = true)
+        {
+            // InvokeRequired required compares the thread ID of the 
+            // calling thread to the thread ID of the creating thread. 
             // If these threads are different, it returns true.
             if (text_OutputLog.InvokeRequired)
             {
@@ -130,7 +238,7 @@ namespace SWBF2_AutomationTool
             }
             else
             {
-                if (message != null)
+                if (!String.IsNullOrEmpty(message))
                 {
                     // Print message
                     text_OutputLog.AppendText(message);
@@ -141,22 +249,116 @@ namespace SWBF2_AutomationTool
                         // Print message on new line
                         text_OutputLog.AppendText(Environment.NewLine);
                     }
-
-                    // Auto-scroll to the most recent line
-                    text_OutputLog.ScrollToCaret();
-
-                    // Is the log full?
-                    if (text_OutputLog.TextLength >= (text_OutputLog.MaxLength - 500))
-                    {
-                        //lbl_OutputLogLines.Text = ("Lines: " + text_OutputLog.Lines.Count().ToString());
-                    }
-
-                    // Update line count
-                    lbl_OutputLogLines.Text = ("Lines: " + text_OutputLog.Lines.Count().ToString());
-
-                    // TODO: add functionality to remove lines from the beginning when the text box becomes full
                 }
             }
+        }
+
+
+        
+        // ***************************
+        // ** WINDOWS FORMS CONTROLS
+        // ***************************
+
+        // When the user clicks the 'Run' button:
+        // Begin processing the list of files as a playlist.
+        private void btn_Submit_Click(object sender, EventArgs e)
+        {
+            // Disable the buttons while executing the files
+            EnableUIProc(false);
+
+            ProcessFiles(clist_Files);
+        }
+
+
+        // When the user clicks the 'Add...' button:
+        // Prompt the user to select files to add to the file list.
+        private void btn_AddFiles_Click(object sender, EventArgs e)
+        {
+            // Open the 'Add Files' prompt
+            openDlg_AddFilesPrompt.ShowDialog();
+        }
+
+
+        // When the user clicks the 'Remove' button:
+        // Remove the selected file from the file list.
+        private void btn_RemoveFiles_Click(object sender, EventArgs e)
+        {
+            // Remove the currently selected file from the list
+            clist_Files.Items.RemoveAt(clist_Files.SelectedIndex);
+        }
+
+
+        // When the user clicks the "OK" button in the "Add Files..." prompt:
+        // Add the selected files to the file list.
+        private void openDlg_AddFilesPrompt_FileOk(object sender, CancelEventArgs e)
+        {
+            // Add the selected files to the list
+            foreach (String file in openDlg_AddFilesPrompt.FileNames)
+            {
+                clist_Files.Items.Add(file, true);
+            }
+        }
+
+
+        // When the user clicks the "Copy to Clipboard" button:
+        // Copy the entire contents of the log to the clipboard.
+        private void btn_CopyLog_Click(object sender, EventArgs e)
+        {
+            text_OutputLog.SelectAll();
+            text_OutputLog.Copy();
+            text_OutputLog.DeselectAll();
+        }
+
+
+        // When the user clicks the "Save Log..." button:
+        // Prompt the user to save the log to a new file.
+        private void btn_SaveLog_Click(object sender, EventArgs e)
+        {
+            saveDlg_SaveLogPrompt.ShowDialog();
+        }
+
+        
+        // When the user clicks the "OK" button in the "Save Log..." prompt:
+        private void saveDlg_SaveLogPrompt_FileOk(object sender, CancelEventArgs e)
+        {
+            // Has a file name been entered?
+            if (saveDlg_SaveLogPrompt.FileName != "")
+            {
+                // Get the file name
+                string name = saveDlg_SaveLogPrompt.FileName;
+
+                // Write the output log's contents to the file
+                //File.WriteAllText(name, text_OutputLog.Text);
+                File.WriteAllLines(name, text_OutputLog.Lines);
+            }
+        }
+
+
+        // When the user clicks the 'Clear Log' button:
+        // Clear the entire contents of the output log.
+        private void btn_ClearLog_Click(object sender, EventArgs e)
+        {
+            text_OutputLog.Clear();
+        }
+
+
+        // When the output log's text is changed:
+        // Scroll to the bottom of the output log, deal with the log being full, and update the line count.
+        private void text_OutputLog_TextChanged(object sender, EventArgs e)
+        {
+            // Auto-scroll to the most recent line
+            text_OutputLog.ScrollToCaret();
+
+            // Is the log full?
+            if (text_OutputLog.TextLength >= (text_OutputLog.MaxLength - 500))
+            {
+                //lbl_OutputLogLines.Text = ("Lines: " + text_OutputLog.Lines.Count().ToString());
+            }
+
+            // Update line count
+            lbl_OutputLogLines.Text = ("Lines: " + text_OutputLog.Lines.Count().ToString());
+
+            // TODO: add functionality to remove lines from the beginning when the text box becomes full
         }
     }
 }
