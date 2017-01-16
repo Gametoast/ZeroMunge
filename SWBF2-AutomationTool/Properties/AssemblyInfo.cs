@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SWBF2-AutomationTool")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Automation Tool")]
+[assembly: AssemblyDescription("Automation Tool")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Frayed Wires Studios")]
 [assembly: AssemblyProduct("SWBF2-AutomationTool")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyCopyright("© 2017 Aaron Gilbert All Rights Reserved")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

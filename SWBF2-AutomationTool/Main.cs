@@ -39,21 +39,6 @@ namespace SWBF2_AutomationTool
         {
             procManager_activeFile = 0;
 
-            // Don't continue if there aren't any files in the list
-            if (clist_Files.Items.Count <= 0)
-            {
-                Thread errorThread = new Thread(() => {
-                    LogOutput_Proc("AutomationTool: ERROR! File list must contain at least one file");
-
-                    // Re-enable the UI
-                    EnableUI_Proc(true);
-                });
-                errorThread.Start();
-                
-                return;
-            }
-
-
             Thread enterThread = new Thread(() => {
                 LogOutput_Proc("**************************************************************");
                 LogOutput_Proc("******** AutomationTool: Entered");
@@ -322,21 +307,28 @@ namespace SWBF2_AutomationTool
         // Begin processing the list of files as a playlist.
         private void btn_Submit_Click(object sender, EventArgs e)
         {
-            //checkedItems.Clear();
-
-            for (int item = 0; item < clist_Files.Items.Count; item++)
-            {
-                //checkedItems.Add(clist_Files.GetItemChecked(item));
-            }
-
             // Disable the UI
             EnableUI_Proc(false);
+
+            // Don't continue if there aren't any files in the list
+            if (clist_Files.Items.Count <= 0)
+            {
+                Thread errorThread = new Thread(() => {
+                    LogOutput_Proc("AutomationTool: ERROR! File list must contain at least one file");
+
+                    // Re-enable the UI
+                    EnableUI_Proc(true);
+                });
+                errorThread.Start();
+
+                return;
+            }
 
             ProcManager_Start();
         }
 
 
-        // When the user clicks the "Add..." button:
+        // When the user clicks the "Add Files..." button:
         // Prompt the user to select files to add to the file list.
         private void btn_AddFiles_Click(object sender, EventArgs e)
         {
@@ -349,6 +341,34 @@ namespace SWBF2_AutomationTool
         // Remove the selected file from the file list.
         private void btn_RemoveFiles_Click(object sender, EventArgs e)
         {
+            // Don't continue if there aren't any files in the list
+            if (clist_Files.Items.Count <= 0)
+            {
+                Thread errorThread = new Thread(() => {
+                    LogOutput_Proc("AutomationTool: ERROR! File list must contain at least one file");
+
+                    // Re-enable the UI
+                    EnableUI_Proc(true);
+                });
+                errorThread.Start();
+
+                return;
+            }
+
+            // Don't continue if a file isn't selected from the list
+            if (clist_Files.SelectedItems.Count <= 0)
+            {
+                Thread errorThread = new Thread(() => {
+                    LogOutput_Proc("AutomationTool: ERROR! File must be selected");
+
+                    // Re-enable the UI
+                    EnableUI_Proc(true);
+                });
+                errorThread.Start();
+
+                return;
+            }
+
             // Remove the currently selected file from the list
             clist_Files.Items.RemoveAt(clist_Files.SelectedIndex);
         }
@@ -363,6 +383,16 @@ namespace SWBF2_AutomationTool
             {
                 clist_Files.Items.Add(file, true);
             }
+        }
+
+        private void btn_AddFolders_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_AddProject_Click(object sender, EventArgs e)
+        {
+
         }
 
 

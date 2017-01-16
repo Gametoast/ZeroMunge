@@ -41,6 +41,8 @@
             this.text_OutputLog = new System.Windows.Forms.RichTextBox();
             this.lbl_OutputLogLines = new System.Windows.Forms.Label();
             this.saveDlg_SaveLogPrompt = new System.Windows.Forms.SaveFileDialog();
+            this.btn_AddFolders = new System.Windows.Forms.Button();
+            this.btn_AddProject = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btn_Submit
@@ -74,7 +76,7 @@
             this.btn_AddFiles.Size = new System.Drawing.Size(102, 23);
             this.btn_AddFiles.TabIndex = 2;
             this.btn_AddFiles.Tag = "";
-            this.btn_AddFiles.Text = "Add...";
+            this.btn_AddFiles.Text = "Add Files...";
             this.FormTooltips.SetToolTip(this.btn_AddFiles, "Opens a prompt to add files to the list of files.");
             this.btn_AddFiles.UseVisualStyleBackColor = true;
             this.btn_AddFiles.Click += new System.EventHandler(this.btn_AddFiles_Click);
@@ -88,7 +90,7 @@
             // 
             // btn_RemoveFiles
             // 
-            this.btn_RemoveFiles.Location = new System.Drawing.Point(669, 101);
+            this.btn_RemoveFiles.Location = new System.Drawing.Point(669, 159);
             this.btn_RemoveFiles.Name = "btn_RemoveFiles";
             this.btn_RemoveFiles.Size = new System.Drawing.Size(102, 23);
             this.btn_RemoveFiles.TabIndex = 3;
@@ -161,11 +163,34 @@
             this.saveDlg_SaveLogPrompt.Title = "Save Log";
             this.saveDlg_SaveLogPrompt.FileOk += new System.ComponentModel.CancelEventHandler(this.saveDlg_SaveLogPrompt_FileOk);
             // 
+            // btn_AddFolders
+            // 
+            this.btn_AddFolders.Location = new System.Drawing.Point(669, 101);
+            this.btn_AddFolders.Name = "btn_AddFolders";
+            this.btn_AddFolders.Size = new System.Drawing.Size(102, 23);
+            this.btn_AddFolders.TabIndex = 10;
+            this.btn_AddFolders.Text = "Add Folders...";
+            this.FormTooltips.SetToolTip(this.btn_AddFolders, "Opens a prompt to add folders containing munge.bat files to the file list.");
+            this.btn_AddFolders.UseVisualStyleBackColor = true;
+            this.btn_AddFolders.Click += new System.EventHandler(this.btn_AddFolders_Click);
+            // 
+            // btn_AddProject
+            // 
+            this.btn_AddProject.Location = new System.Drawing.Point(669, 130);
+            this.btn_AddProject.Name = "btn_AddProject";
+            this.btn_AddProject.Size = new System.Drawing.Size(102, 23);
+            this.btn_AddProject.TabIndex = 11;
+            this.btn_AddProject.Text = "Add Project...";
+            this.btn_AddProject.UseVisualStyleBackColor = true;
+            this.btn_AddProject.Click += new System.EventHandler(this.btn_AddProject_Click);
+            // 
             // AutomationTool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 561);
+            this.Controls.Add(this.btn_AddProject);
+            this.Controls.Add(this.btn_AddFolders);
             this.Controls.Add(this.btn_SaveLog);
             this.Controls.Add(this.btn_CopyLog);
             this.Controls.Add(this.btn_ClearLog);
@@ -198,6 +223,8 @@
         private System.Windows.Forms.Button btn_SaveLog;
         private System.Windows.Forms.SaveFileDialog saveDlg_SaveLogPrompt;
         private System.Windows.Forms.CheckedListBox clist_Files;
+        private System.Windows.Forms.Button btn_AddFolders;
+        private System.Windows.Forms.Button btn_AddProject;
     }
 }
 
