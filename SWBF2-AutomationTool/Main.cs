@@ -27,63 +27,93 @@ namespace SWBF2_AutomationTool
 
 
         // ***************************
-        // ** FILE PROCESSING
+        // ** PROCESS MANAGER
         // ***************************
+
+        private int procManager_activeFile;
 
         /// <summary>
         /// Goes through the specified list of files and executes the ones that are checked.
         /// </summary>
-        /// <param name="fileList">List of file names.</param>
-        private void ProcessFiles(CheckedListBox fileList)
+        public void ProcManager_Start()
         {
-            // Current file's associated process
-            Process proc;
+            procManager_activeFile = 0;
 
             Thread enterThread = new Thread(() => {
-                LogOutputProc("**************************************************************");
-                LogOutputProc("******** AutomationTool: Entered");
-                LogOutputProc("**************************************************************");
-                LogOutputProc(Environment.NewLine, false);
+                LogOutput_Proc("**************************************************************");
+                LogOutput_Proc("******** AutomationTool: Entered");
+                LogOutput_Proc("**************************************************************");
+                LogOutput_Proc(Environment.NewLine, false);
             });
             enterThread.Start();
 
-            for (int curFile = 0; curFile < fileList.Items.Count; curFile++)
+            if (clist_Files.Items.Count <= 0)
             {
-                // Execute each file that is checked
-                if (clist_Files.GetItemChecked(curFile) == true)
-                {
-                    proc = ExecuteFile(fileList.GetItemText(fileList.Items[curFile]));
-                    proc.Exited += ((sender, e) =>
-                    {
-                        //outputThread.Abort();
+                Thread errorThread = new Thread(() => {
+                    LogOutput_Proc("AutomationTool: ERROR! At least one file must be checkmarked before we can begin.");
+                    LogOutput_Proc(Environment.NewLine, false);
+                });
+                errorThread.Start();
 
-                        Thread procExitThread = new Thread(() => {
-                            LogOutputProc("AutomationTool: File done");
-                        });
-                        procExitThread.Start();
-                    });
-                    // TODO: needs to go through each file one at a time while printing to output log in realtime
-                    proc.WaitForExit();     // TODO: this currently prevents realtime logging
-                }
+                // Quit processing files
+                ProcManager_Complete();
             }
 
-            Thread exitThread = new Thread(() => {
-                LogOutputProc(Environment.NewLine, false);
-                LogOutputProc("**************************************************************");
-                LogOutputProc("******** AutomationTool: Exited");
-                LogOutputProc("**************************************************************");
-                EnableUIProc(true);
-            });
-            exitThread.Start();
+            // Activate the first file
+            ProcManager_ActivateProcess(0);
         }
-        
+
+
+        /// <summary>
+        /// Use this to tell the manager when the active file has finished.
+        /// </summary>
+        /// <param name="whichFile"></param>
+        private void ProcManager_NotifyProcessComplete(int whichFile)
+        {
+            // If we've reached here, then all the processes are complete
+            if (procManager_activeFile >= (clist_Files.Items.Count - 1))
+            {
+                // We have no more files, so finish up
+                ProcManager_Complete();
+            }
+            else
+            {
+                // Move on to the next file
+                ProcManager_ActivateProcess(procManager_activeFile + 1);
+            }
+        }
+
+
+        /// <summary>
+        /// Updates the current file number and starts its process.
+        /// </summary>
+        /// <param name="whichFile"></param>
+        private void ProcManager_ActivateProcess(int whichFile)
+        {
+            // Don't advance to the next file if this is the last one
+            if (whichFile > clist_Files.Items.Count)
+            {
+                return;
+            }
+
+            procManager_activeFile = whichFile;
+            if (clist_Files.GetItemChecked(procManager_activeFile) == true)
+            {
+                ProcManager_StartProcess(clist_Files.GetItemText(clist_Files.Items[procManager_activeFile]));
+            }
+            else
+            {
+                ProcManager_NotifyProcessComplete(procManager_activeFile);
+            }
+        }
+
 
         /// <summary>
         /// Executes the specified file in a new process.
         /// </summary>
         /// <param name="filePath">Full path of the file to execute.</param>
         /// <returns>Process that was executed.</returns>
-        private Process ExecuteFile(string filePath)
+        private Process ProcManager_StartProcess(string filePath)
         {
 
             // Initilialize process start info
@@ -95,7 +125,7 @@ namespace SWBF2_AutomationTool
                 RedirectStandardOutput = true,
                 CreateNoWindow = true
             };
-            
+
             // Initialize the process
             Process proc = new Process();
             proc.StartInfo = startInfo;
@@ -104,7 +134,7 @@ namespace SWBF2_AutomationTool
             // Log any output data that's received
             proc.OutputDataReceived += ((sender, e) =>
             {
-                Thread outputThread = new Thread(() => LogOutputProc(e.Data));
+                Thread outputThread = new Thread(() => LogOutput_Proc(e.Data));
                 outputThread.Start();
             });
 
@@ -112,10 +142,21 @@ namespace SWBF2_AutomationTool
             // Print the file path before starting
             Thread initOutputThread = new Thread(() =>
             {
-                LogOutputProc("AutomationTool: Executing file " + filePath);
-                LogOutputProc(Environment.NewLine, false);
+                LogOutput_Proc("AutomationTool: Executing file " + filePath);
+                LogOutput_Proc(Environment.NewLine, false);
             });
             initOutputThread.Start();
+
+            // Notify the manager that the process is done
+            proc.Exited += ((sender, e) =>
+            {
+                Thread procExitThread = new Thread(() => {
+                    LogOutput_Proc("AutomationTool: File done");
+                });
+                procExitThread.Start();
+
+                ProcManager_NotifyProcessComplete(procManager_activeFile);
+            });
 
 
             // Start the process
@@ -125,6 +166,19 @@ namespace SWBF2_AutomationTool
             //Thread.Sleep(5000);
 
             return proc;
+        }
+
+
+        public void ProcManager_Complete()
+        {
+            Thread exitThread = new Thread(() => {
+                LogOutput_Proc(Environment.NewLine, false);
+                LogOutput_Proc("**************************************************************");
+                LogOutput_Proc("******** AutomationTool: Exited");
+                LogOutput_Proc("**************************************************************");
+                EnableUI_Proc(true);
+            });
+            exitThread.Start();
         }
 
 
@@ -158,7 +212,7 @@ namespace SWBF2_AutomationTool
         /// Sets the enabled state of the application's UI controls.
         /// </summary>
         /// <param name="enabled">True to enable UI interactivity, false to disable.</param>
-        private void EnableUIProc(bool enabled)
+        public void EnableUI_Proc(bool enabled)
         {
             EnableUI(enabled);
         }
@@ -170,7 +224,7 @@ namespace SWBF2_AutomationTool
 
         /// <summary>
         /// Sets the enabled state of the application's UI controls.  
-        /// WARNING: Don't call this directly, please call `ToggleUIProc` instead.
+        /// WARNING: Don't call this directly, please call `EnableUI_Proc` instead.
         /// </summary>
         /// <param name="enabled">True to enable UI interactivity, false to disable.</param>
         private void EnableUI(bool enabled)
@@ -210,7 +264,7 @@ namespace SWBF2_AutomationTool
         /// </summary>
         /// <param name="message">Text to print.</param>
         /// <param name="newLine">Optional: True to append a new line to the end of the message.</param>
-        private void LogOutputProc(string message, bool newLine = true)
+        public void LogOutput_Proc(string message, bool newLine = true)
         {
             LogOutput(message, newLine);
         }
@@ -222,7 +276,7 @@ namespace SWBF2_AutomationTool
 
         /// <summary>
         /// Prints the specified text to the output log.  
-        /// WARNING: Don't call this directly, please call `LogOutputProc` instead.
+        /// WARNING: Don't call this directly, please call `LogOutput_Proc` instead.
         /// </summary>
         /// <param name="message">Text to print.</param>
         /// <param name="newLine">Optional: True to append a new line to the end of the message.</param>
@@ -263,14 +317,21 @@ namespace SWBF2_AutomationTool
         // Begin processing the list of files as a playlist.
         private void btn_Submit_Click(object sender, EventArgs e)
         {
-            // Disable the buttons while executing the files
-            EnableUIProc(false);
+            //checkedItems.Clear();
 
-            ProcessFiles(clist_Files);
+            for (int item = 0; item < clist_Files.Items.Count; item++)
+            {
+                //checkedItems.Add(clist_Files.GetItemChecked(item));
+            }
+
+            // Disable the buttons while executing the files
+            EnableUI_Proc(false);
+
+            ProcManager_Start();
         }
 
 
-        // When the user clicks the 'Add...' button:
+        // When the user clicks the "Add..." button:
         // Prompt the user to select files to add to the file list.
         private void btn_AddFiles_Click(object sender, EventArgs e)
         {
@@ -279,7 +340,7 @@ namespace SWBF2_AutomationTool
         }
 
 
-        // When the user clicks the 'Remove' button:
+        // When the user clicks the "Remove" button:
         // Remove the selected file from the file list.
         private void btn_RemoveFiles_Click(object sender, EventArgs e)
         {
@@ -334,7 +395,7 @@ namespace SWBF2_AutomationTool
         }
 
 
-        // When the user clicks the 'Clear Log' button:
+        // When the user clicks the "Clear Log" button:
         // Clear the entire contents of the output log.
         private void btn_ClearLog_Click(object sender, EventArgs e)
         {
@@ -359,6 +420,12 @@ namespace SWBF2_AutomationTool
             lbl_OutputLogLines.Text = ("Lines: " + text_OutputLog.Lines.Count().ToString());
 
             // TODO: add functionality to remove lines from the beginning when the text box becomes full
+        }
+
+
+        private void clist_Files_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

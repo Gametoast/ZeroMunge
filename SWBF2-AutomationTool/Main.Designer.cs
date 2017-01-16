@@ -35,11 +35,11 @@
             this.openDlg_AddFilesPrompt = new System.Windows.Forms.OpenFileDialog();
             this.btn_RemoveFiles = new System.Windows.Forms.Button();
             this.FormTooltips = new System.Windows.Forms.ToolTip(this.components);
-            this.text_OutputLog = new System.Windows.Forms.RichTextBox();
-            this.lbl_OutputLogLines = new System.Windows.Forms.Label();
             this.btn_ClearLog = new System.Windows.Forms.Button();
             this.btn_CopyLog = new System.Windows.Forms.Button();
             this.btn_SaveLog = new System.Windows.Forms.Button();
+            this.text_OutputLog = new System.Windows.Forms.RichTextBox();
+            this.lbl_OutputLogLines = new System.Windows.Forms.Label();
             this.saveDlg_SaveLogPrompt = new System.Windows.Forms.SaveFileDialog();
             this.SuspendLayout();
             // 
@@ -56,12 +56,14 @@
             // 
             // clist_Files
             // 
+            this.clist_Files.CheckOnClick = true;
             this.clist_Files.FormattingEnabled = true;
             this.clist_Files.Location = new System.Drawing.Point(13, 13);
             this.clist_Files.Name = "clist_Files";
             this.clist_Files.ScrollAlwaysVisible = true;
             this.clist_Files.Size = new System.Drawing.Size(650, 319);
             this.clist_Files.TabIndex = 1;
+            this.clist_Files.SelectedIndexChanged += new System.EventHandler(this.clist_Files_SelectedIndexChanged);
             // 
             // btn_AddFiles
             // 
@@ -94,28 +96,6 @@
             this.FormTooltips.SetToolTip(this.btn_RemoveFiles, "Removes the selected file.");
             this.btn_RemoveFiles.UseVisualStyleBackColor = true;
             this.btn_RemoveFiles.Click += new System.EventHandler(this.btn_RemoveFiles_Click);
-            // 
-            // text_OutputLog
-            // 
-            this.text_OutputLog.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.text_OutputLog.ForeColor = System.Drawing.Color.Black;
-            this.text_OutputLog.Location = new System.Drawing.Point(13, 338);
-            this.text_OutputLog.Name = "text_OutputLog";
-            this.text_OutputLog.ReadOnly = true;
-            this.text_OutputLog.Size = new System.Drawing.Size(651, 211);
-            this.text_OutputLog.TabIndex = 5;
-            this.text_OutputLog.Text = "";
-            this.text_OutputLog.WordWrap = false;
-            this.text_OutputLog.TextChanged += new System.EventHandler(this.text_OutputLog_TextChanged);
-            // 
-            // lbl_OutputLogLines
-            // 
-            this.lbl_OutputLogLines.AutoSize = true;
-            this.lbl_OutputLogLines.Location = new System.Drawing.Point(670, 338);
-            this.lbl_OutputLogLines.Name = "lbl_OutputLogLines";
-            this.lbl_OutputLogLines.Size = new System.Drawing.Size(44, 13);
-            this.lbl_OutputLogLines.TabIndex = 6;
-            this.lbl_OutputLogLines.Text = "Lines: 1";
             // 
             // btn_ClearLog
             // 
@@ -151,6 +131,28 @@
             this.btn_SaveLog.UseVisualStyleBackColor = true;
             this.btn_SaveLog.Click += new System.EventHandler(this.btn_SaveLog_Click);
             // 
+            // text_OutputLog
+            // 
+            this.text_OutputLog.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.text_OutputLog.ForeColor = System.Drawing.Color.Black;
+            this.text_OutputLog.Location = new System.Drawing.Point(13, 338);
+            this.text_OutputLog.Name = "text_OutputLog";
+            this.text_OutputLog.ReadOnly = true;
+            this.text_OutputLog.Size = new System.Drawing.Size(651, 211);
+            this.text_OutputLog.TabIndex = 5;
+            this.text_OutputLog.Text = "";
+            this.text_OutputLog.WordWrap = false;
+            this.text_OutputLog.TextChanged += new System.EventHandler(this.text_OutputLog_TextChanged);
+            // 
+            // lbl_OutputLogLines
+            // 
+            this.lbl_OutputLogLines.AutoSize = true;
+            this.lbl_OutputLogLines.Location = new System.Drawing.Point(670, 338);
+            this.lbl_OutputLogLines.Name = "lbl_OutputLogLines";
+            this.lbl_OutputLogLines.Size = new System.Drawing.Size(44, 13);
+            this.lbl_OutputLogLines.TabIndex = 6;
+            this.lbl_OutputLogLines.Text = "Lines: 1";
+            // 
             // saveDlg_SaveLogPrompt
             // 
             this.saveDlg_SaveLogPrompt.DefaultExt = "log";
@@ -185,7 +187,6 @@
 
         #endregion
         private System.Windows.Forms.Button btn_Submit;
-        private System.Windows.Forms.CheckedListBox clist_Files;
         private System.Windows.Forms.Button btn_AddFiles;
         private System.Windows.Forms.OpenFileDialog openDlg_AddFilesPrompt;
         private System.Windows.Forms.Button btn_RemoveFiles;
@@ -196,6 +197,7 @@
         private System.Windows.Forms.Button btn_CopyLog;
         private System.Windows.Forms.Button btn_SaveLog;
         private System.Windows.Forms.SaveFileDialog saveDlg_SaveLogPrompt;
+        private System.Windows.Forms.CheckedListBox clist_Files;
     }
 }
 
