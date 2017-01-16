@@ -39,6 +39,21 @@ namespace SWBF2_AutomationTool
         {
             procManager_activeFile = 0;
 
+            // Don't continue if there aren't any files in the list
+            if (clist_Files.Items.Count <= 0)
+            {
+                Thread errorThread = new Thread(() => {
+                    LogOutput_Proc("AutomationTool: ERROR! File list must contain at least one file");
+
+                    // Re-enable the UI
+                    EnableUI_Proc(true);
+                });
+                errorThread.Start();
+                
+                return;
+            }
+
+
             Thread enterThread = new Thread(() => {
                 LogOutput_Proc("**************************************************************");
                 LogOutput_Proc("******** AutomationTool: Entered");
@@ -46,18 +61,6 @@ namespace SWBF2_AutomationTool
                 LogOutput_Proc(Environment.NewLine, false);
             });
             enterThread.Start();
-
-            if (clist_Files.Items.Count <= 0)
-            {
-                Thread errorThread = new Thread(() => {
-                    LogOutput_Proc("AutomationTool: ERROR! At least one file must be checkmarked before we can begin.");
-                    LogOutput_Proc(Environment.NewLine, false);
-                });
-                errorThread.Start();
-
-                // Quit processing files
-                ProcManager_Complete();
-            }
 
             // Activate the first file
             ProcManager_ActivateProcess(0);
@@ -176,6 +179,8 @@ namespace SWBF2_AutomationTool
                 LogOutput_Proc("**************************************************************");
                 LogOutput_Proc("******** AutomationTool: Exited");
                 LogOutput_Proc("**************************************************************");
+
+                // Re-enable the UI
                 EnableUI_Proc(true);
             });
             exitThread.Start();
@@ -324,7 +329,7 @@ namespace SWBF2_AutomationTool
                 //checkedItems.Add(clist_Files.GetItemChecked(item));
             }
 
-            // Disable the buttons while executing the files
+            // Disable the UI
             EnableUI_Proc(false);
 
             ProcManager_Start();
