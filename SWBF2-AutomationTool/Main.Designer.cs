@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AutomationTool));
             this.btn_Submit = new System.Windows.Forms.Button();
             this.clist_Files = new System.Windows.Forms.CheckedListBox();
             this.btn_AddFiles = new System.Windows.Forms.Button();
@@ -44,6 +45,7 @@
             this.saveDlg_SaveLogPrompt = new System.Windows.Forms.SaveFileDialog();
             this.btn_AddProject = new System.Windows.Forms.Button();
             this.btn_RemoveAllFiles = new System.Windows.Forms.Button();
+            this.btn_Cancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btn_Submit
@@ -71,12 +73,12 @@
             // 
             this.btn_AddFiles.AccessibleDescription = "";
             this.btn_AddFiles.AllowDrop = true;
-            this.btn_AddFiles.Location = new System.Drawing.Point(669, 72);
+            this.btn_AddFiles.Location = new System.Drawing.Point(669, 71);
             this.btn_AddFiles.Name = "btn_AddFiles";
             this.btn_AddFiles.Size = new System.Drawing.Size(102, 23);
             this.btn_AddFiles.TabIndex = 2;
             this.btn_AddFiles.Tag = "";
-            this.btn_AddFiles.Text = "Add files...";
+            this.btn_AddFiles.Text = "Add Files...";
             this.FormTooltips.SetToolTip(this.btn_AddFiles, "Opens a prompt to add files to the list of files.");
             this.btn_AddFiles.UseVisualStyleBackColor = true;
             this.btn_AddFiles.Click += new System.EventHandler(this.btn_AddFiles_Click);
@@ -90,7 +92,7 @@
             // 
             // btn_RemoveFile
             // 
-            this.btn_RemoveFile.Location = new System.Drawing.Point(669, 159);
+            this.btn_RemoveFile.Location = new System.Drawing.Point(669, 158);
             this.btn_RemoveFile.Name = "btn_RemoveFile";
             this.btn_RemoveFile.Size = new System.Drawing.Size(102, 23);
             this.btn_RemoveFile.TabIndex = 3;
@@ -105,7 +107,7 @@
             this.btn_ClearLog.Name = "btn_ClearLog";
             this.btn_ClearLog.Size = new System.Drawing.Size(102, 23);
             this.btn_ClearLog.TabIndex = 7;
-            this.btn_ClearLog.Text = "Clear log";
+            this.btn_ClearLog.Text = "Clear Log";
             this.FormTooltips.SetToolTip(this.btn_ClearLog, "Clears the contents of the output log.");
             this.btn_ClearLog.UseVisualStyleBackColor = true;
             this.btn_ClearLog.Click += new System.EventHandler(this.btn_ClearLog_Click);
@@ -116,7 +118,7 @@
             this.btn_CopyLog.Name = "btn_CopyLog";
             this.btn_CopyLog.Size = new System.Drawing.Size(102, 23);
             this.btn_CopyLog.TabIndex = 8;
-            this.btn_CopyLog.Text = "Copy to clipboard";
+            this.btn_CopyLog.Text = "Copy to Clipboard";
             this.FormTooltips.SetToolTip(this.btn_CopyLog, "Copies the contents of the output log to the clipboard.");
             this.btn_CopyLog.UseVisualStyleBackColor = true;
             this.btn_CopyLog.Click += new System.EventHandler(this.btn_CopyLog_Click);
@@ -127,7 +129,7 @@
             this.btn_SaveLog.Name = "btn_SaveLog";
             this.btn_SaveLog.Size = new System.Drawing.Size(102, 23);
             this.btn_SaveLog.TabIndex = 9;
-            this.btn_SaveLog.Text = "Save log...";
+            this.btn_SaveLog.Text = "Save Log...";
             this.btn_SaveLog.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.FormTooltips.SetToolTip(this.btn_SaveLog, "Opens a prompt to save the contents of the output log to a new file.");
             this.btn_SaveLog.UseVisualStyleBackColor = true;
@@ -135,11 +137,11 @@
             // 
             // btn_AddFolders
             // 
-            this.btn_AddFolders.Location = new System.Drawing.Point(669, 101);
+            this.btn_AddFolders.Location = new System.Drawing.Point(669, 100);
             this.btn_AddFolders.Name = "btn_AddFolders";
             this.btn_AddFolders.Size = new System.Drawing.Size(102, 23);
             this.btn_AddFolders.TabIndex = 10;
-            this.btn_AddFolders.Text = "Add folders...";
+            this.btn_AddFolders.Text = "Add Folders...";
             this.FormTooltips.SetToolTip(this.btn_AddFolders, "Opens a prompt to add folders containing munge.bat files to the file list.");
             this.btn_AddFolders.UseVisualStyleBackColor = true;
             this.btn_AddFolders.Click += new System.EventHandler(this.btn_AddFolders_Click);
@@ -176,30 +178,45 @@
             // 
             // btn_AddProject
             // 
-            this.btn_AddProject.Location = new System.Drawing.Point(669, 130);
+            this.btn_AddProject.Location = new System.Drawing.Point(669, 129);
             this.btn_AddProject.Name = "btn_AddProject";
             this.btn_AddProject.Size = new System.Drawing.Size(102, 23);
             this.btn_AddProject.TabIndex = 11;
-            this.btn_AddProject.Text = "Add project...";
+            this.btn_AddProject.Text = "Add Project...";
+            this.FormTooltips.SetToolTip(this.btn_AddProject, "Opens a prompt to select a project folder whose common munge.bat files will be ad" +
+        "ded to the file list.");
             this.btn_AddProject.UseVisualStyleBackColor = true;
             this.btn_AddProject.Click += new System.EventHandler(this.btn_AddProject_Click);
             // 
             // btn_RemoveAllFiles
             // 
-            this.btn_RemoveAllFiles.Location = new System.Drawing.Point(669, 188);
+            this.btn_RemoveAllFiles.Location = new System.Drawing.Point(669, 187);
             this.btn_RemoveAllFiles.Name = "btn_RemoveAllFiles";
             this.btn_RemoveAllFiles.Size = new System.Drawing.Size(102, 23);
             this.btn_RemoveAllFiles.TabIndex = 0;
-            this.btn_RemoveAllFiles.Text = "Remove all";
+            this.btn_RemoveAllFiles.Text = "Remove All";
             this.btn_RemoveAllFiles.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.FormTooltips.SetToolTip(this.btn_RemoveAllFiles, "Removes all files from the file list.");
             this.btn_RemoveAllFiles.UseVisualStyleBackColor = true;
             this.btn_RemoveAllFiles.Click += new System.EventHandler(this.btn_RemoveAllFiles_Click);
+            // 
+            // btn_Cancel
+            // 
+            this.btn_Cancel.Enabled = false;
+            this.btn_Cancel.Location = new System.Drawing.Point(669, 42);
+            this.btn_Cancel.Name = "btn_Cancel";
+            this.btn_Cancel.Size = new System.Drawing.Size(102, 23);
+            this.btn_Cancel.TabIndex = 12;
+            this.btn_Cancel.Text = "Cancel";
+            this.btn_Cancel.UseVisualStyleBackColor = true;
+            this.btn_Cancel.Click += new System.EventHandler(this.btn_Cancel_Click);
             // 
             // AutomationTool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 561);
+            this.Controls.Add(this.btn_Cancel);
             this.Controls.Add(this.btn_RemoveAllFiles);
             this.Controls.Add(this.btn_AddProject);
             this.Controls.Add(this.btn_AddFolders);
@@ -212,6 +229,7 @@
             this.Controls.Add(this.btn_AddFiles);
             this.Controls.Add(this.clist_Files);
             this.Controls.Add(this.btn_Submit);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(800, 600);
             this.Name = "AutomationTool";
@@ -238,6 +256,7 @@
         private System.Windows.Forms.Button btn_AddFolders;
         private System.Windows.Forms.Button btn_AddProject;
         private System.Windows.Forms.Button btn_RemoveAllFiles;
+        private System.Windows.Forms.Button btn_Cancel;
     }
 }
 

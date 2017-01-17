@@ -47,22 +47,22 @@ namespace SWBF2_AutomationTool
 
 
         /// <summary>
-        /// Returns the folder path of the specified file path.  
-        /// Example: Inputting "C:\Documents\foo.bar" would return "C:\Documents"
+        /// Returns the project ID of the project in the specified file path.  
+        /// Example: Inputting "C:\BF2_ModTools\data_ABC" would return "ABC"
         /// </summary>
-        /// <param name="filePath">Path of file to get folder path from.</param>
-        /// <returns>Folder path of the specified file path.</returns>
+        /// <param name="filePath">Path of file to get project ID from.</param>
+        /// <returns>Project ID of the project in the specified file path.</returns>
         private string GetProjectID(string filePath)
         {
-            // Get the file's directory
-            string filePathDir = "";
+            // Get the project ID
+            string projectID = "";
             int index = filePath.LastIndexOf("data_");
             if (index > 0)
             {
-                filePathDir = filePath.Substring(index + 5); // or index + 1 to keep slash
+                projectID = filePath.Substring(index + 5);
             }
 
-            return filePathDir;
+            return projectID;
         }
 
 
@@ -256,8 +256,12 @@ namespace SWBF2_AutomationTool
             {
                 // Buttons
                 btn_Submit.Enabled = enabled;
+                btn_Cancel.Enabled = !enabled;
                 btn_AddFiles.Enabled = enabled;
+                btn_AddFolders.Enabled = enabled;
+                btn_AddProject.Enabled = enabled;
                 btn_RemoveFile.Enabled = enabled;
+                btn_RemoveAllFiles.Enabled = enabled;
                 btn_CopyLog.Enabled = enabled;
                 btn_SaveLog.Enabled = enabled;
                 btn_ClearLog.Enabled = enabled;
@@ -307,7 +311,7 @@ namespace SWBF2_AutomationTool
             }
             else
             {
-                if (!String.IsNullOrEmpty(message))
+                if (!string.IsNullOrEmpty(message))
                 {
                     // Print message
                     text_OutputLog.AppendText(message);
@@ -338,12 +342,13 @@ namespace SWBF2_AutomationTool
             "\\_BUILD\\Sides\\CIS\\munge.bat",
             "\\_BUILD\\Sides\\IMP\\munge.bat",
             "\\_BUILD\\Sides\\REP\\munge.bat",
+            "\\_BUILD\\Sides\\TUR\\munge.bat",
             "\\_BUILD\\Worlds\\@#$\\munge.bat",
             "\\addme\\mungeAddme.bat"
         };
 
 
-        // When the user clicks the 'Run' button:
+        // When the user clicks the "Run" button:
         // Begin processing the list of files as a playlist.
         private void btn_Submit_Click(object sender, EventArgs e)
         {
@@ -368,7 +373,15 @@ namespace SWBF2_AutomationTool
         }
 
 
-        // When the user clicks the "Add files..." button:
+        // When the user clicks the "Cancel" button:
+        // 
+        private void btn_Cancel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+        // When the user clicks the "Add Files..." button:
         // Prompt the user to select files to add to the file list.
         private void btn_AddFiles_Click(object sender, EventArgs e)
         {
@@ -377,7 +390,7 @@ namespace SWBF2_AutomationTool
         }
 
 
-        // When the user clicks the "OK" button in the "Add files..." prompt:
+        // When the user clicks the "OK" button in the "Add Files..." prompt:
         // Add the selected files to the file list.
         private void openDlg_AddFilesPrompt_FileOk(object sender, CancelEventArgs e)
         {
@@ -389,7 +402,7 @@ namespace SWBF2_AutomationTool
         }
 
 
-        // When the user clicks the "Add folders..." button:
+        // When the user clicks the "Add Folders..." button:
         // Prompt the user to select folders containing munge.bat files to add to the file list.
         private void btn_AddFolders_Click(object sender, EventArgs e)
         {
@@ -433,7 +446,7 @@ namespace SWBF2_AutomationTool
         }
 
 
-        // When the user clicks the "Add project..." button:
+        // When the user clicks the "Add Project..." button:
         // Prompt the user to select a project to add to the file list.
         private void btn_AddProject_Click(object sender, EventArgs e)
         {
@@ -527,15 +540,15 @@ namespace SWBF2_AutomationTool
         }
 
 
-        // When the user clicks the "Remove all" button:
+        // When the user clicks the "Remove All" button:
         // Remove all files from the file list.
         private void btn_RemoveAllFiles_Click(object sender, EventArgs e)
         {
-
+            clist_Files.Items.Clear();
         }
 
 
-        // When the user clicks the "Copy to clipboard" button:
+        // When the user clicks the "Copy to Clipboard" button:
         // Copy the entire contents of the log to the clipboard.
         private void btn_CopyLog_Click(object sender, EventArgs e)
         {
@@ -545,7 +558,7 @@ namespace SWBF2_AutomationTool
         }
 
 
-        // When the user clicks the "Save log..." button:
+        // When the user clicks the "Save Log..." button:
         // Prompt the user to save the log to a new file.
         private void btn_SaveLog_Click(object sender, EventArgs e)
         {
@@ -553,7 +566,7 @@ namespace SWBF2_AutomationTool
         }
 
         
-        // When the user clicks the "OK" button in the "Save log..." prompt:
+        // When the user clicks the "OK" button in the "Save Log..." prompt:
         private void saveDlg_SaveLogPrompt_FileOk(object sender, CancelEventArgs e)
         {
             // Has a file name been entered?
@@ -569,7 +582,7 @@ namespace SWBF2_AutomationTool
         }
 
 
-        // When the user clicks the "Clear log" button:
+        // When the user clicks the "Clear Log" button:
         // Clear the entire contents of the output log.
         private void btn_ClearLog_Click(object sender, EventArgs e)
         {
