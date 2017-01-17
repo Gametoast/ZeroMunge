@@ -36,7 +36,7 @@ namespace SWBF2_AutomationTool
             int index = filePath.LastIndexOf(@"\");
             if (index > 0)
             {
-                filePathDir = filePath.Substring(0, index); // or index + 1 to keep slash
+                filePathDir = filePath.Substring(0, index);
             }
 
             return filePathDir;
@@ -340,7 +340,7 @@ namespace SWBF2_AutomationTool
         }
         
 
-        // This delegate enables asynchronous calls for setting the text property on a RichTextBox control.
+        // This delegate enables asynchronous calls for setting the text property on the output log.
         delegate void LogOutputCallback(string message, bool newLine = true);
 
 
@@ -458,7 +458,7 @@ namespace SWBF2_AutomationTool
 
 
         // When the user clicks the "Cancel" button:
-        // 
+        // Abort the active process and stop processing files.
         private void btn_Cancel_Click(object sender, EventArgs e)
         {
             ProcManager_Abort();
@@ -496,6 +496,7 @@ namespace SWBF2_AutomationTool
         // Prompt the user to select folders containing munge.bat files to add to the file list.
         private void btn_AddFolders_Click(object sender, EventArgs e)
         {
+            openDlg_AddFoldersPrompt.Title = "Select Folders";
             openDlg_AddFoldersPrompt.InitialDirectory = addFoldersLastDir;
             openDlg_AddFoldersPrompt.IsFolderPicker = true;
             openDlg_AddFoldersPrompt.Multiselect = true;
@@ -523,6 +524,7 @@ namespace SWBF2_AutomationTool
         // Prompt the user to select a project to add to the file list.
         private void btn_AddProject_Click(object sender, EventArgs e)
         {
+            openDlg_AddProjectPrompt.Title = "Select Project Folder";
             openDlg_AddProjectPrompt.InitialDirectory = addProjectLastDir;
             openDlg_AddProjectPrompt.IsFolderPicker = true;
             //openDlg_AddProjectPrompt.Multiselect = true;
@@ -656,13 +658,31 @@ namespace SWBF2_AutomationTool
             // Is the log full?
             if (text_OutputLog.TextLength >= (text_OutputLog.MaxLength - 500))
             {
-                //lbl_OutputLogLines.Text = ("Lines: " + text_OutputLog.Lines.Count().ToString());
+                // Make sure the text box is still populated
+                if (text_OutputLog.Lines.Count() > 0)
+                {
+                    // Get the lines of text
+                    string[] lineArray = text_OutputLog.Lines;
+
+                    // Create a collection so that a line can be removed
+                    var lineCollection = new List<string>(lineArray);
+
+                    // Remove the first line
+                    lineCollection.RemoveAt(0);
+
+                    // Convert the collection back to an array
+                    lineArray = lineCollection.ToArray();
+
+                    // Display the new data in the control
+                    text_OutputLog.Lines = lineArray;
+                }
             }
+
+            // Update character count
+            lbl_OutputLogChars.Text = ("Length: " + text_OutputLog.Text.Count().ToString());
 
             // Update line count
             lbl_OutputLogLines.Text = ("Lines: " + text_OutputLog.Lines.Count().ToString());
-
-            // TODO: add functionality to remove lines from the beginning when the text box becomes full
         }
     }
 }

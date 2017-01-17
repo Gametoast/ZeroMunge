@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Frayed Wires Studios")]
 [assembly: AssemblyProduct("AutomationTool")]
-[assembly: AssemblyCopyright("© 2017 Aaron Gilbert All Rights Reserved")]
+[assembly: AssemblyCopyright("Copyright © 2017 Aaron Gilbert, All Rights Reserved")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
