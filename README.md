@@ -2,7 +2,7 @@
 ##What it is
 The goal of this tool is to act as a robust replacement for VisualMunge (the automation tool provided with the SWBF2 mod tools).  
 
-It is written in Visual C# for [.NET Framework 4.5.2](https://www.microsoft.com/en-us/download/details.aspx?id=42642).
+It is written in Visual C# for [.NET Framework 4](https://www.microsoft.com/en-us/download/details.aspx?id=17718).
 
 ##What it does
 At its core, this tool goes through a user-specified list of munge.bat files and executes each one after the previous is finished.  
