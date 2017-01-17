@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("Automation Tool")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Frayed Wires Studios")]
-[assembly: AssemblyProduct("SWBF2-AutomationTool")]
+[assembly: AssemblyProduct("AutomationTool")]
 [assembly: AssemblyCopyright("© 2017 Aaron Gilbert All Rights Reserved")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace SWBF2_AutomationTool
 {
@@ -22,6 +23,46 @@ namespace SWBF2_AutomationTool
         private void AutomationTool_Load(object sender, EventArgs e)
         {
 
+        }
+
+
+        /// <summary>
+        /// Returns the folder path of the specified file path.  
+        /// Example: Inputting "C:\Documents\foo.bar" would return "C:\Documents"
+        /// </summary>
+        /// <param name="filePath">Path of file to get folder path from.</param>
+        /// <returns>Folder path of the specified file path.</returns>
+        private string GetFileDirectory(string filePath)
+        {
+            // Get the file's directory
+            string filePathDir = "";
+            int index = filePath.LastIndexOf(@"\");
+            if (index > 0)
+            {
+                filePathDir = filePath.Substring(0, index); // or index + 1 to keep slash
+            }
+
+            return filePathDir;
+        }
+
+
+        /// <summary>
+        /// Returns the folder path of the specified file path.  
+        /// Example: Inputting "C:\Documents\foo.bar" would return "C:\Documents"
+        /// </summary>
+        /// <param name="filePath">Path of file to get folder path from.</param>
+        /// <returns>Folder path of the specified file path.</returns>
+        private string GetProjectID(string filePath)
+        {
+            // Get the file's directory
+            string filePathDir = "";
+            int index = filePath.LastIndexOf("data_");
+            if (index > 0)
+            {
+                filePathDir = filePath.Substring(index + 5); // or index + 1 to keep slash
+            }
+
+            return filePathDir;
         }
 
 
@@ -40,6 +81,7 @@ namespace SWBF2_AutomationTool
             procManager_activeFile = 0;
 
             Thread enterThread = new Thread(() => {
+                LogOutput_Proc(Environment.NewLine, false);
                 LogOutput_Proc("**************************************************************");
                 LogOutput_Proc("******** AutomationTool: Entered");
                 LogOutput_Proc("**************************************************************");
@@ -157,6 +199,9 @@ namespace SWBF2_AutomationTool
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void ProcManager_Complete()
         {
             Thread exitThread = new Thread(() => {
@@ -169,26 +214,6 @@ namespace SWBF2_AutomationTool
                 EnableUI_Proc(true);
             });
             exitThread.Start();
-        }
-
-
-        /// <summary>
-        /// Returns the folder path of the specified file path.  
-        /// Example: Inputting "C:\Documents\foo.bar" would return "C:\Documents"
-        /// </summary>
-        /// <param name="filePath">Path of file to get folder path from.</param>
-        /// <returns>Folder path of the specified file path.</returns>
-        private string GetFileDirectory(string filePath)
-        {
-            // Get the file's directory
-            string filePathDir = "";
-            int index = filePath.LastIndexOf(@"\");
-            if (index > 0)
-            {
-                filePathDir = filePath.Substring(0, index); // or index + 1 to keep slash
-            }
-
-            return filePathDir;
         }
 
 
@@ -232,7 +257,7 @@ namespace SWBF2_AutomationTool
                 // Buttons
                 btn_Submit.Enabled = enabled;
                 btn_AddFiles.Enabled = enabled;
-                btn_RemoveFiles.Enabled = enabled;
+                btn_RemoveFile.Enabled = enabled;
                 btn_CopyLog.Enabled = enabled;
                 btn_SaveLog.Enabled = enabled;
                 btn_ClearLog.Enabled = enabled;
@@ -298,10 +323,25 @@ namespace SWBF2_AutomationTool
         }
 
 
-        
+
         // ***************************
         // ** WINDOWS FORMS CONTROLS
         // ***************************
+
+        public CommonOpenFileDialog openDlg_AddFoldersPrompt = new CommonOpenFileDialog();
+        public CommonOpenFileDialog openDlg_AddProjectPrompt = new CommonOpenFileDialog();
+        public string addFoldersLastDir = "C:\\";
+        public string addProjectLastDir = "C:\\";
+        public string[] addProject_CommonFiles = {
+            "\\_BUILD\\Common\\munge.bat",
+            "\\_BUILD\\Sides\\ALL\\munge.bat",
+            "\\_BUILD\\Sides\\CIS\\munge.bat",
+            "\\_BUILD\\Sides\\IMP\\munge.bat",
+            "\\_BUILD\\Sides\\REP\\munge.bat",
+            "\\_BUILD\\Worlds\\@#$\\munge.bat",
+            "\\addme\\mungeAddme.bat"
+        };
+
 
         // When the user clicks the 'Run' button:
         // Begin processing the list of files as a playlist.
@@ -328,7 +368,7 @@ namespace SWBF2_AutomationTool
         }
 
 
-        // When the user clicks the "Add Files..." button:
+        // When the user clicks the "Add files..." button:
         // Prompt the user to select files to add to the file list.
         private void btn_AddFiles_Click(object sender, EventArgs e)
         {
@@ -337,9 +377,122 @@ namespace SWBF2_AutomationTool
         }
 
 
+        // When the user clicks the "OK" button in the "Add files..." prompt:
+        // Add the selected files to the file list.
+        private void openDlg_AddFilesPrompt_FileOk(object sender, CancelEventArgs e)
+        {
+            // Add the selected files to the list
+            foreach (string file in openDlg_AddFilesPrompt.FileNames)
+            {
+                clist_Files.Items.Add(file, true);
+            }
+        }
+
+
+        // When the user clicks the "Add folders..." button:
+        // Prompt the user to select folders containing munge.bat files to add to the file list.
+        private void btn_AddFolders_Click(object sender, EventArgs e)
+        {
+            openDlg_AddFoldersPrompt.InitialDirectory = addFoldersLastDir;
+            openDlg_AddFoldersPrompt.IsFolderPicker = true;
+            openDlg_AddFoldersPrompt.Multiselect = true;
+
+            // Auto-detect the munge.bat file inside each selected folder and add it to the file list
+            if (openDlg_AddFoldersPrompt.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                // Parse each folder that was selected
+                foreach (string folder in openDlg_AddFoldersPrompt.FileNames)
+                {
+                    // Set the file path of the munge.bat file
+                    var file = folder + "\\munge.bat";
+
+                    // Save the current directory
+                    addFoldersLastDir = GetFileDirectory(folder);
+
+
+                    // Does the file path exist?
+                    if (File.Exists(file))
+                    {
+                        Thread outputThread = new Thread(() => {
+                            LogOutput_Proc("AutomationTool: Adding " + file);
+                        });
+                        outputThread.Start();
+
+                        // Add the file to the list
+                        clist_Files.Items.Add(file, true);
+                    }
+                    else
+                    {
+                        Thread outputThread = new Thread(() => {
+                            LogOutput_Proc("AutomationTool: ERROR! " + file + " not found");
+                        });
+                        outputThread.Start();
+                    }
+                }
+            }
+        }
+
+
+        // When the user clicks the "Add project..." button:
+        // Prompt the user to select a project to add to the file list.
+        private void btn_AddProject_Click(object sender, EventArgs e)
+        {
+            openDlg_AddProjectPrompt.InitialDirectory = addProjectLastDir;
+            openDlg_AddProjectPrompt.IsFolderPicker = true;
+            //openDlg_AddProjectPrompt.Multiselect = true;
+
+            // Auto-detect the munge.bat file inside each selected folder and add it to the file list
+            if (openDlg_AddProjectPrompt.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                // Get the project ID
+                var projectID = GetProjectID(openDlg_AddProjectPrompt.FileName);
+
+
+                // Add all common munge.bat files in the project folder
+                foreach (string file in addProject_CommonFiles)
+                {
+                    // Store in editable field
+                    var theFile = file;
+
+                    // Is the current file the World munge.bat?
+                    if (theFile.Contains("@#$"))
+                    {
+                        theFile = theFile.Replace("@#$", projectID);
+                    }
+
+                    // Set the complete file path of the munge.bat file
+                    var path = openDlg_AddProjectPrompt.FileName + theFile;
+
+                    // Save the current directory
+                    addProjectLastDir = GetFileDirectory(openDlg_AddProjectPrompt.FileName);
+
+
+                    // Does the file path exist?
+                    if (File.Exists(path))
+                    {
+                        Thread outputThread = new Thread(() => {
+                            LogOutput_Proc("AutomationTool: Adding " + path);
+                        });
+                        outputThread.Start();
+
+                        // Add the file to the list
+                        clist_Files.Items.Add(path, true);
+                    }
+                    else
+                    {
+                        Thread outputThread = new Thread(() => {
+                            LogOutput_Proc("AutomationTool: ERROR! " + path + " not found");
+                        });
+                        outputThread.Start();
+                    }
+                }
+            }
+        }
+
+
         // When the user clicks the "Remove" button:
         // Remove the selected file from the file list.
-        private void btn_RemoveFiles_Click(object sender, EventArgs e)
+        private void btn_RemoveFile_Click(object sender, EventArgs e)
         {
             // Don't continue if there aren't any files in the list
             if (clist_Files.Items.Count <= 0)
@@ -374,29 +527,15 @@ namespace SWBF2_AutomationTool
         }
 
 
-        // When the user clicks the "OK" button in the "Add Files..." prompt:
-        // Add the selected files to the file list.
-        private void openDlg_AddFilesPrompt_FileOk(object sender, CancelEventArgs e)
-        {
-            // Add the selected files to the list
-            foreach (String file in openDlg_AddFilesPrompt.FileNames)
-            {
-                clist_Files.Items.Add(file, true);
-            }
-        }
-
-        private void btn_AddFolders_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btn_AddProject_Click(object sender, EventArgs e)
+        // When the user clicks the "Remove all" button:
+        // Remove all files from the file list.
+        private void btn_RemoveAllFiles_Click(object sender, EventArgs e)
         {
 
         }
 
 
-        // When the user clicks the "Copy to Clipboard" button:
+        // When the user clicks the "Copy to clipboard" button:
         // Copy the entire contents of the log to the clipboard.
         private void btn_CopyLog_Click(object sender, EventArgs e)
         {
@@ -406,7 +545,7 @@ namespace SWBF2_AutomationTool
         }
 
 
-        // When the user clicks the "Save Log..." button:
+        // When the user clicks the "Save log..." button:
         // Prompt the user to save the log to a new file.
         private void btn_SaveLog_Click(object sender, EventArgs e)
         {
@@ -414,7 +553,7 @@ namespace SWBF2_AutomationTool
         }
 
         
-        // When the user clicks the "OK" button in the "Save Log..." prompt:
+        // When the user clicks the "OK" button in the "Save log..." prompt:
         private void saveDlg_SaveLogPrompt_FileOk(object sender, CancelEventArgs e)
         {
             // Has a file name been entered?
@@ -430,7 +569,7 @@ namespace SWBF2_AutomationTool
         }
 
 
-        // When the user clicks the "Clear Log" button:
+        // When the user clicks the "Clear log" button:
         // Clear the entire contents of the output log.
         private void btn_ClearLog_Click(object sender, EventArgs e)
         {
@@ -455,12 +594,6 @@ namespace SWBF2_AutomationTool
             lbl_OutputLogLines.Text = ("Lines: " + text_OutputLog.Lines.Count().ToString());
 
             // TODO: add functionality to remove lines from the beginning when the text box becomes full
-        }
-
-
-        private void clist_Files_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }
