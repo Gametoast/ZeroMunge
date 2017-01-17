@@ -2,11 +2,8 @@
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
@@ -27,11 +24,11 @@ namespace SWBF2_AutomationTool
 
 
         /// <summary>
-        /// Returns the folder path of the specified file path.  
+        /// Returns the directory of the specified file path.  
         /// Example: Inputting "C:\Documents\foo.bar" would return "C:\Documents"
         /// </summary>
-        /// <param name="filePath">Path of file to get folder path from.</param>
-        /// <returns>Folder path of the specified file path.</returns>
+        /// <param name="filePath">Path of file to get directory from.</param>
+        /// <returns>Directory of the specified file path.</returns>
         private string GetFileDirectory(string filePath)
         {
             // Get the file's directory
@@ -82,6 +79,8 @@ namespace SWBF2_AutomationTool
         // ***************************
 
         private int procManager_activeFile;
+        private Process procManager_curProc;
+        private bool procManager_procAborted;
 
         /// <summary>
         /// Goes through the specified list of files and executes the ones that are checked.
@@ -89,6 +88,7 @@ namespace SWBF2_AutomationTool
         public void ProcManager_Start()
         {
             procManager_activeFile = 0;
+            procManager_procAborted = false;
 
             Thread enterThread = new Thread(() => {
                 LogOutput_Proc(Environment.NewLine, false);
@@ -139,7 +139,7 @@ namespace SWBF2_AutomationTool
             procManager_activeFile = whichFile;
             if (clist_Files.GetItemChecked(procManager_activeFile) == true)
             {
-                ProcManager_StartProcess(clist_Files.GetItemText(clist_Files.Items[procManager_activeFile]));
+                procManager_curProc = ProcManager_StartProcess(clist_Files.GetItemText(clist_Files.Items[procManager_activeFile]));
             }
             else
             {
@@ -174,8 +174,11 @@ namespace SWBF2_AutomationTool
             // Log any output data that's received
             proc.OutputDataReceived += ((sender, e) =>
             {
-                Thread outputThread = new Thread(() => LogOutput_Proc(e.Data));
-                outputThread.Start();
+                if (!procManager_procAborted)
+                {
+                    Thread outputThread = new Thread(() => LogOutput_Proc(e.Data));
+                    outputThread.Start();
+                }
             });
 
 
@@ -190,12 +193,16 @@ namespace SWBF2_AutomationTool
             // Notify the manager that the process is done
             proc.Exited += ((sender, e) =>
             {
-                Thread procExitThread = new Thread(() => {
-                    LogOutput_Proc("AutomationTool: File done");
-                });
-                procExitThread.Start();
+                // Don't send out exited messages if we've aborted
+                if (!procManager_procAborted)
+                {
+                    Thread procExitThread = new Thread(() => {
+                        LogOutput_Proc("AutomationTool: File done");
+                    });
+                    procExitThread.Start();
 
-                ProcManager_NotifyProcessComplete(procManager_activeFile);
+                    ProcManager_NotifyProcessComplete(procManager_activeFile);
+                }
             });
 
 
@@ -206,6 +213,29 @@ namespace SWBF2_AutomationTool
             //Thread.Sleep(5000);
 
             return proc;
+        }
+
+
+        /// <summary>
+        /// Aborts the active process.
+        /// </summary>
+        public void ProcManager_Abort()
+        {
+            procManager_procAborted = true;
+
+            // Kill the process
+            procManager_curProc.Kill();
+
+            Thread exitThread = new Thread(() => {
+                LogOutput_Proc(Environment.NewLine, false);
+                LogOutput_Proc("**************************************************************");
+                LogOutput_Proc("******** AutomationTool: Aborted");
+                LogOutput_Proc("**************************************************************");
+
+                // Re-enable the UI
+                EnableUI_Proc(true);
+            });
+            exitThread.Start();
         }
 
 
@@ -265,7 +295,7 @@ namespace SWBF2_AutomationTool
             else
             {
                 // Buttons
-                btn_Submit.Enabled = enabled;
+                btn_Run.Enabled = enabled;
                 btn_Cancel.Enabled = !enabled;
                 btn_AddFiles.Enabled = enabled;
                 btn_AddFolders.Enabled = enabled;
@@ -344,6 +374,7 @@ namespace SWBF2_AutomationTool
 
         public CommonOpenFileDialog openDlg_AddFoldersPrompt = new CommonOpenFileDialog();
         public CommonOpenFileDialog openDlg_AddProjectPrompt = new CommonOpenFileDialog();
+        public string addFilesLastDir = "C:\\";
         public string addFoldersLastDir = "C:\\";
         public string addProjectLastDir = "C:\\";
         public string[] addProject_CommonFiles = {
@@ -358,9 +389,41 @@ namespace SWBF2_AutomationTool
         };
 
 
+        /// <summary>
+        /// Adds the specified file path to the file list.
+        /// </summary>
+        /// <param name="file">Full path of file to add.</param>
+        /// <returns>True if the file was successfully added, false if not.</returns>
+        private bool AddFile(string file)
+        {
+            // Does the file path exist?
+            if (File.Exists(file))
+            {
+                Thread outputThread = new Thread(() => {
+                    LogOutput_Proc("AutomationTool: Adding " + file);
+                });
+                outputThread.Start();
+
+                // Add the file to the list
+                clist_Files.Items.Add(file, true);
+
+                return true;
+            }
+            else
+            {
+                Thread outputThread = new Thread(() => {
+                    LogOutput_Proc("AutomationTool: ERROR! " + file + " not found");
+                });
+                outputThread.Start();
+
+                return false;
+            }
+        }
+
+
         // When the user clicks the "Run" button:
         // Begin processing the list of files as a playlist.
-        private void btn_Submit_Click(object sender, EventArgs e)
+        private void btn_Run_Click(object sender, EventArgs e)
         {
             // Don't continue if there aren't any files in the list
             if (clist_Files.Items.Count <= 0)
@@ -387,7 +450,7 @@ namespace SWBF2_AutomationTool
         // 
         private void btn_Cancel_Click(object sender, EventArgs e)
         {
-
+            ProcManager_Abort();
         }
 
 
@@ -395,6 +458,8 @@ namespace SWBF2_AutomationTool
         // Prompt the user to select files to add to the file list.
         private void btn_AddFiles_Click(object sender, EventArgs e)
         {
+            openDlg_AddFilesPrompt.InitialDirectory = addFilesLastDir;
+
             // Open the 'Add Files' prompt
             openDlg_AddFilesPrompt.ShowDialog();
         }
@@ -407,7 +472,11 @@ namespace SWBF2_AutomationTool
             // Add the selected files to the list
             foreach (string file in openDlg_AddFilesPrompt.FileNames)
             {
-                clist_Files.Items.Add(file, true);
+                // Save the current directory
+                addFilesLastDir = GetFileDirectory(file);
+
+                // Add the file to the list
+                AddFile(file);
             }
         }
 
@@ -431,26 +500,9 @@ namespace SWBF2_AutomationTool
 
                     // Save the current directory
                     addFoldersLastDir = GetFileDirectory(folder);
-
-
-                    // Does the file path exist?
-                    if (File.Exists(file))
-                    {
-                        Thread outputThread = new Thread(() => {
-                            LogOutput_Proc("AutomationTool: Adding " + file);
-                        });
-                        outputThread.Start();
-
-                        // Add the file to the list
-                        clist_Files.Items.Add(file, true);
-                    }
-                    else
-                    {
-                        Thread outputThread = new Thread(() => {
-                            LogOutput_Proc("AutomationTool: ERROR! " + file + " not found");
-                        });
-                        outputThread.Start();
-                    }
+                    
+                    // Add the file to the list
+                    AddFile(file);
                 }
             }
         }
@@ -489,25 +541,8 @@ namespace SWBF2_AutomationTool
                     // Save the current directory
                     addProjectLastDir = GetFileDirectory(openDlg_AddProjectPrompt.FileName);
 
-
-                    // Does the file path exist?
-                    if (File.Exists(path))
-                    {
-                        Thread outputThread = new Thread(() => {
-                            LogOutput_Proc("AutomationTool: Adding " + path);
-                        });
-                        outputThread.Start();
-
-                        // Add the file to the list
-                        clist_Files.Items.Add(path, true);
-                    }
-                    else
-                    {
-                        Thread outputThread = new Thread(() => {
-                            LogOutput_Proc("AutomationTool: ERROR! " + path + " not found");
-                        });
-                        outputThread.Start();
-                    }
+                    // Add the file to the list
+                    AddFile(path);
                 }
             }
         }

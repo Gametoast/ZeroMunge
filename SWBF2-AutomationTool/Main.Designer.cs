@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AutomationTool));
-            this.btn_Submit = new System.Windows.Forms.Button();
+            this.btn_Run = new System.Windows.Forms.Button();
             this.clist_Files = new System.Windows.Forms.CheckedListBox();
             this.btn_AddFiles = new System.Windows.Forms.Button();
             this.openDlg_AddFilesPrompt = new System.Windows.Forms.OpenFileDialog();
@@ -53,17 +53,17 @@
             this.cont_Panels.SuspendLayout();
             this.SuspendLayout();
             // 
-            // btn_Submit
+            // btn_Run
             // 
-            this.btn_Submit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_Submit.Location = new System.Drawing.Point(669, 12);
-            this.btn_Submit.Name = "btn_Submit";
-            this.btn_Submit.Size = new System.Drawing.Size(102, 23);
-            this.btn_Submit.TabIndex = 0;
-            this.btn_Submit.Text = "Run";
-            this.FormTooltips.SetToolTip(this.btn_Submit, "Executes each file in the list recursively.");
-            this.btn_Submit.UseVisualStyleBackColor = true;
-            this.btn_Submit.Click += new System.EventHandler(this.btn_Submit_Click);
+            this.btn_Run.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_Run.Location = new System.Drawing.Point(669, 12);
+            this.btn_Run.Name = "btn_Run";
+            this.btn_Run.Size = new System.Drawing.Size(102, 23);
+            this.btn_Run.TabIndex = 0;
+            this.btn_Run.Text = "Run";
+            this.FormTooltips.SetToolTip(this.btn_Run, "Executes each file in the list recursively.");
+            this.btn_Run.UseVisualStyleBackColor = true;
+            this.btn_Run.Click += new System.EventHandler(this.btn_Run_Click);
             // 
             // clist_Files
             // 
@@ -230,6 +230,7 @@
             this.btn_Cancel.TabIndex = 12;
             this.btn_Cancel.TabStop = false;
             this.btn_Cancel.Text = "Cancel";
+            this.FormTooltips.SetToolTip(this.btn_Cancel, "Stops processing files. WARNING: Canceling a munge is NOT recommended.");
             this.btn_Cancel.UseVisualStyleBackColor = true;
             this.btn_Cancel.Click += new System.EventHandler(this.btn_Cancel_Click);
             // 
@@ -247,6 +248,7 @@
             // 
             this.cont_Panels.Panel1.Controls.Add(this.clist_Files);
             this.cont_Panels.Panel1.Cursor = System.Windows.Forms.Cursors.Default;
+            this.cont_Panels.Panel1MinSize = 184;
             // 
             // cont_Panels.Panel2
             // 
@@ -261,7 +263,7 @@
             // 
             // AutomationTool
             // 
-            this.AcceptButton = this.btn_Submit;
+            this.AcceptButton = this.btn_Run;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btn_Cancel;
@@ -277,7 +279,7 @@
             this.Controls.Add(this.lbl_OutputLogLines);
             this.Controls.Add(this.btn_RemoveFile);
             this.Controls.Add(this.btn_AddFiles);
-            this.Controls.Add(this.btn_Submit);
+            this.Controls.Add(this.btn_Run);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(800, 600);
             this.Name = "AutomationTool";
@@ -293,7 +295,7 @@
         }
 
         #endregion
-        private System.Windows.Forms.Button btn_Submit;
+        private System.Windows.Forms.Button btn_Run;
         private System.Windows.Forms.Button btn_AddFiles;
         private System.Windows.Forms.OpenFileDialog openDlg_AddFilesPrompt;
         private System.Windows.Forms.Button btn_RemoveFile;
