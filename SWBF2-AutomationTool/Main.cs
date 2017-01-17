@@ -153,7 +153,7 @@ namespace SWBF2_AutomationTool
             }
             else
             {
-                ProcManager_NotifyProcessComplete(procManager_activeFile);
+                ProcManager_NotifyProcessComplete(procManager_activeFile, false);
             }
         }
 
