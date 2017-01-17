@@ -108,18 +108,28 @@ namespace SWBF2_AutomationTool
         /// Use this to tell the manager when the active file has finished.
         /// </summary>
         /// <param name="whichFile"></param>
-        private void ProcManager_NotifyProcessComplete(int whichFile)
+        /// <param name="singleFile"></param>
+        private void ProcManager_NotifyProcessComplete(int whichFile, bool singleFile)
         {
-            // If we've reached here, then all the processes are complete
-            if (procManager_activeFile >= (clist_Files.Items.Count - 1))
+            // Are we processing multiple files?
+            if (!singleFile)
             {
-                // We have no more files, so finish up
-                ProcManager_Complete();
+                // If we've reached here, then all the processes are complete
+                if (procManager_activeFile >= (clist_Files.Items.Count - 1))
+                {
+                    // We have no more files, so finish up
+                    ProcManager_Complete();
+                }
+                else
+                {
+                    // Move on to the next file
+                    ProcManager_ActivateProcess(procManager_activeFile + 1);
+                }
             }
             else
             {
-                // Move on to the next file
-                ProcManager_ActivateProcess(procManager_activeFile + 1);
+                // We have no more files, so finish up
+                ProcManager_Complete();
             }
         }
 
@@ -152,8 +162,9 @@ namespace SWBF2_AutomationTool
         /// Executes the specified file in a new process.
         /// </summary>
         /// <param name="filePath">Full path of the file to execute.</param>
+        /// <param name="singleFile">True to only execute a single file, false to notify the manager to execute the next file after this one is finished.</param>
         /// <returns>Process that was executed.</returns>
-        private Process ProcManager_StartProcess(string filePath)
+        private Process ProcManager_StartProcess(string filePath, bool singleFile = false)
         {
 
             // Initilialize process start info
@@ -200,8 +211,8 @@ namespace SWBF2_AutomationTool
                         LogOutput_Proc("AutomationTool: File done");
                     });
                     procExitThread.Start();
-
-                    ProcManager_NotifyProcessComplete(procManager_activeFile);
+                    
+                    ProcManager_NotifyProcessComplete(procManager_activeFile, singleFile);
                 }
             });
 
