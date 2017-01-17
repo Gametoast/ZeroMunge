@@ -66,6 +66,16 @@ namespace SWBF2_AutomationTool
         }
 
 
+        /// <summary>
+        /// Returns the current time in 12-hour format, e.g. "12:40:34 AM".
+        /// </summary>
+        /// <returns>Current time in 12-hour format.</returns>
+        private string GetTimestamp()
+        {
+            return DateTime.Now.ToString("h:mm:ss tt");
+        }
+
+
 
         // ***************************
         // ** PROCESS MANAGER
@@ -200,7 +210,7 @@ namespace SWBF2_AutomationTool
 
 
         /// <summary>
-        /// 
+        /// This is called after all the files have been processed.
         /// </summary>
         public void ProcManager_Complete()
         {
@@ -314,7 +324,7 @@ namespace SWBF2_AutomationTool
                 if (!string.IsNullOrEmpty(message))
                 {
                     // Print message
-                    text_OutputLog.AppendText(message);
+                    text_OutputLog.AppendText(GetTimestamp() + " : " + message);
 
                     // Are we supposed to print a new line?
                     if (newLine)
@@ -352,9 +362,6 @@ namespace SWBF2_AutomationTool
         // Begin processing the list of files as a playlist.
         private void btn_Submit_Click(object sender, EventArgs e)
         {
-            // Disable the UI
-            EnableUI_Proc(false);
-
             // Don't continue if there aren't any files in the list
             if (clist_Files.Items.Count <= 0)
             {
@@ -368,6 +375,9 @@ namespace SWBF2_AutomationTool
 
                 return;
             }
+
+            // Disable the UI
+            EnableUI_Proc(false);
 
             ProcManager_Start();
         }
