@@ -62,7 +62,7 @@
             this.btn_Run.Size = new System.Drawing.Size(102, 23);
             this.btn_Run.TabIndex = 0;
             this.btn_Run.Text = "Run";
-            this.FormTooltips.SetToolTip(this.btn_Run, "Executes each file in the list recursively.");
+            this.FormTooltips.SetToolTip(this.btn_Run, "Executes each file in the list in order.");
             this.btn_Run.UseVisualStyleBackColor = true;
             this.btn_Run.Click += new System.EventHandler(this.btn_Run_Click);
             // 
