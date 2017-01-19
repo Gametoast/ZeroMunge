@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Automation Tool")]
-[assembly: AssemblyDescription("Automation Tool")]
+[assembly: AssemblyTitle("Zero Munge")]
+[assembly: AssemblyDescription("Zero Munge")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Frayed Wires Studios")]
-[assembly: AssemblyProduct("AutomationTool")]
+[assembly: AssemblyProduct("Zero Munge")]
 [assembly: AssemblyCopyright("Copyright © 2017 Aaron Gilbert, All Rights Reserved")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

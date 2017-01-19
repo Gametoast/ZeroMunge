@@ -93,7 +93,7 @@ namespace SWBF2_AutomationTool
             Thread enterThread = new Thread(() => {
                 LogOutput_Proc(Environment.NewLine, false);
                 LogOutput_Proc("**************************************************************");
-                LogOutput_Proc("******** AutomationTool: Entered");
+                LogOutput_Proc("******** ZeroMunge: Entered");
                 LogOutput_Proc("**************************************************************");
                 LogOutput_Proc(Environment.NewLine, false);
             });
@@ -196,7 +196,7 @@ namespace SWBF2_AutomationTool
             // Print the file path before starting
             Thread initOutputThread = new Thread(() =>
             {
-                LogOutput_Proc("AutomationTool: Executing file " + filePath);
+                LogOutput_Proc("ZeroMunge: Executing file " + filePath);
                 LogOutput_Proc(Environment.NewLine, false);
             });
             initOutputThread.Start();
@@ -208,7 +208,7 @@ namespace SWBF2_AutomationTool
                 if (!procManager_procAborted)
                 {
                     Thread procExitThread = new Thread(() => {
-                        LogOutput_Proc("AutomationTool: File done");
+                        LogOutput_Proc("ZeroMunge: File done");
                     });
                     procExitThread.Start();
                     
@@ -240,7 +240,7 @@ namespace SWBF2_AutomationTool
             Thread exitThread = new Thread(() => {
                 LogOutput_Proc(Environment.NewLine, false);
                 LogOutput_Proc("**************************************************************");
-                LogOutput_Proc("******** AutomationTool: Aborted");
+                LogOutput_Proc("******** ZeroMunge: Aborted");
                 LogOutput_Proc("**************************************************************");
 
                 // Re-enable the UI
@@ -258,7 +258,7 @@ namespace SWBF2_AutomationTool
             Thread exitThread = new Thread(() => {
                 LogOutput_Proc(Environment.NewLine, false);
                 LogOutput_Proc("**************************************************************");
-                LogOutput_Proc("******** AutomationTool: Exited");
+                LogOutput_Proc("******** ZeroMunge: Exited");
                 LogOutput_Proc("**************************************************************");
 
                 // Re-enable the UI
@@ -411,7 +411,7 @@ namespace SWBF2_AutomationTool
             if (File.Exists(file))
             {
                 Thread outputThread = new Thread(() => {
-                    LogOutput_Proc("AutomationTool: Adding " + file);
+                    LogOutput_Proc("ZeroMunge: Adding " + file);
                 });
                 outputThread.Start();
 
@@ -423,7 +423,7 @@ namespace SWBF2_AutomationTool
             else
             {
                 Thread outputThread = new Thread(() => {
-                    LogOutput_Proc("AutomationTool: ERROR! " + file + " not found");
+                    LogOutput_Proc("ZeroMunge: ERROR! " + file + " not found");
                 });
                 outputThread.Start();
 
@@ -440,7 +440,7 @@ namespace SWBF2_AutomationTool
             if (clist_Files.Items.Count <= 0)
             {
                 Thread errorThread = new Thread(() => {
-                    LogOutput_Proc("AutomationTool: ERROR! File list must contain at least one file");
+                    LogOutput_Proc("ZeroMunge: ERROR! File list must contain at least one file");
 
                     // Re-enable the UI
                     EnableUI_Proc(true);
@@ -569,7 +569,7 @@ namespace SWBF2_AutomationTool
             if (clist_Files.Items.Count <= 0)
             {
                 Thread errorThread = new Thread(() => {
-                    LogOutput_Proc("AutomationTool: ERROR! File list must contain at least one file");
+                    LogOutput_Proc("ZeroMunge: ERROR! File list must contain at least one file");
 
                     // Re-enable the UI
                     EnableUI_Proc(true);
@@ -583,7 +583,7 @@ namespace SWBF2_AutomationTool
             if (clist_Files.SelectedItems.Count <= 0)
             {
                 Thread errorThread = new Thread(() => {
-                    LogOutput_Proc("AutomationTool: ERROR! File must be selected");
+                    LogOutput_Proc("ZeroMunge: ERROR! File must be selected");
 
                     // Re-enable the UI
                     EnableUI_Proc(true);
