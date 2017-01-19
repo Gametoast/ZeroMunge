@@ -8,7 +8,7 @@ It is written in Visual C# for [.NET Framework 4](https://www.microsoft.com/en-u
 At its core, this tool goes through a user-specified list of munge.bat files and executes each one after the previous is finished.  
 
 This tool can be used to do the following things. Completed features are **bolded**.
-* **Execute a list of batch files recursively**
+* **Execute a list of batch files in order**
 * **Toggle whether or not certain files will be executed**
 * **Log each file's output in real-time (with timestamps)**
 * **Clear the contents of the output log / copy its contents to the clipboard / save its contents to a file**
