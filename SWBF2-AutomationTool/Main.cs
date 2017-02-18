@@ -652,9 +652,6 @@ namespace SWBF2_AutomationTool
         // Scroll to the bottom of the output log, deal with the log being full, and update the line count.
         private void text_OutputLog_TextChanged(object sender, EventArgs e)
         {
-            // Auto-scroll to the most recent line
-            text_OutputLog.ScrollToCaret();
-
             // Is the log full?
             if (text_OutputLog.TextLength >= (text_OutputLog.MaxLength - 500))
             {
@@ -670,6 +667,8 @@ namespace SWBF2_AutomationTool
                     // Remove the first line
                     lineCollection.RemoveAt(0);
 
+                    text_OutputLog.Lines.Count();
+
                     // Convert the collection back to an array
                     lineArray = lineCollection.ToArray();
 
@@ -677,6 +676,9 @@ namespace SWBF2_AutomationTool
                     text_OutputLog.Lines = lineArray;
                 }
             }
+
+            // Auto-scroll to the most recent line
+            text_OutputLog.ScrollToCaret();
 
             // Update character count
             lbl_OutputLogChars.Text = ("Length: " + text_OutputLog.Text.Count().ToString());
