@@ -364,6 +364,29 @@ namespace SWBF2_AutomationTool
             {
                 if (!string.IsNullOrEmpty(message))
                 {
+                    // Is the log full?
+                    if (text_OutputLog.TextLength >= (text_OutputLog.MaxLength - 500))
+                    {
+                        // Make sure the text box is still populated
+                        if (text_OutputLog.Lines.Count() > 0)
+                        {
+                            // Get the lines of text
+                            string[] lineArray = text_OutputLog.Lines;
+
+                            // Create a collection so that a line can be removed
+                            var lineCollection = new List<string>(lineArray);
+
+                            // Remove the first line
+                            lineCollection.RemoveAt(0);
+
+                            // Convert the collection back to an array
+                            lineArray = lineCollection.ToArray();
+
+                            // Display the new data in the control
+                            text_OutputLog.Lines = lineArray;
+                        }
+                    }
+
                     // Print message
                     text_OutputLog.AppendText(GetTimestamp() + " : " + message);
 
@@ -385,9 +408,9 @@ namespace SWBF2_AutomationTool
 
         public CommonOpenFileDialog openDlg_AddFoldersPrompt = new CommonOpenFileDialog();
         public CommonOpenFileDialog openDlg_AddProjectPrompt = new CommonOpenFileDialog();
-        public string addFilesLastDir = "C:\\";
-        public string addFoldersLastDir = "C:\\";
-        public string addProjectLastDir = "C:\\";
+        public string addFilesLastDir = Directory.GetCurrentDirectory();
+        public string addFoldersLastDir = Directory.GetCurrentDirectory();
+        public string addProjectLastDir = Directory.GetCurrentDirectory();
         public string[] addProject_CommonFiles = {
             "\\_BUILD\\Common\\munge.bat",
             "\\_BUILD\\Sides\\ALL\\munge.bat",
@@ -652,31 +675,6 @@ namespace SWBF2_AutomationTool
         // Scroll to the bottom of the output log, deal with the log being full, and update the line count.
         private void text_OutputLog_TextChanged(object sender, EventArgs e)
         {
-            // Is the log full?
-            if (text_OutputLog.TextLength >= (text_OutputLog.MaxLength - 500))
-            {
-                // Make sure the text box is still populated
-                if (text_OutputLog.Lines.Count() > 0)
-                {
-                    // Get the lines of text
-                    string[] lineArray = text_OutputLog.Lines;
-
-                    // Create a collection so that a line can be removed
-                    var lineCollection = new List<string>(lineArray);
-
-                    // Remove the first line
-                    lineCollection.RemoveAt(0);
-
-                    text_OutputLog.Lines.Count();
-
-                    // Convert the collection back to an array
-                    lineArray = lineCollection.ToArray();
-
-                    // Display the new data in the control
-                    text_OutputLog.Lines = lineArray;
-                }
-            }
-
             // Auto-scroll to the most recent line
             text_OutputLog.ScrollToCaret();
 
