@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Threading;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
@@ -73,6 +74,32 @@ namespace SWBF2_AutomationTool
         }
 
 
+        /// <summary>
+        /// Plays the specified sound type.
+        /// </summary>
+        /// <param name="type">Type of sound to play ("start" or "done").</param>
+        private void PlaySound(string type)
+        {
+            string soundToPlay = "null";
+
+            if (type == "start")
+            {
+                soundToPlay = Directory.GetCurrentDirectory() + "\\ZeroMunge\\start.wav";
+            }
+            if (type == "done")
+            {
+                soundToPlay = Directory.GetCurrentDirectory() + "\\ZeroMunge\\done.wav";
+            }
+
+            // Does the sound file exist?
+            if (File.Exists(soundToPlay) || soundToPlay != "null")
+            {
+                SoundPlayer sound = new SoundPlayer(soundToPlay);
+                sound.Play();
+            }
+        }
+
+
 
         // ***************************
         // ** PROCESS MANAGER
@@ -87,6 +114,11 @@ namespace SWBF2_AutomationTool
         /// </summary>
         public void ProcManager_Start()
         {
+            Thread soundThread = new Thread(() => {
+                PlaySound("start");
+            });
+            soundThread.Start();
+
             procManager_activeFile = 0;
             procManager_procAborted = false;
 
@@ -265,6 +297,11 @@ namespace SWBF2_AutomationTool
                 EnableUI_Proc(true);
             });
             exitThread.Start();
+
+            Thread soundThread = new Thread(() => {
+                PlaySound("done");
+            });
+            soundThread.Start();
         }
 
 
