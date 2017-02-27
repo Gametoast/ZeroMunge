@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Media;
+using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
@@ -77,7 +78,7 @@ namespace SWBF2_AutomationTool
         /// <summary>
         /// Plays the specified sound type.
         /// </summary>
-        /// <param name="type">Type of sound to play ("start" or "done").</param>
+        /// <param name="type">Type of sound to play ("start", "success", or "abort").</param>
         private void PlaySound(string type)
         {
             string soundToPlay = "null";
@@ -86,9 +87,13 @@ namespace SWBF2_AutomationTool
             {
                 soundToPlay = Directory.GetCurrentDirectory() + "\\ZeroMunge\\start.wav";
             }
-            if (type == "done")
+            if (type == "success")
             {
-                soundToPlay = Directory.GetCurrentDirectory() + "\\ZeroMunge\\done.wav";
+                soundToPlay = Directory.GetCurrentDirectory() + "\\ZeroMunge\\success.wav";
+            }
+            if (type == "abort")
+            {
+                soundToPlay = Directory.GetCurrentDirectory() + "\\ZeroMunge\\abort.wav";
             }
 
             // Does the sound file exist?
@@ -264,6 +269,11 @@ namespace SWBF2_AutomationTool
         /// </summary>
         public void ProcManager_Abort()
         {
+            Thread soundThread = new Thread(() => {
+                PlaySound("abort");
+            });
+            soundThread.Start();
+
             procManager_procAborted = true;
 
             // Kill the process
@@ -299,7 +309,13 @@ namespace SWBF2_AutomationTool
             exitThread.Start();
 
             Thread soundThread = new Thread(() => {
-                PlaySound("done");
+                var icon = new NotifyIcon();
+                icon.BalloonTipTitle = "Success";
+                icon.BalloonTipText = "The operation was completed successfully.";
+                icon.Visible = true;
+                icon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
+                icon.ShowBalloonTip(30000);
+                PlaySound("success");
             });
             soundThread.Start();
         }
@@ -401,14 +417,29 @@ namespace SWBF2_AutomationTool
             {
                 if (!string.IsNullOrEmpty(message))
                 {
+                    // Print message
+                    text_OutputLog.AppendText(GetTimestamp() + " : " + message);
+
+                    // Are we supposed to print a new line?
+                    if (newLine)
+                    {
+                        // Print message on new line
+                        text_OutputLog.AppendText(Environment.NewLine);
+                    }
+                    
                     // Is the log full?
                     if (text_OutputLog.TextLength >= (text_OutputLog.MaxLength - 500))
                     {
                         // Make sure the text box is still populated
                         if (text_OutputLog.Lines.Count() > 0)
                         {
+                            text_OutputLog.Select(0, text_OutputLog.Text.IndexOf('\n') + 1);
+                            int a = text_OutputLog.SelectionStart;
+                            int b = text_OutputLog.SelectionLength;
+                            text_OutputLog.Text = text_OutputLog.Text.Remove(a, b);
+
                             // Get the lines of text
-                            string[] lineArray = text_OutputLog.Lines;
+                            /*string[] lineArray = text_OutputLog.Lines;
 
                             // Create a collection so that a line can be removed
                             var lineCollection = new List<string>(lineArray);
@@ -420,19 +451,13 @@ namespace SWBF2_AutomationTool
                             lineArray = lineCollection.ToArray();
 
                             // Display the new data in the control
-                            text_OutputLog.Lines = lineArray;
+                            text_OutputLog.Lines = lineArray;*/
                         }
                     }
 
-                    // Print message
-                    text_OutputLog.AppendText(GetTimestamp() + " : " + message);
-
-                    // Are we supposed to print a new line?
-                    if (newLine)
-                    {
-                        // Print message on new line
-                        text_OutputLog.AppendText(Environment.NewLine);
-                    }
+                    // Auto-scroll to the most recent line
+                    text_OutputLog.Select(text_OutputLog.Text.Length, text_OutputLog.Text.Length);
+                    text_OutputLog.ScrollToCaret();
                 }
             }
         }
@@ -712,9 +737,6 @@ namespace SWBF2_AutomationTool
         // Scroll to the bottom of the output log, deal with the log being full, and update the line count.
         private void text_OutputLog_TextChanged(object sender, EventArgs e)
         {
-            // Auto-scroll to the most recent line
-            text_OutputLog.ScrollToCaret();
-
             // Update character count
             lbl_OutputLogChars.Text = ("Length: " + text_OutputLog.Text.Count().ToString());
 
