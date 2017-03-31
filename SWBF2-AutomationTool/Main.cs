@@ -431,7 +431,7 @@ namespace SWBF2_AutomationTool
 
                     // Print message
                     text_OutputLog.AppendText(messageToLog);
-                    
+
                     // Are we supposed to print a new line?
                     if (newLine)
                     {
