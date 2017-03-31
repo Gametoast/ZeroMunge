@@ -48,10 +48,15 @@
             this.saveDlg_SaveLogPrompt = new System.Windows.Forms.SaveFileDialog();
             this.cont_Panels = new System.Windows.Forms.SplitContainer();
             this.lbl_OutputLogChars = new System.Windows.Forms.Label();
+            this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.cmenu_TrayIcon = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmenu_TrayIcon_Open = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmenu_TrayIcon_Quit = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.cont_Panels)).BeginInit();
             this.cont_Panels.Panel1.SuspendLayout();
             this.cont_Panels.Panel2.SuspendLayout();
             this.cont_Panels.SuspendLayout();
+            this.cmenu_TrayIcon.SuspendLayout();
             this.SuspendLayout();
             // 
             // btn_Run
@@ -208,7 +213,7 @@
             this.text_OutputLog.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.text_OutputLog.ForeColor = System.Drawing.Color.Black;
             this.text_OutputLog.Location = new System.Drawing.Point(0, 0);
-            this.text_OutputLog.MaxLength = 120000;
+            this.text_OutputLog.MaxLength = 20000;
             this.text_OutputLog.Name = "text_OutputLog";
             this.text_OutputLog.ReadOnly = true;
             this.text_OutputLog.Size = new System.Drawing.Size(651, 195);
@@ -231,7 +236,7 @@
             // saveDlg_SaveLogPrompt
             // 
             this.saveDlg_SaveLogPrompt.DefaultExt = "log";
-            this.saveDlg_SaveLogPrompt.FileName = "Munge_OutputLog";
+            this.saveDlg_SaveLogPrompt.FileName = "ZeroMunge_OutputLog";
             this.saveDlg_SaveLogPrompt.Filter = "Log files|*.log";
             this.saveDlg_SaveLogPrompt.Title = "Save Log";
             this.saveDlg_SaveLogPrompt.FileOk += new System.ComponentModel.CancelEventHandler(this.saveDlg_SaveLogPrompt_FileOk);
@@ -273,6 +278,37 @@
             this.lbl_OutputLogChars.TabIndex = 14;
             this.lbl_OutputLogChars.Text = "Length: 0";
             // 
+            // trayIcon
+            // 
+            this.trayIcon.ContextMenuStrip = this.cmenu_TrayIcon;
+            this.trayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("trayIcon.Icon")));
+            this.trayIcon.Text = "Zero Munge";
+            this.trayIcon.Visible = true;
+            this.trayIcon.BalloonTipClicked += new System.EventHandler(this.trayIcon_BalloonTipClicked);
+            this.trayIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.trayIcon_MouseDoubleClick);
+            // 
+            // cmenu_TrayIcon
+            // 
+            this.cmenu_TrayIcon.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmenu_TrayIcon_Open,
+            this.cmenu_TrayIcon_Quit});
+            this.cmenu_TrayIcon.Name = "cmenu_TrayIcon";
+            this.cmenu_TrayIcon.Size = new System.Drawing.Size(104, 48);
+            // 
+            // cmenu_TrayIcon_Open
+            // 
+            this.cmenu_TrayIcon_Open.Name = "cmenu_TrayIcon_Open";
+            this.cmenu_TrayIcon_Open.Size = new System.Drawing.Size(103, 22);
+            this.cmenu_TrayIcon_Open.Text = "Open";
+            this.cmenu_TrayIcon_Open.Click += new System.EventHandler(this.cmenu_TrayIcon_Open_Click);
+            // 
+            // cmenu_TrayIcon_Quit
+            // 
+            this.cmenu_TrayIcon_Quit.Name = "cmenu_TrayIcon_Quit";
+            this.cmenu_TrayIcon_Quit.Size = new System.Drawing.Size(103, 22);
+            this.cmenu_TrayIcon_Quit.Text = "Quit";
+            this.cmenu_TrayIcon_Quit.Click += new System.EventHandler(this.cmenu_TrayIcon_Quit_Click);
+            // 
             // AutomationTool
             // 
             this.AcceptButton = this.btn_Run;
@@ -298,10 +334,12 @@
             this.Name = "AutomationTool";
             this.Text = "Zero Munge";
             this.Load += new System.EventHandler(this.AutomationTool_Load);
+            this.Resize += new System.EventHandler(this.AutomationTool_Resize);
             this.cont_Panels.Panel1.ResumeLayout(false);
             this.cont_Panels.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.cont_Panels)).EndInit();
             this.cont_Panels.ResumeLayout(false);
+            this.cmenu_TrayIcon.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -326,6 +364,10 @@
         private System.Windows.Forms.Button btn_Cancel;
         private System.Windows.Forms.SplitContainer cont_Panels;
         private System.Windows.Forms.Label lbl_OutputLogChars;
+        private System.Windows.Forms.NotifyIcon trayIcon;
+        private System.Windows.Forms.ContextMenuStrip cmenu_TrayIcon;
+        private System.Windows.Forms.ToolStripMenuItem cmenu_TrayIcon_Open;
+        private System.Windows.Forms.ToolStripMenuItem cmenu_TrayIcon_Quit;
     }
 }
 

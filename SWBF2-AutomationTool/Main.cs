@@ -21,10 +21,16 @@ namespace SWBF2_AutomationTool
 
         private void AutomationTool_Load(object sender, EventArgs e)
         {
+            // Set the tray icon
+            trayIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
+            trayIcon.Text = "Zero Munge: Idle";
 
+            // Start a new log file
+            string openMessage = "Opened logfile ZeroMunge_OutputLog.log  " + DateTime.Now.ToString("yyyy-MM-dd") +  " " + GetTimestamp();
+            File.WriteAllText(Directory.GetCurrentDirectory() + @"\ZeroMunge_OutputLog.log", openMessage + Environment.NewLine);
         }
-
-
+        
+        
         /// <summary>
         /// Returns the directory of the specified file path.  
         /// Example: Inputting "C:\Documents\foo.bar" would return "C:\Documents"
@@ -120,6 +126,7 @@ namespace SWBF2_AutomationTool
         public void ProcManager_Start()
         {
             Thread soundThread = new Thread(() => {
+                trayIcon.Text = "Zero Munge: Running";
                 PlaySound("start");
             });
             soundThread.Start();
@@ -270,6 +277,7 @@ namespace SWBF2_AutomationTool
         public void ProcManager_Abort()
         {
             Thread soundThread = new Thread(() => {
+                trayIcon.Text = "Zero Munge: Idle";
                 PlaySound("abort");
             });
             soundThread.Start();
@@ -309,12 +317,10 @@ namespace SWBF2_AutomationTool
             exitThread.Start();
 
             Thread soundThread = new Thread(() => {
-                var icon = new NotifyIcon();
-                icon.BalloonTipTitle = "Success";
-                icon.BalloonTipText = "The operation was completed successfully.";
-                icon.Visible = true;
-                icon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
-                icon.ShowBalloonTip(30000);
+                trayIcon.Text = "Zero Munge: Idle";
+                trayIcon.BalloonTipTitle = "Success";
+                trayIcon.BalloonTipText = "The operation was completed successfully.";
+                trayIcon.ShowBalloonTip(30000);
                 PlaySound("success");
             });
             soundThread.Start();
@@ -372,6 +378,9 @@ namespace SWBF2_AutomationTool
 
                 // File list
                 clist_Files.Enabled = enabled;
+
+                // Tray icon context menu
+                cmenu_TrayIcon_Quit.Enabled = enabled;
             }
         }
 
@@ -417,17 +426,25 @@ namespace SWBF2_AutomationTool
             {
                 if (!string.IsNullOrEmpty(message))
                 {
-                    // Print message
-                    text_OutputLog.AppendText(GetTimestamp() + " : " + message);
+                    // Assemble message
+                    string messageToLog = string.Concat(GetTimestamp(), " : ", message);
 
+                    // Print message
+                    text_OutputLog.AppendText(messageToLog);
+                    
                     // Are we supposed to print a new line?
                     if (newLine)
                     {
                         // Print message on new line
                         text_OutputLog.AppendText(Environment.NewLine);
                     }
+
+                    // Log the message to the log file
+                    StreamWriter sw = File.AppendText(string.Concat(Directory.GetCurrentDirectory(), @"\ZeroMunge_OutputLog.log"));
+                    sw.WriteLine(messageToLog);
+                    sw.Close();
                     
-                    // Is the log full?
+                    // Is the output log full?
                     if (text_OutputLog.TextLength >= (text_OutputLog.MaxLength - 500))
                     {
                         // Make sure the text box is still populated
@@ -521,11 +538,39 @@ namespace SWBF2_AutomationTool
         // Begin processing the list of files as a playlist.
         private void btn_Run_Click(object sender, EventArgs e)
         {
-            // Don't continue if there aren't any files in the list
+            int procError = 0;
+            
+            // Are there no items in the list?
             if (clist_Files.Items.Count <= 0)
             {
+                procError = 1;
+            }
+            else
+            {
+                // Are none of the items checked?
+                if (clist_Files.CheckedItems.Count <= 0)
+                {
+                    procError = 2;
+                }
+            }
+            
+            // Report the error if one is present
+            if (procError > 0)
+            {
                 Thread errorThread = new Thread(() => {
-                    LogOutput_Proc("ZeroMunge: ERROR! File list must contain at least one file");
+                    string errorMessage = "";
+
+                    switch (procError)
+                    {
+                        case 1:
+                            errorMessage = "ZeroMunge: ERROR! File list must contain at least one file";
+                            break;
+                        case 2:
+                            errorMessage = "ZeroMunge: ERROR! At least one item must be checked";
+                            break;
+                    }
+
+                    LogOutput_Proc(errorMessage);
 
                     // Re-enable the UI
                     EnableUI_Proc(true);
@@ -687,6 +732,20 @@ namespace SWBF2_AutomationTool
         // Remove all files from the file list.
         private void btn_RemoveAllFiles_Click(object sender, EventArgs e)
         {
+            // Don't continue if there aren't any files in the list
+            if (clist_Files.Items.Count <= 0)
+            {
+                Thread errorThread = new Thread(() => {
+                    LogOutput_Proc("ZeroMunge: ERROR! File list must contain at least one file");
+
+                    // Re-enable the UI
+                    EnableUI_Proc(true);
+                });
+                errorThread.Start();
+
+                return;
+            }
+
             clist_Files.Items.Clear();
         }
 
@@ -702,14 +761,16 @@ namespace SWBF2_AutomationTool
 
 
         // When the user clicks the "Save Log..." button:
-        // Prompt the user to save the log to a new file.
+        // Prompt the user to save the output log to a new file.
         private void btn_SaveLog_Click(object sender, EventArgs e)
         {
+            saveDlg_SaveLogPrompt.FileName = "ZeroMunge_OutputLog_" + DateTime.Now.ToString("yyyyMMdd") + "_" + DateTime.Now.ToString("HHmmss");
             saveDlg_SaveLogPrompt.ShowDialog();
         }
 
         
         // When the user clicks the "OK" button in the "Save Log..." prompt:
+        // Save the contents of the entire output log to a new file.
         private void saveDlg_SaveLogPrompt_FileOk(object sender, CancelEventArgs e)
         {
             // Has a file name been entered?
@@ -718,8 +779,9 @@ namespace SWBF2_AutomationTool
                 // Get the file name
                 string name = saveDlg_SaveLogPrompt.FileName;
 
+                LogOutput_Proc("ZeroMunge: Saved logfile as " + name);
+
                 // Write the output log's contents to the file
-                //File.WriteAllText(name, text_OutputLog.Text);
                 File.WriteAllLines(name, text_OutputLog.Lines);
             }
         }
@@ -738,10 +800,66 @@ namespace SWBF2_AutomationTool
         private void text_OutputLog_TextChanged(object sender, EventArgs e)
         {
             // Update character count
-            lbl_OutputLogChars.Text = ("Length: " + text_OutputLog.Text.Count().ToString());
+            lbl_OutputLogChars.Text = string.Concat("Length: ", text_OutputLog.Text.Count().ToString());
 
             // Update line count
-            lbl_OutputLogLines.Text = ("Lines: " + text_OutputLog.Lines.Count().ToString());
+            lbl_OutputLogLines.Text = string.Concat("Lines: ", text_OutputLog.Lines.Count().ToString());
+        }
+
+
+        // Set the initial state of the window
+        FormWindowState lastWindowState = FormWindowState.Minimized;
+        FormWindowState lastWindowSize = FormWindowState.Normal;
+
+        // When the user resizes the window by dragging the handles, maximizing, restoring, or minimizing:
+        // Store the WindowState for using with 
+        private void AutomationTool_Resize(object sender, EventArgs e)
+        {
+            Debug.WriteLine("WindowState changed");
+            lastWindowState = WindowState;
+            
+            if (WindowState == FormWindowState.Maximized)
+            {
+                Debug.WriteLine("WindowState: Maximized");
+                lastWindowSize = FormWindowState.Maximized;
+            }
+            if (WindowState == FormWindowState.Normal)
+            {
+                Debug.WriteLine("WindowState: Normal");
+                lastWindowSize = FormWindowState.Normal;
+            }
+        }
+
+
+        // When the user double-clicks the tray icon:
+        // Restore the form to its previous WindowState.
+        private void trayIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            WindowState = lastWindowSize;
+        }
+
+
+        // When the user clicks any of the balloon tips that pop up:
+        // Restore the form to its previous WindowState.
+        private void trayIcon_BalloonTipClicked(object sender, EventArgs e)
+        {
+            WindowState = lastWindowSize;
+        }
+
+
+        // When the user clicks the "Open" item in the tray icon context menu:
+        // Restore the form to its previous WindowState.
+        private void cmenu_TrayIcon_Open_Click(object sender, EventArgs e)
+        {
+            WindowState = lastWindowSize;
+        }
+
+
+        // When the user clicks the "Quit" item in the tray icon context menu:
+        // Exit the application.
+        private void cmenu_TrayIcon_Quit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
