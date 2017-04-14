@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SWBF2_AutomationTool
+namespace AutomationTool
 {
     static class Program
     {

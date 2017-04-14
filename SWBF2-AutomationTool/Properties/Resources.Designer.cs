@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SWBF2_AutomationTool.Properties {
+namespace AutomationTool.Properties {
     using System;
     
     

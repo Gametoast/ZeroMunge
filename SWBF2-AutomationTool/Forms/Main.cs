@@ -4,13 +4,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Media;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
-namespace SWBF2_AutomationTool
+namespace AutomationTool
 {
     public partial class AutomationTool : Form
     {
@@ -26,99 +25,18 @@ namespace SWBF2_AutomationTool
             trayIcon.Text = "Zero Munge: Idle";
 
             // Start a new log file
-            string openMessage = "Opened logfile ZeroMunge_OutputLog.log  " + DateTime.Now.ToString("yyyy-MM-dd") +  " " + GetTimestamp();
+            string openMessage = "Opened logfile ZeroMunge_OutputLog.log  " + DateTime.Now.ToString("yyyy-MM-dd") +  " " + Modules.Utilities.GetTimestamp();
             File.WriteAllText(Directory.GetCurrentDirectory() + @"\ZeroMunge_OutputLog.log", openMessage + Environment.NewLine);
         }
-        
-        
-        /// <summary>
-        /// Returns the directory of the specified file path.  
-        /// Example: Inputting "C:\Documents\foo.bar" would return "C:\Documents"
-        /// </summary>
-        /// <param name="filePath">Path of file to get directory from.</param>
-        /// <returns>Directory of the specified file path.</returns>
-        private string GetFileDirectory(string filePath)
-        {
-            // Get the file's directory
-            string filePathDir = "";
-            int index = filePath.LastIndexOf(@"\");
-            if (index > 0)
-            {
-                filePathDir = filePath.Substring(0, index);
-            }
-
-            return filePathDir;
-        }
-
-
-        /// <summary>
-        /// Returns the project ID of the project in the specified file path.  
-        /// Example: Inputting "C:\BF2_ModTools\data_ABC" would return "ABC"
-        /// </summary>
-        /// <param name="filePath">Path of file to get project ID from.</param>
-        /// <returns>Project ID of the project in the specified file path.</returns>
-        private string GetProjectID(string filePath)
-        {
-            // Get the project ID
-            string projectID = "";
-            int index = filePath.LastIndexOf("data_");
-            if (index > 0)
-            {
-                projectID = filePath.Substring(index + 5);
-            }
-
-            return projectID;
-        }
-
-
-        /// <summary>
-        /// Returns the current time in 12-hour format, e.g. "12:40:34 AM".
-        /// </summary>
-        /// <returns>Current time in 12-hour format.</returns>
-        private string GetTimestamp()
-        {
-            return DateTime.Now.ToString("h:mm:ss tt");
-        }
-
-
-        /// <summary>
-        /// Plays the specified sound type.
-        /// </summary>
-        /// <param name="type">Type of sound to play ("start", "success", or "abort").</param>
-        private void PlaySound(string type)
-        {
-            string soundToPlay = "null";
-
-            if (type == "start")
-            {
-                soundToPlay = Directory.GetCurrentDirectory() + "\\ZeroMunge\\start.wav";
-            }
-            if (type == "success")
-            {
-                soundToPlay = Directory.GetCurrentDirectory() + "\\ZeroMunge\\success.wav";
-            }
-            if (type == "abort")
-            {
-                soundToPlay = Directory.GetCurrentDirectory() + "\\ZeroMunge\\abort.wav";
-            }
-
-            // Does the sound file exist?
-            if (File.Exists(soundToPlay) || soundToPlay != "null")
-            {
-                SoundPlayer sound = new SoundPlayer(soundToPlay);
-                sound.Play();
-            }
-        }
-
 
 
         // ***************************
         // ** PROCESS MANAGER
         // ***************************
 
-        private int procManager_activeFile;
-        private Process procManager_curProc;
-        private bool procManager_procAborted;
+        private int ProcManager_activeFile;
+        private Process ProcManager_curProc;
+        private bool ProcManager_procAborted;
 
         /// <summary>
         /// Goes through the specified list of files and executes the ones that are checked.
@@ -127,19 +45,19 @@ namespace SWBF2_AutomationTool
         {
             Thread soundThread = new Thread(() => {
                 trayIcon.Text = "Zero Munge: Running";
-                PlaySound("start");
+                Modules.Utilities.PlaySound("start");
             });
             soundThread.Start();
 
-            procManager_activeFile = 0;
-            procManager_procAborted = false;
+            ProcManager_activeFile = 0;
+            ProcManager_procAborted = false;
 
             Thread enterThread = new Thread(() => {
-                LogOutput_Proc(Environment.NewLine, false);
-                LogOutput_Proc("**************************************************************");
-                LogOutput_Proc("******** ZeroMunge: Entered");
-                LogOutput_Proc("**************************************************************");
-                LogOutput_Proc(Environment.NewLine, false);
+                Log(Environment.NewLine, false);
+                Log("**************************************************************");
+                Log("******** ZeroMunge: Entered");
+                Log("**************************************************************");
+                Log(Environment.NewLine, false);
             });
             enterThread.Start();
 
@@ -159,7 +77,7 @@ namespace SWBF2_AutomationTool
             if (!singleFile)
             {
                 // If we've reached here, then all the processes are complete
-                if (procManager_activeFile >= (clist_Files.Items.Count - 1))
+                if (ProcManager_activeFile >= (clist_Files.Items.Count - 1))
                 {
                     // We have no more files, so finish up
                     ProcManager_Complete();
@@ -167,7 +85,7 @@ namespace SWBF2_AutomationTool
                 else
                 {
                     // Move on to the next file
-                    ProcManager_ActivateProcess(procManager_activeFile + 1);
+                    ProcManager_ActivateProcess(ProcManager_activeFile + 1);
                 }
             }
             else
@@ -190,14 +108,14 @@ namespace SWBF2_AutomationTool
                 return;
             }
 
-            procManager_activeFile = whichFile;
-            if (clist_Files.GetItemChecked(procManager_activeFile) == true)
+            ProcManager_activeFile = whichFile;
+            if (clist_Files.GetItemChecked(ProcManager_activeFile) == true)
             {
-                procManager_curProc = ProcManager_StartProcess(clist_Files.GetItemText(clist_Files.Items[procManager_activeFile]));
+                ProcManager_curProc = ProcManager_StartProcess(clist_Files.GetItemText(clist_Files.Items[ProcManager_activeFile]));
             }
             else
             {
-                ProcManager_NotifyProcessComplete(procManager_activeFile, false);
+                ProcManager_NotifyProcessComplete(ProcManager_activeFile, false);
             }
         }
 
@@ -214,7 +132,7 @@ namespace SWBF2_AutomationTool
             // Initilialize process start info
             ProcessStartInfo startInfo = new ProcessStartInfo(@filePath)
             {
-                WorkingDirectory = GetFileDirectory(filePath),
+                WorkingDirectory = Modules.Utilities.GetFileDirectory(filePath),
                 WindowStyle = ProcessWindowStyle.Hidden,
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
@@ -229,9 +147,9 @@ namespace SWBF2_AutomationTool
             // Log any output data that's received
             proc.OutputDataReceived += ((sender, e) =>
             {
-                if (!procManager_procAborted)
+                if (!ProcManager_procAborted)
                 {
-                    Thread outputThread = new Thread(() => LogOutput_Proc(e.Data));
+                    Thread outputThread = new Thread(() => Log(e.Data));
                     outputThread.Start();
                 }
             });
@@ -240,8 +158,8 @@ namespace SWBF2_AutomationTool
             // Print the file path before starting
             Thread initOutputThread = new Thread(() =>
             {
-                LogOutput_Proc("ZeroMunge: Executing file " + filePath);
-                LogOutput_Proc(Environment.NewLine, false);
+                Log("ZeroMunge: Executing file " + filePath);
+                Log(Environment.NewLine, false);
             });
             initOutputThread.Start();
 
@@ -249,14 +167,14 @@ namespace SWBF2_AutomationTool
             proc.Exited += ((sender, e) =>
             {
                 // Don't send out exited messages if we've aborted
-                if (!procManager_procAborted)
+                if (!ProcManager_procAborted)
                 {
                     Thread procExitThread = new Thread(() => {
-                        LogOutput_Proc("ZeroMunge: File done");
+                        Log("ZeroMunge: File done");
                     });
                     procExitThread.Start();
-                    
-                    ProcManager_NotifyProcessComplete(procManager_activeFile, singleFile);
+
+                    ProcManager_NotifyProcessComplete(ProcManager_activeFile, singleFile);
                 }
             });
 
@@ -278,23 +196,23 @@ namespace SWBF2_AutomationTool
         {
             Thread soundThread = new Thread(() => {
                 trayIcon.Text = "Zero Munge: Idle";
-                PlaySound("abort");
+                Modules.Utilities.PlaySound("abort");
             });
             soundThread.Start();
 
-            procManager_procAborted = true;
+            ProcManager_procAborted = true;
 
             // Kill the process
-            procManager_curProc.Kill();
+            ProcManager_curProc.Kill();
 
             Thread exitThread = new Thread(() => {
-                LogOutput_Proc(Environment.NewLine, false);
-                LogOutput_Proc("**************************************************************");
-                LogOutput_Proc("******** ZeroMunge: Aborted");
-                LogOutput_Proc("**************************************************************");
+                Log(Environment.NewLine, false);
+                Log("**************************************************************");
+                Log("******** ZeroMunge: Aborted");
+                Log("**************************************************************");
 
                 // Re-enable the UI
-                EnableUI_Proc(true);
+                EnableUI(true);
             });
             exitThread.Start();
         }
@@ -306,13 +224,13 @@ namespace SWBF2_AutomationTool
         public void ProcManager_Complete()
         {
             Thread exitThread = new Thread(() => {
-                LogOutput_Proc(Environment.NewLine, false);
-                LogOutput_Proc("**************************************************************");
-                LogOutput_Proc("******** ZeroMunge: Exited");
-                LogOutput_Proc("**************************************************************");
+                Log(Environment.NewLine, false);
+                Log("**************************************************************");
+                Log("******** ZeroMunge: Exited");
+                Log("**************************************************************");
 
                 // Re-enable the UI
-                EnableUI_Proc(true);
+                EnableUI(true);
             });
             exitThread.Start();
 
@@ -321,69 +239,10 @@ namespace SWBF2_AutomationTool
                 trayIcon.BalloonTipTitle = "Success";
                 trayIcon.BalloonTipText = "The operation was completed successfully.";
                 trayIcon.ShowBalloonTip(30000);
-                PlaySound("success");
+                Modules.Utilities.PlaySound("success");
             });
             soundThread.Start();
         }
-
-
-
-        // ***************************
-        // ** TOGGLE UI
-        // ***************************
-
-        // This method is executed on the worker thread and makes a thread-safe call on the UI controls.
-        /// <summary>
-        /// Sets the enabled state of the application's UI controls.
-        /// </summary>
-        /// <param name="enabled">True to enable UI interactivity, false to disable.</param>
-        public void EnableUI_Proc(bool enabled)
-        {
-            EnableUI(enabled);
-        }
-        
-
-        // This delegate enables asynchronous calls for setting the enabled property on the UI control.
-        delegate void EnableUICallback(bool enabled);
-        
-
-        /// <summary>
-        /// Sets the enabled state of the application's UI controls.  
-        /// WARNING: Don't call this directly, please call `EnableUI_Proc` instead.
-        /// </summary>
-        /// <param name="enabled">True to enable UI interactivity, false to disable.</param>
-        private void EnableUI(bool enabled)
-        {
-            // InvokeRequired required compares the thread ID of the 
-            // calling thread to the thread ID of the creating thread. 
-            // If these threads are different, it returns true.
-            if (InvokeRequired)
-            {
-                EnableUICallback cb = new EnableUICallback(EnableUI);
-                BeginInvoke(cb, new object[] { enabled });
-            }
-            else
-            {
-                // Buttons
-                btn_Run.Enabled = enabled;
-                btn_Cancel.Enabled = !enabled;
-                btn_AddFiles.Enabled = enabled;
-                btn_AddFolders.Enabled = enabled;
-                btn_AddProject.Enabled = enabled;
-                btn_RemoveFile.Enabled = enabled;
-                btn_RemoveAllFiles.Enabled = enabled;
-                btn_CopyLog.Enabled = enabled;
-                btn_SaveLog.Enabled = enabled;
-                btn_ClearLog.Enabled = enabled;
-
-                // File list
-                clist_Files.Enabled = enabled;
-
-                // Tray icon context menu
-                cmenu_TrayIcon_Quit.Enabled = enabled;
-            }
-        }
-
 
 
         // ***************************
@@ -396,30 +255,30 @@ namespace SWBF2_AutomationTool
         /// </summary>
         /// <param name="message">Text to print.</param>
         /// <param name="newLine">Optional: True to append a new line to the end of the message.</param>
-        public void LogOutput_Proc(string message, bool newLine = true)
+        public void Log(string message, bool newLine = true)
         {
-            LogOutput(message, newLine);
+            Log_Proc(message, newLine);
         }
-        
+
 
         // This delegate enables asynchronous calls for setting the text property on the output log.
-        delegate void LogOutputCallback(string message, bool newLine = true);
+        delegate void LogCallback(string message, bool newLine = true);
 
 
         /// <summary>
         /// Prints the specified text to the output log.  
-        /// WARNING: Don't call this directly, please call `LogOutput_Proc` instead.
+        /// WARNING: Don't call this directly, please call `Log` instead.
         /// </summary>
         /// <param name="message">Text to print.</param>
         /// <param name="newLine">Optional: True to append a new line to the end of the message.</param>
-        private void LogOutput(string message, bool newLine = true)
+        private void Log_Proc(string message, bool newLine = true)
         {
             // InvokeRequired required compares the thread ID of the 
             // calling thread to the thread ID of the creating thread. 
             // If these threads are different, it returns true.
             if (text_OutputLog.InvokeRequired)
             {
-                LogOutputCallback cb = new LogOutputCallback(LogOutput);
+                LogCallback cb = new LogCallback(Log_Proc);
                 BeginInvoke(cb, new object[] { message, newLine });
             }
             else
@@ -427,7 +286,7 @@ namespace SWBF2_AutomationTool
                 if (!string.IsNullOrEmpty(message))
                 {
                     // Assemble message
-                    string messageToLog = string.Concat(GetTimestamp(), " : ", message);
+                    string messageToLog = string.Concat(Modules.Utilities.GetTimestamp(), " : ", message);
 
                     // Print message
                     text_OutputLog.AppendText(messageToLog);
@@ -443,7 +302,7 @@ namespace SWBF2_AutomationTool
                     StreamWriter sw = File.AppendText(string.Concat(Directory.GetCurrentDirectory(), @"\ZeroMunge_OutputLog.log"));
                     sw.WriteLine(messageToLog);
                     sw.Close();
-                    
+
                     // Is the output log full?
                     if (text_OutputLog.TextLength >= (text_OutputLog.MaxLength - 500))
                     {
@@ -482,6 +341,64 @@ namespace SWBF2_AutomationTool
 
 
         // ***************************
+        // ** TOGGLE UI
+        // ***************************
+
+        // This method is executed on the worker thread and makes a thread-safe call on the UI controls.
+        /// <summary>
+        /// Sets the enabled state of the application's UI controls.
+        /// </summary>
+        /// <param name="enabled">True to enable UI interactivity, false to disable.</param>
+        public void EnableUI(bool enabled)
+        {
+            EnableUI_Proc(enabled);
+        }
+        
+
+        // This delegate enables asynchronous calls for setting the enabled property on the UI control.
+        delegate void EnableUICallback(bool enabled);
+        
+
+        /// <summary>
+        /// Sets the enabled state of the application's UI controls.  
+        /// WARNING: Don't call this directly, please call `EnableUI` instead.
+        /// </summary>
+        /// <param name="enabled">True to enable UI interactivity, false to disable.</param>
+        private void EnableUI_Proc(bool enabled)
+        {
+            // InvokeRequired required compares the thread ID of the 
+            // calling thread to the thread ID of the creating thread. 
+            // If these threads are different, it returns true.
+            if (InvokeRequired)
+            {
+                EnableUICallback cb = new EnableUICallback(EnableUI_Proc);
+                BeginInvoke(cb, new object[] { enabled });
+            }
+            else
+            {
+                // Buttons
+                btn_Run.Enabled = enabled;
+                btn_Cancel.Enabled = !enabled;
+                btn_AddFiles.Enabled = enabled;
+                btn_AddFolders.Enabled = enabled;
+                btn_AddProject.Enabled = enabled;
+                btn_RemoveFile.Enabled = enabled;
+                btn_RemoveAllFiles.Enabled = enabled;
+                btn_CopyLog.Enabled = enabled;
+                btn_SaveLog.Enabled = enabled;
+                btn_ClearLog.Enabled = enabled;
+
+                // File list
+                clist_Files.Enabled = enabled;
+
+                // Tray icon context menu
+                cmenu_TrayIcon_Quit.Enabled = enabled;
+            }
+        }
+
+
+
+        // ***************************
         // ** WINDOWS FORMS CONTROLS
         // ***************************
 
@@ -513,7 +430,7 @@ namespace SWBF2_AutomationTool
             if (File.Exists(file))
             {
                 Thread outputThread = new Thread(() => {
-                    LogOutput_Proc("ZeroMunge: Adding " + file);
+                    Log("ZeroMunge: Adding " + file);
                 });
                 outputThread.Start();
 
@@ -525,7 +442,7 @@ namespace SWBF2_AutomationTool
             else
             {
                 Thread outputThread = new Thread(() => {
-                    LogOutput_Proc("ZeroMunge: ERROR! " + file + " not found");
+                    Log("ZeroMunge: ERROR! " + file + " not found");
                 });
                 outputThread.Start();
 
@@ -570,10 +487,10 @@ namespace SWBF2_AutomationTool
                             break;
                     }
 
-                    LogOutput_Proc(errorMessage);
+                    Log(errorMessage);
 
                     // Re-enable the UI
-                    EnableUI_Proc(true);
+                    EnableUI(true);
                 });
                 errorThread.Start();
 
@@ -581,7 +498,7 @@ namespace SWBF2_AutomationTool
             }
 
             // Disable the UI
-            EnableUI_Proc(false);
+            EnableUI(false);
 
             ProcManager_Start();
         }
@@ -614,7 +531,7 @@ namespace SWBF2_AutomationTool
             foreach (string file in openDlg_AddFilesPrompt.FileNames)
             {
                 // Save the current directory
-                addFilesLastDir = GetFileDirectory(file);
+                addFilesLastDir = Modules.Utilities.GetFileDirectory(file);
 
                 // Add the file to the list
                 AddFile(file);
@@ -641,7 +558,7 @@ namespace SWBF2_AutomationTool
                     var file = folder + "\\munge.bat";
 
                     // Save the current directory
-                    addFoldersLastDir = GetFileDirectory(folder);
+                    addFoldersLastDir = Modules.Utilities.GetFileDirectory(folder);
                     
                     // Add the file to the list
                     AddFile(file);
@@ -663,7 +580,7 @@ namespace SWBF2_AutomationTool
             if (openDlg_AddProjectPrompt.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 // Get the project ID
-                var projectID = GetProjectID(openDlg_AddProjectPrompt.FileName);
+                var projectID = Modules.Utilities.GetProjectID(openDlg_AddProjectPrompt.FileName);
 
 
                 // Add all common munge.bat files in the project folder
@@ -682,7 +599,7 @@ namespace SWBF2_AutomationTool
                     var path = openDlg_AddProjectPrompt.FileName + theFile;
 
                     // Save the current directory
-                    addProjectLastDir = GetFileDirectory(openDlg_AddProjectPrompt.FileName);
+                    addProjectLastDir = Modules.Utilities.GetFileDirectory(openDlg_AddProjectPrompt.FileName);
 
                     // Add the file to the list
                     AddFile(path);
@@ -699,10 +616,10 @@ namespace SWBF2_AutomationTool
             if (clist_Files.Items.Count <= 0)
             {
                 Thread errorThread = new Thread(() => {
-                    LogOutput_Proc("ZeroMunge: ERROR! File list must contain at least one file");
+                    Log("ZeroMunge: ERROR! File list must contain at least one file");
 
                     // Re-enable the UI
-                    EnableUI_Proc(true);
+                    EnableUI(true);
                 });
                 errorThread.Start();
 
@@ -713,10 +630,10 @@ namespace SWBF2_AutomationTool
             if (clist_Files.SelectedItems.Count <= 0)
             {
                 Thread errorThread = new Thread(() => {
-                    LogOutput_Proc("ZeroMunge: ERROR! File must be selected");
+                    Log("ZeroMunge: ERROR! File must be selected");
 
                     // Re-enable the UI
-                    EnableUI_Proc(true);
+                    EnableUI(true);
                 });
                 errorThread.Start();
 
@@ -736,10 +653,10 @@ namespace SWBF2_AutomationTool
             if (clist_Files.Items.Count <= 0)
             {
                 Thread errorThread = new Thread(() => {
-                    LogOutput_Proc("ZeroMunge: ERROR! File list must contain at least one file");
+                    Log("ZeroMunge: ERROR! File list must contain at least one file");
 
                     // Re-enable the UI
-                    EnableUI_Proc(true);
+                    EnableUI(true);
                 });
                 errorThread.Start();
 
@@ -779,7 +696,7 @@ namespace SWBF2_AutomationTool
                 // Get the file name
                 string name = saveDlg_SaveLogPrompt.FileName;
 
-                LogOutput_Proc("ZeroMunge: Saved logfile as " + name);
+                Log("ZeroMunge: Saved logfile as " + name);
 
                 // Write the output log's contents to the file
                 File.WriteAllLines(name, text_OutputLog.Lines);
@@ -861,5 +778,11 @@ namespace SWBF2_AutomationTool
         {
             Application.Exit();
         }
+    }
+
+
+    public class ProcessManager
+    {
+        static AutomationTool formInst = new AutomationTool();
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace SWBF2_AutomationTool
+﻿namespace AutomationTool
 {
     partial class AutomationTool
     {
@@ -346,28 +346,28 @@
         }
 
         #endregion
-        private System.Windows.Forms.Button btn_Run;
-        private System.Windows.Forms.Button btn_AddFiles;
-        private System.Windows.Forms.OpenFileDialog openDlg_AddFilesPrompt;
-        private System.Windows.Forms.Button btn_RemoveFile;
-        private System.Windows.Forms.ToolTip FormTooltips;
-        private System.Windows.Forms.RichTextBox text_OutputLog;
-        private System.Windows.Forms.Label lbl_OutputLogLines;
-        private System.Windows.Forms.Button btn_ClearLog;
-        private System.Windows.Forms.Button btn_CopyLog;
-        private System.Windows.Forms.Button btn_SaveLog;
-        private System.Windows.Forms.SaveFileDialog saveDlg_SaveLogPrompt;
-        private System.Windows.Forms.CheckedListBox clist_Files;
-        private System.Windows.Forms.Button btn_AddFolders;
-        private System.Windows.Forms.Button btn_AddProject;
-        private System.Windows.Forms.Button btn_RemoveAllFiles;
-        private System.Windows.Forms.Button btn_Cancel;
         private System.Windows.Forms.SplitContainer cont_Panels;
-        private System.Windows.Forms.Label lbl_OutputLogChars;
-        private System.Windows.Forms.NotifyIcon trayIcon;
-        private System.Windows.Forms.ContextMenuStrip cmenu_TrayIcon;
         private System.Windows.Forms.ToolStripMenuItem cmenu_TrayIcon_Open;
         private System.Windows.Forms.ToolStripMenuItem cmenu_TrayIcon_Quit;
+        public System.Windows.Forms.Button btn_Run;
+        public System.Windows.Forms.Button btn_AddFiles;
+        public System.Windows.Forms.OpenFileDialog openDlg_AddFilesPrompt;
+        public System.Windows.Forms.Button btn_RemoveFile;
+        public System.Windows.Forms.ToolTip FormTooltips;
+        public System.Windows.Forms.RichTextBox text_OutputLog;
+        public System.Windows.Forms.Label lbl_OutputLogLines;
+        public System.Windows.Forms.Button btn_ClearLog;
+        public System.Windows.Forms.Button btn_CopyLog;
+        public System.Windows.Forms.Button btn_SaveLog;
+        public System.Windows.Forms.SaveFileDialog saveDlg_SaveLogPrompt;
+        public System.Windows.Forms.CheckedListBox clist_Files;
+        public System.Windows.Forms.Button btn_AddFolders;
+        public System.Windows.Forms.Button btn_AddProject;
+        public System.Windows.Forms.Button btn_RemoveAllFiles;
+        public System.Windows.Forms.Button btn_Cancel;
+        public System.Windows.Forms.Label lbl_OutputLogChars;
+        public System.Windows.Forms.NotifyIcon trayIcon;
+        public System.Windows.Forms.ContextMenuStrip cmenu_TrayIcon;
     }
 }
 
