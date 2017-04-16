@@ -16,6 +16,9 @@ namespace AutomationTool
         public AutomationTool()
         {
             InitializeComponent();
+
+            // Load any saved settings
+            LoadSettings();
         }
 
         private void AutomationTool_Load(object sender, EventArgs e)
@@ -24,9 +27,22 @@ namespace AutomationTool
             trayIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
             trayIcon.Text = "Zero Munge: Idle";
 
+            // Set the visibility of the DataGridView buttons
+            col_FileBrowse.UseColumnTextForButtonValue = true;
+            col_StagingBrowse.UseColumnTextForButtonValue = true;
+
             // Start a new log file
             string openMessage = "Opened logfile ZeroMunge_OutputLog.log  " + DateTime.Now.ToString("yyyy-MM-dd") +  " " + Modules.Utilities.GetTimestamp();
             File.WriteAllText(Directory.GetCurrentDirectory() + @"\ZeroMunge_OutputLog.log", openMessage + Environment.NewLine);
+        }
+
+
+        public void LoadSettings()
+        {
+            gameDirectory = Properties.Settings.Default["GameDirectory"].ToString();
+
+            Debug.WriteLine("Loading GameDirectory: " + gameDirectory);
+            Log("Loading GameDirectory: " + gameDirectory);
         }
 
 
@@ -37,6 +53,7 @@ namespace AutomationTool
         private int ProcManager_activeFile;
         private Process ProcManager_curProc;
         private bool ProcManager_procAborted;
+        private List<MungeFactory> ProcManager_fileList;
 
         /// <summary>
         /// Goes through the specified list of files and executes the ones that are checked.
@@ -48,6 +65,10 @@ namespace AutomationTool
                 Modules.Utilities.PlaySound("start");
             });
             soundThread.Start();
+
+            // Grab the list of checked files
+            ProcManager_fileList = new List<MungeFactory>();
+            ProcManager_fileList = GetCheckedFiles();
 
             ProcManager_activeFile = 0;
             ProcManager_procAborted = false;
@@ -77,7 +98,7 @@ namespace AutomationTool
             if (!singleFile)
             {
                 // If we've reached here, then all the processes are complete
-                if (ProcManager_activeFile >= (clist_Files.Items.Count - 1))
+                if (ProcManager_activeFile >= (ProcManager_fileList.Count - 1))
                 {
                     // We have no more files, so finish up
                     ProcManager_Complete();
@@ -103,20 +124,23 @@ namespace AutomationTool
         private void ProcManager_ActivateProcess(int whichFile)
         {
             // Don't advance to the next file if this is the last one
-            if (whichFile > clist_Files.Items.Count)
+            if (whichFile > ProcManager_fileList.Count)
             {
                 return;
             }
 
             ProcManager_activeFile = whichFile;
-            if (clist_Files.GetItemChecked(ProcManager_activeFile) == true)
-            {
-                ProcManager_curProc = ProcManager_StartProcess(clist_Files.GetItemText(clist_Files.Items[ProcManager_activeFile]));
-            }
-            else
-            {
-                ProcManager_NotifyProcessComplete(ProcManager_activeFile, false);
-            }
+
+            ProcManager_curProc = ProcManager_StartProcess(ProcManager_fileList.ElementAt(ProcManager_activeFile).FileDir);
+
+            //if (clist_Files.GetItemChecked(ProcManager_activeFile) == true)
+            //{
+            //    ProcManager_curProc = ProcManager_StartProcess(clist_Files.GetItemText(clist_Files.Items[ProcManager_activeFile]));
+            //}
+            //else
+            //{
+            //    ProcManager_NotifyProcessComplete(ProcManager_activeFile, false);
+            //}
         }
 
 
@@ -204,6 +228,9 @@ namespace AutomationTool
 
             // Kill the process
             ProcManager_curProc.Kill();
+
+            // Reset the stored list of checked files
+            ProcManager_fileList = null;
 
             Thread exitThread = new Thread(() => {
                 Log(Environment.NewLine, false);
@@ -389,7 +416,7 @@ namespace AutomationTool
                 btn_ClearLog.Enabled = enabled;
 
                 // File list
-                clist_Files.Enabled = enabled;
+                data_Files.Enabled = enabled;
 
                 // Tray icon context menu
                 cmenu_TrayIcon_Quit.Enabled = enabled;
@@ -402,11 +429,64 @@ namespace AutomationTool
         // ** WINDOWS FORMS CONTROLS
         // ***************************
 
+        /// <summary>
+        /// SWBF2's GameData directory.
+        /// </summary>
+        public string gameDirectory = "";
+
+        /// <summary>
+        /// Index of currently selected row in data_Files.
+        /// </summary>
+        public int data_Files_CurSelectedRow = -1;
+
+        /// <summary>
+        /// Index of currently selected column in data_Files.
+        /// </summary>
+        public int data_Files_CurSelectedColumn = -1;
+
+        /// <summary>
+        /// Folder selection prompt for setting the staging directory of the currently selected row in the DataGridView.
+        /// </summary>
+        public CommonOpenFileDialog openDlg_SetStagingPrompt = new CommonOpenFileDialog();
+
+        /// <summary>
+        /// Folder selection prompt for adding folders to the DataGridView.
+        /// </summary>
         public CommonOpenFileDialog openDlg_AddFoldersPrompt = new CommonOpenFileDialog();
+
+        /// <summary>
+        /// Folder selection prompt for adding projects to the DataGridView.
+        /// </summary>
         public CommonOpenFileDialog openDlg_AddProjectPrompt = new CommonOpenFileDialog();
+
+        /// <summary>
+        /// Folder selection prompt for selecting SWBF2's GameData directory.
+        /// </summary>
+        public CommonOpenFileDialog openDlg_SetGamePathPrompt = new CommonOpenFileDialog();
+
+        /// <summary>
+        /// Last directory user was in for the openDlg_SetStagingPrompt.
+        /// </summary>
+        public string setStagingLastDir = Directory.GetCurrentDirectory();
+
+        /// <summary>
+        /// Last directory user was in for the openDlg_AddFilesPrompt.
+        /// </summary>
         public string addFilesLastDir = Directory.GetCurrentDirectory();
+
+        /// <summary>
+        /// Last directory user was in for the openDlg_AddFoldersPrompt.
+        /// </summary>
         public string addFoldersLastDir = Directory.GetCurrentDirectory();
+
+        /// <summary>
+        /// Last directory user was in for the openDlg_AddProjectPrompt.
+        /// </summary>
         public string addProjectLastDir = Directory.GetCurrentDirectory();
+
+        /// <summary>
+        /// Common munge scripts for a typical project.
+        /// </summary>
         public string[] addProject_CommonFiles = {
             "\\_BUILD\\Common\\munge.bat",
             "\\_BUILD\\Sides\\ALL\\munge.bat",
@@ -420,6 +500,96 @@ namespace AutomationTool
 
 
         /// <summary>
+        /// Returns a list of files that are currently checkmarked in the file list.
+        /// </summary>
+        /// <returns>List<MungeFactory> of files that are checkmarked.</MungeFactory></returns>
+        private List<MungeFactory> GetCheckedFiles()
+        {
+            var checkedFiles = new List<MungeFactory>();
+
+            Debug.WriteLine("There are " + (data_Files.RowCount - 1) + " rows");
+
+            foreach (DataGridViewRow row in data_Files.Rows)
+            {
+                Debug.WriteLine("Row " + row.Index + ", entered");
+
+                // Add the file to the list if all its fields are correct and valid (note: StagingDirectory isn't required)
+                if (row.Cells[0].Value != null &&
+                    row.Cells[1].Value != null &&
+                    row.Cells[5].Value != null)
+                {
+                    if (row.Cells[0].Value.ToString() == "True")
+                    {
+                        Thread errorThread = new Thread(() => {
+                            if (row.Cells[0].Value == null)
+                            {
+                                Debug.WriteLine("WARNING! Row at index " + row.Index + " isn't enabled!");
+                            }
+
+                            if (String.IsNullOrEmpty(row.Cells[1].Value.ToString()))
+                            {
+                                var message = "ERROR! FilePath at row index " + row.Index + " isn't specified!";
+                                Debug.WriteLine(message);
+                                Log("ZeroMunge: " + message);
+                            }
+
+                            if (String.IsNullOrEmpty(row.Cells[3].Value.ToString()))
+                            {
+                                var message = "WARNING! StagingDirectory at row index " + row.Index + " isn't specified!";
+                                Debug.WriteLine(message);
+                                Log("ZeroMunge: " + message);
+                            }
+
+                            if (String.IsNullOrEmpty(row.Cells[5].Value.ToString()))
+                            {
+                                var message = "ERROR! MungeDirectory at row index " + row.Index + " isn't specified!";
+                                Debug.WriteLine(message);
+                                Log("ZeroMunge: " + message);
+                            }
+
+
+                            if (!File.Exists(row.Cells[1].Value.ToString()))
+                            {
+                                var message = "ERROR! FilePath at row index " + row.Index + " cannot be found!";
+                                Debug.WriteLine(message);
+                                Log("ZeroMunge: " + message);
+                            }
+                        });
+                        errorThread.Start();
+
+                        Debug.WriteLine(row.Cells[1].Value.ToString());
+                        if (row.Cells[3].Value != null)
+                        {
+                            Debug.WriteLine(row.Cells[3].Value.ToString());
+                        }
+                        Debug.WriteLine(row.Cells[5].Value.ToString());
+
+
+                        // Construct a new MungeFactory object and initialize our data into it
+                        MungeFactory fileInfo = new MungeFactory();
+
+                        fileInfo.FileDir = row.Cells[1].Value.ToString();
+                        if (row.Cells[3].Value != null)
+                        {
+                            fileInfo.StagingDir = row.Cells[3].Value.ToString();
+                        }
+                        fileInfo.MungeDir = row.Cells[5].Value.ToString();
+
+                        // Add our MungeFactory object to the checked files list
+                        checkedFiles.Add(fileInfo);
+                    }
+                    else
+                    {
+                        Debug.WriteLine("WARNING! Row at index " + row.Index + " isn't enabled!");
+                    }
+                }
+            }
+
+            return checkedFiles;
+        }
+
+
+        /// <summary>
         /// Adds the specified file path to the file list.
         /// </summary>
         /// <param name="file">Full path of file to add.</param>
@@ -429,13 +599,105 @@ namespace AutomationTool
             // Does the file path exist?
             if (File.Exists(file))
             {
-                Thread outputThread = new Thread(() => {
-                    Log("ZeroMunge: Adding " + file);
-                });
-                outputThread.Start();
-
                 // Add the file to the list
-                clist_Files.Items.Add(file, true);
+                if (data_Files.SelectedCells.Count >= 0)
+                {
+                    // Auto-set the staging directory if the game directory has been set
+                    if (gameDirectory != "")
+                    {
+                        string projectStagingRoot = gameDirectory + "\\addon\\" + Modules.Utilities.GetProjectID(file);
+                        string stagingDirectory = "";
+                        string mungeOutputDirectory = "";
+
+                        Debug.WriteLine(Modules.Utilities.GetProjectID(file));
+
+                        // Set the file's staging directory based on the file's munge type (e.g., side, world, common)
+                        switch (Modules.Utilities.GetMungeType(file))
+                        {
+                            default:
+                                stagingDirectory = "nil";
+                                break;
+                            case Modules.Utilities.MungeTypes.Addme:
+                                stagingDirectory = projectStagingRoot + "\\";
+                                break;
+                            case Modules.Utilities.MungeTypes.Common:
+                                stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\";
+                                break;
+                            case Modules.Utilities.MungeTypes.Load:
+                                stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\Load\\";
+                                break;
+                            case Modules.Utilities.MungeTypes.Shell:
+                                stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\";
+                                break;
+                            case Modules.Utilities.MungeTypes.Side:
+                                stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\Load\\SIDE\\";
+                                break;
+                            case Modules.Utilities.MungeTypes.Sound:
+                                stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\Load\\Sound\\";
+                                break;
+                            case Modules.Utilities.MungeTypes.World:
+                                stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\" + Modules.Utilities.GetProjectID(file) + "\\";
+                                break;
+                        }
+
+                        // Get the file's munge output directory
+                        mungeOutputDirectory = Modules.Utilities.GetMungeDirectory(file);
+
+
+                        // Remove any duplicate backslashes
+                        file = file.Replace(@"\\", @"\");
+                        stagingDirectory = stagingDirectory.Replace(@"\\", @"\");
+                        mungeOutputDirectory = mungeOutputDirectory.Replace(@"\\", @"\");
+                        
+
+                        // Are none of the rows selected? (i.e., did the user click the "Add Files..." button?)
+                        if (data_Files_CurSelectedRow == -1)
+                        {
+                            // Create a new row first
+                            int rowId = data_Files.Rows.Add();
+
+                            // Grab the new row
+                            DataGridViewRow newRow = data_Files.Rows[rowId];
+
+                            // Initialize data into the new row
+                            newRow.Cells[0].Value = true;
+                            newRow.Cells[1].Value = file;
+                            newRow.Cells[3].Value = stagingDirectory;
+                            newRow.Cells[5].Value = mungeOutputDirectory;
+                        }
+                        else
+                        {
+                            // Add a blank row to the bottom of the list
+                            data_Files.Rows.Add();
+
+                            // Initialize data into the new row
+                            data_Files[0, data_Files_CurSelectedRow].Value = true;
+                            data_Files[1, data_Files_CurSelectedRow].Value = file;
+                            data_Files[3, data_Files_CurSelectedRow].Value = stagingDirectory;
+                            data_Files[5, data_Files_CurSelectedRow].Value = mungeOutputDirectory;
+                        }
+
+                        
+                        Thread logThread = new Thread(() => {
+                            Log(Environment.NewLine, false);
+                            Log("ZeroMunge: Adding file: " + file);
+                            Log("ZeroMunge: Staging directory: " + stagingDirectory);
+                            Log("ZeroMunge: Munge output directory: " + mungeOutputDirectory);
+                        });
+                        logThread.Start();
+
+
+                        // Reset the stored index of the currently selected row
+                        data_Files_CurSelectedRow = -1;
+                    }
+                    else
+                    {
+                        Thread errorThread = new Thread(() => {
+                            Log("ZeroMunge: ERROR! Game directory not set!");
+                        });
+                        errorThread.Start();
+                    }
+                }
 
                 return true;
             }
@@ -451,21 +713,118 @@ namespace AutomationTool
         }
 
 
+        // When the user clicks on a cell:
+        // Reset the currently selected row header index.
+        private void data_Files_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var senderGrid = (DataGridView)sender;
+
+            // Reset the currently selected header row
+            if (e.RowIndex >= 0)
+            {
+                Debug.WriteLine("Cell clicked at row index " + e.RowIndex + ", column index " + e.ColumnIndex);
+
+                data_Files_CurSelectedRow = e.RowIndex;
+                data_Files_CurSelectedColumn = e.ColumnIndex;
+
+                //Debug.WriteLine("Selected header row: " + data_Files_CurSelectedHeaderRow);
+            }
+        }
+
+
+        // When the user clicks on a cell in the DataGridView:
+        // Do something depending on the cell that was clicked on.
+        private void data_Files_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var senderGrid = (DataGridView)sender;
+
+            // Debug messages
+            if (e.RowIndex >= 0)
+            {
+                string cellType = "nil";
+
+                // Determine the cell type
+                if (senderGrid.Columns[e.ColumnIndex] is DataGridViewTextBoxColumn)
+                {
+                    cellType = "TextBox";
+                }
+                else if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn)
+                {
+                    cellType = "Button";
+                }
+                else if (senderGrid.Columns[e.ColumnIndex] is DataGridViewCheckBoxColumn)
+                {
+                    cellType = "CheckBox";
+                }
+
+                Debug.WriteLine(cellType + " cell content clicked at row index " + e.RowIndex + ", column index " + e.ColumnIndex);
+            }
+
+            // Do stuff if the clicked cell's type was Button
+            switch (data_Files_CurSelectedColumn)
+            {
+                case 2:     // col_FileBrowse
+                    // Open the 'Add Files' prompt
+                    openDlg_AddFilesPrompt.InitialDirectory = addFilesLastDir;
+                    openDlg_AddFilesPrompt.ShowDialog();
+                    break;
+                        
+                case 4:     // col_StagingBrowse
+                    // Fire the faux-event for the button
+                    btn_SetStaging_Click();
+                    break;
+            }
+        }
+
+
+        // This is called when the user clicks the Browse button to select a new staging directory for a file.
+        // Prompt the user to select a new staging directory for the currently selected file.
+        private void btn_SetStaging_Click()
+        {
+            openDlg_SetStagingPrompt.Title = "Select Staging Directory";
+            openDlg_SetStagingPrompt.InitialDirectory = data_Files[2, data_Files_CurSelectedRow].Value.ToString();
+            openDlg_SetStagingPrompt.IsFolderPicker = true;
+            openDlg_SetStagingPrompt.Multiselect = false;
+
+            // Auto-detect the munge.bat file inside each selected folder and add it to the file list
+            if (openDlg_SetStagingPrompt.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                var folder = openDlg_SetStagingPrompt.FileName;
+
+                // Save the current directory
+                setStagingLastDir = Modules.Utilities.GetFileDirectory(folder);
+
+                // Set the staging directory if it exists
+                if (Directory.Exists(folder))
+                {
+                    data_Files[3, data_Files_CurSelectedRow].Value = folder;
+                }
+            }
+        }
+
+
         // When the user clicks the "Run" button:
         // Begin processing the list of files as a playlist.
         private void btn_Run_Click(object sender, EventArgs e)
         {
             int procError = 0;
-            
+
             // Are there no items in the list?
-            if (clist_Files.Items.Count <= 0)
+            if (data_Files.RowCount == 1)
             {
-                procError = 1;
+                if (data_Files.Rows[0].Cells[1].Value == null ||
+                    data_Files.Rows[0].Cells[3].Value == null ||
+                    data_Files.Rows[0].Cells[5].Value == null)
+                {
+                    procError = 1;
+                }
             }
             else
             {
+                var files = GetCheckedFiles();
+
                 // Are none of the items checked?
-                if (clist_Files.CheckedItems.Count <= 0)
+                if (files.Count <= 0)
                 {
                     procError = 2;
                 }
@@ -527,15 +886,13 @@ namespace AutomationTool
         // Add the selected files to the file list.
         private void openDlg_AddFilesPrompt_FileOk(object sender, CancelEventArgs e)
         {
-            // Add the selected files to the list
-            foreach (string file in openDlg_AddFilesPrompt.FileNames)
-            {
-                // Save the current directory
-                addFilesLastDir = Modules.Utilities.GetFileDirectory(file);
+            string file = openDlg_AddFilesPrompt.FileName;
 
-                // Add the file to the list
-                AddFile(file);
-            }
+            // Save the current directory
+            addFilesLastDir = Modules.Utilities.GetFileDirectory(file);
+
+            // Add the file to the list
+            AddFile(file);
         }
 
 
@@ -613,7 +970,7 @@ namespace AutomationTool
         private void btn_RemoveFile_Click(object sender, EventArgs e)
         {
             // Don't continue if there aren't any files in the list
-            if (clist_Files.Items.Count <= 0)
+            if (data_Files.RowCount <= 0)
             {
                 Thread errorThread = new Thread(() => {
                     Log("ZeroMunge: ERROR! File list must contain at least one file");
@@ -626,22 +983,25 @@ namespace AutomationTool
                 return;
             }
 
-            // Don't continue if a file isn't selected from the list
-            if (clist_Files.SelectedItems.Count <= 0)
+            // Is the currently selected column the row header?
+            if (data_Files_CurSelectedColumn == -1)
             {
-                Thread errorThread = new Thread(() => {
-                    Log("ZeroMunge: ERROR! File must be selected");
+                if (data_Files_CurSelectedRow == data_Files.RowCount)
+                {
+                    // Remove the currently selected file from the list
+                    data_Files.Rows.RemoveAt(data_Files_CurSelectedRow);
+                }
+                else
+                {
+                    Thread errorThread = new Thread(() => {
+                        Log("ZeroMunge: ERROR! Cannot remove the last (uncommitted) row");
 
-                    // Re-enable the UI
-                    EnableUI(true);
-                });
-                errorThread.Start();
-
-                return;
+                        // Re-enable the UI
+                        EnableUI(true);
+                    });
+                    errorThread.Start();
+                }
             }
-
-            // Remove the currently selected file from the list
-            clist_Files.Items.RemoveAt(clist_Files.SelectedIndex);
         }
 
 
@@ -649,26 +1009,66 @@ namespace AutomationTool
         // Remove all files from the file list.
         private void btn_RemoveAllFiles_Click(object sender, EventArgs e)
         {
-            // Don't continue if there aren't any files in the list
-            if (clist_Files.Items.Count <= 0)
+            // Is there at least 1 committed row to remove?
+            if (data_Files.RowCount > 1)
             {
-                Thread errorThread = new Thread(() => {
+                Debug.WriteLine("Rows to remove: " + (data_Files.RowCount - 1));
+
+                // Keep removing the topmost row until only 1 row remains
+                do
+                {
+                    data_Files.Rows.RemoveAt(data_Files.Rows[0].Index);
+                    Debug.WriteLine("Rows remaining: " + (data_Files.RowCount - 1));
+                } while (data_Files.RowCount > 1);
+            }
+            else
+            {
+                Thread errorThread = new Thread(() =>
+                {
                     Log("ZeroMunge: ERROR! File list must contain at least one file");
 
                     // Re-enable the UI
                     EnableUI(true);
                 });
                 errorThread.Start();
-
-                return;
             }
-
-            clist_Files.Items.Clear();
         }
 
 
-        // When the user clicks the "Copy to Clipboard" button:
-        // Copy the entire contents of the log to the clipboard.
+        // When the user clicks the "Set Game Path..." button:
+        // Prompt the user to select the file path of SWBF2's executable.
+        private void btn_SetGamePath_Click(object sender, EventArgs e)
+        {
+            openDlg_SelectGameExePrompt.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+            openDlg_SelectGameExePrompt.ShowDialog();
+        }
+
+
+        // When the user clicks the "OK" button in the "Select Game Executable..." prompt:
+        // Sets the game directory based on the file path of SWBF2's executable.
+        private void openDlg_SelectGameExePrompt_FileOk(object sender, CancelEventArgs e)
+        {
+            var file = openDlg_SelectGameExePrompt.FileName;
+
+            // Set the game path if it exists
+            if (Directory.Exists(Modules.Utilities.GetFileDirectory(file)))
+            {
+                gameDirectory = Modules.Utilities.GetFileDirectory(file);
+
+                Properties.Settings.Default["GameDirectory"] = gameDirectory;
+                Properties.Settings.Default.Save();
+
+                Thread outputThread = new Thread(() => {
+                    Debug.WriteLine("Saving GameDirectory: " + Properties.Settings.Default["GameDirectory"]);
+                    Log("ZeroMunge: Saving GameDirectory: " + Properties.Settings.Default["GameDirectory"]);
+                });
+                outputThread.Start();
+            }
+        }
+
+
+        // When the user clicks the "Copy Log" button:
+        // Copy the contents of the output log window to the clipboard.
         private void btn_CopyLog_Click(object sender, EventArgs e)
         {
             text_OutputLog.SelectAll();
@@ -677,7 +1077,7 @@ namespace AutomationTool
         }
 
 
-        // When the user clicks the "Save Log..." button:
+        // When the user clicks the "Save Log As..." button:
         // Prompt the user to save the output log to a new file.
         private void btn_SaveLog_Click(object sender, EventArgs e)
         {
@@ -686,7 +1086,7 @@ namespace AutomationTool
         }
 
         
-        // When the user clicks the "OK" button in the "Save Log..." prompt:
+        // When the user clicks the "OK" button in the "Save Log As" prompt:
         // Save the contents of the entire output log to a new file.
         private void saveDlg_SaveLogPrompt_FileOk(object sender, CancelEventArgs e)
         {
@@ -729,7 +1129,7 @@ namespace AutomationTool
         FormWindowState lastWindowSize = FormWindowState.Normal;
 
         // When the user resizes the window by dragging the handles, maximizing, restoring, or minimizing:
-        // Store the WindowState for using with 
+        // Store the WindowState for future reference when the user double-clicks the trayIcon.
         private void AutomationTool_Resize(object sender, EventArgs e)
         {
             Debug.WriteLine("WindowState changed");
@@ -778,11 +1178,17 @@ namespace AutomationTool
         {
             Application.Exit();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            GetCheckedFiles();
+        }
     }
 
-
-    public class ProcessManager
+    public class MungeFactory
     {
-        static AutomationTool formInst = new AutomationTool();
+        public string FileDir { get; set; }
+        public string StagingDir { get; set; }
+        public string MungeDir { get; set; }
     }
 }

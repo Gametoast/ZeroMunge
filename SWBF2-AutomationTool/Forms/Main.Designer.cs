@@ -29,9 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AutomationTool));
             this.btn_Run = new System.Windows.Forms.Button();
-            this.clist_Files = new System.Windows.Forms.CheckedListBox();
             this.btn_AddFiles = new System.Windows.Forms.Button();
             this.openDlg_AddFilesPrompt = new System.Windows.Forms.OpenFileDialog();
             this.btn_RemoveFile = new System.Windows.Forms.Button();
@@ -43,19 +44,30 @@
             this.btn_AddProject = new System.Windows.Forms.Button();
             this.btn_RemoveAllFiles = new System.Windows.Forms.Button();
             this.btn_Cancel = new System.Windows.Forms.Button();
+            this.btn_SetGamePath = new System.Windows.Forms.Button();
             this.text_OutputLog = new System.Windows.Forms.RichTextBox();
             this.lbl_OutputLogLines = new System.Windows.Forms.Label();
             this.saveDlg_SaveLogPrompt = new System.Windows.Forms.SaveFileDialog();
             this.cont_Panels = new System.Windows.Forms.SplitContainer();
+            this.data_Files = new System.Windows.Forms.DataGridView();
+            this.col_Enabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.col_File = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_FileBrowse = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.col_Staging = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_StagingBrowse = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.col_MungeDir = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lbl_OutputLogChars = new System.Windows.Forms.Label();
             this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.cmenu_TrayIcon = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmenu_TrayIcon_Open = new System.Windows.Forms.ToolStripMenuItem();
             this.cmenu_TrayIcon_Quit = new System.Windows.Forms.ToolStripMenuItem();
+            this.button2 = new System.Windows.Forms.Button();
+            this.openDlg_SelectGameExePrompt = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.cont_Panels)).BeginInit();
             this.cont_Panels.Panel1.SuspendLayout();
             this.cont_Panels.Panel2.SuspendLayout();
             this.cont_Panels.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.data_Files)).BeginInit();
             this.cmenu_TrayIcon.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -70,18 +82,6 @@
             this.FormTooltips.SetToolTip(this.btn_Run, "Executes each file in the list in order.");
             this.btn_Run.UseVisualStyleBackColor = true;
             this.btn_Run.Click += new System.EventHandler(this.btn_Run_Click);
-            // 
-            // clist_Files
-            // 
-            this.clist_Files.CheckOnClick = true;
-            this.clist_Files.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.clist_Files.FormattingEnabled = true;
-            this.clist_Files.Location = new System.Drawing.Point(0, 0);
-            this.clist_Files.Name = "clist_Files";
-            this.clist_Files.ScrollAlwaysVisible = true;
-            this.clist_Files.Size = new System.Drawing.Size(651, 334);
-            this.clist_Files.TabIndex = 1;
-            this.clist_Files.TabStop = false;
             // 
             // btn_AddFiles
             // 
@@ -101,7 +101,6 @@
             // openDlg_AddFilesPrompt
             // 
             this.openDlg_AddFilesPrompt.Filter = "Batch files|*.bat";
-            this.openDlg_AddFilesPrompt.Multiselect = true;
             this.openDlg_AddFilesPrompt.Title = "Select Files";
             this.openDlg_AddFilesPrompt.FileOk += new System.ComponentModel.CancelEventHandler(this.openDlg_AddFilesPrompt_FileOk);
             // 
@@ -136,8 +135,8 @@
             this.btn_CopyLog.Name = "btn_CopyLog";
             this.btn_CopyLog.Size = new System.Drawing.Size(102, 23);
             this.btn_CopyLog.TabIndex = 6;
-            this.btn_CopyLog.Text = "Copy to Clipboard";
-            this.FormTooltips.SetToolTip(this.btn_CopyLog, "Copies the contents of the output log to the clipboard.");
+            this.btn_CopyLog.Text = "Copy Log";
+            this.FormTooltips.SetToolTip(this.btn_CopyLog, "Copies the contents of the output log window to the clipboard.");
             this.btn_CopyLog.UseVisualStyleBackColor = true;
             this.btn_CopyLog.Click += new System.EventHandler(this.btn_CopyLog_Click);
             // 
@@ -148,7 +147,7 @@
             this.btn_SaveLog.Name = "btn_SaveLog";
             this.btn_SaveLog.Size = new System.Drawing.Size(102, 23);
             this.btn_SaveLog.TabIndex = 7;
-            this.btn_SaveLog.Text = "Save Log...";
+            this.btn_SaveLog.Text = "Save Log As...";
             this.btn_SaveLog.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.FormTooltips.SetToolTip(this.btn_SaveLog, "Opens a prompt to save the contents of the output log to a new file.");
             this.btn_SaveLog.UseVisualStyleBackColor = true;
@@ -203,9 +202,22 @@
             this.btn_Cancel.TabIndex = 12;
             this.btn_Cancel.TabStop = false;
             this.btn_Cancel.Text = "Cancel";
-            this.FormTooltips.SetToolTip(this.btn_Cancel, "Stops processing files. WARNING: Canceling a munge is NOT recommended.");
+            this.FormTooltips.SetToolTip(this.btn_Cancel, "Stops processing files. WARNING: Canceling a munge is strongly NOT recommended.");
             this.btn_Cancel.UseVisualStyleBackColor = true;
             this.btn_Cancel.Click += new System.EventHandler(this.btn_Cancel_Click);
+            // 
+            // btn_SetGamePath
+            // 
+            this.btn_SetGamePath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_SetGamePath.Location = new System.Drawing.Point(669, 244);
+            this.btn_SetGamePath.Name = "btn_SetGamePath";
+            this.btn_SetGamePath.Size = new System.Drawing.Size(102, 23);
+            this.btn_SetGamePath.TabIndex = 15;
+            this.btn_SetGamePath.Text = "Set Game Path...";
+            this.FormTooltips.SetToolTip(this.btn_SetGamePath, "Opens a prompt to point Zero Munge to Star Wars Battlefront II\'s GameData directo" +
+        "ry.");
+            this.btn_SetGamePath.UseVisualStyleBackColor = true;
+            this.btn_SetGamePath.Click += new System.EventHandler(this.btn_SetGamePath_Click);
             // 
             // text_OutputLog
             // 
@@ -216,7 +228,7 @@
             this.text_OutputLog.MaxLength = 20000;
             this.text_OutputLog.Name = "text_OutputLog";
             this.text_OutputLog.ReadOnly = true;
-            this.text_OutputLog.Size = new System.Drawing.Size(651, 195);
+            this.text_OutputLog.Size = new System.Drawing.Size(651, 286);
             this.text_OutputLog.TabIndex = 5;
             this.text_OutputLog.TabStop = false;
             this.text_OutputLog.Text = "";
@@ -238,7 +250,7 @@
             this.saveDlg_SaveLogPrompt.DefaultExt = "log";
             this.saveDlg_SaveLogPrompt.FileName = "ZeroMunge_OutputLog";
             this.saveDlg_SaveLogPrompt.Filter = "Log files|*.log";
-            this.saveDlg_SaveLogPrompt.Title = "Save Log";
+            this.saveDlg_SaveLogPrompt.Title = "Save Log As";
             this.saveDlg_SaveLogPrompt.FileOk += new System.ComponentModel.CancelEventHandler(this.saveDlg_SaveLogPrompt_FileOk);
             // 
             // cont_Panels
@@ -253,7 +265,7 @@
             // 
             // cont_Panels.Panel1
             // 
-            this.cont_Panels.Panel1.Controls.Add(this.clist_Files);
+            this.cont_Panels.Panel1.Controls.Add(this.data_Files);
             this.cont_Panels.Panel1.Cursor = System.Windows.Forms.Cursors.Default;
             this.cont_Panels.Panel1MinSize = 139;
             // 
@@ -263,10 +275,82 @@
             this.cont_Panels.Panel2.Cursor = System.Windows.Forms.Cursors.Default;
             this.cont_Panels.Panel2MinSize = 150;
             this.cont_Panels.Size = new System.Drawing.Size(651, 537);
-            this.cont_Panels.SplitterDistance = 334;
+            this.cont_Panels.SplitterDistance = 243;
             this.cont_Panels.SplitterIncrement = 15;
             this.cont_Panels.SplitterWidth = 8;
             this.cont_Panels.TabIndex = 13;
+            // 
+            // data_Files
+            // 
+            this.data_Files.AllowUserToResizeRows = false;
+            this.data_Files.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.data_Files.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.col_Enabled,
+            this.col_File,
+            this.col_FileBrowse,
+            this.col_Staging,
+            this.col_StagingBrowse,
+            this.col_MungeDir});
+            this.data_Files.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.data_Files.Location = new System.Drawing.Point(0, 0);
+            this.data_Files.Name = "data_Files";
+            this.data_Files.RowHeadersWidth = 31;
+            this.data_Files.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.data_Files.ShowEditingIcon = false;
+            this.data_Files.Size = new System.Drawing.Size(651, 243);
+            this.data_Files.TabIndex = 4;
+            this.data_Files.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.data_Files_CellClick);
+            this.data_Files.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.data_Files_CellContentClick);
+            // 
+            // col_Enabled
+            // 
+            this.col_Enabled.HeaderText = "";
+            this.col_Enabled.Name = "col_Enabled";
+            this.col_Enabled.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.col_Enabled.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.col_Enabled.Width = 22;
+            // 
+            // col_File
+            // 
+            this.col_File.HeaderText = "File Path";
+            this.col_File.Name = "col_File";
+            this.col_File.Width = 265;
+            // 
+            // col_FileBrowse
+            // 
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle15.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle15;
+            this.col_FileBrowse.HeaderText = "";
+            this.col_FileBrowse.Name = "col_FileBrowse";
+            this.col_FileBrowse.ReadOnly = true;
+            this.col_FileBrowse.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.col_FileBrowse.Text = "...";
+            this.col_FileBrowse.Width = 30;
+            // 
+            // col_Staging
+            // 
+            this.col_Staging.HeaderText = "Staging Directory";
+            this.col_Staging.Name = "col_Staging";
+            this.col_Staging.Width = 265;
+            // 
+            // col_StagingBrowse
+            // 
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle16.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+            this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle16;
+            this.col_StagingBrowse.HeaderText = "";
+            this.col_StagingBrowse.Name = "col_StagingBrowse";
+            this.col_StagingBrowse.ReadOnly = true;
+            this.col_StagingBrowse.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.col_StagingBrowse.Text = "...";
+            this.col_StagingBrowse.Width = 30;
+            // 
+            // col_MungeDir
+            // 
+            this.col_MungeDir.HeaderText = "Munge Directory";
+            this.col_MungeDir.Name = "col_MungeDir";
+            this.col_MungeDir.Width = 265;
             // 
             // lbl_OutputLogChars
             // 
@@ -309,6 +393,24 @@
             this.cmenu_TrayIcon_Quit.Text = "Quit";
             this.cmenu_TrayIcon_Quit.Click += new System.EventHandler(this.cmenu_TrayIcon_Quit_Click);
             // 
+            // button2
+            // 
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2.Location = new System.Drawing.Point(670, 283);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 16;
+            this.button2.Text = "button2";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Visible = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // openDlg_SelectGameExePrompt
+            // 
+            this.openDlg_SelectGameExePrompt.Filter = "BattlefrontII.exe|BattlefrontII.exe";
+            this.openDlg_SelectGameExePrompt.Title = "Select Game Executable";
+            this.openDlg_SelectGameExePrompt.FileOk += new System.ComponentModel.CancelEventHandler(this.openDlg_SelectGameExePrompt_FileOk);
+            // 
             // AutomationTool
             // 
             this.AcceptButton = this.btn_Run;
@@ -316,6 +418,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btn_Cancel;
             this.ClientSize = new System.Drawing.Size(784, 561);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.btn_SetGamePath);
             this.Controls.Add(this.lbl_OutputLogChars);
             this.Controls.Add(this.cont_Panels);
             this.Controls.Add(this.btn_Cancel);
@@ -339,6 +443,7 @@
             this.cont_Panels.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.cont_Panels)).EndInit();
             this.cont_Panels.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.data_Files)).EndInit();
             this.cmenu_TrayIcon.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -360,7 +465,6 @@
         public System.Windows.Forms.Button btn_CopyLog;
         public System.Windows.Forms.Button btn_SaveLog;
         public System.Windows.Forms.SaveFileDialog saveDlg_SaveLogPrompt;
-        public System.Windows.Forms.CheckedListBox clist_Files;
         public System.Windows.Forms.Button btn_AddFolders;
         public System.Windows.Forms.Button btn_AddProject;
         public System.Windows.Forms.Button btn_RemoveAllFiles;
@@ -368,6 +472,18 @@
         public System.Windows.Forms.Label lbl_OutputLogChars;
         public System.Windows.Forms.NotifyIcon trayIcon;
         public System.Windows.Forms.ContextMenuStrip cmenu_TrayIcon;
+        public System.Windows.Forms.CheckedListBox clist_Files;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.DataGridView data_Files;
+        private System.Windows.Forms.Button btn_SetGamePath;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn col_Enabled;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_File;
+        private System.Windows.Forms.DataGridViewButtonColumn col_FileBrowse;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_Staging;
+        private System.Windows.Forms.DataGridViewButtonColumn col_StagingBrowse;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_MungeDir;
+        private System.Windows.Forms.Button button2;
+        public System.Windows.Forms.OpenFileDialog openDlg_SelectGameExePrompt;
     }
 }
 
