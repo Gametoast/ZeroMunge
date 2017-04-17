@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Media;
+using System.Text.RegularExpressions;
 
 namespace AutomationTool.Modules
 {
@@ -21,6 +23,42 @@ namespace AutomationTool.Modules
 
 
         /// <summary>
+        /// Returns the first N characters of the specified string.
+        /// </summary>
+        /// <param name="str">String to truncate.</param>
+        /// <param name="maxLength">Number of characters to return.</param>
+        /// <returns>First N characters of the specified string</returns>
+        public static string TruncateLongString(this string str, int maxLength)
+        {
+            return str.Substring(0, Math.Min(str.Length, maxLength));
+        }
+
+
+        /// <summary>
+        /// Given a string containing lines of text separated by new-line delimiters ("\n"), returns a list containing each extracted line.
+        /// </summary>
+        /// <param name="str">String to extract lines from.</param>
+        /// <returns>List of extracted lines.</returns>
+        public static List<string> ExtractLines(string str)
+        {
+            // List that we're gonna add the split segments to
+            List<string> newStr = new List<string>();
+
+            // Split the string wherever there's a new-line delimiter and store the split segments in an array
+            string[] strSplitted = str.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Add each split segment to the list
+            foreach (string s in strSplitted)
+            {
+                Debug.WriteLine(s);
+                newStr.Add(s);
+            }
+
+            return newStr;
+        }
+
+
+        /// <summary>
         /// Returns the directory of the specified file path.  
         /// Example: Inputting "C:\Documents\foo.bar" would return "C:\Documents"
         /// </summary>
@@ -37,6 +75,20 @@ namespace AutomationTool.Modules
             }
 
             return filePathDir;
+        }
+
+
+        /// <summary>
+        /// Returns the name of the specified file path's parent folder.  
+        /// Example: Inputting "C:\Documents\foo.bar" would return "Documents"
+        /// </summary>
+        /// <param name="filePath">Path of file to get parent folder name from.</param>
+        /// <returns>Name of the specified file path's parent folder.</returns>
+        public static string GetParentFolderName(string filePath)
+        {
+            DirectoryInfo dir = new DirectoryInfo(GetFileDirectory(filePath));
+
+            return dir.Name;
         }
 
 
@@ -135,6 +187,116 @@ namespace AutomationTool.Modules
             }
 
             return directory;
+        }
+
+
+        /// <summary>
+        /// Returns a list of names of files compiled by the munge script at the specified file path.  
+        /// </summary>
+        /// <param name="mungeScriptPath">Path of munge script to list of compiled files from.</param>
+        /// <returns>List of names of files compiled by munge script.</returns>
+        public static List<string> GetCompiledFiles(string mungeScriptPath)
+        {
+            List<string> compiledFiles = new List<string>();
+
+            DirectoryInfo dir = new DirectoryInfo(GetFileDirectory(mungeScriptPath));
+            DirectoryInfo dirdir = new DirectoryInfo(dir.Name);
+            DirectoryInfo dirdirdir = new DirectoryInfo(dirdir.Name);
+
+            //Debug.WriteLine(dir.Name);
+            //Debug.WriteLine(dirdir.Name);
+            //Debug.WriteLine(dirdirdir.Name);
+
+            switch (GetMungeType(mungeScriptPath))
+            {
+                default:
+                    compiledFiles.Add("nil");
+                    break;
+                case MungeTypes.Addme:
+                    compiledFiles.Add("addme.script");
+                    break;
+                case MungeTypes.Common:
+                    compiledFiles = ParseLevelpackReqs(mungeScriptPath);
+                    break;
+                case MungeTypes.Load:
+                    compiledFiles.Add("common.lvl");
+                    break;
+                case MungeTypes.Shell:
+                    compiledFiles = ParseLevelpackReqs(mungeScriptPath);
+                    break;
+                case MungeTypes.Side:
+                    compiledFiles.Add(GetParentFolderName(mungeScriptPath));
+                    break;
+                case MungeTypes.Sound:
+                    compiledFiles.Add("nil");   // since soundmunge takes care of copying files
+                    break;
+                case MungeTypes.World:
+                    compiledFiles.Add(GetParentFolderName(mungeScriptPath));
+                    break;
+            }
+
+            //Debug.WriteLine(directory);
+
+            return compiledFiles;
+        }
+
+
+        /// <summary>
+        /// Scans through the munge script at the specified path and extracts all of the names of the REQs compiled by levelpack.
+        /// </summary>
+        /// <param name="mungeScriptPath">Path of munge script to scan.</param>
+        /// <returns>List of the names of the REQs compiled by levelpack.</returns>
+        public static List<string> ParseLevelpackReqs(string mungeScriptPath)
+        {
+            List<string> reqs = new List<string>();
+
+            if (!File.Exists(mungeScriptPath))
+            {
+                Debug.WriteLine("ERROR! File doesn't exist at " + mungeScriptPath);
+                return reqs;
+            }
+
+
+            //Debug.WriteLine("Adding REQs to list:");
+
+            string curLine;
+
+            // Scan the file line by line and extract the REQ names from the levelpack lines
+            StreamReader file = new StreamReader(mungeScriptPath);
+            while ((curLine = file.ReadLine()) != null)
+            {
+                // Is the line a levelpack line?
+                if (TruncateLongString(curLine, 9).ToLower() == "levelpack")
+                {
+                    string reqName = curLine;
+
+                    // Sample of the beginning of a levelpack line
+                    var levelpackSample = "levelpack -inputfile";
+
+                    // Remove the right half of the string from the file extension onwards
+                    reqName = reqName.TruncateLongString(reqName.LastIndexOf(".req"));
+
+                    // Remove the left half of the string from the inputfile command onwards
+                    reqName = reqName.Remove(0, levelpackSample.Length);
+
+                    // Trim any excess spaces from the ends of the string
+                    reqName = reqName.Trim(" "[0]);
+
+                    // Add the LVL file extension to the end
+                    reqName = string.Concat(reqName, ".lvl");
+
+                    // Exclude any lines that are for munging sub-lvls (they typically look like this: "MISSION\*.req")
+                    if (!reqName.Contains("*"))
+                    {
+                        //Debug.WriteLine(reqName);
+                        reqs.Add(reqName);
+                    }
+                }
+            }
+
+            file.Close();
+            
+            return reqs;
         }
 
 

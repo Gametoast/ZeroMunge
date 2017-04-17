@@ -13,6 +13,7 @@ namespace AutomationTool
 {
     public partial class AutomationTool : Form
     {
+        // This is the very first method called by the application. It initializes the UI controls and loads user settings.
         public AutomationTool()
         {
             InitializeComponent();
@@ -21,6 +22,9 @@ namespace AutomationTool
             LoadSettings();
         }
 
+
+        // When the AutomationTool form is finished loading:
+        // Create the tray icon, initialize some stuff with the file list, and start a new output log.
         private void AutomationTool_Load(object sender, EventArgs e)
         {
             // Set the tray icon
@@ -37,6 +41,9 @@ namespace AutomationTool
         }
 
 
+        /// <summary>
+        /// Loads and initializes saved user settings.
+        /// </summary>
         public void LoadSettings()
         {
             gameDirectory = Properties.Settings.Default["GameDirectory"].ToString();
@@ -156,7 +163,7 @@ namespace AutomationTool
             // Initilialize process start info
             ProcessStartInfo startInfo = new ProcessStartInfo(@filePath)
             {
-                WorkingDirectory = Modules.Utilities.GetFileDirectory(filePath),
+                WorkingDirectory = Modules.Utilities.GetFileDirectory(@filePath),
                 WindowStyle = ProcessWindowStyle.Hidden,
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
@@ -182,7 +189,7 @@ namespace AutomationTool
             // Print the file path before starting
             Thread initOutputThread = new Thread(() =>
             {
-                Log("ZeroMunge: Executing file " + filePath);
+                Log("ZeroMunge: Executing file " + @filePath);
                 Log(Environment.NewLine, false);
             });
             initOutputThread.Start();
@@ -411,6 +418,7 @@ namespace AutomationTool
                 btn_AddProject.Enabled = enabled;
                 btn_RemoveFile.Enabled = enabled;
                 btn_RemoveAllFiles.Enabled = enabled;
+                btn_SetGamePath.Enabled = enabled;
                 btn_CopyLog.Enabled = enabled;
                 btn_SaveLog.Enabled = enabled;
                 btn_ClearLog.Enabled = enabled;
@@ -547,6 +555,20 @@ namespace AutomationTool
                                 Log("ZeroMunge: " + message);
                             }
 
+                            if (String.IsNullOrEmpty(row.Cells[5].Value.ToString()))
+                            {
+                                var message = "ERROR! MungeDirectory at row index " + row.Index + " isn't specified!";
+                                Debug.WriteLine(message);
+                                Log("ZeroMunge: " + message);
+                            }
+
+                            if (String.IsNullOrEmpty(row.Cells[6].Value.ToString()))
+                            {
+                                var message = "WARNING! MungedFiles at row index " + row.Index + " isn't specified!";
+                                Debug.WriteLine(message);
+                                Log("ZeroMunge: " + message);
+                            }
+
 
                             if (!File.Exists(row.Cells[1].Value.ToString()))
                             {
@@ -569,11 +591,19 @@ namespace AutomationTool
                         MungeFactory fileInfo = new MungeFactory();
 
                         fileInfo.FileDir = row.Cells[1].Value.ToString();
+
                         if (row.Cells[3].Value != null)
                         {
                             fileInfo.StagingDir = row.Cells[3].Value.ToString();
                         }
+
                         fileInfo.MungeDir = row.Cells[5].Value.ToString();
+
+                        if (row.Cells[6].Value != null)
+                        {
+                            fileInfo.MungedFiles = Modules.Utilities.ExtractLines(row.Cells[6].Value.ToString());
+                        }
+
 
                         // Add our MungeFactory object to the checked files list
                         checkedFiles.Add(fileInfo);
@@ -608,6 +638,7 @@ namespace AutomationTool
                         string projectStagingRoot = gameDirectory + "\\addon\\" + Modules.Utilities.GetProjectID(file);
                         string stagingDirectory = "";
                         string mungeOutputDirectory = "";
+                        string compiledFiles = "";
 
                         Debug.WriteLine(Modules.Utilities.GetProjectID(file));
 
@@ -648,6 +679,12 @@ namespace AutomationTool
                         file = file.Replace(@"\\", @"\");
                         stagingDirectory = stagingDirectory.Replace(@"\\", @"\");
                         mungeOutputDirectory = mungeOutputDirectory.Replace(@"\\", @"\");
+
+
+                        foreach (string compiledFile in Modules.Utilities.GetCompiledFiles(file))
+                        {
+                            compiledFiles = string.Concat(compiledFiles, compiledFile, "\n");
+                        }
                         
 
                         // Are none of the rows selected? (i.e., did the user click the "Add Files..." button?)
@@ -664,6 +701,7 @@ namespace AutomationTool
                             newRow.Cells[1].Value = file;
                             newRow.Cells[3].Value = stagingDirectory;
                             newRow.Cells[5].Value = mungeOutputDirectory;
+                            newRow.Cells[6].Value = compiledFiles;
                         }
                         else
                         {
@@ -675,6 +713,7 @@ namespace AutomationTool
                             data_Files[1, data_Files_CurSelectedRow].Value = file;
                             data_Files[3, data_Files_CurSelectedRow].Value = stagingDirectory;
                             data_Files[5, data_Files_CurSelectedRow].Value = mungeOutputDirectory;
+                            data_Files[6, data_Files_CurSelectedRow].Value = compiledFiles;
                         }
 
                         
@@ -1181,7 +1220,17 @@ namespace AutomationTool
 
         private void button2_Click(object sender, EventArgs e)
         {
-            GetCheckedFiles();
+            string compiledFiles = "";
+
+            foreach (string compiledFile in Modules.Utilities.GetCompiledFiles(@"J:\BF2_ModTools\data_MEU\data_ME5\_BUILD\Common\munge.bat"))
+            {
+                compiledFiles = string.Concat(compiledFiles, compiledFile, "\n");
+            }
+
+            Modules.Utilities.ExtractLines(compiledFiles);
+
+            //Modules.Utilities.ParseLevelpackReqs(@"J:\BF2_ModTools\data_MEU\data_ME5\_BUILD\Common\munge.bat");
+            //Modules.Utilities.GetCompiledFiles(@"J:\BF2_ModTools\data_MEU\data_ME5\_BUILD\Sides\CON_COL\munge_col.bat");
         }
     }
 
@@ -1190,5 +1239,6 @@ namespace AutomationTool
         public string FileDir { get; set; }
         public string StagingDir { get; set; }
         public string MungeDir { get; set; }
+        public List<string> MungedFiles { get; set; }
     }
 }
