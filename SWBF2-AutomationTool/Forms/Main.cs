@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -34,7 +35,7 @@ namespace AutomationTool
             // Set the visibility of the DataGridView buttons
             col_FileBrowse.UseColumnTextForButtonValue = true;
             col_StagingBrowse.UseColumnTextForButtonValue = true;
-            col_MungedFilesButton.UseColumnTextForButtonValue = true;
+            col_MungedFilesEdit.UseColumnTextForButtonValue = true;
 
             // Start a new log file
             string openMessage = "Opened logfile ZeroMunge_OutputLog.log  " + DateTime.Now.ToString("yyyy-MM-dd") +  " " + Modules.Utilities.GetTimestamp();
@@ -765,6 +766,7 @@ namespace AutomationTool
                         mungeOutputDirectory = mungeOutputDirectory.Replace(@"\\", @"\");
 
 
+                        // Assemble a multi-line string of the compiled files' names
                         foreach (string compiledFile in Modules.Utilities.GetCompiledFiles(file))
                         {
                             compiledFiles = string.Concat(compiledFiles, compiledFile, "\n");
@@ -789,8 +791,11 @@ namespace AutomationTool
                         }
                         else
                         {
-                            // Add a blank row to the bottom of the list
-                            data_Files.Rows.Add();
+                            // Add a blank row to the bottom of the list if we're not updating an existing row
+                            if (data_Files[1, data_Files_CurSelectedRow].Value == null)
+                            {
+                                data_Files.Rows.Add();
+                            }
 
                             // Initialize data into the new row
                             data_Files[0, data_Files_CurSelectedRow].Value = true;
@@ -896,6 +901,11 @@ namespace AutomationTool
                     // Fire the faux-event for the button
                     btn_SetStaging_Click();
                     break;
+
+                case 7:     // col_MungedFilesEdit
+                    // Fire the faux-event for the button
+                    btn_MungedFilesEdit_Click();
+                    break;
             }
         }
 
@@ -904,25 +914,133 @@ namespace AutomationTool
         // Prompt the user to select a new staging directory for the currently selected file.
         private void btn_SetStaging_Click()
         {
-            openDlg_SetStagingPrompt.Title = "Select Staging Directory";
-            openDlg_SetStagingPrompt.InitialDirectory = data_Files[2, data_Files_CurSelectedRow].Value.ToString();
-            openDlg_SetStagingPrompt.IsFolderPicker = true;
-            openDlg_SetStagingPrompt.Multiselect = false;
-
-            // Auto-detect the munge.bat file inside each selected folder and add it to the file list
-            if (openDlg_SetStagingPrompt.ShowDialog() == CommonFileDialogResult.Ok)
+            if (data_Files[3, data_Files_CurSelectedRow].Value != null)
             {
-                var folder = openDlg_SetStagingPrompt.FileName;
+                openDlg_SetStagingPrompt.Title = "Select Staging Directory";
+                openDlg_SetStagingPrompt.InitialDirectory = data_Files[3, data_Files_CurSelectedRow].Value.ToString();
+                openDlg_SetStagingPrompt.IsFolderPicker = true;
+                openDlg_SetStagingPrompt.Multiselect = false;
 
-                // Save the current directory
-                setStagingLastDir = Modules.Utilities.GetFileDirectory(folder);
-
-                // Set the staging directory if it exists
-                if (Directory.Exists(folder))
+                // Auto-detect the munge.bat file inside each selected folder and add it to the file list
+                if (openDlg_SetStagingPrompt.ShowDialog() == CommonFileDialogResult.Ok)
                 {
-                    data_Files[3, data_Files_CurSelectedRow].Value = folder;
+                    var folder = openDlg_SetStagingPrompt.FileName;
+
+                    // Save the current directory
+                    setStagingLastDir = Modules.Utilities.GetFileDirectory(folder);
+
+                    // Set the staging directory if it exists
+                    if (Directory.Exists(folder))
+                    {
+                        data_Files[3, data_Files_CurSelectedRow].Value = folder;
+                    }
                 }
             }
+        }
+
+
+        public RichTextBox editMungedFilesTextBox;
+
+        // This is called when the user clicks the dropdown button to edit the list of compiled files.
+        // Show a multi-line textbox containing the contents of the compiled files list.
+        private void btn_MungedFilesEdit_Click()
+        {
+            // Number of pixels to offset the textbox from the mouse cursor
+            int positionOffset = 5;
+
+
+            // Disable the form's Accept/Cancel Button handlers
+            ActiveForm.AcceptButton = null;
+            ActiveForm.CancelButton = null;
+
+
+            // Instantiate the textbox template
+            editMungedFilesTextBox = new RichTextBox();
+            editMungedFilesTextBox = text_MungedFilesEdit_TEMPLATE;
+
+
+            // Assemble the location for the textbox
+            Point newPosition = ActiveForm.PointToClient(Cursor.Position);
+            newPosition.X = (newPosition.X - editMungedFilesTextBox.Width) - positionOffset;
+            newPosition.Y = (newPosition.Y) + positionOffset;
+
+            // Set the location
+            editMungedFilesTextBox.Location = newPosition;
+            editMungedFilesTextBox.Parent = ActiveForm;
+
+
+            // Populate the textbox's contents if there's any contents to populate
+            if (data_Files[6, data_Files_CurSelectedRow].Value != null)
+            {
+                editMungedFilesTextBox.Text = data_Files[6, data_Files_CurSelectedRow].Value.ToString();
+            }
+
+
+            // Attach our keyboard/mouse event handlers
+            editMungedFilesTextBox.KeyDown += text_MungedFilesEdit_KeyDown;
+            data_Files.MouseClick += text_MungedFilesEdit_MouseClickOutside;
+
+
+            // Show and focus the textbox
+            editMungedFilesTextBox.Visible = true;
+            editMungedFilesTextBox.Focus();
+        }
+
+
+        private void text_MungedFilesEdit_KeyDown(object sender, KeyEventArgs e)
+        {
+            if ((ModifierKeys & Keys.Control) == Keys.Control)
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    Debug.WriteLine("Ctrl + Enter was pressed");
+                    
+                    text_MungedFilesEdit_Commit();
+
+                    ActiveForm.AcceptButton = btn_Run;
+
+                    editMungedFilesTextBox.Visible = false;
+                    editMungedFilesTextBox.KeyDown -= text_MungedFilesEdit_KeyDown;
+                    e.Handled = true;
+                }
+            }
+            
+            if (e.KeyCode == Keys.Escape)
+            {
+                Debug.WriteLine("Ctrl + Enter was pressed");
+
+                text_MungedFilesEdit_Dispose();
+                e.Handled = true;
+            }
+        }
+
+
+        private void text_MungedFilesEdit_MouseClickOutside(object sender, EventArgs e)
+        {
+            text_MungedFilesEdit_Dispose();
+        }
+
+
+        private void text_MungedFilesEdit_Commit()
+        {
+            data_Files[6, data_Files_CurSelectedRow].Value = editMungedFilesTextBox.Text;
+
+            text_MungedFilesEdit_Dispose();
+        }
+
+
+        private void text_MungedFilesEdit_Dispose()
+        {
+            editMungedFilesTextBox.Visible = false;
+            editMungedFilesTextBox.Text = "";
+
+            // Re-enable the form's Accept/Cancel Button handlers
+            ActiveForm.AcceptButton = btn_Run;
+            ActiveForm.CancelButton = btn_Cancel;
+
+            // Detach our event handlers
+            editMungedFilesTextBox.KeyDown -= text_MungedFilesEdit_KeyDown;
+            data_Files.MouseClick -= text_MungedFilesEdit_MouseClickOutside;
         }
 
 

@@ -30,10 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AutomationTool));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle69 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle70 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle71 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle72 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_Run = new System.Windows.Forms.Button();
             this.btn_AddFiles = new System.Windows.Forms.Button();
             this.openDlg_AddFilesPrompt = new System.Windows.Forms.OpenFileDialog();
@@ -66,7 +66,8 @@
             this.col_StagingBrowse = new System.Windows.Forms.DataGridViewButtonColumn();
             this.col_MungeDir = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.col_MungedFiles = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_MungedFilesButton = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.col_MungedFilesEdit = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.text_MungedFilesEdit_TEMPLATE = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.cont_Panels)).BeginInit();
             this.cont_Panels.Panel1.SuspendLayout();
             this.cont_Panels.Panel2.SuspendLayout();
@@ -296,7 +297,7 @@
             this.col_StagingBrowse,
             this.col_MungeDir,
             this.col_MungedFiles,
-            this.col_MungedFilesButton});
+            this.col_MungedFilesEdit});
             this.data_Files.Dock = System.Windows.Forms.DockStyle.Fill;
             this.data_Files.Location = new System.Drawing.Point(0, 0);
             this.data_Files.Name = "data_Files";
@@ -383,9 +384,9 @@
             // 
             // col_FileBrowse
             // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle69.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle69.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle69;
             this.col_FileBrowse.HeaderText = "";
             this.col_FileBrowse.Name = "col_FileBrowse";
             this.col_FileBrowse.ReadOnly = true;
@@ -403,9 +404,9 @@
             // 
             // col_StagingBrowse
             // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-            this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle70.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle70.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+            this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle70;
             this.col_StagingBrowse.HeaderText = "";
             this.col_StagingBrowse.Name = "col_StagingBrowse";
             this.col_StagingBrowse.ReadOnly = true;
@@ -423,8 +424,8 @@
             // 
             // col_MungedFiles
             // 
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle71.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle71;
             this.col_MungedFiles.HeaderText = "Munged Files";
             this.col_MungedFiles.MinimumWidth = 100;
             this.col_MungedFiles.Name = "col_MungedFiles";
@@ -432,18 +433,29 @@
             this.col_MungedFiles.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.col_MungedFiles.Width = 170;
             // 
-            // col_MungedFilesButton
+            // col_MungedFilesEdit
             // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-            this.col_MungedFilesButton.DefaultCellStyle = dataGridViewCellStyle4;
-            this.col_MungedFilesButton.HeaderText = "";
-            this.col_MungedFilesButton.Name = "col_MungedFilesButton";
-            this.col_MungedFilesButton.ReadOnly = true;
-            this.col_MungedFilesButton.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.col_MungedFilesButton.Text = "...";
-            this.col_MungedFilesButton.UseColumnTextForButtonValue = true;
-            this.col_MungedFilesButton.Width = 30;
+            dataGridViewCellStyle72.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle72.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+            this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle72;
+            this.col_MungedFilesEdit.HeaderText = "";
+            this.col_MungedFilesEdit.Name = "col_MungedFilesEdit";
+            this.col_MungedFilesEdit.ReadOnly = true;
+            this.col_MungedFilesEdit.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.col_MungedFilesEdit.Text = "...";
+            this.col_MungedFilesEdit.UseColumnTextForButtonValue = true;
+            this.col_MungedFilesEdit.Width = 30;
+            // 
+            // text_MungedFilesEdit_TEMPLATE
+            // 
+            this.text_MungedFilesEdit_TEMPLATE.BackColor = System.Drawing.SystemColors.Info;
+            this.text_MungedFilesEdit_TEMPLATE.Location = new System.Drawing.Point(0, 0);
+            this.text_MungedFilesEdit_TEMPLATE.Name = "text_MungedFilesEdit_TEMPLATE";
+            this.text_MungedFilesEdit_TEMPLATE.Size = new System.Drawing.Size(220, 120);
+            this.text_MungedFilesEdit_TEMPLATE.TabIndex = 5;
+            this.text_MungedFilesEdit_TEMPLATE.Text = "";
+            this.text_MungedFilesEdit_TEMPLATE.Visible = false;
+            this.text_MungedFilesEdit_TEMPLATE.WordWrap = false;
             // 
             // AutomationTool
             // 
@@ -452,6 +464,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btn_Cancel;
             this.ClientSize = new System.Drawing.Size(784, 561);
+            this.Controls.Add(this.text_MungedFilesEdit_TEMPLATE);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.btn_SetGamePath);
             this.Controls.Add(this.lbl_OutputLogChars);
@@ -519,7 +532,8 @@
         private System.Windows.Forms.DataGridViewButtonColumn col_StagingBrowse;
         private System.Windows.Forms.DataGridViewTextBoxColumn col_MungeDir;
         private System.Windows.Forms.DataGridViewTextBoxColumn col_MungedFiles;
-        private System.Windows.Forms.DataGridViewButtonColumn col_MungedFilesButton;
+        private System.Windows.Forms.DataGridViewButtonColumn col_MungedFilesEdit;
+        private System.Windows.Forms.RichTextBox text_MungedFilesEdit_TEMPLATE;
     }
 }
 
