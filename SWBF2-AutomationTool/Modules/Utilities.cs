@@ -245,14 +245,16 @@ namespace AutomationTool.Modules
         /// Scans through the munge script at the specified path and extracts all of the names of the REQs compiled by levelpack.
         /// </summary>
         /// <param name="mungeScriptPath">Path of munge script to scan.</param>
+        /// <param name="skipUserScripts">Whether or not to skip user scripts and custom GCs.</param>
         /// <returns>List of the names of the REQs compiled by levelpack.</returns>
-        public static List<string> ParseLevelpackReqs(string mungeScriptPath)
+        public static List<string> ParseLevelpackReqs(string mungeScriptPath, bool skipUserScripts = true)
         {
             List<string> reqs = new List<string>();
 
             if (!File.Exists(mungeScriptPath))
             {
-                Debug.WriteLine("ERROR! File doesn't exist at " + mungeScriptPath);
+                var message = "ERROR! File does not exist at " + mungeScriptPath;
+                Trace.WriteLine(message);
                 return reqs;
             }
 
@@ -269,6 +271,7 @@ namespace AutomationTool.Modules
                 if (TruncateLongString(curLine, 9).ToLower() == "levelpack")
                 {
                     string reqName = curLine;
+                    bool skipFile = false;
 
                     // Sample of the beginning of a levelpack line
                     var levelpackSample = "levelpack -inputfile";
@@ -285,8 +288,26 @@ namespace AutomationTool.Modules
                     // Add the LVL file extension to the end
                     reqName = string.Concat(reqName, ".lvl");
 
-                    // Exclude any lines that are for munging sub-lvls (they typically look like this: "MISSION\*.req")
-                    if (!reqName.Contains("*"))
+
+                    // Determine whether or not to skip the file
+                    if (skipUserScripts && !skipFile)
+                    {
+                        // Exclude user scripts
+                        skipFile = reqName.Contains("user_script");
+                    }
+                    if (skipUserScripts && !skipFile)
+                    {
+                        // Exclude custom GCs
+                        skipFile = reqName.Contains("custom_gc");
+                    }
+                    if (!skipFile)
+                    {
+                        // Exclude any lines that are for munging sub-lvls (they typically look like this: "MISSION\*.req")
+                        skipFile = reqName.Contains("*");
+                    }
+
+
+                    if (!skipFile)
                     {
                         //Debug.WriteLine(reqName);
                         reqs.Add(reqName);
@@ -329,21 +350,25 @@ namespace AutomationTool.Modules
             {
                 type = MungeTypes.Shell;
             }
-            else if (dirdir.Name.ToLower() == "sides")
-            {
-                type = MungeTypes.Side;
-            }
             else if (dir.Name.ToLower() == "sound")
             {
                 type = MungeTypes.Sound;
             }
-            else if (dirdir.Name.ToLower() == "worlds")
-            {
-                type = MungeTypes.World;
-            }
             else
             {
-                type = MungeTypes.Nil;
+                if (GetParentFolderName(GetFileDirectory(filePath)).ToLower() == "sides")
+                {
+                    type = MungeTypes.Side;
+                }
+                else if (GetParentFolderName(GetFileDirectory(filePath)).ToLower() == "worlds")
+                {
+                    type = MungeTypes.World;
+                }
+                else
+                {
+                    Debug.WriteLine(GetParentFolderName(GetFileDirectory(filePath)).ToLower());
+                    type = MungeTypes.Nil;
+                }
             }
 
             return type;

@@ -34,6 +34,7 @@ namespace AutomationTool
             // Set the visibility of the DataGridView buttons
             col_FileBrowse.UseColumnTextForButtonValue = true;
             col_StagingBrowse.UseColumnTextForButtonValue = true;
+            col_MungedFilesButton.UseColumnTextForButtonValue = true;
 
             // Start a new log file
             string openMessage = "Opened logfile ZeroMunge_OutputLog.log  " + DateTime.Now.ToString("yyyy-MM-dd") +  " " + Modules.Utilities.GetTimestamp();
@@ -101,6 +102,89 @@ namespace AutomationTool
         /// <param name="singleFile"></param>
         private void ProcManager_NotifyProcessComplete(int whichFile, bool singleFile)
         {
+            // Copy the compiled files to the staging directory
+            List<string> filesToCopy = new List<string>();
+            filesToCopy = ProcManager_fileList.ElementAt(whichFile).MungedFiles;
+
+            string sourceDir = ProcManager_fileList.ElementAt(whichFile).MungeDir;
+            string targetDir = ProcManager_fileList.ElementAt(whichFile).StagingDir;
+
+            // Copy each file to the staging directory
+            foreach (string file in filesToCopy)
+            {
+                // Assemble the full file paths
+                var fullSourceFilePath = string.Concat(sourceDir, "\\", file);
+                var fullTargetFilePath = string.Concat(targetDir, "\\", file);
+
+                // Remove any duplicate backslashes
+                fullSourceFilePath = fullSourceFilePath.Replace(@"\\", @"\");
+                fullTargetFilePath = fullTargetFilePath.Replace(@"\\", @"\");
+
+
+                // Make sure the source file exists before attempting to copy it
+                if (!File.Exists(fullSourceFilePath))
+                {
+                    var message = "ERROR! Source file does not exist at path " + fullSourceFilePath;
+                    Trace.WriteLine(message);
+                    Log("ZeroMunge: " + message);
+                }
+                else
+                {
+                    // Create the target directory if it doesn't already exist
+                    if (!Directory.Exists(targetDir))
+                    {
+                        try
+                        {
+                            Directory.CreateDirectory(targetDir);
+                        }
+                        catch (IOException e)
+                        {
+                            Trace.WriteLine(e.Message);
+                            Log(e.Message);
+                        }
+                        catch (UnauthorizedAccessException e)
+                        {
+                            Trace.WriteLine(e.Message);
+                            Log(e.Message);
+
+                            var message = "Try running the application with administrative privileges";
+                            Trace.WriteLine(message);
+                            Log("ZeroMunge: " + message);
+                        }
+                    }
+
+                    // Copy the file
+                    if (File.Exists(fullSourceFilePath))
+                    {
+                        try
+                        {
+                            File.Copy(fullSourceFilePath, fullTargetFilePath, true);
+
+                            var message = "Successfully copied " + fullSourceFilePath + " to " + fullTargetFilePath;
+                            Debug.WriteLine(message);
+                            Log("ZeroMunge: " + message);
+                        }
+                        catch (IOException e)
+                        {
+                            Trace.WriteLine(e.Message);
+                            Log(e.Message);
+                        }
+                        catch (UnauthorizedAccessException e)
+                        {
+                            Trace.WriteLine(e.Message);
+                            Log(e.Message);
+                        }
+                    }
+                    else
+                    {
+                        var message = "ERROR! File does not exist at path " + fullSourceFilePath;
+                        Trace.WriteLine(message);
+                        Log("ZeroMunge: " + message);
+                    }
+                }
+            }
+
+
             // Are we processing multiple files?
             if (!singleFile)
             {
@@ -661,10 +745,10 @@ namespace AutomationTool
                                 stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\";
                                 break;
                             case Modules.Utilities.MungeTypes.Side:
-                                stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\Load\\SIDE\\";
+                                stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\SIDE\\";
                                 break;
                             case Modules.Utilities.MungeTypes.Sound:
-                                stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\Load\\Sound\\";
+                                stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\Sound\\";
                                 break;
                             case Modules.Utilities.MungeTypes.World:
                                 stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\" + Modules.Utilities.GetProjectID(file) + "\\";
@@ -1220,14 +1304,29 @@ namespace AutomationTool
 
         private void button2_Click(object sender, EventArgs e)
         {
-            string compiledFiles = "";
+            List<string> files = new List<string>();
+            files.Add(@"testfile1.txt");
+            files.Add(@"testfile2.txt");
+            files.Add(@"testfile3.txt");
 
-            foreach (string compiledFile in Modules.Utilities.GetCompiledFiles(@"J:\BF2_ModTools\data_MEU\data_ME5\_BUILD\Common\munge.bat"))
+            string targetDir = @"Y:\ZeroMungeFileTests\target";
+            string sourceDir = @"Y:\ZeroMungeFileTests\source";
+
+            foreach (string file in files)
             {
-                compiledFiles = string.Concat(compiledFiles, compiledFile, "\n");
+                Debug.WriteLine(targetDir + "\\" + file);
+
+                File.Copy(string.Concat(targetDir, "\\", file), string.Concat(sourceDir, "\\", file), true);
             }
 
-            Modules.Utilities.ExtractLines(compiledFiles);
+            //string compiledFiles = "";
+
+            //foreach (string compiledFile in Modules.Utilities.GetCompiledFiles(@"J:\BF2_ModTools\data_MEU\data_ME5\_BUILD\Common\munge.bat"))
+            //{
+            //    compiledFiles = string.Concat(compiledFiles, compiledFile, "\n");
+            //}
+
+            //Modules.Utilities.ExtractLines(compiledFiles);
 
             //Modules.Utilities.ParseLevelpackReqs(@"J:\BF2_ModTools\data_MEU\data_ME5\_BUILD\Common\munge.bat");
             //Modules.Utilities.GetCompiledFiles(@"J:\BF2_ModTools\data_MEU\data_ME5\_BUILD\Sides\CON_COL\munge_col.bat");
