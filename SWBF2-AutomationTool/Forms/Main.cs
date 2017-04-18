@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
@@ -937,9 +938,7 @@ namespace AutomationTool
                 }
             }
         }
-
-
-        public RichTextBox editMungedFilesTextBox;
+        
 
         // This is called when the user clicks the dropdown button to edit the list of compiled files.
         // Show a multi-line textbox containing the contents of the compiled files list.
@@ -954,36 +953,31 @@ namespace AutomationTool
             ActiveForm.CancelButton = null;
 
 
-            // Instantiate the textbox template
-            editMungedFilesTextBox = new RichTextBox();
-            editMungedFilesTextBox = text_MungedFilesEdit_TEMPLATE;
-
-
             // Assemble the location for the textbox
             Point newPosition = ActiveForm.PointToClient(Cursor.Position);
-            newPosition.X = (newPosition.X - editMungedFilesTextBox.Width) - positionOffset;
+            newPosition.X = (newPosition.X - pan_MungedFilesEdit.Width) - positionOffset;
             newPosition.Y = (newPosition.Y) + positionOffset;
 
             // Set the location
-            editMungedFilesTextBox.Location = newPosition;
-            editMungedFilesTextBox.Parent = ActiveForm;
+            pan_MungedFilesEdit.Location = newPosition;
+            pan_MungedFilesEdit.Parent = ActiveForm;
 
 
             // Populate the textbox's contents if there's any contents to populate
             if (data_Files[6, data_Files_CurSelectedRow].Value != null)
             {
-                editMungedFilesTextBox.Text = data_Files[6, data_Files_CurSelectedRow].Value.ToString();
+                text_MungedFilesEdit.Text = data_Files[6, data_Files_CurSelectedRow].Value.ToString();
             }
 
 
             // Attach our keyboard/mouse event handlers
-            editMungedFilesTextBox.KeyDown += text_MungedFilesEdit_KeyDown;
+            text_MungedFilesEdit.KeyDown += text_MungedFilesEdit_KeyDown;
             data_Files.MouseClick += text_MungedFilesEdit_MouseClickOutside;
 
 
             // Show and focus the textbox
-            editMungedFilesTextBox.Visible = true;
-            editMungedFilesTextBox.Focus();
+            pan_MungedFilesEdit.Visible = true;
+            text_MungedFilesEdit.Focus();
         }
 
 
@@ -999,8 +993,8 @@ namespace AutomationTool
 
                     ActiveForm.AcceptButton = btn_Run;
 
-                    editMungedFilesTextBox.Visible = false;
-                    editMungedFilesTextBox.KeyDown -= text_MungedFilesEdit_KeyDown;
+                    pan_MungedFilesEdit.Visible = false;
+                    text_MungedFilesEdit.KeyDown -= text_MungedFilesEdit_KeyDown;
                     e.Handled = true;
                 }
             }
@@ -1023,7 +1017,24 @@ namespace AutomationTool
 
         private void text_MungedFilesEdit_Commit()
         {
-            data_Files[6, data_Files_CurSelectedRow].Value = editMungedFilesTextBox.Text;
+            // Do initial empty-line removal
+            text_MungedFilesEdit.Text = Regex.Replace(text_MungedFilesEdit.Text, @"^\s*$(\n|\r|\r\n)", "", RegexOptions.Multiline);
+
+            // Remove any empty lines that were somehow missed
+            string[] lines = text_MungedFilesEdit.Lines;
+            if (lines[lines.Length - 1] == "" || lines[lines.Length - 1] == "\n")
+            {
+                Debug.WriteLine("Found empty line! EXTERMINATE, EXTERMINATE, EXTERMINATE...");
+
+                // Convert to list, remove last element, convert back to array (C# arrays suuuuuuck)
+                List<string> linesList = lines.ToList();
+                linesList.RemoveAt(lines.Length - 1);
+                lines = linesList.ToArray<string>();
+            }
+
+            // Commit text to cell
+            text_MungedFilesEdit.Lines = lines;
+            data_Files[6, data_Files_CurSelectedRow].Value = text_MungedFilesEdit.Text;
 
             text_MungedFilesEdit_Dispose();
         }
@@ -1031,15 +1042,15 @@ namespace AutomationTool
 
         private void text_MungedFilesEdit_Dispose()
         {
-            editMungedFilesTextBox.Visible = false;
-            editMungedFilesTextBox.Text = "";
+            pan_MungedFilesEdit.Visible = false;
+            text_MungedFilesEdit.Text = "";
 
             // Re-enable the form's Accept/Cancel Button handlers
             ActiveForm.AcceptButton = btn_Run;
             ActiveForm.CancelButton = btn_Cancel;
 
             // Detach our event handlers
-            editMungedFilesTextBox.KeyDown -= text_MungedFilesEdit_KeyDown;
+            text_MungedFilesEdit.KeyDown -= text_MungedFilesEdit_KeyDown;
             data_Files.MouseClick -= text_MungedFilesEdit_MouseClickOutside;
         }
 
