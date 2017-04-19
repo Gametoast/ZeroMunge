@@ -24,6 +24,26 @@ namespace AutomationTool
             LoadSettings();
         }
 
+        public const string STR_DATA_FILES_CHK_ENABLED = "col_Enabled";
+        public const string STR_DATA_FILES_CHK_COPY = "col_Copy";
+        public const string STR_DATA_FILES_TXT_FILE = "col_File";
+        public const string STR_DATA_FILES_BTN_FILE_BROWSE = "col_FileBrowse";
+        public const string STR_DATA_FILES_TXT_STAGING = "col_Staging";
+        public const string STR_DATA_FILES_BTN_STAGING_BROWSE = "col_StagingBrowse";
+        public const string STR_DATA_FILES_TXT_MUNGE_DIR = "col_MungeDir";
+        public const string STR_DATA_FILES_TXT_MUNGED_FILES = "col_MungedFiles";
+        public const string STR_DATA_FILES_BTN_MUNGED_FILES_EDIT = "col_MungedFilesEdit";
+
+        public const int INT_DATA_FILES_CHK_ENABLED = 0;
+        public const int INT_DATA_FILES_CHK_COPY = 1;
+        public const int INT_DATA_FILES_TXT_FILE = 2;
+        public const int INT_DATA_FILES_BTN_FILE_BROWSE = 3;
+        public const int INT_DATA_FILES_TXT_STAGING = 4;
+        public const int INT_DATA_FILES_BTN_STAGING_BROWSE = 5;
+        public const int INT_DATA_FILES_TXT_MUNGE_DIR = 6;
+        public const int INT_DATA_FILES_TXT_MUNGED_FILES = 7;
+        public const int INT_DATA_FILES_BTN_MUNGED_FILES_EDIT = 8;
+
 
         // When the AutomationTool form is finished loading:
         // Create the tray icon, initialize some stuff with the file list, and start a new output log.
@@ -104,88 +124,98 @@ namespace AutomationTool
         /// <param name="singleFile"></param>
         private void ProcManager_NotifyProcessComplete(int whichFile, bool singleFile)
         {
-            if (ProcManager_fileList.ElementAt(whichFile).MungedFiles != null && ProcManager_fileList.ElementAt(whichFile).MungedFiles[0] != "nil" &&
-                ProcManager_fileList.ElementAt(whichFile).StagingDir != null)
+            if (ProcManager_fileList.ElementAt(whichFile).MungedFiles != null && ProcManager_fileList.ElementAt(whichFile).MungedFiles[0] != "nil" && 
+                ProcManager_fileList.ElementAt(whichFile).StagingDir != null && 
+                ProcManager_fileList.ElementAt(whichFile).CopyToStaging != null)
             {
-                // Copy the compiled files to the staging directory
-                List<string> filesToCopy = ProcManager_fileList.ElementAt(whichFile).MungedFiles;
-
-                string sourceDir = ProcManager_fileList.ElementAt(whichFile).MungeDir;
-                string targetDir = ProcManager_fileList.ElementAt(whichFile).StagingDir;
-
-                // Copy each file to the staging directory
-                foreach (string file in filesToCopy)
+                if (ProcManager_fileList.ElementAt(whichFile).CopyToStaging == "True")
                 {
-                    // Assemble the full file paths
-                    var fullSourceFilePath = string.Concat(sourceDir, "\\", file);
-                    var fullTargetFilePath = string.Concat(targetDir, "\\", file);
+                    // Copy the compiled files to the staging directory
+                    List<string> filesToCopy = ProcManager_fileList.ElementAt(whichFile).MungedFiles;
 
-                    // Remove any duplicate backslashes
-                    fullSourceFilePath = fullSourceFilePath.Replace(@"\\", @"\");
-                    fullTargetFilePath = fullTargetFilePath.Replace(@"\\", @"\");
+                    string sourceDir = ProcManager_fileList.ElementAt(whichFile).MungeDir;
+                    string targetDir = ProcManager_fileList.ElementAt(whichFile).StagingDir;
 
-
-                    // Make sure the source file exists before attempting to copy it
-                    if (!File.Exists(fullSourceFilePath))
+                    // Copy each file to the staging directory
+                    foreach (string file in filesToCopy)
                     {
-                        var message = "ERROR! Source file does not exist at path " + fullSourceFilePath;
-                        Trace.WriteLine(message);
-                        Log("ZeroMunge: " + message);
-                    }
-                    else
-                    {
-                        // Create the target directory if it doesn't already exist
-                        if (!Directory.Exists(targetDir))
+                        // Assemble the full file paths
+                        var fullSourceFilePath = string.Concat(sourceDir, "\\", file);
+                        var fullTargetFilePath = string.Concat(targetDir, "\\", file);
+
+                        // Remove any duplicate backslashes
+                        fullSourceFilePath = fullSourceFilePath.Replace(@"\\", @"\");
+                        fullTargetFilePath = fullTargetFilePath.Replace(@"\\", @"\");
+
+
+                        // Make sure the source file exists before attempting to copy it
+                        if (!File.Exists(fullSourceFilePath))
                         {
-                            try
+                            var message = "ERROR! Source file does not exist at path " + fullSourceFilePath;
+                            Trace.WriteLine(message);
+                            Log("ZeroMunge: " + message);
+                        }
+                        else
+                        {
+                            // Create the target directory if it doesn't already exist
+                            if (!Directory.Exists(targetDir))
                             {
-                                Directory.CreateDirectory(targetDir);
-                            }
-                            catch (IOException e)
-                            {
-                                Trace.WriteLine(e.Message);
-                                Log(e.Message);
-                            }
-                            catch (UnauthorizedAccessException e)
-                            {
-                                Trace.WriteLine(e.Message);
-                                Log(e.Message);
+                                try
+                                {
+                                    Directory.CreateDirectory(targetDir);
+                                }
+                                catch (IOException e)
+                                {
+                                    Trace.WriteLine(e.Message);
+                                    Log(e.Message);
+                                }
+                                catch (UnauthorizedAccessException e)
+                                {
+                                    Trace.WriteLine(e.Message);
+                                    Log(e.Message);
 
-                                var message = "Try running the application with administrative privileges";
+                                    var message = "Try running the application with administrative privileges";
+                                    Trace.WriteLine(message);
+                                    Log("ZeroMunge: " + message);
+                                }
+                            }
+
+                            // Copy the file
+                            if (File.Exists(fullSourceFilePath))
+                            {
+                                try
+                                {
+                                    File.Copy(fullSourceFilePath, fullTargetFilePath, true);
+
+                                    var message = "Successfully copied " + fullSourceFilePath + " to " + fullTargetFilePath;
+                                    Debug.WriteLine(message);
+                                    Log("ZeroMunge: " + message);
+                                }
+                                catch (IOException e)
+                                {
+                                    Trace.WriteLine(e.Message);
+                                    Log(e.Message);
+                                }
+                                catch (UnauthorizedAccessException e)
+                                {
+                                    Trace.WriteLine(e.Message);
+                                    Log(e.Message);
+                                }
+                            }
+                            else
+                            {
+                                var message = "ERROR! File does not exist at path " + fullSourceFilePath;
                                 Trace.WriteLine(message);
                                 Log("ZeroMunge: " + message);
                             }
                         }
-
-                        // Copy the file
-                        if (File.Exists(fullSourceFilePath))
-                        {
-                            try
-                            {
-                                File.Copy(fullSourceFilePath, fullTargetFilePath, true);
-
-                                var message = "Successfully copied " + fullSourceFilePath + " to " + fullTargetFilePath;
-                                Debug.WriteLine(message);
-                                Log("ZeroMunge: " + message);
-                            }
-                            catch (IOException e)
-                            {
-                                Trace.WriteLine(e.Message);
-                                Log(e.Message);
-                            }
-                            catch (UnauthorizedAccessException e)
-                            {
-                                Trace.WriteLine(e.Message);
-                                Log(e.Message);
-                            }
-                        }
-                        else
-                        {
-                            var message = "ERROR! File does not exist at path " + fullSourceFilePath;
-                            Trace.WriteLine(message);
-                            Log("ZeroMunge: " + message);
-                        }
                     }
+                }
+                else
+                {
+                    var message = "Copy is unchecked, skipping copy operation for " + ProcManager_fileList.ElementAt(whichFile).FileDir;
+                    Debug.WriteLine(message);
+                    Log("ZeroMunge: " + message);
                 }
             }
 
@@ -608,40 +638,40 @@ namespace AutomationTool
                 Debug.WriteLine("Row " + row.Index + ", entered");
 
                 // Add the file to the list if all its fields are correct and valid (note: StagingDirectory isn't required)
-                if (row.Cells[0].Value != null &&
-                    row.Cells[1].Value != null &&
-                    row.Cells[5].Value != null)
+                if (row.Cells[STR_DATA_FILES_CHK_ENABLED].Value != null &&
+                    row.Cells[STR_DATA_FILES_CHK_ENABLED].Value != null &&
+                    row.Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value != null)
                 {
-                    if (row.Cells[0].Value.ToString() == "True")
+                    if (row.Cells[STR_DATA_FILES_CHK_ENABLED].Value.ToString() == "True")
                     {
                         Thread errorThread = new Thread(() => {
-                            if (row.Cells[0].Value == null)
+                            if (row.Cells[STR_DATA_FILES_CHK_ENABLED].Value == null)
                             {
                                 Debug.WriteLine("WARNING! Row at index " + row.Index + " isn't enabled!");
                             }
 
-                            if (row.Cells[1].Value == null)
+                            if (row.Cells[STR_DATA_FILES_TXT_FILE].Value == null)
                             {
                                 var message = "ERROR! FilePath at row index " + row.Index + " isn't specified!";
                                 Debug.WriteLine(message);
                                 Log("ZeroMunge: " + message);
                             }
 
-                            if (row.Cells[3].Value == null)
+                            if (row.Cells[STR_DATA_FILES_TXT_STAGING].Value == null)
                             {
                                 var message = "WARNING! StagingDirectory at row index " + row.Index + " isn't specified!";
                                 Debug.WriteLine(message);
                                 Log("ZeroMunge: " + message);
                             }
 
-                            if (row.Cells[5].Value == null)
+                            if (row.Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value == null)
                             {
                                 var message = "ERROR! MungeDirectory at row index " + row.Index + " isn't specified!";
                                 Debug.WriteLine(message);
                                 Log("ZeroMunge: " + message);
                             }
 
-                            if (row.Cells[6].Value == null)
+                            if (row.Cells[STR_DATA_FILES_TXT_MUNGED_FILES].Value == null)
                             {
                                 var message = "WARNING! MungedFiles at row index " + row.Index + " isn't specified!";
                                 Debug.WriteLine(message);
@@ -649,7 +679,7 @@ namespace AutomationTool
                             }
 
 
-                            if (!File.Exists(row.Cells[1].Value.ToString()))
+                            if (!File.Exists(row.Cells[STR_DATA_FILES_TXT_FILE].Value.ToString()))
                             {
                                 var message = "ERROR! FilePath at row index " + row.Index + " cannot be found!";
                                 Debug.WriteLine(message);
@@ -658,29 +688,36 @@ namespace AutomationTool
                         });
                         errorThread.Start();
 
-                        Debug.WriteLine(row.Cells[1].Value.ToString());
-                        if (row.Cells[3].Value != null)
+                        Debug.WriteLine(row.Cells[STR_DATA_FILES_TXT_FILE].Value.ToString());
+                        if (row.Cells[STR_DATA_FILES_TXT_STAGING].Value != null)
                         {
-                            Debug.WriteLine(row.Cells[3].Value.ToString());
+                            Debug.WriteLine(row.Cells[STR_DATA_FILES_TXT_STAGING].Value.ToString());
                         }
-                        Debug.WriteLine(row.Cells[5].Value.ToString());
+                        Debug.WriteLine(row.Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value.ToString());
 
 
                         // Construct a new MungeFactory object and initialize our data into it
                         MungeFactory fileInfo = new MungeFactory();
 
-                        fileInfo.FileDir = row.Cells[1].Value.ToString();
+                        // File directory data
+                        fileInfo.CopyToStaging = row.Cells[STR_DATA_FILES_CHK_COPY].Value.ToString();
 
-                        if (row.Cells[3].Value != null)
+                        // File directory data
+                        fileInfo.FileDir = row.Cells[STR_DATA_FILES_TXT_FILE].Value.ToString();
+
+                        // Staging directory data
+                        if (row.Cells[STR_DATA_FILES_TXT_STAGING].Value != null)
                         {
-                            fileInfo.StagingDir = row.Cells[3].Value.ToString();
+                            fileInfo.StagingDir = row.Cells[STR_DATA_FILES_TXT_STAGING].Value.ToString();
                         }
 
-                        fileInfo.MungeDir = row.Cells[5].Value.ToString();
+                        // Munge directory data
+                        fileInfo.MungeDir = row.Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value.ToString();
 
-                        if (row.Cells[6].Value != null)
+                        // Munged files data
+                        if (row.Cells[STR_DATA_FILES_TXT_MUNGED_FILES].Value != null)
                         {
-                            fileInfo.MungedFiles = Modules.Utilities.ExtractLines(row.Cells[6].Value.ToString());
+                            fileInfo.MungedFiles = Modules.Utilities.ExtractLines(row.Cells[STR_DATA_FILES_TXT_MUNGED_FILES].Value.ToString());
                         }
 
 
@@ -777,26 +814,27 @@ namespace AutomationTool
                             DataGridViewRow newRow = data_Files.Rows[rowId];
 
                             // Initialize data into the new row
-                            newRow.Cells[0].Value = true;
-                            newRow.Cells[1].Value = file;
-                            newRow.Cells[3].Value = stagingDirectory;
-                            newRow.Cells[5].Value = mungeOutputDirectory;
-                            newRow.Cells[6].Value = compiledFiles;
+                            newRow.Cells[STR_DATA_FILES_CHK_ENABLED].Value = true;
+                            newRow.Cells[STR_DATA_FILES_TXT_FILE].Value = file;
+                            newRow.Cells[STR_DATA_FILES_TXT_STAGING].Value = stagingDirectory;
+                            newRow.Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value = mungeOutputDirectory;
+                            newRow.Cells[STR_DATA_FILES_TXT_MUNGED_FILES].Value = compiledFiles;
                         }
                         else
                         {
                             // Add a blank row to the bottom of the list if we're not updating an existing row
-                            if (data_Files[1, data_Files_CurSelectedRow].Value == null)
+                            if (data_Files[INT_DATA_FILES_TXT_FILE, data_Files_CurSelectedRow].Value == null)
                             {
                                 data_Files.Rows.Add();
                             }
 
                             // Initialize data into the new row
-                            data_Files[0, data_Files_CurSelectedRow].Value = true;
-                            data_Files[1, data_Files_CurSelectedRow].Value = file;
-                            data_Files[3, data_Files_CurSelectedRow].Value = stagingDirectory;
-                            data_Files[5, data_Files_CurSelectedRow].Value = mungeOutputDirectory;
-                            data_Files[6, data_Files_CurSelectedRow].Value = compiledFiles;
+                            data_Files[INT_DATA_FILES_CHK_ENABLED, data_Files_CurSelectedRow].Value = true;
+                            data_Files[INT_DATA_FILES_CHK_COPY, data_Files_CurSelectedRow].Value = true;
+                            data_Files[INT_DATA_FILES_TXT_FILE, data_Files_CurSelectedRow].Value = file;
+                            data_Files[INT_DATA_FILES_TXT_STAGING, data_Files_CurSelectedRow].Value = stagingDirectory;
+                            data_Files[INT_DATA_FILES_TXT_MUNGE_DIR, data_Files_CurSelectedRow].Value = mungeOutputDirectory;
+                            data_Files[INT_DATA_FILES_TXT_MUNGED_FILES, data_Files_CurSelectedRow].Value = compiledFiles;
                         }
 
                         
@@ -885,18 +923,18 @@ namespace AutomationTool
             // Do stuff if the clicked cell's type was Button
             switch (data_Files_CurSelectedColumn)
             {
-                case 2:     // col_FileBrowse
+                case INT_DATA_FILES_BTN_FILE_BROWSE:     // col_FileBrowse
                     // Open the 'Add Files' prompt
                     openDlg_AddFilesPrompt.InitialDirectory = addFilesLastDir;
                     openDlg_AddFilesPrompt.ShowDialog();
                     break;
                         
-                case 4:     // col_StagingBrowse
+                case INT_DATA_FILES_BTN_STAGING_BROWSE:     // col_StagingBrowse
                     // Fire the faux-event for the button
                     btn_SetStaging_Click();
                     break;
 
-                case 7:     // col_MungedFilesEdit
+                case INT_DATA_FILES_BTN_MUNGED_FILES_EDIT:     // col_MungedFilesEdit
                     // Fire the faux-event for the button
                     btn_MungedFilesEdit_Click();
                     break;
@@ -908,10 +946,10 @@ namespace AutomationTool
         // Prompt the user to select a new staging directory for the currently selected file.
         private void btn_SetStaging_Click()
         {
-            if (data_Files[3, data_Files_CurSelectedRow].Value != null)
+            if (data_Files[INT_DATA_FILES_TXT_STAGING, data_Files_CurSelectedRow].Value != null)
             {
                 openDlg_SetStagingPrompt.Title = "Select Staging Directory";
-                openDlg_SetStagingPrompt.InitialDirectory = data_Files[3, data_Files_CurSelectedRow].Value.ToString();
+                openDlg_SetStagingPrompt.InitialDirectory = data_Files[INT_DATA_FILES_TXT_STAGING, data_Files_CurSelectedRow].Value.ToString();
                 openDlg_SetStagingPrompt.IsFolderPicker = true;
                 openDlg_SetStagingPrompt.Multiselect = false;
 
@@ -926,7 +964,7 @@ namespace AutomationTool
                     // Set the staging directory if it exists
                     if (Directory.Exists(folder))
                     {
-                        data_Files[3, data_Files_CurSelectedRow].Value = folder;
+                        data_Files[INT_DATA_FILES_TXT_STAGING, data_Files_CurSelectedRow].Value = folder;
                     }
                 }
             }
@@ -957,9 +995,9 @@ namespace AutomationTool
 
 
             // Populate the textbox's contents if there's any contents to populate
-            if (data_Files[6, data_Files_CurSelectedRow].Value != null)
+            if (data_Files[INT_DATA_FILES_TXT_MUNGED_FILES, data_Files_CurSelectedRow].Value != null)
             {
-                text_MungedFilesEdit.Text = data_Files[6, data_Files_CurSelectedRow].Value.ToString();
+                text_MungedFilesEdit.Text = data_Files[INT_DATA_FILES_TXT_MUNGED_FILES, data_Files_CurSelectedRow].Value.ToString();
             }
 
 
@@ -974,6 +1012,8 @@ namespace AutomationTool
         }
 
 
+        // When the user presses a key when the Munged Files Edit popup is open:
+        // Depending on the key combination pressed, commit the text to the cell or dispose of it.
         private void text_MungedFilesEdit_KeyDown(object sender, KeyEventArgs e)
         {
             if ((ModifierKeys & Keys.Control) == Keys.Control)
@@ -1002,12 +1042,17 @@ namespace AutomationTool
         }
 
 
+        // When the user clicks outside of the Munged Files Edit popup when it's open:
+        // Dispose of any text entered in the popup.
         private void text_MungedFilesEdit_MouseClickOutside(object sender, EventArgs e)
         {
             text_MungedFilesEdit_Dispose();
         }
 
-
+        
+        /// <summary>
+        /// Commit text in the Munged Files Edit popup to the corresponding cell.
+        /// </summary>
         private void text_MungedFilesEdit_Commit()
         {
             // Do initial empty-line removal
@@ -1025,14 +1070,18 @@ namespace AutomationTool
                 lines = linesList.ToArray<string>();
             }
 
+
             // Commit text to cell
             text_MungedFilesEdit.Lines = lines;
-            data_Files[6, data_Files_CurSelectedRow].Value = text_MungedFilesEdit.Text;
+            data_Files[INT_DATA_FILES_TXT_MUNGED_FILES, data_Files_CurSelectedRow].Value = text_MungedFilesEdit.Text;
 
             text_MungedFilesEdit_Dispose();
         }
 
 
+        /// <summary>
+        /// Close the Munged Files Edit popup.
+        /// </summary>
         private void text_MungedFilesEdit_Dispose()
         {
             pan_MungedFilesEdit.Visible = false;
@@ -1057,9 +1106,9 @@ namespace AutomationTool
             // Are there no items in the list?
             if (data_Files.RowCount == 1)
             {
-                if (data_Files.Rows[0].Cells[1].Value == null ||
-                    data_Files.Rows[0].Cells[3].Value == null ||
-                    data_Files.Rows[0].Cells[5].Value == null)
+                if (data_Files.Rows[0].Cells[STR_DATA_FILES_TXT_FILE].Value == null ||
+                    data_Files.Rows[0].Cells[STR_DATA_FILES_TXT_STAGING].Value == null ||
+                    data_Files.Rows[0].Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value == null)
                 {
                     procError = 1;
                 }
@@ -1426,20 +1475,22 @@ namespace AutomationTool
 
         private void button2_Click(object sender, EventArgs e)
         {
-            List<string> files = new List<string>();
-            files.Add(@"testfile1.txt");
-            files.Add(@"testfile2.txt");
-            files.Add(@"testfile3.txt");
+            Debug.WriteLine(data_Files.Rows[0].Cells[STR_DATA_FILES_TXT_FILE].Value.ToString());
 
-            string targetDir = @"Y:\ZeroMungeFileTests\target";
-            string sourceDir = @"Y:\ZeroMungeFileTests\source";
+            //List<string> files = new List<string>();
+            //files.Add(@"testfile1.txt");
+            //files.Add(@"testfile2.txt");
+            //files.Add(@"testfile3.txt");
 
-            foreach (string file in files)
-            {
-                Debug.WriteLine(targetDir + "\\" + file);
+            //string targetDir = @"Y:\ZeroMungeFileTests\target";
+            //string sourceDir = @"Y:\ZeroMungeFileTests\source";
 
-                File.Copy(string.Concat(targetDir, "\\", file), string.Concat(sourceDir, "\\", file), true);
-            }
+            //foreach (string file in files)
+            //{
+            //    Debug.WriteLine(targetDir + "\\" + file);
+
+            //    File.Copy(string.Concat(targetDir, "\\", file), string.Concat(sourceDir, "\\", file), true);
+            //}
 
             //string compiledFiles = "";
 
@@ -1457,6 +1508,7 @@ namespace AutomationTool
 
     public class MungeFactory
     {
+        public string CopyToStaging { get; set; }
         public string FileDir { get; set; }
         public string StagingDir { get; set; }
         public string MungeDir { get; set; }

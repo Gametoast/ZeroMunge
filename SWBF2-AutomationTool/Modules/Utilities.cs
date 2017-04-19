@@ -246,8 +246,9 @@ namespace AutomationTool.Modules
         /// </summary>
         /// <param name="mungeScriptPath">Path of munge script to scan.</param>
         /// <param name="skipUserScripts">Whether or not to skip user scripts and custom GCs.</param>
+        /// <param name="skipInshell">Whether or not to skip inshell.</param>
         /// <returns>List of the names of the REQs compiled by levelpack.</returns>
-        public static List<string> ParseLevelpackReqs(string mungeScriptPath, bool skipUserScripts = true)
+        public static List<string> ParseLevelpackReqs(string mungeScriptPath, bool skipUserScripts = true, bool skipInshell = true)
         {
             List<string> reqs = new List<string>();
 
@@ -299,6 +300,11 @@ namespace AutomationTool.Modules
                     {
                         // Exclude custom GCs
                         skipFile = reqName.Contains("custom_gc");
+                    }
+                    if (skipInshell && !skipFile)
+                    {
+                        // Exclude custom GCs
+                        skipFile = reqName.Contains("inshell");
                     }
                     if (!skipFile)
                     {
