@@ -225,13 +225,13 @@ namespace AutomationTool.Modules
                     compiledFiles = ParseLevelpackReqs(mungeScriptPath);
                     break;
                 case MungeTypes.Side:
-                    compiledFiles.Add(GetParentFolderName(mungeScriptPath));
+                    compiledFiles.Add(GetParentFolderName(mungeScriptPath) + ".lvl");
                     break;
                 case MungeTypes.Sound:
                     compiledFiles.Add("nil");   // since soundmunge takes care of copying files
                     break;
                 case MungeTypes.World:
-                    compiledFiles.Add(GetParentFolderName(mungeScriptPath));
+                    compiledFiles.Add(GetParentFolderName(mungeScriptPath) + ".lvl");
                     break;
             }
 

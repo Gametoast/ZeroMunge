@@ -104,84 +104,87 @@ namespace AutomationTool
         /// <param name="singleFile"></param>
         private void ProcManager_NotifyProcessComplete(int whichFile, bool singleFile)
         {
-            // Copy the compiled files to the staging directory
-            List<string> filesToCopy = new List<string>();
-            filesToCopy = ProcManager_fileList.ElementAt(whichFile).MungedFiles;
-
-            string sourceDir = ProcManager_fileList.ElementAt(whichFile).MungeDir;
-            string targetDir = ProcManager_fileList.ElementAt(whichFile).StagingDir;
-
-            // Copy each file to the staging directory
-            foreach (string file in filesToCopy)
+            if (ProcManager_fileList.ElementAt(whichFile).MungedFiles != null && ProcManager_fileList.ElementAt(whichFile).MungedFiles[0] != "nil" &&
+                ProcManager_fileList.ElementAt(whichFile).StagingDir != null)
             {
-                // Assemble the full file paths
-                var fullSourceFilePath = string.Concat(sourceDir, "\\", file);
-                var fullTargetFilePath = string.Concat(targetDir, "\\", file);
+                // Copy the compiled files to the staging directory
+                List<string> filesToCopy = ProcManager_fileList.ElementAt(whichFile).MungedFiles;
 
-                // Remove any duplicate backslashes
-                fullSourceFilePath = fullSourceFilePath.Replace(@"\\", @"\");
-                fullTargetFilePath = fullTargetFilePath.Replace(@"\\", @"\");
+                string sourceDir = ProcManager_fileList.ElementAt(whichFile).MungeDir;
+                string targetDir = ProcManager_fileList.ElementAt(whichFile).StagingDir;
 
-
-                // Make sure the source file exists before attempting to copy it
-                if (!File.Exists(fullSourceFilePath))
+                // Copy each file to the staging directory
+                foreach (string file in filesToCopy)
                 {
-                    var message = "ERROR! Source file does not exist at path " + fullSourceFilePath;
-                    Trace.WriteLine(message);
-                    Log("ZeroMunge: " + message);
-                }
-                else
-                {
-                    // Create the target directory if it doesn't already exist
-                    if (!Directory.Exists(targetDir))
+                    // Assemble the full file paths
+                    var fullSourceFilePath = string.Concat(sourceDir, "\\", file);
+                    var fullTargetFilePath = string.Concat(targetDir, "\\", file);
+
+                    // Remove any duplicate backslashes
+                    fullSourceFilePath = fullSourceFilePath.Replace(@"\\", @"\");
+                    fullTargetFilePath = fullTargetFilePath.Replace(@"\\", @"\");
+
+
+                    // Make sure the source file exists before attempting to copy it
+                    if (!File.Exists(fullSourceFilePath))
                     {
-                        try
-                        {
-                            Directory.CreateDirectory(targetDir);
-                        }
-                        catch (IOException e)
-                        {
-                            Trace.WriteLine(e.Message);
-                            Log(e.Message);
-                        }
-                        catch (UnauthorizedAccessException e)
-                        {
-                            Trace.WriteLine(e.Message);
-                            Log(e.Message);
-
-                            var message = "Try running the application with administrative privileges";
-                            Trace.WriteLine(message);
-                            Log("ZeroMunge: " + message);
-                        }
-                    }
-
-                    // Copy the file
-                    if (File.Exists(fullSourceFilePath))
-                    {
-                        try
-                        {
-                            File.Copy(fullSourceFilePath, fullTargetFilePath, true);
-
-                            var message = "Successfully copied " + fullSourceFilePath + " to " + fullTargetFilePath;
-                            Debug.WriteLine(message);
-                            Log("ZeroMunge: " + message);
-                        }
-                        catch (IOException e)
-                        {
-                            Trace.WriteLine(e.Message);
-                            Log(e.Message);
-                        }
-                        catch (UnauthorizedAccessException e)
-                        {
-                            Trace.WriteLine(e.Message);
-                            Log(e.Message);
-                        }
+                        var message = "ERROR! Source file does not exist at path " + fullSourceFilePath;
+                        Trace.WriteLine(message);
+                        Log("ZeroMunge: " + message);
                     }
                     else
                     {
-                        var message = "ERROR! File does not exist at path " + fullSourceFilePath;
-                        Trace.WriteLine(message);
-                        Log("ZeroMunge: " + message);
+                        // Create the target directory if it doesn't already exist
+                        if (!Directory.Exists(targetDir))
+                        {
+                            try
+                            {
+                                Directory.CreateDirectory(targetDir);
+                            }
+                            catch (IOException e)
+                            {
+                                Trace.WriteLine(e.Message);
+                                Log(e.Message);
+                            }
+                            catch (UnauthorizedAccessException e)
+                            {
+                                Trace.WriteLine(e.Message);
+                                Log(e.Message);
+
+                                var message = "Try running the application with administrative privileges";
+                                Trace.WriteLine(message);
+                                Log("ZeroMunge: " + message);
+                            }
+                        }
+
+                        // Copy the file
+                        if (File.Exists(fullSourceFilePath))
+                        {
+                            try
+                            {
+                                File.Copy(fullSourceFilePath, fullTargetFilePath, true);
+
+                                var message = "Successfully copied " + fullSourceFilePath + " to " + fullTargetFilePath;
+                                Debug.WriteLine(message);
+                                Log("ZeroMunge: " + message);
+                            }
+                            catch (IOException e)
+                            {
+                                Trace.WriteLine(e.Message);
+                                Log(e.Message);
+                            }
+                            catch (UnauthorizedAccessException e)
+                            {
+                                Trace.WriteLine(e.Message);
+                                Log(e.Message);
+                            }
+                        }
+                        else
+                        {
+                            var message = "ERROR! File does not exist at path " + fullSourceFilePath;
+                            Trace.WriteLine(message);
+                            Log("ZeroMunge: " + message);
+                        }
                     }
                 }
             }
@@ -385,6 +388,8 @@ namespace AutomationTool
         delegate void LogCallback(string message, bool newLine = true);
 
 
+        private List<string> logLineCollection = new List<string>();
+
         /// <summary>
         /// Prints the specified text to the output log.  
         /// WARNING: Don't call this directly, please call `Log` instead.
@@ -423,33 +428,28 @@ namespace AutomationTool
                     sw.WriteLine(messageToLog);
                     sw.Close();
 
-                    // Is the output log full?
-                    if (text_OutputLog.TextLength >= (text_OutputLog.MaxLength - 500))
+
+                    // Remove the previous temporary blank line from the end if the log isn't empty
+                    if (logLineCollection.Count > 0)
                     {
-                        // Make sure the text box is still populated
-                        if (text_OutputLog.Lines.Count() > 0)
-                        {
-                            text_OutputLog.Select(0, text_OutputLog.Text.IndexOf('\n') + 1);
-                            int a = text_OutputLog.SelectionStart;
-                            int b = text_OutputLog.SelectionLength;
-                            text_OutputLog.Text = text_OutputLog.Text.Remove(a, b);
-
-                            // Get the lines of text
-                            /*string[] lineArray = text_OutputLog.Lines;
-
-                            // Create a collection so that a line can be removed
-                            var lineCollection = new List<string>(lineArray);
-
-                            // Remove the first line
-                            lineCollection.RemoveAt(0);
-
-                            // Convert the collection back to an array
-                            lineArray = lineCollection.ToArray();
-
-                            // Display the new data in the control
-                            text_OutputLog.Lines = lineArray;*/
-                        }
+                        logLineCollection.RemoveAt(logLineCollection.Count - 1);
                     }
+
+                    // Add the message to the line collection
+                    logLineCollection.Add(messageToLog);
+
+                    // Add a temporary new blank line to the end
+                    logLineCollection.Add("");
+
+
+                    // Remove the first line if the output log is full
+                    if (logLineCollection.Count >= 100)
+                    {
+                        logLineCollection.RemoveAt(0);
+                    }
+
+                    // Display the new data in the control
+                    text_OutputLog.Lines = logLineCollection.ToArray();
 
                     // Auto-scroll to the most recent line
                     text_OutputLog.Select(text_OutputLog.Text.Length, text_OutputLog.Text.Length);
@@ -620,35 +620,28 @@ namespace AutomationTool
                                 Debug.WriteLine("WARNING! Row at index " + row.Index + " isn't enabled!");
                             }
 
-                            if (String.IsNullOrEmpty(row.Cells[1].Value.ToString()))
+                            if (row.Cells[1].Value == null)
                             {
                                 var message = "ERROR! FilePath at row index " + row.Index + " isn't specified!";
                                 Debug.WriteLine(message);
                                 Log("ZeroMunge: " + message);
                             }
 
-                            if (String.IsNullOrEmpty(row.Cells[3].Value.ToString()))
+                            if (row.Cells[3].Value == null)
                             {
                                 var message = "WARNING! StagingDirectory at row index " + row.Index + " isn't specified!";
                                 Debug.WriteLine(message);
                                 Log("ZeroMunge: " + message);
                             }
 
-                            if (String.IsNullOrEmpty(row.Cells[5].Value.ToString()))
+                            if (row.Cells[5].Value == null)
                             {
                                 var message = "ERROR! MungeDirectory at row index " + row.Index + " isn't specified!";
                                 Debug.WriteLine(message);
                                 Log("ZeroMunge: " + message);
                             }
 
-                            if (String.IsNullOrEmpty(row.Cells[5].Value.ToString()))
-                            {
-                                var message = "ERROR! MungeDirectory at row index " + row.Index + " isn't specified!";
-                                Debug.WriteLine(message);
-                                Log("ZeroMunge: " + message);
-                            }
-
-                            if (String.IsNullOrEmpty(row.Cells[6].Value.ToString()))
+                            if (row.Cells[6].Value == null)
                             {
                                 var message = "WARNING! MungedFiles at row index " + row.Index + " isn't specified!";
                                 Debug.WriteLine(message);
