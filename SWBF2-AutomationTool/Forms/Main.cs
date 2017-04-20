@@ -15,15 +15,7 @@ namespace AutomationTool
 {
     public partial class AutomationTool : Form
     {
-        // This is the very first method called by the application. It initializes the UI controls and loads user settings.
-        public AutomationTool()
-        {
-            InitializeComponent();
-
-            // Load any saved settings
-            LoadSettings();
-        }
-
+        // data_Files : Column names
         public const string STR_DATA_FILES_CHK_ENABLED = "col_Enabled";
         public const string STR_DATA_FILES_CHK_COPY = "col_Copy";
         public const string STR_DATA_FILES_TXT_FILE = "col_File";
@@ -33,7 +25,10 @@ namespace AutomationTool
         public const string STR_DATA_FILES_TXT_MUNGE_DIR = "col_MungeDir";
         public const string STR_DATA_FILES_TXT_MUNGED_FILES = "col_MungedFiles";
         public const string STR_DATA_FILES_BTN_MUNGED_FILES_EDIT = "col_MungedFilesEdit";
+        public const string STR_DATA_FILES_CHK_IS_MUNGE_SCRIPT = "col_IsMungeScript";
+        public const string STR_DATA_FILES_CHK_IS_VALID = "col_IsValid";
 
+        // data_Files : Column indexes
         public const int INT_DATA_FILES_CHK_ENABLED = 0;
         public const int INT_DATA_FILES_CHK_COPY = 1;
         public const int INT_DATA_FILES_TXT_FILE = 2;
@@ -43,6 +38,20 @@ namespace AutomationTool
         public const int INT_DATA_FILES_TXT_MUNGE_DIR = 6;
         public const int INT_DATA_FILES_TXT_MUNGED_FILES = 7;
         public const int INT_DATA_FILES_BTN_MUNGED_FILES_EDIT = 8;
+        public const int INT_DATA_FILES_CHK_IS_MUNGE_SCRIPT = 9;
+        public const int INT_DATA_FILES_CHK_IS_VALID = 10;
+
+        public Color errorRed = Color.FromArgb(251, 99, 99);
+
+
+        // This is the very first method called by the application. It initializes the UI controls and loads user settings.
+        public AutomationTool()
+        {
+            InitializeComponent();
+
+            // Load any saved settings
+            LoadSettings();
+        }
 
 
         // When the AutomationTool form is finished loading:
@@ -696,25 +705,25 @@ namespace AutomationTool
                         Debug.WriteLine(row.Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value.ToString());
 
 
-                        // Construct a new MungeFactory object and initialize our data into it
+                        // Construct a new FileFactory object and initialize our data into it
                         MungeFactory fileInfo = new MungeFactory();
 
-                        // File directory data
+                        // 'Copy' data
                         fileInfo.CopyToStaging = row.Cells[STR_DATA_FILES_CHK_COPY].Value.ToString();
 
-                        // File directory data
+                        // 'File directory' data
                         fileInfo.FileDir = row.Cells[STR_DATA_FILES_TXT_FILE].Value.ToString();
 
-                        // Staging directory data
+                        // 'Staging directory' data
                         if (row.Cells[STR_DATA_FILES_TXT_STAGING].Value != null)
                         {
                             fileInfo.StagingDir = row.Cells[STR_DATA_FILES_TXT_STAGING].Value.ToString();
                         }
 
-                        // Munge directory data
+                        // 'Munge directory' data
                         fileInfo.MungeDir = row.Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value.ToString();
 
-                        // Munged files data
+                        // 'Munged files' data
                         if (row.Cells[STR_DATA_FILES_TXT_MUNGED_FILES].Value != null)
                         {
                             fileInfo.MungedFiles = Modules.Utilities.ExtractLines(row.Cells[STR_DATA_FILES_TXT_MUNGED_FILES].Value.ToString());
@@ -739,8 +748,9 @@ namespace AutomationTool
         /// Adds the specified file path to the file list.
         /// </summary>
         /// <param name="file">Full path of file to add.</param>
+        /// <param name="isMungeScript">Whether or not the specified file is a munge script.</param>
         /// <returns>True if the file was successfully added, false if not.</returns>
-        private bool AddFile(string file)
+        private bool AddFile(string file, bool isMungeScript = true)
         {
             // Does the file path exist?
             if (File.Exists(file))
@@ -802,6 +812,22 @@ namespace AutomationTool
                         {
                             compiledFiles = string.Concat(compiledFiles, compiledFile, "\n");
                         }
+
+
+                        // Make all data values nil if file isn't a munge script
+                        if (!isMungeScript)
+                        {
+                            stagingDirectory = "nil";
+                            mungeOutputDirectory = "nil";
+                            compiledFiles = "nil";
+
+                            Thread infoThread = new Thread(() => {
+                                var message = "File is not a munge script, copy operations will be disabled for it";
+                                Debug.WriteLine(message);
+                                Log("ZeroMunge: " + message);
+                            });
+                            infoThread.Start();
+                        }
                         
 
                         // Are none of the rows selected? (i.e., did the user click the "Add Files..." button?)
@@ -815,10 +841,12 @@ namespace AutomationTool
 
                             // Initialize data into the new row
                             newRow.Cells[STR_DATA_FILES_CHK_ENABLED].Value = true;
+                            newRow.Cells[STR_DATA_FILES_CHK_COPY].Value = isMungeScript;
                             newRow.Cells[STR_DATA_FILES_TXT_FILE].Value = file;
                             newRow.Cells[STR_DATA_FILES_TXT_STAGING].Value = stagingDirectory;
                             newRow.Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value = mungeOutputDirectory;
                             newRow.Cells[STR_DATA_FILES_TXT_MUNGED_FILES].Value = compiledFiles;
+                            newRow.Cells[STR_DATA_FILES_CHK_IS_MUNGE_SCRIPT].Value = isMungeScript;
                         }
                         else
                         {
@@ -830,11 +858,12 @@ namespace AutomationTool
 
                             // Initialize data into the new row
                             data_Files[INT_DATA_FILES_CHK_ENABLED, data_Files_CurSelectedRow].Value = true;
-                            data_Files[INT_DATA_FILES_CHK_COPY, data_Files_CurSelectedRow].Value = true;
+                            data_Files[INT_DATA_FILES_CHK_COPY, data_Files_CurSelectedRow].Value = isMungeScript;
                             data_Files[INT_DATA_FILES_TXT_FILE, data_Files_CurSelectedRow].Value = file;
                             data_Files[INT_DATA_FILES_TXT_STAGING, data_Files_CurSelectedRow].Value = stagingDirectory;
                             data_Files[INT_DATA_FILES_TXT_MUNGE_DIR, data_Files_CurSelectedRow].Value = mungeOutputDirectory;
                             data_Files[INT_DATA_FILES_TXT_MUNGED_FILES, data_Files_CurSelectedRow].Value = compiledFiles;
+                            data_Files[INT_DATA_FILES_CHK_IS_MUNGE_SCRIPT, data_Files_CurSelectedRow].Value = isMungeScript;
                         }
 
                         
@@ -853,9 +882,13 @@ namespace AutomationTool
                     else
                     {
                         Thread errorThread = new Thread(() => {
-                            Log("ZeroMunge: ERROR! Game directory not set!");
+                            var message = "ERROR! Game directory not set";
+                            Debug.WriteLine(message);
+                            Log("ZeroMunge: " + message);
                         });
                         errorThread.Start();
+
+                        return false;
                     }
                 }
 
@@ -863,10 +896,12 @@ namespace AutomationTool
             }
             else
             {
-                Thread outputThread = new Thread(() => {
-                    Log("ZeroMunge: ERROR! " + file + " not found");
+                Thread errorThread = new Thread(() => {
+                    var message = "ERROR! File does not exist at " + file;
+                    Debug.WriteLine(message);
+                    Log("ZeroMunge: " + message);
                 });
-                outputThread.Start();
+                errorThread.Start();
 
                 return false;
             }
@@ -898,11 +933,12 @@ namespace AutomationTool
         {
             var senderGrid = (DataGridView)sender;
 
+            bool fileIsNull = false;
+            string cellType = "nil";
+
             // Debug messages
             if (e.RowIndex >= 0)
             {
-                string cellType = "nil";
-
                 // Determine the cell type
                 if (senderGrid.Columns[e.ColumnIndex] is DataGridViewTextBoxColumn)
                 {
@@ -917,7 +953,25 @@ namespace AutomationTool
                     cellType = "CheckBox";
                 }
 
-                Debug.WriteLine(cellType + " cell content clicked at row index " + e.RowIndex + ", column index " + e.ColumnIndex);
+                //Debug.WriteLine(cellType + " cell content clicked at row index " + e.RowIndex + ", column index " + e.ColumnIndex);
+            }
+
+            // Does the File Path cell contain actual data?
+            if (data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value == null || 
+                data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value.ToString() == "nil" ||
+                data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value.ToString() == "")
+            {
+                fileIsNull = true;
+
+                if (data_Files_CurSelectedColumn != INT_DATA_FILES_BTN_FILE_BROWSE)
+                {
+                    Thread errorThread = new Thread(() => {
+                        var message = "ERROR! File Path must first be specified";
+                        Debug.WriteLine(message);
+                        Log("ZeroMunge: " + message);
+                    });
+                    errorThread.Start();
+                }
             }
 
             // Do stuff if the clicked cell's type was Button
@@ -931,13 +985,138 @@ namespace AutomationTool
                         
                 case INT_DATA_FILES_BTN_STAGING_BROWSE:     // col_StagingBrowse
                     // Fire the faux-event for the button
-                    btn_SetStaging_Click();
+                    if (!fileIsNull)
+                    {
+                        btn_SetStaging_Click();
+                    }
                     break;
 
                 case INT_DATA_FILES_BTN_MUNGED_FILES_EDIT:     // col_MungedFilesEdit
                     // Fire the faux-event for the button
-                    btn_MungedFilesEdit_Click();
+                    if (!fileIsNull)
+                    {
+                        btn_MungedFilesEdit_Click();
+                    }
                     break;
+            }
+        }
+
+
+        // When a cell's value in the file list has changed:
+        // Validate or invalidate the cell.
+        private void data_Files_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            var senderGrid = (DataGridView)sender;
+
+            bool fileIsNull = false;
+            string cellType = "nil";
+
+            if (e.ColumnIndex == INT_DATA_FILES_TXT_FILE)
+            {
+                Debug.WriteLine("File Path value was changed");
+            }
+
+            // Debug messages
+            if (e.RowIndex >= 0)
+            {
+                // Determine the cell type
+                if (senderGrid.Columns[e.ColumnIndex] is DataGridViewTextBoxColumn)
+                {
+                    cellType = "TextBox";
+                }
+                else if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn)
+                {
+                    cellType = "Button";
+                }
+                else if (senderGrid.Columns[e.ColumnIndex] is DataGridViewCheckBoxColumn)
+                {
+                    cellType = "CheckBox";
+                }
+
+                //Debug.WriteLine(cellType + " cell content clicked at row index " + e.RowIndex + ", column index " + e.ColumnIndex);
+            }
+
+            if (e.RowIndex < 0 || data_Files.Rows[e.RowIndex].IsNewRow) { return; }
+
+            // Does the File Path cell contain actual data?
+            if (data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value == null)
+            {
+                fileIsNull = true;
+
+                if (data_Files_CurSelectedColumn != INT_DATA_FILES_BTN_FILE_BROWSE)
+                {
+                    Thread errorThread = new Thread(() => {
+                        var message = "ERROR! File Path must first be specified";
+                        Debug.WriteLine(message);
+                        Log("ZeroMunge: " + message);
+                    });
+                    errorThread.Start();
+                }
+            }
+
+            // Do stuff if the edited cell's type was TextBox
+            switch (e.ColumnIndex)
+            {
+                case INT_DATA_FILES_TXT_FILE:     // col_File
+                    // Throw an error and color the cell red if the file at the specified path is blank, null, or doesn't exist
+                    if (fileIsNull)
+                    {
+                        data_Files_ValidateCell(e.RowIndex, INT_DATA_FILES_TXT_FILE, false);
+                        data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_CHK_IS_VALID].Value = false;
+
+                        Thread errorThread = new Thread(() => {
+                            var message = "ERROR! File Path is blank";
+                            Debug.WriteLine(message);
+                            Log("ZeroMunge: " + message);
+                        });
+                        errorThread.Start();
+                    }
+                    else if (data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value.ToString() == "" || 
+                        !File.Exists(data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value.ToString()))
+                    {
+                        data_Files_ValidateCell(e.RowIndex, INT_DATA_FILES_TXT_FILE, false);
+                        data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_CHK_IS_VALID].Value = false;
+
+                        Thread errorThread = new Thread(() => {
+                            var message = "ERROR! File Path doesn't exist at " + data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value.ToString();
+                            Debug.WriteLine(message);
+                            Log("ZeroMunge: " + message);
+                        });
+                        errorThread.Start();
+                    }
+                    else
+                    {
+                        data_Files_ValidateCell(e.RowIndex, INT_DATA_FILES_TXT_FILE, true);
+                        data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_CHK_IS_VALID].Value = true;
+                    }
+                    break;
+
+                case INT_DATA_FILES_TXT_STAGING:     // col_Staging
+                    
+                    break;
+
+                case INT_DATA_FILES_TXT_MUNGED_FILES:     // col_MungedFiles
+                    
+                    break;
+            }
+        }
+
+
+        /// <summary>
+        /// Validates or invalidates the cell in the given row and column. If the cell is valid, it's colored normally. If not, it's colored red.
+        /// </summary>
+        /// <param name="row">Index of row containing cell to validate.</param>
+        /// <param name="column">Index of column containing cell to validate.</param>
+        /// <param name="validate">True, validate cell. False, invalidate cell.</param>
+        private void data_Files_ValidateCell(int row, int column, bool validate)
+        {
+            if (validate)
+            {
+                data_Files.Rows[row].Cells[column].Style.BackColor = data_Files.DefaultCellStyle.BackColor;
+            }
+            else
+            {
+                data_Files.Rows[row].Cells[column].Style.BackColor = errorRed;
             }
         }
 
@@ -1181,12 +1360,13 @@ namespace AutomationTool
         private void openDlg_AddFilesPrompt_FileOk(object sender, CancelEventArgs e)
         {
             string file = openDlg_AddFilesPrompt.FileName;
+            bool isMungeScript = new DirectoryInfo(file).Name.Contains("munge");
 
             // Save the current directory
             addFilesLastDir = Modules.Utilities.GetFileDirectory(file);
 
             // Add the file to the list
-            AddFile(file);
+            AddFile(file, isMungeScript);
         }
 
 
@@ -1210,9 +1390,21 @@ namespace AutomationTool
 
                     // Save the current directory
                     addFoldersLastDir = Modules.Utilities.GetFileDirectory(folder);
-                    
-                    // Add the file to the list
-                    AddFile(file);
+
+                    if (File.Exists(file))
+                    {
+                        // Add the file to the list
+                        AddFile(file);
+                    }
+                    else
+                    {
+                        Thread errorThread = new Thread(() => {
+                            var message = "ERROR! File does not exist at " + file;
+                            Debug.WriteLine(message);
+                            Log("ZeroMunge: " + message);
+                        });
+                        errorThread.Start();
+                    }
                 }
             }
         }
@@ -1246,7 +1438,7 @@ namespace AutomationTool
                         theFile = theFile.Replace("@#$", projectID);
                     }
 
-                    // Set the complete file path of the munge.bat file
+                    // Assemble the complete file path of the munge.bat file
                     var path = openDlg_AddProjectPrompt.FileName + theFile;
 
                     // Save the current directory
@@ -1475,7 +1667,7 @@ namespace AutomationTool
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine(data_Files.Rows[0].Cells[STR_DATA_FILES_TXT_FILE].Value.ToString());
+            //Debug.WriteLine(data_Files.Rows[0].Cells[STR_DATA_FILES_TXT_FILE].Value.ToString());
 
             //List<string> files = new List<string>();
             //files.Add(@"testfile1.txt");

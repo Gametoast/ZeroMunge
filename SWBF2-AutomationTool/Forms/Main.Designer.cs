@@ -72,6 +72,8 @@
             this.col_MungeDir = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.col_MungedFiles = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.col_MungedFilesEdit = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.col_IsMungeScript = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.IsValid = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.pan_MungedFilesEdit.SuspendLayout();
             this.status_MungedFilesEdit.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cont_Panels)).BeginInit();
@@ -346,7 +348,9 @@
             this.col_StagingBrowse,
             this.col_MungeDir,
             this.col_MungedFiles,
-            this.col_MungedFilesEdit});
+            this.col_MungedFilesEdit,
+            this.col_IsMungeScript,
+            this.IsValid});
             this.data_Files.Dock = System.Windows.Forms.DockStyle.Fill;
             this.data_Files.Location = new System.Drawing.Point(0, 0);
             this.data_Files.Name = "data_Files";
@@ -357,6 +361,7 @@
             this.data_Files.TabIndex = 4;
             this.data_Files.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.data_Files_CellClick);
             this.data_Files.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.data_Files_CellContentClick);
+            this.data_Files.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.data_Files_CellValueChanged);
             // 
             // lbl_OutputLogChars
             // 
@@ -437,10 +442,10 @@
             // 
             // col_File
             // 
-            this.col_File.HeaderText = "Munge Script File Path";
+            this.col_File.HeaderText = "File Path";
             this.col_File.MinimumWidth = 100;
             this.col_File.Name = "col_File";
-            this.col_File.ToolTipText = "File path of Munge Script to execute.";
+            this.col_File.ToolTipText = "File path of the batch script to execute.";
             this.col_File.Width = 265;
             // 
             // col_FileBrowse
@@ -453,7 +458,7 @@
             this.col_FileBrowse.ReadOnly = true;
             this.col_FileBrowse.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.col_FileBrowse.Text = "...";
-            this.col_FileBrowse.ToolTipText = "Open a prompt to browse for a new Munge Script.";
+            this.col_FileBrowse.ToolTipText = "Open a prompt to browse for a new batch script.";
             this.col_FileBrowse.UseColumnTextForButtonValue = true;
             this.col_FileBrowse.Width = 30;
             // 
@@ -462,7 +467,7 @@
             this.col_Staging.HeaderText = "Staging Directory";
             this.col_Staging.MinimumWidth = 100;
             this.col_Staging.Name = "col_Staging";
-            this.col_Staging.ToolTipText = "Directory to which the Munged Files are copied after the Munge Script has finishe" +
+            this.col_Staging.ToolTipText = "Directory to which the munged files are copied after the batch script has finishe" +
     "d executing.";
             this.col_Staging.Width = 265;
             // 
@@ -476,7 +481,7 @@
             this.col_StagingBrowse.ReadOnly = true;
             this.col_StagingBrowse.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.col_StagingBrowse.Text = "...";
-            this.col_StagingBrowse.ToolTipText = "Open a prompt to browse for a new Staging Directory.";
+            this.col_StagingBrowse.ToolTipText = "Open a prompt to browse for a new staging directory.";
             this.col_StagingBrowse.UseColumnTextForButtonValue = true;
             this.col_StagingBrowse.Width = 30;
             // 
@@ -496,8 +501,8 @@
             this.col_MungedFiles.Name = "col_MungedFiles";
             this.col_MungedFiles.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.col_MungedFiles.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.col_MungedFiles.ToolTipText = "Names of files that will be copied to the row\'s Staging Directory after the Munge" +
-    " Script has finished executing.";
+            this.col_MungedFiles.ToolTipText = "Names of files that will be copied to the row\'s staging directory after the batch" +
+    " script has finished executing.";
             this.col_MungedFiles.Width = 170;
             // 
             // col_MungedFilesEdit
@@ -510,9 +515,23 @@
             this.col_MungedFilesEdit.ReadOnly = true;
             this.col_MungedFilesEdit.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.col_MungedFilesEdit.Text = "...";
-            this.col_MungedFilesEdit.ToolTipText = "Open a popup to add/remove/edit names of Munged Files.";
+            this.col_MungedFilesEdit.ToolTipText = "Open a popup to add/remove/edit names of munged files.";
             this.col_MungedFilesEdit.UseColumnTextForButtonValue = true;
             this.col_MungedFilesEdit.Width = 30;
+            // 
+            // col_IsMungeScript
+            // 
+            this.col_IsMungeScript.HeaderText = "IsMungeScript";
+            this.col_IsMungeScript.Name = "col_IsMungeScript";
+            this.col_IsMungeScript.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.col_IsMungeScript.Width = 50;
+            // 
+            // IsValid
+            // 
+            this.IsValid.HeaderText = "IsValid";
+            this.IsValid.Name = "IsValid";
+            this.IsValid.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.IsValid.Width = 50;
             // 
             // AutomationTool
             // 
@@ -599,6 +618,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn col_MungeDir;
         private System.Windows.Forms.DataGridViewTextBoxColumn col_MungedFiles;
         private System.Windows.Forms.DataGridViewButtonColumn col_MungedFilesEdit;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn col_IsMungeScript;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn IsValid;
     }
 }
 
