@@ -30,10 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AutomationTool));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_Run = new System.Windows.Forms.Button();
             this.btn_AddFiles = new System.Windows.Forms.Button();
             this.openDlg_AddFilesPrompt = new System.Windows.Forms.OpenFileDialog();
@@ -63,6 +63,12 @@
             this.cmenu_TrayIcon_Quit = new System.Windows.Forms.ToolStripMenuItem();
             this.button2 = new System.Windows.Forms.Button();
             this.openDlg_SelectGameExePrompt = new System.Windows.Forms.OpenFileDialog();
+            this.cmenu_Text = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.selectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.col_Enabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.col_Copy = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.col_File = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -82,6 +88,7 @@
             this.cont_Panels.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.data_Files)).BeginInit();
             this.cmenu_TrayIcon.SuspendLayout();
+            this.cmenu_Text.SuspendLayout();
             this.SuspendLayout();
             // 
             // btn_Run
@@ -267,6 +274,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.text_MungedFilesEdit.BackColor = System.Drawing.SystemColors.Info;
+            this.text_MungedFilesEdit.ContextMenuStrip = this.cmenu_Text;
             this.text_MungedFilesEdit.Location = new System.Drawing.Point(0, 0);
             this.text_MungedFilesEdit.Name = "text_MungedFilesEdit";
             this.text_MungedFilesEdit.Size = new System.Drawing.Size(358, 143);
@@ -421,6 +429,58 @@
             this.openDlg_SelectGameExePrompt.Title = "Select Game Executable";
             this.openDlg_SelectGameExePrompt.FileOk += new System.ComponentModel.CancelEventHandler(this.openDlg_SelectGameExePrompt_FileOk);
             // 
+            // cmenu_Text
+            // 
+            this.cmenu_Text.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copyToolStripMenuItem,
+            this.pasteToolStripMenuItem,
+            this.deleteToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.selectAllToolStripMenuItem});
+            this.cmenu_Text.Name = "cmenu_Text";
+            this.cmenu_Text.Size = new System.Drawing.Size(165, 120);
+            // 
+            // selectAllToolStripMenuItem
+            // 
+            this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
+            this.selectAllToolStripMenuItem.ShortcutKeyDisplayString = "";
+            this.selectAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
+            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.selectAllToolStripMenuItem.Text = "Select All";
+            this.selectAllToolStripMenuItem.Click += new System.EventHandler(this.selectAllToolStripMenuItem_Click);
+            // 
+            // copyToolStripMenuItem
+            // 
+            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            this.copyToolStripMenuItem.ShortcutKeyDisplayString = "";
+            this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.copyToolStripMenuItem.Text = "Copy";
+            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
+            // 
+            // pasteToolStripMenuItem
+            // 
+            this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
+            this.pasteToolStripMenuItem.ShortcutKeyDisplayString = "";
+            this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.pasteToolStripMenuItem.Text = "Paste";
+            this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
+            // 
+            // deleteToolStripMenuItem
+            // 
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.deleteToolStripMenuItem.ShortcutKeyDisplayString = "";
+            this.deleteToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.deleteToolStripMenuItem.Text = "Delete";
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(161, 6);
+            // 
             // col_Enabled
             // 
             this.col_Enabled.HeaderText = "Process";
@@ -450,9 +510,9 @@
             // 
             // col_FileBrowse
             // 
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle1;
             this.col_FileBrowse.HeaderText = "";
             this.col_FileBrowse.Name = "col_FileBrowse";
             this.col_FileBrowse.ReadOnly = true;
@@ -473,9 +533,9 @@
             // 
             // col_StagingBrowse
             // 
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-            this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+            this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle2;
             this.col_StagingBrowse.HeaderText = "";
             this.col_StagingBrowse.Name = "col_StagingBrowse";
             this.col_StagingBrowse.ReadOnly = true;
@@ -494,8 +554,8 @@
             // 
             // col_MungedFiles
             // 
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle3;
             this.col_MungedFiles.HeaderText = "Munged Files";
             this.col_MungedFiles.MinimumWidth = 100;
             this.col_MungedFiles.Name = "col_MungedFiles";
@@ -507,17 +567,17 @@
             // 
             // col_MungedFilesEdit
             // 
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-            this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+            this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle4;
             this.col_MungedFilesEdit.HeaderText = "";
             this.col_MungedFilesEdit.Name = "col_MungedFilesEdit";
             this.col_MungedFilesEdit.ReadOnly = true;
             this.col_MungedFilesEdit.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.col_MungedFilesEdit.Text = "...";
+            this.col_MungedFilesEdit.Text = "▼";
             this.col_MungedFilesEdit.ToolTipText = "Open a popup to add/remove/edit names of munged files.";
             this.col_MungedFilesEdit.UseColumnTextForButtonValue = true;
-            this.col_MungedFilesEdit.Width = 30;
+            this.col_MungedFilesEdit.Width = 20;
             // 
             // col_IsMungeScript
             // 
@@ -572,6 +632,7 @@
             this.cont_Panels.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.data_Files)).EndInit();
             this.cmenu_TrayIcon.ResumeLayout(false);
+            this.cmenu_Text.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -609,6 +670,12 @@
         private System.Windows.Forms.Panel pan_MungedFilesEdit;
         private System.Windows.Forms.StatusStrip status_MungedFilesEdit;
         private System.Windows.Forms.ToolStripStatusLabel label_MungedFilesEdit;
+        private System.Windows.Forms.ContextMenuStrip cmenu_Text;
+        private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem selectAllToolStripMenuItem;
         private System.Windows.Forms.DataGridViewCheckBoxColumn col_Enabled;
         private System.Windows.Forms.DataGridViewCheckBoxColumn col_Copy;
         private System.Windows.Forms.DataGridViewTextBoxColumn col_File;

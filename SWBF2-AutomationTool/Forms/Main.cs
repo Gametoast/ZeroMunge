@@ -714,8 +714,7 @@ namespace AutomationTool
                 Debug.WriteLine("Row " + row.Index + ", entered");
 
                 // Add the file to the list if all its fields are correct and valid (note: StagingDirectory isn't required)
-                if (row.Cells[STR_DATA_FILES_CHK_ENABLED].Value != null &&
-                    row.Cells[STR_DATA_FILES_CHK_ENABLED].Value != null &&
+                if (row.Cells[STR_DATA_FILES_CHK_ENABLED].Value != null && 
                     row.Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value != null)
                 {
                     if (row.Cells[STR_DATA_FILES_CHK_ENABLED].Value.ToString() == "True")
@@ -996,7 +995,7 @@ namespace AutomationTool
         }
 
         
-        // When the user clicks on a cell in the DataGridView:
+        // When the user clicks on a cell in the file list:
         // Do something depending on the cell that was clicked on.
         private void data_Files_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -1342,6 +1341,33 @@ namespace AutomationTool
                     text_MungedFilesEdit.KeyDown -= text_MungedFilesEdit_KeyDown;
                     e.Handled = true;
                 }
+
+                if (e.KeyCode == Keys.C)
+                {
+                    Debug.WriteLine("Ctrl + C was pressed");
+                    
+                    text_MungedFilesEdit.Copy();
+
+                    e.Handled = true;
+                }
+
+                if (e.KeyCode == Keys.V)
+                {
+                    Debug.WriteLine("Ctrl + V was pressed");
+
+                    text_MungedFilesEdit.Paste();
+
+                    e.Handled = true;
+                }
+
+                if (e.KeyCode == Keys.A)
+                {
+                    Debug.WriteLine("Ctrl + A was pressed");
+
+                    text_MungedFilesEdit.SelectAll();
+
+                    e.Handled = true;
+                }
             }
             
             if (e.KeyCode == Keys.Escape)
@@ -1349,6 +1375,15 @@ namespace AutomationTool
                 Debug.WriteLine("Ctrl + Enter was pressed");
 
                 text_MungedFilesEdit_Dispose();
+                e.Handled = true;
+            }
+
+            if (e.KeyCode == Keys.Delete)
+            {
+                Debug.WriteLine("Delete was pressed");
+
+                text_MungedFilesEdit.Text.Remove(text_MungedFilesEdit.SelectionStart, text_MungedFilesEdit.SelectionLength);
+                
                 e.Handled = true;
             }
         }
@@ -1776,6 +1811,122 @@ namespace AutomationTool
 
             //Utilities.ParseLevelpackReqs(@"J:\BF2_ModTools\data_MEU\data_ME5\_BUILD\Common\munge.bat");
             //Utilities.GetCompiledFiles(@"J:\BF2_ModTools\data_MEU\data_ME5\_BUILD\Sides\CON_COL\munge_col.bat");
+        }
+
+
+        // When the user clicks the Copy button in the text context menu:
+        // Copy the selected text in the textbox.
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Debug.WriteLine("copyToolStripMenuItem_Click() entered");
+
+            // Try to cast the sender to a ToolStripItem
+            ToolStripItem menuItem = sender as ToolStripItem;
+            if (menuItem != null)
+            {
+                // Retrieve the ContextMenuStrip that owns this ToolStripItem
+                ContextMenuStrip owner = menuItem.Owner as ContextMenuStrip;
+                if (owner != null)
+                {
+                    // Get the control that is displaying this context menu
+                    Control sourceControl = owner.SourceControl;
+
+                    if (sourceControl is RichTextBox)
+                    {
+                        Debug.WriteLine("Control is RichTextBox");
+                        var rtb = (RichTextBox)sourceControl;
+
+                        rtb.Copy();
+                    }
+                }
+            }
+        }
+
+
+        // When the user clicks the Paste button in the text context menu:
+        // Paste the clipboard's contents into the textbox.
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Debug.WriteLine("pasteToolStripMenuItem_Click() entered");
+
+            // Try to cast the sender to a ToolStripItem
+            ToolStripItem menuItem = sender as ToolStripItem;
+            if (menuItem != null)
+            {
+                // Retrieve the ContextMenuStrip that owns this ToolStripItem
+                ContextMenuStrip owner = menuItem.Owner as ContextMenuStrip;
+                if (owner != null)
+                {
+                    // Get the control that is displaying this context menu
+                    Control sourceControl = owner.SourceControl;
+
+                    if (sourceControl is RichTextBox)
+                    {
+                        Debug.WriteLine("Control is RichTextBox");
+                        var rtb = (RichTextBox)sourceControl;
+
+                        rtb.Paste();
+                    }
+                }
+            }
+        }
+
+
+        // When the user clicks the Delete button in the text context menu:
+        // Delete the selected text in the textbox.
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Debug.WriteLine("deleteToolStripMenuItem_Click() entered");
+
+            // Try to cast the sender to a ToolStripItem
+            ToolStripItem menuItem = sender as ToolStripItem;
+            if (menuItem != null)
+            {
+                // Retrieve the ContextMenuStrip that owns this ToolStripItem
+                ContextMenuStrip owner = menuItem.Owner as ContextMenuStrip;
+                if (owner != null)
+                {
+                    // Get the control that is displaying this context menu
+                    Control sourceControl = owner.SourceControl;
+
+                    if (sourceControl is RichTextBox)
+                    {
+                        Debug.WriteLine("Control is RichTextBox");
+                        var rtb = (RichTextBox)sourceControl;
+                        
+                        rtb.Text = rtb.Text.Remove(rtb.SelectionStart, rtb.SelectionLength);
+                    }
+                }
+            }
+        }
+
+
+        // When the user clicks the Select All button in the text context menu:
+        // Select all of the textbox's contents.
+        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Debug.WriteLine("selectAllToolStripMenuItem_Click() entered");
+
+            // Try to cast the sender to a ToolStripItem
+            ToolStripItem menuItem = sender as ToolStripItem;
+            if (menuItem != null)
+            {
+                // Retrieve the ContextMenuStrip that owns this ToolStripItem
+                ContextMenuStrip owner = menuItem.Owner as ContextMenuStrip;
+                if (owner != null)
+                {
+                    // Get the control that is displaying this context menu
+                    Control sourceControl = owner.SourceControl;
+
+                    if (sourceControl is RichTextBox)
+                    {
+                        Debug.WriteLine("Control is RichTextBox");
+                        var rtb = (RichTextBox)sourceControl;
+
+                        rtb.SelectAll();
+                    }
+                }
+            }
         }
     }
 
