@@ -5,7 +5,7 @@ using System.IO;
 using System.Media;
 using System.Text.RegularExpressions;
 
-namespace AutomationTool.Modules
+namespace AutomationTool
 {
     public static class Utilities
     {
@@ -233,6 +233,21 @@ namespace AutomationTool.Modules
                 case MungeTypes.World:
                     compiledFiles.Add(GetParentFolderName(mungeScriptPath) + ".lvl");
                     break;
+            }
+
+            if (compiledFiles.Count > 1)
+            {
+                Debug.WriteLine("Going through list...");
+                for (int i = compiledFiles.Count - 1; i > 0; i--)
+                {
+                    Debug.WriteLine(compiledFiles[i]);
+
+                    if (compiledFiles[i] == "" || compiledFiles[i] == "\n")
+                    {
+                        compiledFiles.RemoveAt(i);
+                    }
+                }
+                Debug.WriteLine("Going through list... Done");
             }
 
             //Debug.WriteLine(directory);

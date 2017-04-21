@@ -40,7 +40,7 @@ namespace AutomationTool
         public const int INT_DATA_FILES_BTN_MUNGED_FILES_EDIT = 8;
         public const int INT_DATA_FILES_CHK_IS_MUNGE_SCRIPT = 9;
         public const int INT_DATA_FILES_CHK_IS_VALID = 10;
-
+        
         public Color errorRed = Color.FromArgb(251, 99, 99);
 
 
@@ -59,7 +59,7 @@ namespace AutomationTool
         private void AutomationTool_Load(object sender, EventArgs e)
         {
             // Set the tray icon
-            trayIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
+            trayIcon.Icon = Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
             trayIcon.Text = "Zero Munge: Idle";
 
             // Set the visibility of the DataGridView buttons
@@ -68,7 +68,7 @@ namespace AutomationTool
             col_MungedFilesEdit.UseColumnTextForButtonValue = true;
 
             // Start a new log file
-            string openMessage = "Opened logfile ZeroMunge_OutputLog.log  " + DateTime.Now.ToString("yyyy-MM-dd") +  " " + Modules.Utilities.GetTimestamp();
+            string openMessage = "Opened logfile ZeroMunge_OutputLog.log  " + DateTime.Now.ToString("yyyy-MM-dd") +  " " + Utilities.GetTimestamp();
             File.WriteAllText(Directory.GetCurrentDirectory() + @"\ZeroMunge_OutputLog.log", openMessage + Environment.NewLine);
         }
 
@@ -89,6 +89,7 @@ namespace AutomationTool
         // ** PROCESS MANAGER
         // ***************************
 
+        public bool ProcManager_isRunning = false;
         private int ProcManager_activeFile;
         private Process ProcManager_curProc;
         private bool ProcManager_procAborted;
@@ -99,15 +100,76 @@ namespace AutomationTool
         /// </summary>
         public void ProcManager_Start()
         {
+            // Disable the UI
+            EnableUI(false);
+
+            ProcManager_isRunning = true;
+
             Thread soundThread = new Thread(() => {
                 trayIcon.Text = "Zero Munge: Running";
-                Modules.Utilities.PlaySound("start");
+                Utilities.PlaySound("start");
             });
             soundThread.Start();
 
             // Grab the list of checked files
             ProcManager_fileList = new List<MungeFactory>();
             ProcManager_fileList = GetCheckedFiles();
+
+
+            // BEGIN CHECKING FOR ROW ERRORS
+
+            int procError = 0;
+
+            // Are there no items in the list?
+            if (data_Files.Rows[0].IsNewRow)
+            {
+                if (data_Files.Rows[0].Cells[STR_DATA_FILES_TXT_FILE].Value == null ||
+                    data_Files.Rows[0].Cells[STR_DATA_FILES_TXT_STAGING].Value == null ||
+                    data_Files.Rows[0].Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value == null)
+                {
+                    Debug.WriteLine("First row is new row");
+                    procError = 1;
+                }
+            }
+            else
+            {
+                // Are none of the items checked?
+                if (ProcManager_fileList.Count <= 0)
+                {
+                    procError = 2;
+                }
+            }
+
+            // Report the error if one is present
+            if (procError > 0)
+            {
+                Thread errorThread = new Thread(() => {
+                    string errorMessage = "";
+
+                    switch (procError)
+                    {
+                        case 1:
+                            errorMessage = "ZeroMunge: ERROR! File list must contain at least one file";
+                            break;
+                        case 2:
+                            errorMessage = "ZeroMunge: ERROR! At least one item must be checked";
+                            break;
+                    }
+
+                    Log(errorMessage);
+
+                    // Re-enable the UI
+                    EnableUI(true);
+                });
+                errorThread.Start();
+
+                return;
+            }
+
+            if (ProcManager_fileList.Count == 0) { return; }
+
+            // FINISH CHECKING FOR ROW ERRORS
+
 
             ProcManager_activeFile = 0;
             ProcManager_procAborted = false;
@@ -291,7 +353,7 @@ namespace AutomationTool
             // Initilialize process start info
             ProcessStartInfo startInfo = new ProcessStartInfo(@filePath)
             {
-                WorkingDirectory = Modules.Utilities.GetFileDirectory(@filePath),
+                WorkingDirectory = Utilities.GetFileDirectory(@filePath),
                 WindowStyle = ProcessWindowStyle.Hidden,
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
@@ -353,9 +415,11 @@ namespace AutomationTool
         /// </summary>
         public void ProcManager_Abort()
         {
+            ProcManager_isRunning = false;
+
             Thread soundThread = new Thread(() => {
                 trayIcon.Text = "Zero Munge: Idle";
-                Modules.Utilities.PlaySound("abort");
+                Utilities.PlaySound("abort");
             });
             soundThread.Start();
 
@@ -385,6 +449,8 @@ namespace AutomationTool
         /// </summary>
         public void ProcManager_Complete()
         {
+            ProcManager_isRunning = false;
+
             Thread exitThread = new Thread(() => {
                 Log(Environment.NewLine, false);
                 Log("**************************************************************");
@@ -401,7 +467,7 @@ namespace AutomationTool
                 trayIcon.BalloonTipTitle = "Success";
                 trayIcon.BalloonTipText = "The operation was completed successfully.";
                 trayIcon.ShowBalloonTip(30000);
-                Modules.Utilities.PlaySound("success");
+                Utilities.PlaySound("success");
             });
             soundThread.Start();
         }
@@ -450,7 +516,7 @@ namespace AutomationTool
                 if (!string.IsNullOrEmpty(message))
                 {
                     // Assemble message
-                    string messageToLog = string.Concat(Modules.Utilities.GetTimestamp(), " : ", message);
+                    string messageToLog = string.Concat(Utilities.GetTimestamp(), " : ", message);
 
                     // Print message
                     text_OutputLog.AppendText(messageToLog);
@@ -547,6 +613,7 @@ namespace AutomationTool
                 btn_CopyLog.Enabled = enabled;
                 btn_SaveLog.Enabled = enabled;
                 btn_ClearLog.Enabled = enabled;
+                btn_SetGamePath.Enabled = enabled;
 
                 // File list
                 data_Files.Enabled = enabled;
@@ -726,7 +793,7 @@ namespace AutomationTool
                         // 'Munged files' data
                         if (row.Cells[STR_DATA_FILES_TXT_MUNGED_FILES].Value != null)
                         {
-                            fileInfo.MungedFiles = Modules.Utilities.ExtractLines(row.Cells[STR_DATA_FILES_TXT_MUNGED_FILES].Value.ToString());
+                            fileInfo.MungedFiles = Utilities.ExtractLines(row.Cells[STR_DATA_FILES_TXT_MUNGED_FILES].Value.ToString());
                         }
 
 
@@ -761,44 +828,46 @@ namespace AutomationTool
                     // Auto-set the staging directory if the game directory has been set
                     if (gameDirectory != "")
                     {
-                        string projectStagingRoot = gameDirectory + "\\addon\\" + Modules.Utilities.GetProjectID(file);
+                        string projectStagingRoot = gameDirectory + "\\addon\\" + Utilities.GetProjectID(file);
                         string stagingDirectory = "";
                         string mungeOutputDirectory = "";
                         string compiledFiles = "";
 
-                        Debug.WriteLine(Modules.Utilities.GetProjectID(file));
+                        List<string> compiledFilesList = Utilities.GetCompiledFiles(file);
+
+                        Debug.WriteLine(Utilities.GetProjectID(file));
 
                         // Set the file's staging directory based on the file's munge type (e.g., side, world, common)
-                        switch (Modules.Utilities.GetMungeType(file))
+                        switch (Utilities.GetMungeType(file))
                         {
                             default:
                                 stagingDirectory = "nil";
                                 break;
-                            case Modules.Utilities.MungeTypes.Addme:
+                            case Utilities.MungeTypes.Addme:
                                 stagingDirectory = projectStagingRoot + "\\";
                                 break;
-                            case Modules.Utilities.MungeTypes.Common:
+                            case Utilities.MungeTypes.Common:
                                 stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\";
                                 break;
-                            case Modules.Utilities.MungeTypes.Load:
+                            case Utilities.MungeTypes.Load:
                                 stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\Load\\";
                                 break;
-                            case Modules.Utilities.MungeTypes.Shell:
+                            case Utilities.MungeTypes.Shell:
                                 stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\";
                                 break;
-                            case Modules.Utilities.MungeTypes.Side:
+                            case Utilities.MungeTypes.Side:
                                 stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\SIDE\\";
                                 break;
-                            case Modules.Utilities.MungeTypes.Sound:
+                            case Utilities.MungeTypes.Sound:
                                 stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\Sound\\";
                                 break;
-                            case Modules.Utilities.MungeTypes.World:
-                                stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\" + Modules.Utilities.GetProjectID(file) + "\\";
+                            case Utilities.MungeTypes.World:
+                                stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\" + Utilities.GetProjectID(file) + "\\";
                                 break;
                         }
 
                         // Get the file's munge output directory
-                        mungeOutputDirectory = Modules.Utilities.GetMungeDirectory(file);
+                        mungeOutputDirectory = Utilities.GetMungeDirectory(file);
 
 
                         // Remove any duplicate backslashes
@@ -808,13 +877,13 @@ namespace AutomationTool
 
 
                         // Assemble a multi-line string of the compiled files' names
-                        foreach (string compiledFile in Modules.Utilities.GetCompiledFiles(file))
+                        foreach (string compiledFile in compiledFilesList)
                         {
                             compiledFiles = string.Concat(compiledFiles, compiledFile, "\n");
                         }
 
 
-                        // Make all data values nil if file isn't a munge script
+                        // Make all data values nil if file isn't a munge script (except for the File Path value)
                         if (!isMungeScript)
                         {
                             stagingDirectory = "nil";
@@ -926,7 +995,7 @@ namespace AutomationTool
             }
         }
 
-
+        
         // When the user clicks on a cell in the DataGridView:
         // Do something depending on the cell that was clicked on.
         private void data_Files_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -956,23 +1025,27 @@ namespace AutomationTool
                 //Debug.WriteLine(cellType + " cell content clicked at row index " + e.RowIndex + ", column index " + e.ColumnIndex);
             }
 
-            // Does the File Path cell contain actual data?
-            if (data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value == null || 
-                data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value.ToString() == "nil" ||
-                data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value.ToString() == "")
+            try
             {
-                fileIsNull = true;
-
-                if (data_Files_CurSelectedColumn != INT_DATA_FILES_BTN_FILE_BROWSE)
+                // Does the File Path cell contain actual data?
+                if (data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value == null || 
+                    data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value.ToString() == "" || 
+                    data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value.ToString() == "nil")
                 {
-                    Thread errorThread = new Thread(() => {
-                        var message = "ERROR! File Path must first be specified";
-                        Debug.WriteLine(message);
-                        Log("ZeroMunge: " + message);
-                    });
-                    errorThread.Start();
+                    fileIsNull = true;
+
+                    if (data_Files_CurSelectedColumn != INT_DATA_FILES_BTN_FILE_BROWSE)
+                    {
+                        Thread errorThread = new Thread(() => {
+                            var message = "ERROR! File Path must first be specified";
+                            Debug.WriteLine(message);
+                            Log("ZeroMunge: " + message);
+                        });
+                        errorThread.Start();
+                    }
                 }
             }
+            catch (ArgumentOutOfRangeException) { }
 
             // Do stuff if the clicked cell's type was Button
             switch (data_Files_CurSelectedColumn)
@@ -1102,6 +1175,66 @@ namespace AutomationTool
         }
 
 
+        // When the user presses a key in the file list:
+        // Do stuff depending on the key combination pressed.
+        private void data_Files_KeyDown(object sender, KeyEventArgs e)
+        {
+            // When the key combination is Shift + F5:
+            // Stop processing files in the file list.
+            if ((ModifierKeys & Keys.Shift) == Keys.Shift)
+            {
+                if (e.KeyCode == Keys.F5)
+                {
+                    Debug.WriteLine("Shift + F5 was pressed");
+
+                    if (ProcManager_isRunning)
+                    {
+                        ProcManager_Abort();
+                    }
+
+                    e.Handled = true;
+                }
+            }
+
+            // When the key combination is F5:
+            // Start processing files in the file list.
+            if (e.KeyCode == Keys.F5)
+            {
+                if ((ModifierKeys & Keys.Shift) == Keys.Shift) { return; }
+
+                Debug.WriteLine("F5 was pressed");
+
+                if (!ProcManager_isRunning)
+                {
+                    ProcManager_Start();
+                }
+
+                e.Handled = true;
+            }
+
+            // When the key combination is Delete:
+            // Clear the contents of the currently selected cell in the file list.
+            if (e.KeyCode == Keys.Delete)
+            {
+                Debug.WriteLine("Delete was pressed");
+
+                foreach (DataGridViewCell cell in data_Files.SelectedCells)
+                {
+                    // Determine the cell type
+                    if (cell is DataGridViewTextBoxCell)
+                    {
+                        if (cell.Value != null)
+                        {
+                            cell.Value = "";
+                        }
+                    }
+                }
+
+                e.Handled = true;
+            }
+        }
+
+
         /// <summary>
         /// Validates or invalidates the cell in the given row and column. If the cell is valid, it's colored normally. If not, it's colored red.
         /// </summary>
@@ -1138,7 +1271,7 @@ namespace AutomationTool
                     var folder = openDlg_SetStagingPrompt.FileName;
 
                     // Save the current directory
-                    setStagingLastDir = Modules.Utilities.GetFileDirectory(folder);
+                    setStagingLastDir = Utilities.GetFileDirectory(folder);
 
                     // Set the staging directory if it exists
                     if (Directory.Exists(folder))
@@ -1280,58 +1413,6 @@ namespace AutomationTool
         // Begin processing the list of files as a playlist.
         private void btn_Run_Click(object sender, EventArgs e)
         {
-            int procError = 0;
-
-            // Are there no items in the list?
-            if (data_Files.RowCount == 1)
-            {
-                if (data_Files.Rows[0].Cells[STR_DATA_FILES_TXT_FILE].Value == null ||
-                    data_Files.Rows[0].Cells[STR_DATA_FILES_TXT_STAGING].Value == null ||
-                    data_Files.Rows[0].Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value == null)
-                {
-                    procError = 1;
-                }
-            }
-            else
-            {
-                var files = GetCheckedFiles();
-
-                // Are none of the items checked?
-                if (files.Count <= 0)
-                {
-                    procError = 2;
-                }
-            }
-            
-            // Report the error if one is present
-            if (procError > 0)
-            {
-                Thread errorThread = new Thread(() => {
-                    string errorMessage = "";
-
-                    switch (procError)
-                    {
-                        case 1:
-                            errorMessage = "ZeroMunge: ERROR! File list must contain at least one file";
-                            break;
-                        case 2:
-                            errorMessage = "ZeroMunge: ERROR! At least one item must be checked";
-                            break;
-                    }
-
-                    Log(errorMessage);
-
-                    // Re-enable the UI
-                    EnableUI(true);
-                });
-                errorThread.Start();
-
-                return;
-            }
-
-            // Disable the UI
-            EnableUI(false);
-
             ProcManager_Start();
         }
 
@@ -1363,7 +1444,7 @@ namespace AutomationTool
             bool isMungeScript = new DirectoryInfo(file).Name.Contains("munge");
 
             // Save the current directory
-            addFilesLastDir = Modules.Utilities.GetFileDirectory(file);
+            addFilesLastDir = Utilities.GetFileDirectory(file);
 
             // Add the file to the list
             AddFile(file, isMungeScript);
@@ -1389,7 +1470,7 @@ namespace AutomationTool
                     var file = folder + "\\munge.bat";
 
                     // Save the current directory
-                    addFoldersLastDir = Modules.Utilities.GetFileDirectory(folder);
+                    addFoldersLastDir = Utilities.GetFileDirectory(folder);
 
                     if (File.Exists(file))
                     {
@@ -1423,7 +1504,7 @@ namespace AutomationTool
             if (openDlg_AddProjectPrompt.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 // Get the project ID
-                var projectID = Modules.Utilities.GetProjectID(openDlg_AddProjectPrompt.FileName);
+                var projectID = Utilities.GetProjectID(openDlg_AddProjectPrompt.FileName);
 
 
                 // Add all common munge.bat files in the project folder
@@ -1442,7 +1523,7 @@ namespace AutomationTool
                     var path = openDlg_AddProjectPrompt.FileName + theFile;
 
                     // Save the current directory
-                    addProjectLastDir = Modules.Utilities.GetFileDirectory(openDlg_AddProjectPrompt.FileName);
+                    addProjectLastDir = Utilities.GetFileDirectory(openDlg_AddProjectPrompt.FileName);
 
                     // Add the file to the list
                     AddFile(path);
@@ -1537,9 +1618,9 @@ namespace AutomationTool
             var file = openDlg_SelectGameExePrompt.FileName;
 
             // Set the game path if it exists
-            if (Directory.Exists(Modules.Utilities.GetFileDirectory(file)))
+            if (Directory.Exists(Utilities.GetFileDirectory(file)))
             {
-                gameDirectory = Modules.Utilities.GetFileDirectory(file);
+                gameDirectory = Utilities.GetFileDirectory(file);
 
                 Properties.Settings.Default["GameDirectory"] = gameDirectory;
                 Properties.Settings.Default.Save();
@@ -1686,15 +1767,15 @@ namespace AutomationTool
 
             //string compiledFiles = "";
 
-            //foreach (string compiledFile in Modules.Utilities.GetCompiledFiles(@"J:\BF2_ModTools\data_MEU\data_ME5\_BUILD\Common\munge.bat"))
+            //foreach (string compiledFile in Utilities.GetCompiledFiles(@"J:\BF2_ModTools\data_MEU\data_ME5\_BUILD\Common\munge.bat"))
             //{
             //    compiledFiles = string.Concat(compiledFiles, compiledFile, "\n");
             //}
 
-            //Modules.Utilities.ExtractLines(compiledFiles);
+            //Utilities.ExtractLines(compiledFiles);
 
-            //Modules.Utilities.ParseLevelpackReqs(@"J:\BF2_ModTools\data_MEU\data_ME5\_BUILD\Common\munge.bat");
-            //Modules.Utilities.GetCompiledFiles(@"J:\BF2_ModTools\data_MEU\data_ME5\_BUILD\Sides\CON_COL\munge_col.bat");
+            //Utilities.ParseLevelpackReqs(@"J:\BF2_ModTools\data_MEU\data_ME5\_BUILD\Common\munge.bat");
+            //Utilities.GetCompiledFiles(@"J:\BF2_ModTools\data_MEU\data_ME5\_BUILD\Sides\CON_COL\munge_col.bat");
         }
     }
 
