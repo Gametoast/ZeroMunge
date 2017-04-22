@@ -175,11 +175,11 @@ namespace AutomationTool
             ProcManager_procAborted = false;
 
             Thread enterThread = new Thread(() => {
-                Log(Environment.NewLine, false);
+                Log("");
                 Log("**************************************************************");
                 Log("******** ZeroMunge: Entered");
                 Log("**************************************************************");
-                Log(Environment.NewLine, false);
+                Log("");
             });
             enterThread.Start();
 
@@ -380,7 +380,7 @@ namespace AutomationTool
             Thread initOutputThread = new Thread(() =>
             {
                 Log("ZeroMunge: Executing file " + @filePath);
-                Log(Environment.NewLine, false);
+                Log("");
             });
             initOutputThread.Start();
 
@@ -432,7 +432,7 @@ namespace AutomationTool
             ProcManager_fileList = null;
 
             Thread exitThread = new Thread(() => {
-                Log(Environment.NewLine, false);
+                Log("");
                 Log("**************************************************************");
                 Log("******** ZeroMunge: Aborted");
                 Log("**************************************************************");
@@ -452,7 +452,7 @@ namespace AutomationTool
             ProcManager_isRunning = false;
 
             Thread exitThread = new Thread(() => {
-                Log(Environment.NewLine, false);
+                Log("");
                 Log("**************************************************************");
                 Log("******** ZeroMunge: Exited");
                 Log("**************************************************************");
@@ -483,14 +483,14 @@ namespace AutomationTool
         /// </summary>
         /// <param name="message">Text to print.</param>
         /// <param name="newLine">Optional: True to append a new line to the end of the message.</param>
-        public void Log(string message, bool newLine = true)
+        public void Log(string message, bool newLine = false)
         {
             Log_Proc(message, newLine);
         }
 
 
         // This delegate enables asynchronous calls for setting the text property on the output log.
-        delegate void LogCallback(string message, bool newLine = true);
+        delegate void LogCallback(string message, bool newLine = false);
 
 
         private List<string> logLineCollection = new List<string>();
@@ -501,7 +501,7 @@ namespace AutomationTool
         /// </summary>
         /// <param name="message">Text to print.</param>
         /// <param name="newLine">Optional: True to append a new line to the end of the message.</param>
-        private void Log_Proc(string message, bool newLine = true)
+        private void Log_Proc(string message, bool newLine = false)
         {
             // InvokeRequired required compares the thread ID of the 
             // calling thread to the thread ID of the creating thread. 
@@ -513,53 +513,57 @@ namespace AutomationTool
             }
             else
             {
-                if (!string.IsNullOrEmpty(message))
+                string newLineText = "";
+
+                if (newLine)
                 {
-                    // Assemble message
-                    string messageToLog = string.Concat(Utilities.GetTimestamp(), " : ", message);
-
-                    // Print message
-                    text_OutputLog.AppendText(messageToLog);
-
-                    // Are we supposed to print a new line?
-                    if (newLine)
-                    {
-                        // Print message on new line
-                        text_OutputLog.AppendText(Environment.NewLine);
-                    }
-
-                    // Log the message to the log file
-                    StreamWriter sw = File.AppendText(string.Concat(Directory.GetCurrentDirectory(), @"\ZeroMunge_OutputLog.log"));
-                    sw.WriteLine(messageToLog);
-                    sw.Close();
-
-
-                    // Remove the previous temporary blank line from the end if the log isn't empty
-                    if (logLineCollection.Count > 0)
-                    {
-                        logLineCollection.RemoveAt(logLineCollection.Count - 1);
-                    }
-
-                    // Add the message to the line collection
-                    logLineCollection.Add(messageToLog);
-
-                    // Add a temporary new blank line to the end
-                    logLineCollection.Add("");
-
-
-                    // Remove the first line if the output log is full
-                    if (logLineCollection.Count >= 100)
-                    {
-                        logLineCollection.RemoveAt(0);
-                    }
-
-                    // Display the new data in the control
-                    text_OutputLog.Lines = logLineCollection.ToArray();
-
-                    // Auto-scroll to the most recent line
-                    text_OutputLog.Select(text_OutputLog.Text.Length, text_OutputLog.Text.Length);
-                    text_OutputLog.ScrollToCaret();
+                    newLineText = Environment.NewLine;
                 }
+
+                // Assemble message
+                string messageToLog = string.Concat(Utilities.GetTimestamp(), " : ", message, newLineText);
+
+                // Print message
+                text_OutputLog.AppendText(messageToLog);
+
+                // Are we supposed to print a new line?
+                if (newLine)
+                {
+                    // Print message on new line
+                    //text_OutputLog.AppendText(Environment.NewLine);
+                }
+
+                // Log the message to the log file
+                StreamWriter sw = File.AppendText(string.Concat(Directory.GetCurrentDirectory(), @"\ZeroMunge_OutputLog.log"));
+                sw.WriteLine(messageToLog);
+                sw.Close();
+
+
+                // Remove the previous temporary blank line from the end if the log isn't empty
+                if (logLineCollection.Count > 0)
+                {
+                    logLineCollection.RemoveAt(logLineCollection.Count - 1);
+                }
+
+                // Add the message to the line collection
+                logLineCollection.Add(messageToLog);
+
+                // Add a temporary new blank line to the end
+                logLineCollection.Add("");
+
+
+                // Remove the first line if the output log is full
+                if (logLineCollection.Count >= 100)
+                {
+                    logLineCollection.RemoveAt(0);
+                }
+
+                // Display the new data in the control
+                text_OutputLog.Lines = logLineCollection.ToArray();
+
+                // Auto-scroll to the most recent line
+                text_OutputLog.Select(text_OutputLog.Text.Length, text_OutputLog.Text.Length);
+                text_OutputLog.ScrollToCaret();
             }
         }
 
@@ -936,7 +940,7 @@ namespace AutomationTool
 
                         
                         Thread logThread = new Thread(() => {
-                            Log(Environment.NewLine, false);
+                            Log("");
                             Log("ZeroMunge: Adding file: " + file);
                             Log("ZeroMunge: Staging directory: " + stagingDirectory);
                             Log("ZeroMunge: Munge output directory: " + mungeOutputDirectory);
