@@ -195,7 +195,8 @@ namespace AutomationTool
         /// <param name="singleFile"></param>
         private void ProcManager_NotifyProcessComplete(int whichFile, bool singleFile)
         {
-            if (ProcManager_fileList.ElementAt(whichFile).MungedFiles != null && ProcManager_fileList.ElementAt(whichFile).MungedFiles[0] != "nil" && 
+            if (ProcManager_fileList.ElementAt(whichFile).MungedFiles != null && 
+                ProcManager_fileList.ElementAt(whichFile).MungedFiles[0] != "nil" && 
                 ProcManager_fileList.ElementAt(whichFile).StagingDir != null && 
                 ProcManager_fileList.ElementAt(whichFile).CopyToStaging != null)
             {
@@ -614,16 +615,48 @@ namespace AutomationTool
                 btn_RemoveFile.Enabled = enabled;
                 btn_RemoveAllFiles.Enabled = enabled;
                 btn_SetGamePath.Enabled = enabled;
+
                 btn_CopyLog.Enabled = enabled;
                 btn_SaveLog.Enabled = enabled;
                 btn_ClearLog.Enabled = enabled;
-                btn_SetGamePath.Enabled = enabled;
+
 
                 // File list
                 data_Files.Enabled = enabled;
 
+
                 // Tray icon context menu
                 cmenu_TrayIcon_Quit.Enabled = enabled;
+
+
+                // Menu strip context menus
+                // File menu
+                menu_newToolStripMenuItem.Enabled = enabled;
+                menu_openToolStripMenuItem.Enabled = enabled;
+                menu_saveToolStripMenuItem.Enabled = enabled;
+                menu_saveAsToolStripMenuItem.Enabled = enabled;
+                menu_exitToolStripMenuItem.Enabled = enabled;
+
+                // Edit menu
+                menu_runToolStripMenuItem.Enabled = enabled;
+                menu_cancelToolStripMenuItem.Enabled = !enabled;
+                menu_addFilesToolStripMenuItem.Enabled = enabled;
+                menu_addFoldersToolStripMenuItem.Enabled = enabled;
+                menu_addProjectToolStripMenuItem.Enabled = enabled;
+                menu_removeToolStripMenuItem.Enabled = enabled;
+                menu_removeAllToolStripMenuItem.Enabled = enabled;
+
+                // Log menu
+                menu_copyLogToolStripMenuItem.Enabled = enabled;
+                menu_saveLogAsToolStripMenuItem.Enabled = enabled;
+                menu_clearLogToolStripMenuItem.Enabled = enabled;
+
+                // Settings menu
+                menu_setGamePathToolStripMenuItem.Enabled = enabled;
+                menu_prefsToolStripMenuItem.Enabled = enabled;
+
+                // Help menu
+                menu_aboutToolStripMenuItem.Enabled = enabled;
             }
         }
 
@@ -1931,6 +1964,23 @@ namespace AutomationTool
                     }
                 }
             }
+        }
+
+
+        // When the user clicks the Exit button in the File menu:
+        // Exit the application.
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+
+        // When the user clicks the Preferences button in the Settings menu:
+        // Open the Preferences window.
+        private void menu_prefsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Preferences prefs = new Preferences();
+            prefs.Show();
         }
     }
 

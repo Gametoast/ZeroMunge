@@ -434,5 +434,42 @@ namespace AutomationTool
                 sound.Play();
             }
         }
+
+
+        /// <summary>
+        /// Returns an object containing the application's saved user settings.
+        /// </summary>
+        /// <returns>Prefs object containing the application's saved user settings.</returns>
+        public static Prefs LoadPrefs()
+        {
+            Prefs prefs = new Prefs {
+                TrayIconEnabled = Properties.Settings.Default.TrayIconEnabled,
+                NotificationPopupsEnabled = Properties.Settings.Default.NotificationPopupsEnabled,
+                NotificationSoundsEnabled = Properties.Settings.Default.NotificationSoundsEnabled
+            };
+
+            return prefs;
+        }
+
+
+        /// <summary>
+        /// Saves the provided Prefs values into the application settings.
+        /// </summary>
+        /// <param name="prefs">Prefs object containing the values to save.</param>
+        public static void SavePrefs(Prefs prefs)
+        {
+            Properties.Settings.Default.TrayIconEnabled = prefs.TrayIconEnabled;
+            Properties.Settings.Default.NotificationPopupsEnabled = prefs.NotificationPopupsEnabled;
+            Properties.Settings.Default.NotificationSoundsEnabled = prefs.NotificationSoundsEnabled;
+
+            Properties.Settings.Default.Save();
+        }
+    }
+
+    public class Prefs
+    {
+        public bool TrayIconEnabled { get; set; }
+        public bool NotificationPopupsEnabled { get; set; }
+        public bool NotificationSoundsEnabled { get; set; }
     }
 }
