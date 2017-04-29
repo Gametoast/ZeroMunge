@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle45 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle46 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle47 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle48 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AutomationTool));
             this.btn_Run = new System.Windows.Forms.Button();
             this.btn_AddFiles = new System.Windows.Forms.Button();
@@ -82,10 +82,13 @@
             this.openDlg_SelectGameExePrompt = new System.Windows.Forms.OpenFileDialog();
             this.menu_MainForm = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.menu_exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_cancelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -95,21 +98,19 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.menu_removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_removeAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_setGamePathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_prefsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.outputLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_copyLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_saveLogAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_clearLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cont_FileButtons = new System.Windows.Forms.FlowLayoutPanel();
-            this.cont_LogButtons = new System.Windows.Forms.FlowLayoutPanel();
-            this.menu_newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_setGamePathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.menu_prefsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cont_FileButtons = new System.Windows.Forms.FlowLayoutPanel();
+            this.button3 = new System.Windows.Forms.Button();
+            this.cont_LogButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.pan_MungedFilesEdit.SuspendLayout();
             this.status_MungedFilesEdit.SuspendLayout();
             this.cmenu_Text.SuspendLayout();
@@ -156,6 +157,7 @@
             // openDlg_AddFilesPrompt
             // 
             this.openDlg_AddFilesPrompt.Filter = "Batch files|*.bat";
+            this.openDlg_AddFilesPrompt.Multiselect = true;
             this.openDlg_AddFilesPrompt.Title = "Select Files";
             this.openDlg_AddFilesPrompt.FileOk += new System.ComponentModel.CancelEventHandler(this.openDlg_AddFilesPrompt_FileOk);
             // 
@@ -496,9 +498,9 @@
             // 
             // col_FileBrowse
             // 
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle17.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle45.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle45.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle45;
             this.col_FileBrowse.HeaderText = "";
             this.col_FileBrowse.Name = "col_FileBrowse";
             this.col_FileBrowse.ReadOnly = true;
@@ -519,9 +521,9 @@
             // 
             // col_StagingBrowse
             // 
-            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle18.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-            this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle46.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle46.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+            this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle46;
             this.col_StagingBrowse.HeaderText = "";
             this.col_StagingBrowse.Name = "col_StagingBrowse";
             this.col_StagingBrowse.ReadOnly = true;
@@ -540,22 +542,21 @@
             // 
             // col_MungedFiles
             // 
-            dataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle19;
+            dataGridViewCellStyle47.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle47;
             this.col_MungedFiles.HeaderText = "Munged Files";
             this.col_MungedFiles.MinimumWidth = 100;
             this.col_MungedFiles.Name = "col_MungedFiles";
             this.col_MungedFiles.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.col_MungedFiles.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.col_MungedFiles.ToolTipText = "Names of files that will be copied to the staging directory after the batch scrip" +
     "t has finished executing. Separate each file name into its own line.";
             this.col_MungedFiles.Width = 170;
             // 
             // col_MungedFilesEdit
             // 
-            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle20.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-            this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle20;
+            dataGridViewCellStyle48.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle48.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+            this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle48;
             this.col_MungedFilesEdit.HeaderText = "";
             this.col_MungedFilesEdit.Name = "col_MungedFilesEdit";
             this.col_MungedFilesEdit.ReadOnly = true;
@@ -630,6 +631,7 @@
             this.button2.TabIndex = 16;
             this.button2.Text = "button2";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Visible = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // openDlg_SelectGameExePrompt
@@ -664,6 +666,52 @@
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
+            // menu_newToolStripMenuItem
+            // 
+            this.menu_newToolStripMenuItem.Name = "menu_newToolStripMenuItem";
+            this.menu_newToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+N";
+            this.menu_newToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.menu_newToolStripMenuItem.Text = "New";
+            this.menu_newToolStripMenuItem.Visible = false;
+            // 
+            // menu_openToolStripMenuItem
+            // 
+            this.menu_openToolStripMenuItem.Name = "menu_openToolStripMenuItem";
+            this.menu_openToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+O";
+            this.menu_openToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.menu_openToolStripMenuItem.Text = "Open";
+            this.menu_openToolStripMenuItem.Visible = false;
+            // 
+            // menu_saveToolStripMenuItem
+            // 
+            this.menu_saveToolStripMenuItem.Name = "menu_saveToolStripMenuItem";
+            this.menu_saveToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+S";
+            this.menu_saveToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.menu_saveToolStripMenuItem.Text = "Save";
+            this.menu_saveToolStripMenuItem.Visible = false;
+            // 
+            // menu_saveAsToolStripMenuItem
+            // 
+            this.menu_saveAsToolStripMenuItem.Name = "menu_saveAsToolStripMenuItem";
+            this.menu_saveAsToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Alt+S";
+            this.menu_saveAsToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.menu_saveAsToolStripMenuItem.Text = "Save As...";
+            this.menu_saveAsToolStripMenuItem.Visible = false;
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator4.Visible = false;
+            // 
+            // menu_exitToolStripMenuItem
+            // 
+            this.menu_exitToolStripMenuItem.Name = "menu_exitToolStripMenuItem";
+            this.menu_exitToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Q";
+            this.menu_exitToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.menu_exitToolStripMenuItem.Text = "Exit";
+            this.menu_exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -680,35 +728,11 @@
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "Edit";
             // 
-            // settingsToolStripMenuItem
-            // 
-            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menu_setGamePathToolStripMenuItem,
-            this.toolStripSeparator5,
-            this.menu_prefsToolStripMenuItem});
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.settingsToolStripMenuItem.Text = "Settings";
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menu_aboutToolStripMenuItem});
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.helpToolStripMenuItem.Text = "Help";
-            // 
-            // menu_exitToolStripMenuItem
-            // 
-            this.menu_exitToolStripMenuItem.Name = "menu_exitToolStripMenuItem";
-            this.menu_exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.menu_exitToolStripMenuItem.Text = "Exit";
-            this.menu_exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
             // menu_runToolStripMenuItem
             // 
             this.menu_runToolStripMenuItem.Name = "menu_runToolStripMenuItem";
-            this.menu_runToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.menu_runToolStripMenuItem.ShortcutKeyDisplayString = "F5";
+            this.menu_runToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.menu_runToolStripMenuItem.Text = "Run";
             this.menu_runToolStripMenuItem.Click += new System.EventHandler(this.btn_Run_Click);
             // 
@@ -716,74 +740,55 @@
             // 
             this.menu_cancelToolStripMenuItem.Enabled = false;
             this.menu_cancelToolStripMenuItem.Name = "menu_cancelToolStripMenuItem";
-            this.menu_cancelToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.menu_cancelToolStripMenuItem.ShortcutKeyDisplayString = "Shift+F5";
+            this.menu_cancelToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.menu_cancelToolStripMenuItem.Text = "Cancel";
             this.menu_cancelToolStripMenuItem.Click += new System.EventHandler(this.btn_Cancel_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(143, 6);
             // 
             // menu_addFilesToolStripMenuItem
             // 
             this.menu_addFilesToolStripMenuItem.Name = "menu_addFilesToolStripMenuItem";
-            this.menu_addFilesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.menu_addFilesToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.menu_addFilesToolStripMenuItem.Text = "Add Files...";
             this.menu_addFilesToolStripMenuItem.Click += new System.EventHandler(this.btn_AddFiles_Click);
             // 
             // menu_addFoldersToolStripMenuItem
             // 
             this.menu_addFoldersToolStripMenuItem.Name = "menu_addFoldersToolStripMenuItem";
-            this.menu_addFoldersToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.menu_addFoldersToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.menu_addFoldersToolStripMenuItem.Text = "Add Folders...";
             this.menu_addFoldersToolStripMenuItem.Click += new System.EventHandler(this.btn_AddFolders_Click);
             // 
             // menu_addProjectToolStripMenuItem
             // 
             this.menu_addProjectToolStripMenuItem.Name = "menu_addProjectToolStripMenuItem";
-            this.menu_addProjectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.menu_addProjectToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.menu_addProjectToolStripMenuItem.Text = "Add Project...";
             this.menu_addProjectToolStripMenuItem.Click += new System.EventHandler(this.btn_AddProject_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(143, 6);
             // 
             // menu_removeToolStripMenuItem
             // 
             this.menu_removeToolStripMenuItem.Name = "menu_removeToolStripMenuItem";
-            this.menu_removeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.menu_removeToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.menu_removeToolStripMenuItem.Text = "Remove";
             this.menu_removeToolStripMenuItem.Click += new System.EventHandler(this.btn_RemoveFile_Click);
             // 
             // menu_removeAllToolStripMenuItem
             // 
             this.menu_removeAllToolStripMenuItem.Name = "menu_removeAllToolStripMenuItem";
-            this.menu_removeAllToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.menu_removeAllToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.menu_removeAllToolStripMenuItem.Text = "Remove All";
             this.menu_removeAllToolStripMenuItem.Click += new System.EventHandler(this.btn_RemoveAllFiles_Click);
-            // 
-            // menu_setGamePathToolStripMenuItem
-            // 
-            this.menu_setGamePathToolStripMenuItem.Name = "menu_setGamePathToolStripMenuItem";
-            this.menu_setGamePathToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.menu_setGamePathToolStripMenuItem.Text = "Set Game Path...";
-            this.menu_setGamePathToolStripMenuItem.Click += new System.EventHandler(this.btn_SetGamePath_Click);
-            // 
-            // menu_prefsToolStripMenuItem
-            // 
-            this.menu_prefsToolStripMenuItem.Name = "menu_prefsToolStripMenuItem";
-            this.menu_prefsToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.menu_prefsToolStripMenuItem.Text = "Preferences";
-            this.menu_prefsToolStripMenuItem.Click += new System.EventHandler(this.menu_prefsToolStripMenuItem_Click);
-            // 
-            // menu_aboutToolStripMenuItem
-            // 
-            this.menu_aboutToolStripMenuItem.Name = "menu_aboutToolStripMenuItem";
-            this.menu_aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.menu_aboutToolStripMenuItem.Text = "About";
             // 
             // outputLogToolStripMenuItem
             // 
@@ -798,20 +803,66 @@
             // menu_copyLogToolStripMenuItem
             // 
             this.menu_copyLogToolStripMenuItem.Name = "menu_copyLogToolStripMenuItem";
-            this.menu_copyLogToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.menu_copyLogToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.menu_copyLogToolStripMenuItem.Text = "Copy Log";
             // 
             // menu_saveLogAsToolStripMenuItem
             // 
             this.menu_saveLogAsToolStripMenuItem.Name = "menu_saveLogAsToolStripMenuItem";
-            this.menu_saveLogAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.menu_saveLogAsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.menu_saveLogAsToolStripMenuItem.Text = "Save Log As...";
             // 
             // menu_clearLogToolStripMenuItem
             // 
             this.menu_clearLogToolStripMenuItem.Name = "menu_clearLogToolStripMenuItem";
-            this.menu_clearLogToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.menu_clearLogToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.menu_clearLogToolStripMenuItem.Text = "Clear Log";
+            // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_setGamePathToolStripMenuItem,
+            this.toolStripSeparator5,
+            this.menu_prefsToolStripMenuItem});
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            // 
+            // menu_setGamePathToolStripMenuItem
+            // 
+            this.menu_setGamePathToolStripMenuItem.Name = "menu_setGamePathToolStripMenuItem";
+            this.menu_setGamePathToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.menu_setGamePathToolStripMenuItem.Text = "Set Game Path...";
+            this.menu_setGamePathToolStripMenuItem.Click += new System.EventHandler(this.btn_SetGamePath_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(157, 6);
+            // 
+            // menu_prefsToolStripMenuItem
+            // 
+            this.menu_prefsToolStripMenuItem.Name = "menu_prefsToolStripMenuItem";
+            this.menu_prefsToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+P";
+            this.menu_prefsToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.menu_prefsToolStripMenuItem.Text = "Preferences";
+            this.menu_prefsToolStripMenuItem.Click += new System.EventHandler(this.menu_prefsToolStripMenuItem_Click);
+            // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_aboutToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // menu_aboutToolStripMenuItem
+            // 
+            this.menu_aboutToolStripMenuItem.Name = "menu_aboutToolStripMenuItem";
+            this.menu_aboutToolStripMenuItem.ShortcutKeyDisplayString = "F1";
+            this.menu_aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.menu_aboutToolStripMenuItem.Text = "About";
+            this.menu_aboutToolStripMenuItem.Click += new System.EventHandler(this.menu_aboutToolStripMenuItem_Click);
             // 
             // cont_FileButtons
             // 
@@ -825,11 +876,23 @@
             this.cont_FileButtons.Controls.Add(this.btn_RemoveAllFiles);
             this.cont_FileButtons.Controls.Add(this.btn_SetGamePath);
             this.cont_FileButtons.Controls.Add(this.button2);
+            this.cont_FileButtons.Controls.Add(this.button3);
             this.cont_FileButtons.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.cont_FileButtons.Location = new System.Drawing.Point(673, 27);
             this.cont_FileButtons.Name = "cont_FileButtons";
-            this.cont_FileButtons.Size = new System.Drawing.Size(102, 268);
+            this.cont_FileButtons.Size = new System.Drawing.Size(102, 315);
             this.cont_FileButtons.TabIndex = 19;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(3, 264);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 17;
+            this.button3.Text = "button3";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Visible = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // cont_LogButtons
             // 
@@ -842,40 +905,6 @@
             this.cont_LogButtons.Name = "cont_LogButtons";
             this.cont_LogButtons.Size = new System.Drawing.Size(102, 88);
             this.cont_LogButtons.TabIndex = 20;
-            // 
-            // menu_newToolStripMenuItem
-            // 
-            this.menu_newToolStripMenuItem.Name = "menu_newToolStripMenuItem";
-            this.menu_newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.menu_newToolStripMenuItem.Text = "New";
-            // 
-            // menu_saveToolStripMenuItem
-            // 
-            this.menu_saveToolStripMenuItem.Name = "menu_saveToolStripMenuItem";
-            this.menu_saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.menu_saveToolStripMenuItem.Text = "Save";
-            // 
-            // menu_saveAsToolStripMenuItem
-            // 
-            this.menu_saveAsToolStripMenuItem.Name = "menu_saveAsToolStripMenuItem";
-            this.menu_saveAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.menu_saveAsToolStripMenuItem.Text = "Save As...";
-            // 
-            // menu_openToolStripMenuItem
-            // 
-            this.menu_openToolStripMenuItem.Name = "menu_openToolStripMenuItem";
-            this.menu_openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.menu_openToolStripMenuItem.Text = "Open";
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(149, 6);
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(157, 6);
             // 
             // AutomationTool
             // 
@@ -897,7 +926,10 @@
             this.MinimumSize = new System.Drawing.Size(800, 600);
             this.Name = "AutomationTool";
             this.Text = "Zero Munge";
+            this.Activated += new System.EventHandler(this.AutomationTool_Activated);
+            this.Deactivate += new System.EventHandler(this.AutomationTool_Deactivate);
             this.Load += new System.EventHandler(this.AutomationTool_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.AutomationTool_KeyDown);
             this.Resize += new System.EventHandler(this.AutomationTool_Resize);
             this.pan_MungedFilesEdit.ResumeLayout(false);
             this.pan_MungedFilesEdit.PerformLayout();
@@ -957,17 +989,6 @@
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem selectAllToolStripMenuItem;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn col_Enabled;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn col_Copy;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_File;
-        private System.Windows.Forms.DataGridViewButtonColumn col_FileBrowse;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_Staging;
-        private System.Windows.Forms.DataGridViewButtonColumn col_StagingBrowse;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_MungeDir;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_MungedFiles;
-        private System.Windows.Forms.DataGridViewButtonColumn col_MungedFilesEdit;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn col_IsMungeScript;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn IsValid;
         private System.Windows.Forms.MenuStrip menu_MainForm;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem menu_exitToolStripMenuItem;
@@ -998,6 +1019,18 @@
         private System.Windows.Forms.ToolStripMenuItem menu_saveAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn col_Enabled;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn col_Copy;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_File;
+        private System.Windows.Forms.DataGridViewButtonColumn col_FileBrowse;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_Staging;
+        private System.Windows.Forms.DataGridViewButtonColumn col_StagingBrowse;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_MungeDir;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_MungedFiles;
+        private System.Windows.Forms.DataGridViewButtonColumn col_MungedFilesEdit;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn col_IsMungeScript;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn IsValid;
+        private System.Windows.Forms.Button button3;
     }
 }
 

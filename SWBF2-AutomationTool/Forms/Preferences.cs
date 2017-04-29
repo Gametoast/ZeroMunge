@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -24,9 +25,11 @@ namespace AutomationTool
             prefs = Utilities.LoadPrefs();
 
             // Fill the form control values with the loaded settings
-            chk_EnableTrayIcon.Checked = prefs.TrayIconEnabled;
-            chk_EnableNotificationPopups.Checked = prefs.NotificationPopupsEnabled;
-            chk_EnableNotificationSounds.Checked = prefs.NotificationSoundsEnabled;
+            chk_ShowTrayIcon.Checked = prefs.ShowTrayIcon;
+            chk_ShowNotificationPopups.Checked = prefs.ShowNotificationPopups;
+            chk_PlayNotificationSounds.Checked = prefs.PlayNotificationSounds;
+            chk_AutoDetectStagingDir.Checked = prefs.AutoDetectStagingDir;
+            chk_AutoDetectMungedFiles.Checked = prefs.AutoDetectMungedFiles;
         }
 
 
@@ -59,22 +62,38 @@ namespace AutomationTool
 
         // When the user checks/unchecks one of the preference checkboxes:
         // Store the checkbox's checked state in our prefs object.
-        private void chk_EnableTrayIcon_CheckedChanged(object sender, EventArgs e)
+        private void chk_ShowTrayIcon_CheckedChanged(object sender, EventArgs e)
         {
-            prefs.TrayIconEnabled = chk_EnableTrayIcon.Checked;
+            prefs.ShowTrayIcon = chk_ShowTrayIcon.Checked;
 
-            // Disable/enable the Enable Notification Popups checkbox based on this one's checked state
-            chk_EnableNotificationPopups.Enabled = chk_EnableTrayIcon.Checked;
+            // Disable/enable the Show Notification Popups checkbox based on this one's checked state
+            chk_ShowNotificationPopups.Enabled = chk_ShowTrayIcon.Checked;
+
+            // Uncheck Show Notification Popups if Show Tray Icon is unchecked
+            if (!chk_ShowTrayIcon.Checked)
+            {
+                chk_ShowNotificationPopups.Checked = false;
+            }
         }
 
-        private void chk_EnableNotificationPopups_CheckedChanged(object sender, EventArgs e)
+        private void chk_ShowNotificationPopups_CheckedChanged(object sender, EventArgs e)
         {
-            prefs.NotificationPopupsEnabled = chk_EnableNotificationPopups.Checked;
+            prefs.ShowNotificationPopups = chk_ShowNotificationPopups.Checked;
         }
 
-        private void chk_EnableNotificationSounds_CheckedChanged(object sender, EventArgs e)
+        private void chk_PlayNotificationSounds_CheckedChanged(object sender, EventArgs e)
         {
-            prefs.NotificationSoundsEnabled = chk_EnableNotificationSounds.Checked;
+            prefs.PlayNotificationSounds = chk_PlayNotificationSounds.Checked;
+        }
+
+        private void chk_AutoDetectStagingDir_CheckedChanged(object sender, EventArgs e)
+        {
+            prefs.AutoDetectStagingDir = chk_AutoDetectStagingDir.Checked;
+        }
+
+        private void chk_AutoDetectMungedFiles_CheckedChanged(object sender, EventArgs e)
+        {
+            prefs.AutoDetectMungedFiles = chk_AutoDetectMungedFiles.Checked;
         }
     }
 }

@@ -1,18 +1,24 @@
 ﻿using System;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using System.Xml;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace AutomationTool
 {
+    [Serializable]
     public partial class AutomationTool : Form
     {
         // data_Files : Column names
@@ -53,14 +59,22 @@ namespace AutomationTool
             LoadSettings();
         }
 
+        public Prefs prefs = new Prefs();
 
         // When the AutomationTool form is finished loading:
         // Create the tray icon, initialize some stuff with the file list, and start a new output log.
         private void AutomationTool_Load(object sender, EventArgs e)
         {
-            // Set the tray icon
-            trayIcon.Icon = Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
-            trayIcon.Text = "Zero Munge: Idle";
+            // Set the tray icon if it's enabled
+            if (prefs.ShowTrayIcon)
+            {
+                trayIcon.Icon = Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
+                trayIcon.Text = "Zero Munge: Idle";
+            }
+            else
+            {
+                trayIcon.Visible = false;
+            }
 
             // Set the visibility of the DataGridView buttons
             col_FileBrowse.UseColumnTextForButtonValue = true;
@@ -78,10 +92,44 @@ namespace AutomationTool
         /// </summary>
         public void LoadSettings()
         {
-            gameDirectory = Properties.Settings.Default["GameDirectory"].ToString();
+            // Load the saved user settings into our prefs object
+            prefs = Utilities.LoadPrefs();
 
-            Debug.WriteLine("Loading GameDirectory: " + gameDirectory);
-            Log("Loading GameDirectory: " + gameDirectory);
+            Debug.WriteLine("Loading GameDirectory: " + prefs.GameDirectory);
+            Log("Loading GameDirectory: " + prefs.GameDirectory);
+        }
+
+
+        /// <summary>
+        /// Call this to open a new instance of the Preferences window.  
+        /// NOTE: The window will be opened as a dialog.
+        /// </summary>
+        private void OpenWindow_Preferences()
+        {
+            Preferences prefsForm = new Preferences();
+            prefsForm.ShowDialog();
+        }
+
+
+        /// <summary>
+        /// Call this to open a new instance of the Help window.  
+        /// NOTE: The window will be opened as a dialog.
+        /// </summary>
+        private void OpenWindow_Help()
+        {
+            //Preferences prefsForm = new Preferences();
+            //prefsForm.ShowDialog();
+        }
+
+
+        /// <summary>
+        /// Call this to open a new instance of the About window.  
+        /// NOTE: The window will be opened as a dialog.
+        /// </summary>
+        private void OpenWindow_About()
+        {
+            About aboutForm = new About();
+            aboutForm.ShowDialog();
         }
 
 
@@ -106,7 +154,10 @@ namespace AutomationTool
             ProcManager_isRunning = true;
 
             Thread soundThread = new Thread(() => {
-                trayIcon.Text = "Zero Munge: Running";
+                if (prefs.ShowTrayIcon)
+                {
+                    trayIcon.Text = "Zero Munge: Running";
+                }
                 Utilities.PlaySound("start");
             });
             soundThread.Start();
@@ -162,6 +213,8 @@ namespace AutomationTool
                     EnableUI(true);
                 });
                 errorThread.Start();
+
+                ProcManager_isRunning = false;
 
                 return;
             }
@@ -419,7 +472,10 @@ namespace AutomationTool
             ProcManager_isRunning = false;
 
             Thread soundThread = new Thread(() => {
-                trayIcon.Text = "Zero Munge: Idle";
+                if (prefs.ShowTrayIcon)
+                {
+                    trayIcon.Text = "Zero Munge: Idle";
+                }
                 Utilities.PlaySound("abort");
             });
             soundThread.Start();
@@ -464,10 +520,13 @@ namespace AutomationTool
             exitThread.Start();
 
             Thread soundThread = new Thread(() => {
-                trayIcon.Text = "Zero Munge: Idle";
-                trayIcon.BalloonTipTitle = "Success";
-                trayIcon.BalloonTipText = "The operation was completed successfully.";
-                trayIcon.ShowBalloonTip(30000);
+                if (prefs.ShowNotificationPopups)
+                {
+                    trayIcon.Text = "Zero Munge: Idle";
+                    trayIcon.BalloonTipTitle = "Success";
+                    trayIcon.BalloonTipText = "The operation was completed successfully.";
+                    trayIcon.ShowBalloonTip(30000);
+                }
                 Utilities.PlaySound("success");
             });
             soundThread.Start();
@@ -667,19 +726,14 @@ namespace AutomationTool
         // ***************************
 
         /// <summary>
-        /// SWBF2's GameData directory.
-        /// </summary>
-        public string gameDirectory = "";
-
-        /// <summary>
         /// Index of currently selected row in data_Files.
         /// </summary>
-        public int data_Files_CurSelectedRow = -1;
+        public int data_Files_CurSelectedRow = 0;
 
         /// <summary>
         /// Index of currently selected column in data_Files.
         /// </summary>
-        public int data_Files_CurSelectedColumn = -1;
+        public int data_Files_CurSelectedColumn = 0;
 
         /// <summary>
         /// Folder selection prompt for setting the staging directory of the currently selected row in the DataGridView.
@@ -862,9 +916,9 @@ namespace AutomationTool
                 if (data_Files.SelectedCells.Count >= 0)
                 {
                     // Auto-set the staging directory if the game directory has been set
-                    if (gameDirectory != "")
+                    if (prefs.GameDirectory != "")
                     {
-                        string projectStagingRoot = gameDirectory + "\\addon\\" + Utilities.GetProjectID(file);
+                        string projectStagingRoot = prefs.GameDirectory + "\\addon\\" + Utilities.GetProjectID(file);
                         string stagingDirectory = "";
                         string mungeOutputDirectory = "";
                         string compiledFiles = "";
@@ -933,7 +987,33 @@ namespace AutomationTool
                             });
                             infoThread.Start();
                         }
-                        
+
+
+                        if (!prefs.AutoDetectStagingDir)
+                        {
+                            stagingDirectory = "nil";
+
+                            Thread infoThread = new Thread(() => {
+                                var message = "Not setting Staging Directory in accordance with preferences";
+                                Debug.WriteLine(message);
+                                Log("ZeroMunge: " + message);
+                            });
+                            infoThread.Start();
+                        }
+
+
+                        if (!prefs.AutoDetectMungedFiles)
+                        {
+                            compiledFiles = "nil";
+
+                            Thread infoThread = new Thread(() => {
+                                var message = "Not setting Munged Files in accordance with preferences";
+                                Debug.WriteLine(message);
+                                Log("ZeroMunge: " + message);
+                            });
+                            infoThread.Start();
+                        }
+
 
                         // Are none of the rows selected? (i.e., did the user click the "Add Files..." button?)
                         if (data_Files_CurSelectedRow == -1)
@@ -1013,6 +1093,139 @@ namespace AutomationTool
         }
 
 
+        // When the user presses a key:
+        // 
+        private void AutomationTool_KeyDown(object sender, KeyEventArgs e)
+        {
+            // When the key combination is Shift + F5:
+            // Stop processing files in the file list.
+            if ((ModifierKeys & Keys.Shift) == Keys.Shift)
+            {
+                if (e.KeyCode == Keys.F5)
+                {
+                    Debug.WriteLine("Shift + F5 was pressed");
+
+                    if (ProcManager_isRunning)
+                    {
+                        ProcManager_Abort();
+                    }
+
+                    e.Handled = true;
+                }
+            }
+
+            // When the modifier key is Ctrl:
+            if ((ModifierKeys & Keys.Control) == Keys.Control)
+            {
+                // And the action key is N:
+                // 
+                if (e.KeyCode == Keys.N)
+                {
+                    Debug.WriteLine("Ctrl + N was pressed");
+
+                    // TODO: build DataGridView serialization functionality
+
+                    e.Handled = true;
+                }
+
+                // And the action key is O:
+                // 
+                if (e.KeyCode == Keys.O)
+                {
+                    Debug.WriteLine("Ctrl + O was pressed");
+
+                    // TODO: build DataGridView serialization functionality
+
+                    e.Handled = true;
+                }
+
+                // And the action key is S:
+                // 
+                if (e.KeyCode == Keys.S)
+                {
+                    Debug.WriteLine("Ctrl + S was pressed");
+
+                    // TODO: build DataGridView serialization functionality
+
+                    e.Handled = true;
+                }
+
+                // And the action key is Q:
+                // Exit the application.
+                if (e.KeyCode == Keys.Q)
+                {
+                    Debug.WriteLine("Ctrl + Q was pressed");
+
+                    Application.Exit();
+
+                    e.Handled = true;
+                }
+
+                // And the action key is P:
+                // Open the Preferences window.
+                if (e.KeyCode == Keys.P)
+                {
+                    Debug.WriteLine("Ctrl + P was pressed");
+
+                    OpenWindow_Preferences();
+
+                    e.Handled = true;
+                }
+            }
+
+            // When the key combination is F1:
+            // Start processing files in the file list.
+            if (e.KeyCode == Keys.F1)
+            {
+                if ((ModifierKeys & Keys.Shift) == Keys.Shift) { return; }
+
+                Debug.WriteLine("F1 was pressed");
+
+                About aboutForm = new About();
+                aboutForm.ShowDialog();
+
+                e.Handled = true;
+            }
+
+            // When the key combination is F5:
+            // Start processing files in the file list.
+            if (e.KeyCode == Keys.F5)
+            {
+                if ((ModifierKeys & Keys.Shift) == Keys.Shift) { return; }
+
+                Debug.WriteLine("F5 was pressed");
+
+                if (!ProcManager_isRunning)
+                {
+                    ProcManager_Start();
+                }
+
+                e.Handled = true;
+            }
+
+            // When the key combination is Delete:
+            // Clear the contents of the currently selected cell in the file list.
+            if (e.KeyCode == Keys.Delete)
+            {
+                Debug.WriteLine("Delete was pressed");
+
+                foreach (DataGridViewCell cell in data_Files.SelectedCells)
+                {
+                    // Determine the cell type
+                    if (cell is DataGridViewTextBoxCell)
+                    {
+                        if (cell.Value != null)
+                        {
+                            cell.Value = "";
+                        }
+                    }
+                }
+
+                e.Handled = true;
+            }
+        }
+
+
         // When the user clicks on a cell:
         // Reset the currently selected row header index.
         private void data_Files_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -1084,29 +1297,32 @@ namespace AutomationTool
             catch (ArgumentOutOfRangeException) { }
 
             // Do stuff if the clicked cell's type was Button
-            switch (data_Files_CurSelectedColumn)
+            if (cellType == "Button" && e.RowIndex != -1)
             {
-                case INT_DATA_FILES_BTN_FILE_BROWSE:     // col_FileBrowse
-                    // Open the 'Add Files' prompt
-                    openDlg_AddFilesPrompt.InitialDirectory = addFilesLastDir;
-                    openDlg_AddFilesPrompt.ShowDialog();
-                    break;
-                        
-                case INT_DATA_FILES_BTN_STAGING_BROWSE:     // col_StagingBrowse
-                    // Fire the faux-event for the button
-                    if (!fileIsNull)
-                    {
-                        btn_SetStaging_Click();
-                    }
-                    break;
+                switch (data_Files_CurSelectedColumn)
+                {
+                    case INT_DATA_FILES_BTN_FILE_BROWSE:     // col_FileBrowse
+                                                             // Open the 'Add Files' prompt
+                        openDlg_AddFilesPrompt.InitialDirectory = addFilesLastDir;
+                        openDlg_AddFilesPrompt.ShowDialog();
+                        break;
 
-                case INT_DATA_FILES_BTN_MUNGED_FILES_EDIT:     // col_MungedFilesEdit
-                    // Fire the faux-event for the button
-                    if (!fileIsNull)
-                    {
-                        btn_MungedFilesEdit_Click();
-                    }
-                    break;
+                    case INT_DATA_FILES_BTN_STAGING_BROWSE:     // col_StagingBrowse
+                                                                // Fire the faux-event for the button
+                        if (!fileIsNull)
+                        {
+                            btn_SetStaging_Click();
+                        }
+                        break;
+
+                    case INT_DATA_FILES_BTN_MUNGED_FILES_EDIT:     // col_MungedFilesEdit
+                                                                   // Fire the faux-event for the button
+                        if (!fileIsNull)
+                        {
+                            btn_MungedFilesEdit_Click();
+                        }
+                        break;
+                }
             }
         }
 
@@ -1215,39 +1431,6 @@ namespace AutomationTool
         // Do stuff depending on the key combination pressed.
         private void data_Files_KeyDown(object sender, KeyEventArgs e)
         {
-            // When the key combination is Shift + F5:
-            // Stop processing files in the file list.
-            if ((ModifierKeys & Keys.Shift) == Keys.Shift)
-            {
-                if (e.KeyCode == Keys.F5)
-                {
-                    Debug.WriteLine("Shift + F5 was pressed");
-
-                    if (ProcManager_isRunning)
-                    {
-                        ProcManager_Abort();
-                    }
-
-                    e.Handled = true;
-                }
-            }
-
-            // When the key combination is F5:
-            // Start processing files in the file list.
-            if (e.KeyCode == Keys.F5)
-            {
-                if ((ModifierKeys & Keys.Shift) == Keys.Shift) { return; }
-
-                Debug.WriteLine("F5 was pressed");
-
-                if (!ProcManager_isRunning)
-                {
-                    ProcManager_Start();
-                }
-
-                e.Handled = true;
-            }
-
             // When the key combination is Delete:
             // Clear the contents of the currently selected cell in the file list.
             if (e.KeyCode == Keys.Delete)
@@ -1512,14 +1695,21 @@ namespace AutomationTool
         // Add the selected files to the file list.
         private void openDlg_AddFilesPrompt_FileOk(object sender, CancelEventArgs e)
         {
-            string file = openDlg_AddFilesPrompt.FileName;
-            bool isMungeScript = new DirectoryInfo(file).Name.Contains("munge");
-
             // Save the current directory
-            addFilesLastDir = Utilities.GetFileDirectory(file);
+            addFilesLastDir = Utilities.GetFileDirectory(openDlg_AddFilesPrompt.FileNames[0]);
 
-            // Add the file to the list
-            AddFile(file, isMungeScript);
+            // Add each file to the list
+            foreach (string file in openDlg_AddFilesPrompt.FileNames)
+            {
+                if (File.Exists(file))
+                {
+                    // Determine whether or not the file is a munge script
+                    bool isMungeScript = new DirectoryInfo(file).Name.Contains("munge");
+
+                    // And add the file to the list
+                    AddFile(file, isMungeScript);
+                }
+            }
         }
 
 
@@ -1625,7 +1815,7 @@ namespace AutomationTool
             // Is the currently selected column the row header?
             if (data_Files_CurSelectedColumn == -1)
             {
-                if (data_Files_CurSelectedRow == data_Files.RowCount)
+                if (!data_Files.Rows[data_Files_CurSelectedRow].IsNewRow)
                 {
                     // Remove the currently selected file from the list
                     data_Files.Rows.RemoveAt(data_Files_CurSelectedRow);
@@ -1692,14 +1882,13 @@ namespace AutomationTool
             // Set the game path if it exists
             if (Directory.Exists(Utilities.GetFileDirectory(file)))
             {
-                gameDirectory = Utilities.GetFileDirectory(file);
+                prefs.GameDirectory = Utilities.GetFileDirectory(file);
 
-                Properties.Settings.Default["GameDirectory"] = gameDirectory;
-                Properties.Settings.Default.Save();
+                Utilities.SavePrefs(prefs);
 
                 Thread outputThread = new Thread(() => {
-                    Debug.WriteLine("Saving GameDirectory: " + Properties.Settings.Default["GameDirectory"]);
-                    Log("ZeroMunge: Saving GameDirectory: " + Properties.Settings.Default["GameDirectory"]);
+                    Debug.WriteLine("Saving GameDirectory: " + Properties.Settings.Default.GameDirectory);
+                    Log("ZeroMunge: Saving GameDirectory: " + Properties.Settings.Default.GameDirectory);
                 });
                 outputThread.Start();
             }
@@ -1816,38 +2005,6 @@ namespace AutomationTool
         private void cmenu_TrayIcon_Quit_Click(object sender, EventArgs e)
         {
             Application.Exit();
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            //Debug.WriteLine(data_Files.Rows[0].Cells[STR_DATA_FILES_TXT_FILE].Value.ToString());
-
-            //List<string> files = new List<string>();
-            //files.Add(@"testfile1.txt");
-            //files.Add(@"testfile2.txt");
-            //files.Add(@"testfile3.txt");
-
-            //string targetDir = @"Y:\ZeroMungeFileTests\target";
-            //string sourceDir = @"Y:\ZeroMungeFileTests\source";
-
-            //foreach (string file in files)
-            //{
-            //    Debug.WriteLine(targetDir + "\\" + file);
-
-            //    File.Copy(string.Concat(targetDir, "\\", file), string.Concat(sourceDir, "\\", file), true);
-            //}
-
-            //string compiledFiles = "";
-
-            //foreach (string compiledFile in Utilities.GetCompiledFiles(@"J:\BF2_ModTools\data_MEU\data_ME5\_BUILD\Common\munge.bat"))
-            //{
-            //    compiledFiles = string.Concat(compiledFiles, compiledFile, "\n");
-            //}
-
-            //Utilities.ExtractLines(compiledFiles);
-
-            //Utilities.ParseLevelpackReqs(@"J:\BF2_ModTools\data_MEU\data_ME5\_BUILD\Common\munge.bat");
-            //Utilities.GetCompiledFiles(@"J:\BF2_ModTools\data_MEU\data_ME5\_BUILD\Sides\CON_COL\munge_col.bat");
         }
 
 
@@ -1979,8 +2136,134 @@ namespace AutomationTool
         // Open the Preferences window.
         private void menu_prefsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Preferences prefs = new Preferences();
-            prefs.Show();
+            OpenWindow_Preferences();
+        }
+
+        private void menu_aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenWindow_About();
+        }
+
+
+        // When the form is focused on and activated:
+        // Reload the application settings.
+        private void AutomationTool_Activated(object sender, EventArgs e)
+        {
+            Debug.WriteLine("AutomationTool_Activated() entered");
+
+            prefs = Utilities.LoadPrefs();
+        }
+
+
+        // When the form is unfocused and deactivated:
+        // 
+        private void AutomationTool_Deactivate(object sender, EventArgs e)
+        {
+            Debug.WriteLine("AutomationTool_Deactivate() entered");
+        }
+
+
+        void Serialize()
+        {
+            // Create a hashtable of values that will eventually be serialized.
+            List<DataGridViewRow> rows = new List<DataGridViewRow>();
+
+            foreach (DataGridViewRow row in data_Files.Rows)
+            {
+                rows.Add(row);
+            }
+
+            // To serialize the hashtable and its key/value pairs,  
+            // you must first open a stream for writing. 
+            // In this case, use a file stream.
+            FileStream fs = new FileStream("DataFile.dat", FileMode.Create);
+
+            // Construct a BinaryFormatter and use it to serialize the data to the stream.
+            BinaryFormatter formatter = new BinaryFormatter();
+            try
+            {
+                formatter.Serialize(fs, rows);
+            }
+            catch (SerializationException e)
+            {
+                Console.WriteLine("Failed to serialize. Reason: " + e.Message);
+                throw;
+            }
+            finally
+            {
+                fs.Close();
+            }
+        }
+
+
+        void Deserialize()
+        {
+            // Declare the hashtable reference.
+            List<DataGridViewRow> rows = null;
+
+            // Open the file containing the data that you want to deserialize.
+            FileStream fs = new FileStream("DataFile.dat", FileMode.Open);
+            try
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+
+                // Deserialize the hashtable from the file and 
+                // assign the reference to the local variable.
+                rows = (List<DataGridViewRow>)formatter.Deserialize(fs);
+            }
+            catch (SerializationException e)
+            {
+                Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
+                throw;
+            }
+            finally
+            {
+                fs.Close();
+            }
+
+            // To prove that the table deserialized correctly, 
+            // display the key/value pairs.
+            Debug.WriteLine(rows[0].Cells[0].ToString());
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Serialize();
+            Deserialize();
+
+            //Debug.WriteLine(data_Files.Rows[0].Cells[STR_DATA_FILES_TXT_FILE].Value.ToString());
+
+            //List<string> files = new List<string>();
+            //files.Add(@"testfile1.txt");
+            //files.Add(@"testfile2.txt");
+            //files.Add(@"testfile3.txt");
+
+            //string targetDir = @"Y:\ZeroMungeFileTests\target";
+            //string sourceDir = @"Y:\ZeroMungeFileTests\source";
+
+            //foreach (string file in files)
+            //{
+            //    Debug.WriteLine(targetDir + "\\" + file);
+
+            //    File.Copy(string.Concat(targetDir, "\\", file), string.Concat(sourceDir, "\\", file), true);
+            //}
+
+            //string compiledFiles = "";
+
+            //foreach (string compiledFile in Utilities.GetCompiledFiles(@"J:\BF2_ModTools\data_MEU\data_ME5\_BUILD\Common\munge.bat"))
+            //{
+            //    compiledFiles = string.Concat(compiledFiles, compiledFile, "\n");
+            //}
+
+            //Utilities.ExtractLines(compiledFiles);
+
+            //Utilities.ParseLevelpackReqs(@"J:\BF2_ModTools\data_MEU\data_ME5\_BUILD\Common\munge.bat");
+            //Utilities.GetCompiledFiles(@"J:\BF2_ModTools\data_MEU\data_ME5\_BUILD\Sides\CON_COL\munge_col.bat");
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 

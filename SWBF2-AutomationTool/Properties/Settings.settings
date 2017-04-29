@@ -5,14 +5,26 @@
     <Setting Name="GameDirectory" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="TrayIconEnabled" Type="System.Boolean" Scope="User">
+    <Setting Name="ShowTrayIcon" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="NotificationPopupsEnabled" Type="System.Boolean" Scope="User">
+    <Setting Name="ShowNotificationPopups" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="NotificationSoundsEnabled" Type="System.Boolean" Scope="User">
+    <Setting Name="PlayNotificationSounds" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="AutoDetectStagingDir" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="AutoDetectMungedFiles" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="Info_BuildDate" Type="System.DateTime" Scope="Application">
+      <Value Profile="(Default)">04/29/2017 14:21:00</Value>
+    </Setting>
+    <Setting Name="Info_BuildNum" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">60</Value>
     </Setting>
   </Settings>
 </SettingsFile>

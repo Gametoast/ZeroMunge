@@ -12,7 +12,7 @@ namespace AutomationTool.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.1.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -38,36 +38,78 @@ namespace AutomationTool.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool TrayIconEnabled {
+        public bool ShowTrayIcon {
             get {
-                return ((bool)(this["TrayIconEnabled"]));
+                return ((bool)(this["ShowTrayIcon"]));
             }
             set {
-                this["TrayIconEnabled"] = value;
+                this["ShowTrayIcon"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool NotificationPopupsEnabled {
+        public bool ShowNotificationPopups {
             get {
-                return ((bool)(this["NotificationPopupsEnabled"]));
+                return ((bool)(this["ShowNotificationPopups"]));
             }
             set {
-                this["NotificationPopupsEnabled"] = value;
+                this["ShowNotificationPopups"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool NotificationSoundsEnabled {
+        public bool PlayNotificationSounds {
             get {
-                return ((bool)(this["NotificationSoundsEnabled"]));
+                return ((bool)(this["PlayNotificationSounds"]));
             }
             set {
-                this["NotificationSoundsEnabled"] = value;
+                this["PlayNotificationSounds"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AutoDetectStagingDir {
+            get {
+                return ((bool)(this["AutoDetectStagingDir"]));
+            }
+            set {
+                this["AutoDetectStagingDir"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AutoDetectMungedFiles {
+            get {
+                return ((bool)(this["AutoDetectMungedFiles"]));
+            }
+            set {
+                this["AutoDetectMungedFiles"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("04/29/2017 14:21:00")]
+        public global::System.DateTime Info_BuildDate {
+            get {
+                return ((global::System.DateTime)(this["Info_BuildDate"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int Info_BuildNum {
+            get {
+                return ((int)(this["Info_BuildNum"]));
             }
         }
     }

@@ -412,6 +412,8 @@ namespace AutomationTool
         /// <param name="type">Type of sound to play ("start", "success", or "abort").</param>
         public static void PlaySound(string type)
         {
+            if (!Properties.Settings.Default.PlayNotificationSounds) { return; }
+
             string soundToPlay = "null";
 
             if (type == "start")
@@ -443,9 +445,12 @@ namespace AutomationTool
         public static Prefs LoadPrefs()
         {
             Prefs prefs = new Prefs {
-                TrayIconEnabled = Properties.Settings.Default.TrayIconEnabled,
-                NotificationPopupsEnabled = Properties.Settings.Default.NotificationPopupsEnabled,
-                NotificationSoundsEnabled = Properties.Settings.Default.NotificationSoundsEnabled
+                GameDirectory = Properties.Settings.Default.GameDirectory,
+                ShowTrayIcon = Properties.Settings.Default.ShowTrayIcon,
+                ShowNotificationPopups = Properties.Settings.Default.ShowNotificationPopups,
+                PlayNotificationSounds = Properties.Settings.Default.PlayNotificationSounds,
+                AutoDetectStagingDir = Properties.Settings.Default.AutoDetectStagingDir,
+                AutoDetectMungedFiles = Properties.Settings.Default.AutoDetectMungedFiles
             };
 
             return prefs;
@@ -458,9 +463,12 @@ namespace AutomationTool
         /// <param name="prefs">Prefs object containing the values to save.</param>
         public static void SavePrefs(Prefs prefs)
         {
-            Properties.Settings.Default.TrayIconEnabled = prefs.TrayIconEnabled;
-            Properties.Settings.Default.NotificationPopupsEnabled = prefs.NotificationPopupsEnabled;
-            Properties.Settings.Default.NotificationSoundsEnabled = prefs.NotificationSoundsEnabled;
+            Properties.Settings.Default.GameDirectory = prefs.GameDirectory;
+            Properties.Settings.Default.ShowTrayIcon = prefs.ShowTrayIcon;
+            Properties.Settings.Default.ShowNotificationPopups = prefs.ShowNotificationPopups;
+            Properties.Settings.Default.PlayNotificationSounds = prefs.PlayNotificationSounds;
+            Properties.Settings.Default.AutoDetectStagingDir = prefs.AutoDetectStagingDir;
+            Properties.Settings.Default.AutoDetectMungedFiles = prefs.AutoDetectMungedFiles;
 
             Properties.Settings.Default.Save();
         }
@@ -468,8 +476,11 @@ namespace AutomationTool
 
     public class Prefs
     {
-        public bool TrayIconEnabled { get; set; }
-        public bool NotificationPopupsEnabled { get; set; }
-        public bool NotificationSoundsEnabled { get; set; }
+        public string GameDirectory { get; set; }
+        public bool ShowTrayIcon { get; set; }
+        public bool ShowNotificationPopups { get; set; }
+        public bool PlayNotificationSounds { get; set; }
+        public bool AutoDetectStagingDir { get; set; }
+        public bool AutoDetectMungedFiles { get; set; }
     }
 }
