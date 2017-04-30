@@ -4,7 +4,7 @@ The goal of this tool is to act as a robust replacement for VisualMunge (the aut
 It is written in Visual C# for [.NET Framework 4](https://www.microsoft.com/en-us/download/details.aspx?id=17718).
 
 ## What it does
-At its core, this tool goes through a user-specified list of munge.bat files and executes each one after the previous is finished.  
+At its core, this tool goes through a user-specified list of munge.bat files and executes each one, one at a time.  
 
 This tool can be used to do the following things. Completed features are **bolded**.
 * **Execute a list of batch files in order**
