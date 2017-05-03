@@ -55,10 +55,10 @@
             // 
             this.btn_Accept.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btn_Accept.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btn_Accept.Location = new System.Drawing.Point(377, 326);
+            this.btn_Accept.Location = new System.Drawing.Point(377, 346);
             this.btn_Accept.Name = "btn_Accept";
             this.btn_Accept.Size = new System.Drawing.Size(75, 23);
-            this.btn_Accept.TabIndex = 0;
+            this.btn_Accept.TabIndex = 3;
             this.btn_Accept.Text = "OK";
             this.btn_Accept.UseVisualStyleBackColor = true;
             this.btn_Accept.Click += new System.EventHandler(this.btn_Accept_Click);
@@ -71,7 +71,7 @@
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 131);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(314, 50);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(314, 70);
             this.flowLayoutPanel1.TabIndex = 2;
             // 
             // label1
@@ -79,16 +79,18 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(3, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(65, 13);
+            this.label1.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.label1.Size = new System.Drawing.Size(65, 19);
             this.label1.TabIndex = 0;
             this.label1.Text = "Zero Munge";
             // 
             // lbl_BuildInfo
             // 
             this.lbl_BuildInfo.AutoSize = true;
-            this.lbl_BuildInfo.Location = new System.Drawing.Point(3, 13);
+            this.lbl_BuildInfo.Location = new System.Drawing.Point(3, 19);
             this.lbl_BuildInfo.Name = "lbl_BuildInfo";
-            this.lbl_BuildInfo.Size = new System.Drawing.Size(70, 13);
+            this.lbl_BuildInfo.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.lbl_BuildInfo.Size = new System.Drawing.Size(70, 19);
             this.lbl_BuildInfo.TabIndex = 1;
             this.lbl_BuildInfo.Text = "BUILD_INFO";
             // 
@@ -109,15 +111,17 @@
             this.text_License.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.text_License.Size = new System.Drawing.Size(437, 117);
             this.text_License.TabIndex = 0;
+            this.text_License.TabStop = false;
             this.text_License.Text = "";
             this.text_License.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.text_License_LinkClicked);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 26);
+            this.label3.Location = new System.Drawing.Point(3, 38);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(137, 13);
+            this.label3.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.label3.Size = new System.Drawing.Size(137, 19);
             this.label3.TabIndex = 2;
             this.label3.Text = "Developed by Aaron Gilbert";
             // 
@@ -132,10 +136,12 @@
             // 
             // flow_License
             // 
+            this.flow_License.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.flow_License.Controls.Add(this.lbl_LicensePre);
             this.flow_License.Controls.Add(this.pnl_License);
             this.flow_License.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flow_License.Location = new System.Drawing.Point(12, 187);
+            this.flow_License.Location = new System.Drawing.Point(12, 207);
             this.flow_License.Name = "flow_License";
             this.flow_License.Size = new System.Drawing.Size(440, 133);
             this.flow_License.TabIndex = 4;
@@ -143,13 +149,13 @@
             // 
             // img_Logo
             // 
-            this.img_Logo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.img_Logo.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.img_Logo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.img_Logo.Image = global::AutomationTool.Properties.Resources.app_banner;
             this.img_Logo.Location = new System.Drawing.Point(12, 12);
             this.img_Logo.Name = "img_Logo";
             this.img_Logo.Size = new System.Drawing.Size(440, 113);
-            this.img_Logo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.img_Logo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.img_Logo.TabIndex = 1;
             this.img_Logo.TabStop = false;
             this.img_Logo.WaitOnLoad = true;
@@ -164,7 +170,7 @@
             this.flowLayoutPanel2.Location = new System.Drawing.Point(332, 131);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(120, 50);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(120, 70);
             this.flowLayoutPanel2.TabIndex = 5;
             // 
             // link_Updates
@@ -172,7 +178,8 @@
             this.link_Updates.AutoSize = true;
             this.link_Updates.Location = new System.Drawing.Point(23, 0);
             this.link_Updates.Name = "link_Updates";
-            this.link_Updates.Size = new System.Drawing.Size(94, 13);
+            this.link_Updates.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.link_Updates.Size = new System.Drawing.Size(94, 19);
             this.link_Updates.TabIndex = 0;
             this.link_Updates.TabStop = true;
             this.link_Updates.Text = "Check for updates";
@@ -183,10 +190,11 @@
             // link_Contact
             // 
             this.link_Contact.AutoSize = true;
-            this.link_Contact.Location = new System.Drawing.Point(73, 13);
+            this.link_Contact.Location = new System.Drawing.Point(73, 19);
             this.link_Contact.Name = "link_Contact";
-            this.link_Contact.Size = new System.Drawing.Size(44, 13);
-            this.link_Contact.TabIndex = 2;
+            this.link_Contact.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.link_Contact.Size = new System.Drawing.Size(44, 19);
+            this.link_Contact.TabIndex = 1;
             this.link_Contact.TabStop = true;
             this.link_Contact.Text = "Contact";
             this.FormTooltips.SetToolTip(this.link_Contact, "Send me an e-mail message.");
@@ -195,10 +203,11 @@
             // link_FrayedWires
             // 
             this.link_FrayedWires.AutoSize = true;
-            this.link_FrayedWires.Location = new System.Drawing.Point(10, 26);
+            this.link_FrayedWires.Location = new System.Drawing.Point(10, 38);
             this.link_FrayedWires.Name = "link_FrayedWires";
-            this.link_FrayedWires.Size = new System.Drawing.Size(107, 13);
-            this.link_FrayedWires.TabIndex = 3;
+            this.link_FrayedWires.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.link_FrayedWires.Size = new System.Drawing.Size(107, 19);
+            this.link_FrayedWires.TabIndex = 2;
             this.link_FrayedWires.TabStop = true;
             this.link_FrayedWires.Text = "Frayed Wires Studios";
             this.FormTooltips.SetToolTip(this.link_FrayedWires, "Open a link to the Mod DB page for Frayed Wires Studios.");
@@ -210,7 +219,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btn_Accept;
-            this.ClientSize = new System.Drawing.Size(464, 361);
+            this.ClientSize = new System.Drawing.Size(464, 381);
             this.Controls.Add(this.flowLayoutPanel2);
             this.Controls.Add(this.flow_License);
             this.Controls.Add(this.flowLayoutPanel1);
@@ -218,6 +227,7 @@
             this.Controls.Add(this.btn_Accept);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(480, 400);
             this.Name = "About";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;

@@ -106,7 +106,7 @@ namespace AutomationTool.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        [global::System.Configuration.DefaultSettingValueAttribute("62")]
         public int Info_BuildNum {
             get {
                 return ((int)(this["Info_BuildNum"]));

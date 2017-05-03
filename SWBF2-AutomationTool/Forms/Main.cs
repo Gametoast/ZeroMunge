@@ -21,6 +21,8 @@ namespace AutomationTool
     [Serializable]
     public partial class AutomationTool : Form
     {
+        public const bool BUILD_DEBUG = false;
+
         // data_Files : Column names
         public const string STR_DATA_FILES_CHK_ENABLED = "col_Enabled";
         public const string STR_DATA_FILES_CHK_COPY = "col_Copy";
@@ -75,6 +77,11 @@ namespace AutomationTool
             {
                 trayIcon.Visible = false;
             }
+
+            // Set the visibility of the debug columns in the file list
+            col_MungeDir.Visible = BUILD_DEBUG;
+            col_IsMungeScript.Visible = BUILD_DEBUG;
+            col_IsValid.Visible = BUILD_DEBUG;
 
             // Set the visibility of the DataGridView buttons
             col_FileBrowse.UseColumnTextForButtonValue = true;
@@ -1174,15 +1181,15 @@ namespace AutomationTool
             }
 
             // When the key combination is F1:
-            // Start processing files in the file list.
+            // Open the Help window.
             if (e.KeyCode == Keys.F1)
             {
                 if ((ModifierKeys & Keys.Shift) == Keys.Shift) { return; }
 
                 Debug.WriteLine("F1 was pressed");
 
-                About aboutForm = new About();
-                aboutForm.ShowDialog();
+                //HelpWin helpForm = new HelpWin();
+                //helpForm.Show();
 
                 e.Handled = true;
             }
@@ -1199,6 +1206,20 @@ namespace AutomationTool
                 {
                     ProcManager_Start();
                 }
+
+                e.Handled = true;
+            }
+
+            // When the key combination is F12:
+            // Open the About window.
+            if (e.KeyCode == Keys.F12)
+            {
+                if ((ModifierKeys & Keys.Shift) == Keys.Shift) { return; }
+
+                Debug.WriteLine("F12 was pressed");
+
+                About aboutForm = new About();
+                aboutForm.ShowDialog();
 
                 e.Handled = true;
             }
@@ -2262,6 +2283,11 @@ namespace AutomationTool
         }
 
         private void button3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void viewHelpToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }
