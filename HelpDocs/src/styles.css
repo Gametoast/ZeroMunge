@@ -22,7 +22,7 @@ body {
   color: #333;
   background-color: #fff;
   padding: 20px;
-  max-width: 960px;
+  /* max-width: 960px; */
   margin: 0 auto;
 }
 
@@ -102,6 +102,7 @@ h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
 
 a {
   color: #4183C4;
+  font-weight: bold;
   text-decoration: none;
 }
 
@@ -280,5 +281,5 @@ table tr:nth-child(2n) {
 =============================================================================*/
 
 img {
-  max-width: 100%
+  /*max-width: 100%;*/
 }

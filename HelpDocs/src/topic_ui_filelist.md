@@ -1,5 +1,5 @@
 ## User Interface: File List
-![Overview of User Interface](images/ui_filelist.png)
+![File List](images/ui_filelist.png)
 
 1. **Process** – If checked, executes the batch script located at the specified File Path.
 2. **Copy** – If checked, copies the specified Munged Files to the Staging Directory after the batch script has finished executing.
@@ -13,7 +13,7 @@
 ### Munged Files Edit
 This is what the Munged Files Edit window looks like.
 
-![Overview of User Interface](images/ui_filelist_mungedfiles.png)
+![Munged Files Edit](images/ui_filelist_mungedfiles.png)
 
-### Related Articles
+### Related Pages
 - [TODO]

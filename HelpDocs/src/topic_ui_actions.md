@@ -1,5 +1,5 @@
 ## User Interface: Actions
-![Overview of User Interface](images/ui_actions.png)
+![Actions](images/ui_actions.png)
 
 1. **Run** – Executes each file in the list in order.
 2. **Cancel** – Stops processing files. WARNING: Canceling a munge is strongly NOT recommended.
@@ -10,5 +10,5 @@
 7. **Remove All** – Removes all files from the file list.
 8. **Set Game Path...** – Opens a prompt to point Zero Munge to Star Wars Battlefront II's GameData directory.
 
-### Related Articles
+### Related Pages
 - [TODO]

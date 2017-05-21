@@ -5,5 +5,5 @@
 - **Actions** – The buttons in the Actions list perform various operations that relate to the File List.
 - **Output Log** – The controls in this section pertain to the Output Log, which displays the processed files' text output in real-time.
 
-### Related Articles
+### Related Pages
 - [TODO]

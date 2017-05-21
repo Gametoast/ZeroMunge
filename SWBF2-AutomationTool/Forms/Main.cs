@@ -21,7 +21,7 @@ namespace AutomationTool
     [Serializable]
     public partial class AutomationTool : Form
     {
-        public const bool BUILD_DEBUG = false;
+        public const bool BUILD_DEBUG = true;
 
         // data_Files : Column names
         public const string STR_DATA_FILES_CHK_ENABLED = "col_Enabled";
@@ -124,8 +124,8 @@ namespace AutomationTool
         /// </summary>
         private void OpenWindow_Help()
         {
-            //Preferences prefsForm = new Preferences();
-            //prefsForm.ShowDialog();
+            // TODO: Update CHM location!
+            Help.ShowHelp(this, @"C:\Users\aaron\Documents\Visual Studio 2015\Projects\SWBF2-AutomationTool\HelpDocs\ZeroMungeHelp.chm");
         }
 
 
@@ -2165,6 +2165,11 @@ namespace AutomationTool
             OpenWindow_About();
         }
 
+        private void menu_viewHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenWindow_Help();
+        }
+
 
         // When the form is focused on and activated:
         // Reload the application settings.
@@ -2249,8 +2254,48 @@ namespace AutomationTool
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Serialize();
-            Deserialize();
+            DataFilesContainer saveData = new DataFilesContainer();
+
+            foreach (DataGridViewRow row in data_Files.Rows)
+            {
+                if (!row.IsNewRow)
+                {
+                    DataFilesRow rowData = new DataFilesRow();
+
+                    rowData.Enabled = (bool)row.Cells[INT_DATA_FILES_CHK_ENABLED].Value;
+                    rowData.Copy = (bool)row.Cells[INT_DATA_FILES_CHK_COPY].Value;
+                    rowData.IsMungeScript = (bool)row.Cells[INT_DATA_FILES_CHK_IS_MUNGE_SCRIPT].Value;
+                    rowData.IsValid = (bool)row.Cells[INT_DATA_FILES_CHK_IS_VALID].Value;
+
+                    if (row.Cells[INT_DATA_FILES_TXT_FILE].Value != null)
+                        rowData.FilePath = row.Cells[INT_DATA_FILES_TXT_FILE].Value.ToString();
+                    else
+                        rowData.FilePath = "";
+                    
+                    if (row.Cells[INT_DATA_FILES_TXT_STAGING].Value != null)
+                        rowData.StagingDir = row.Cells[INT_DATA_FILES_TXT_STAGING].Value.ToString();
+                    else
+                        rowData.StagingDir = "";
+                    
+                    if (row.Cells[INT_DATA_FILES_TXT_MUNGE_DIR].Value != null)
+                        rowData.MungeDir = row.Cells[INT_DATA_FILES_TXT_MUNGE_DIR].Value.ToString();
+                    else
+                        rowData.MungeDir = "";
+                    
+                    if (row.Cells[INT_DATA_FILES_TXT_MUNGED_FILES].Value != null)
+                        rowData.MungedFiles = row.Cells[INT_DATA_FILES_TXT_MUNGED_FILES].Value.ToString();
+                    else
+                        rowData.MungedFiles = "";
+
+
+                    saveData.AddRow(rowData);
+                }
+            }
+
+            saveData.PrintAllRows();
+
+            //Serialize();
+            //Deserialize();
 
             //Debug.WriteLine(data_Files.Rows[0].Cells[STR_DATA_FILES_TXT_FILE].Value.ToString());
 
@@ -2286,11 +2331,6 @@ namespace AutomationTool
         {
 
         }
-
-        private void viewHelpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 
     public class MungeFactory
@@ -2300,5 +2340,56 @@ namespace AutomationTool
         public string StagingDir { get; set; }
         public string MungeDir { get; set; }
         public List<string> MungedFiles { get; set; }
+    }
+
+    [Serializable]
+    public class DataFilesRow
+    {
+        public bool Enabled { get; set; }
+        public bool Copy { get; set; }
+        public string FilePath { get; set; }
+        public string StagingDir { get; set; }
+        public string MungeDir { get; set; }
+        public string MungedFiles { get; set; }
+        public bool IsMungeScript { get; set; }
+        public bool IsValid { get; set; }
+    }
+
+    [Serializable]
+    public class DataFilesContainer
+    {
+        public List<DataFilesRow> DataFilesRows { get; private set; }
+
+        public DataFilesRow AddRow(DataFilesRow row)
+        {
+            if (DataFilesRows == null)
+            {
+                DataFilesRows = new List<DataFilesRow>();
+            }
+
+            DataFilesRows.Add(row);
+
+            return row;
+        }
+
+        public void PrintAllRows()
+        {
+            if (DataFilesRows != null)
+            {
+                foreach (DataFilesRow row in DataFilesRows)
+                {
+                    Debug.WriteLine("Printing next row");
+                    Debug.WriteLine("Enabled       = " + row.Enabled.ToString());
+                    Debug.WriteLine("Copy          = " + row.Copy.ToString());
+                    Debug.WriteLine("FilePath      = " + row.FilePath.ToString());
+                    Debug.WriteLine("StagingDir    = " + row.StagingDir.ToString());
+                    Debug.WriteLine("MungeDir      = " + row.MungeDir.ToString());
+                    Debug.WriteLine("MungedFiles   = " + row.MungedFiles.ToString());
+                    Debug.WriteLine("IsMungeScript = " + row.IsMungeScript.ToString());
+                    Debug.WriteLine("IsValid       = " + row.IsValid.ToString());
+                    Debug.WriteLine(Environment.NewLine);
+                }
+            }
+        }
     }
 }

@@ -5,6 +5,21 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWBF2-AutomationTool", "SWBF2-AutomationTool\SWBF2-AutomationTool.csproj", "{08322025-AE41-4654-A4FD-D5FFA8F04BDA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D07E96B9-0EA9-4A5D-BDDE-FB50508D41DE}"
+	ProjectSection(SolutionItems) = preProject
+		HelpDocs\src\styles.css = HelpDocs\src\styles.css
+		HelpDocs\src\topic_filelist.html = HelpDocs\src\topic_filelist.html
+		HelpDocs\src\topic_gs.html = HelpDocs\src\topic_gs.html
+		HelpDocs\src\topic_gs_addfiles.html = HelpDocs\src\topic_gs_addfiles.html
+		HelpDocs\src\topic_gs_gamepath.html = HelpDocs\src\topic_gs_gamepath.html
+		HelpDocs\src\topic_gs_ui.html = HelpDocs\src\topic_gs_ui.html
+		HelpDocs\src\topic_start.html = HelpDocs\src\topic_start.html
+		HelpDocs\src\topic_ui_actions.html = HelpDocs\src\topic_ui_actions.html
+		HelpDocs\src\topic_ui_filelist.html = HelpDocs\src\topic_ui_filelist.html
+		HelpDocs\src\topic_ui_log.html = HelpDocs\src\topic_ui_log.html
+		HelpDocs\src\topic_ui_overview.html = HelpDocs\src\topic_ui_overview.html
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

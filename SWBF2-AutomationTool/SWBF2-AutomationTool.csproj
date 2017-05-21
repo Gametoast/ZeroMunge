@@ -103,6 +103,7 @@
     <Compile Include="Forms\Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modules\ReadWriteCsv.cs" />
     <Compile Include="Modules\Utilities.cs" />
     <Compile Include="Forms\Preferences.cs">
       <SubType>Form</SubType>
