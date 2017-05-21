@@ -1860,29 +1860,7 @@ namespace AutomationTool
         // Remove all files from the file list.
         private void btn_RemoveAllFiles_Click(object sender, EventArgs e)
         {
-            // Is there at least 1 committed row to remove?
-            if (data_Files.RowCount > 1)
-            {
-                Debug.WriteLine("Rows to remove: " + (data_Files.RowCount - 1));
-
-                // Keep removing the topmost row until only 1 row remains
-                do
-                {
-                    data_Files.Rows.RemoveAt(data_Files.Rows[0].Index);
-                    Debug.WriteLine("Rows remaining: " + (data_Files.RowCount - 1));
-                } while (data_Files.RowCount > 1);
-            }
-            else
-            {
-                Thread errorThread = new Thread(() =>
-                {
-                    Log("ZeroMunge: ERROR! File list must contain at least one file");
-
-                    // Re-enable the UI
-                    EnableUI(true);
-                });
-                errorThread.Start();
-            }
+            ClearFileList(true);
         }
 
 
@@ -2342,6 +2320,88 @@ namespace AutomationTool
             return data;
         }
 
+        /// <summary>
+        /// Removes all committed rows from the file list.
+        /// </summary>
+        /// <param name="printErrors">Whether or not error messages should be printed to the Output Log.</param>
+        public void ClearFileList(bool printErrors = false)
+        {
+            // Is there at least 1 committed row to remove?
+            if (data_Files.RowCount > 1 && !data_Files.Rows[0].IsNewRow)
+            {
+                Debug.WriteLine("Rows to remove: " + (data_Files.RowCount - 1));
+
+                // Keep removing the topmost row until only 1 row remains
+                do
+                {
+                    data_Files.Rows.RemoveAt(data_Files.Rows[0].Index);
+                    Debug.WriteLine("Rows remaining: " + (data_Files.RowCount - 1));
+                } while (data_Files.RowCount > 1);
+            }
+            else
+            {
+                Thread errorThread = new Thread(() =>
+                {
+                    if (printErrors)
+                    {
+                        Log("ZeroMunge: ERROR! File list must contain at least one file");
+                    }
+
+                    // Re-enable the UI
+                    EnableUI(true);
+                });
+                errorThread.Start();
+            }
+        }
+
+        /// <summary>
+        /// Loads data from the specified DataFilesContainer into the file list.
+        /// </summary>
+        /// <param name="data">DataFilesContainer object containing the data to load into the file list.</param>
+        /// <param name="replaceCurrentContents">Whether or not to clear the contents of the file list before loading the new data into it. Default = true</param>
+        public void LoadDataIntoFileList(DataFilesContainer data, bool replaceCurrentContents = true)
+        {
+            // Clear the contents of the file list if specified
+            if (replaceCurrentContents)
+            {
+                ClearFileList();
+            }
+
+            try
+            {
+                // Fill the file list with the data from the inputted container
+                foreach (DataFilesRow row in data.DataRows)
+                {
+                    // Create a new row first
+                    int rowId = data_Files.Rows.Add();
+
+                    // Grab the new row
+                    DataGridViewRow newRow = data_Files.Rows[rowId];
+
+                    // Initialize data into the new row
+                    newRow.Cells[STR_DATA_FILES_CHK_ENABLED].Value = row.Enabled;
+                    newRow.Cells[STR_DATA_FILES_CHK_COPY].Value = row.Copy;
+                    newRow.Cells[STR_DATA_FILES_TXT_FILE].Value = row.FilePath;
+                    newRow.Cells[STR_DATA_FILES_TXT_STAGING].Value = row.StagingDir;
+                    newRow.Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value = row.MungeDir;
+                    newRow.Cells[STR_DATA_FILES_TXT_MUNGED_FILES].Value = row.MungedFiles;
+                    newRow.Cells[STR_DATA_FILES_CHK_IS_MUNGE_SCRIPT].Value = row.IsMungeScript;
+                    newRow.Cells[STR_DATA_FILES_CHK_IS_VALID].Value = row.IsValid;
+                }
+            }
+            catch (NullReferenceException e)
+            {
+                Thread errorThread = new Thread(() =>
+                {
+                    Console.WriteLine("Failed to load data into file list. Reason: " + e.Message);
+                    Log("ZeroMunge: ERROR! File does not contain any data to load");
+                });
+                errorThread.Start();
+
+                //throw;
+            }
+        }
+
         private void button2_Click(object sender, EventArgs e)
         {
             SerializeData(@"data.zmd");
@@ -2384,7 +2444,7 @@ namespace AutomationTool
             DataFilesContainer data = DeserializeData(@"data.zmd");
             data.PrintAllRows();
 
-
+            LoadDataIntoFileList(data);
         }
     }
 
