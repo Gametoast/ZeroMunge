@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Serialization;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace AutomationTool
@@ -2252,7 +2253,7 @@ namespace AutomationTool
             Debug.WriteLine(rows[0].Cells[0].ToString());
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        public void SerializeData(string filePath)
         {
             DataFilesContainer saveData = new DataFilesContainer();
 
@@ -2271,17 +2272,17 @@ namespace AutomationTool
                         rowData.FilePath = row.Cells[INT_DATA_FILES_TXT_FILE].Value.ToString();
                     else
                         rowData.FilePath = "";
-                    
+
                     if (row.Cells[INT_DATA_FILES_TXT_STAGING].Value != null)
                         rowData.StagingDir = row.Cells[INT_DATA_FILES_TXT_STAGING].Value.ToString();
                     else
                         rowData.StagingDir = "";
-                    
+
                     if (row.Cells[INT_DATA_FILES_TXT_MUNGE_DIR].Value != null)
                         rowData.MungeDir = row.Cells[INT_DATA_FILES_TXT_MUNGE_DIR].Value.ToString();
                     else
                         rowData.MungeDir = "";
-                    
+
                     if (row.Cells[INT_DATA_FILES_TXT_MUNGED_FILES].Value != null)
                         rowData.MungedFiles = row.Cells[INT_DATA_FILES_TXT_MUNGED_FILES].Value.ToString();
                     else
@@ -2292,7 +2293,58 @@ namespace AutomationTool
                 }
             }
 
-            saveData.PrintAllRows();
+            // A FileStream is needed to save the binary file
+            FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None);
+            try
+            {
+                // Create an instance of the BinaryFormatter
+                IFormatter formatter = new BinaryFormatter();
+
+                // Serialize and save the data
+                formatter.Serialize(fs, saveData);
+            }
+            catch (SerializationException e)
+            {
+                Console.WriteLine("Failed to serialize. Reason: " + e.Message);
+                throw;
+            }
+            finally
+            {
+                fs.Close();
+            }
+        }
+
+        public DataFilesContainer DeserializeData(string filePath)
+        {
+            // Declare an object variable of the type to be deserialized
+            DataFilesContainer data;
+
+            // A FileStream is needed to read the binary file
+            FileStream fs = new FileStream(filePath, FileMode.Open);
+            try
+            {
+                // Create an instance of the BinaryFormatter
+                IFormatter formatter = new BinaryFormatter();
+
+                // Deserialize and store the data
+                data = (DataFilesContainer)formatter.Deserialize(fs);
+            }
+            catch (SerializationException e)
+            {
+                Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
+                throw;
+            }
+            finally
+            {
+                fs.Close();
+            }
+
+            return data;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            SerializeData(@"data.zmd");
 
             //Serialize();
             //Deserialize();
@@ -2329,6 +2381,9 @@ namespace AutomationTool
 
         private void button3_Click(object sender, EventArgs e)
         {
+            DataFilesContainer data = DeserializeData(@"data.zmd");
+            data.PrintAllRows();
+
 
         }
     }
@@ -2358,36 +2413,38 @@ namespace AutomationTool
     [Serializable]
     public class DataFilesContainer
     {
-        public List<DataFilesRow> DataFilesRows { get; private set; }
+        public List<DataFilesRow> DataRows { get; private set; }
 
         public DataFilesRow AddRow(DataFilesRow row)
         {
-            if (DataFilesRows == null)
+            if (DataRows == null)
             {
-                DataFilesRows = new List<DataFilesRow>();
+                DataRows = new List<DataFilesRow>();
             }
 
-            DataFilesRows.Add(row);
+            DataRows.Add(row);
 
             return row;
         }
 
         public void PrintAllRows()
         {
-            if (DataFilesRows != null)
+            if (DataRows != null)
             {
-                foreach (DataFilesRow row in DataFilesRows)
+                foreach (DataFilesRow row in DataRows)
                 {
-                    Debug.WriteLine("Printing next row");
-                    Debug.WriteLine("Enabled       = " + row.Enabled.ToString());
-                    Debug.WriteLine("Copy          = " + row.Copy.ToString());
-                    Debug.WriteLine("FilePath      = " + row.FilePath.ToString());
-                    Debug.WriteLine("StagingDir    = " + row.StagingDir.ToString());
-                    Debug.WriteLine("MungeDir      = " + row.MungeDir.ToString());
-                    Debug.WriteLine("MungedFiles   = " + row.MungedFiles.ToString());
-                    Debug.WriteLine("IsMungeScript = " + row.IsMungeScript.ToString());
-                    Debug.WriteLine("IsValid       = " + row.IsValid.ToString());
-                    Debug.WriteLine(Environment.NewLine);
+                    Debug.WriteLine("PrintAllRows(): ");
+                    Debug.WriteLine("PrintAllRows(): Printing next row");
+                    Debug.WriteLine("PrintAllRows(): ");
+                    Debug.WriteLine("PrintAllRows(): Enabled       = " + row.Enabled.ToString());
+                    Debug.WriteLine("PrintAllRows(): Copy          = " + row.Copy.ToString());
+                    Debug.WriteLine("PrintAllRows(): FilePath      = " + row.FilePath.ToString());
+                    Debug.WriteLine("PrintAllRows(): StagingDir    = " + row.StagingDir.ToString());
+                    Debug.WriteLine("PrintAllRows(): MungeDir      = " + row.MungeDir.ToString());
+                    Debug.WriteLine("PrintAllRows(): MungedFiles   = " + row.MungedFiles.ToString());
+                    Debug.WriteLine("PrintAllRows(): IsMungeScript = " + row.IsMungeScript.ToString());
+                    Debug.WriteLine("PrintAllRows(): IsValid       = " + row.IsValid.ToString());
+                    Debug.WriteLine("PrintAllRows(): ");
                 }
             }
         }
