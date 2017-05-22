@@ -784,6 +784,11 @@ namespace AutomationTool
         public string addProjectLastDir = Directory.GetCurrentDirectory();
 
         /// <summary>
+        /// Last directory user was in for the saveDlg_SaveFileListPrompt.
+        /// </summary>
+        public string saveFileListLastDir = Directory.GetCurrentDirectory();
+
+        /// <summary>
         /// Common munge scripts for a typical project.
         /// </summary>
         public string[] addProject_CommonFiles = {
@@ -796,6 +801,21 @@ namespace AutomationTool
             "\\_BUILD\\Worlds\\@#$\\munge.bat",
             "\\addme\\mungeAddme.bat"
         };
+
+        /// <summary>
+        /// Name of the file list's current save file.
+        /// </summary>
+        public string curFileListName = "null";
+
+        /// <summary>
+        /// File path of the file list's current save file.
+        /// </summary>
+        public string curFileListPath = "null";
+
+        /// <summary>
+        /// Whether or not the file list is dirty.
+        /// </summary>
+        public bool isFileListDirty = false;
 
 
         /// <summary>
@@ -1101,6 +1121,235 @@ namespace AutomationTool
         }
 
 
+        /// <summary>
+        /// Serializes the contents of the file list and saves them to the specified file path.
+        /// </summary>
+        /// <param name="filePath">File path to save the contents of the file list to.</param>
+        public void SerializeData(string filePath)
+        {
+            DataFilesContainer saveData = new DataFilesContainer();
+
+            foreach (DataGridViewRow row in data_Files.Rows)
+            {
+                if (!row.IsNewRow)
+                {
+                    DataFilesRow rowData = new DataFilesRow();
+
+                    rowData.Enabled = (bool)row.Cells[INT_DATA_FILES_CHK_ENABLED].Value;
+                    rowData.Copy = (bool)row.Cells[INT_DATA_FILES_CHK_COPY].Value;
+                    rowData.IsMungeScript = (bool)row.Cells[INT_DATA_FILES_CHK_IS_MUNGE_SCRIPT].Value;
+                    rowData.IsValid = (bool)row.Cells[INT_DATA_FILES_CHK_IS_VALID].Value;
+
+                    if (row.Cells[INT_DATA_FILES_TXT_FILE].Value != null)
+                        rowData.FilePath = row.Cells[INT_DATA_FILES_TXT_FILE].Value.ToString();
+                    else
+                        rowData.FilePath = "";
+
+                    if (row.Cells[INT_DATA_FILES_TXT_STAGING].Value != null)
+                        rowData.StagingDir = row.Cells[INT_DATA_FILES_TXT_STAGING].Value.ToString();
+                    else
+                        rowData.StagingDir = "";
+
+                    if (row.Cells[INT_DATA_FILES_TXT_MUNGE_DIR].Value != null)
+                        rowData.MungeDir = row.Cells[INT_DATA_FILES_TXT_MUNGE_DIR].Value.ToString();
+                    else
+                        rowData.MungeDir = "";
+
+                    if (row.Cells[INT_DATA_FILES_TXT_MUNGED_FILES].Value != null)
+                        rowData.MungedFiles = row.Cells[INT_DATA_FILES_TXT_MUNGED_FILES].Value.ToString();
+                    else
+                        rowData.MungedFiles = "";
+
+
+                    saveData.AddRow(rowData);
+                }
+            }
+
+            // A FileStream is needed to save the binary file
+            FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None);
+            try
+            {
+                // Create an instance of the BinaryFormatter
+                IFormatter formatter = new BinaryFormatter();
+
+                // Serialize and save the data
+                formatter.Serialize(fs, saveData);
+            }
+            catch (SerializationException e)
+            {
+                Console.WriteLine("Failed to serialize. Reason: " + e.Message);
+                throw;
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine("Failed to write to file path. Reason: " + e.Message);
+                throw;
+            }
+            finally
+            {
+                fs.Close();
+            }
+        }
+
+
+        /// <summary>
+        /// Deserializes the file at the specified file path and returns the results.
+        /// </summary>
+        /// <param name="filePath">File path of the file containing the contents of the file list to deserialize.</param>
+        /// <returns>The deserialized contents of the inputted file list.</returns>
+        public DataFilesContainer DeserializeData(string filePath)
+        {
+            // Declare an object variable of the type to be deserialized
+            DataFilesContainer data;
+
+            // A FileStream is needed to read the binary file
+            FileStream fs = new FileStream(filePath, FileMode.Open);
+            try
+            {
+                // Create an instance of the BinaryFormatter
+                IFormatter formatter = new BinaryFormatter();
+
+                // Deserialize and store the data
+                data = (DataFilesContainer)formatter.Deserialize(fs);
+            }
+            catch (SerializationException e)
+            {
+                Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
+                throw;
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine("Failed to read from file path. Reason: " + e.Message);
+                throw;
+            }
+            finally
+            {
+                fs.Close();
+            }
+
+            return data;
+        }
+
+        /// <summary>
+        /// Removes all committed rows from the file list.
+        /// </summary>
+        /// <param name="printErrors">Whether or not error messages should be printed to the Output Log.</param>
+        public void ClearFileList(bool printErrors = false)
+        {
+            // Is there at least 1 committed row to remove?
+            if (data_Files.RowCount > 1 && !data_Files.Rows[0].IsNewRow)
+            {
+                Debug.WriteLine("Rows to remove: " + (data_Files.RowCount - 1));
+
+                // Keep removing the topmost row until only 1 row remains
+                do
+                {
+                    data_Files.Rows.RemoveAt(data_Files.Rows[0].Index);
+                    Debug.WriteLine("Rows remaining: " + (data_Files.RowCount - 1));
+                } while (data_Files.RowCount > 1);
+            }
+            else
+            {
+                Thread errorThread = new Thread(() =>
+                {
+                    if (printErrors)
+                    {
+                        Log("ZeroMunge: ERROR! File list must contain at least one file");
+                    }
+
+                    // Re-enable the UI
+                    EnableUI(true);
+                });
+                errorThread.Start();
+            }
+        }
+
+        /// <summary>
+        /// Loads data from the specified DataFilesContainer into the file list.
+        /// </summary>
+        /// <param name="data">DataFilesContainer object containing the data to load into the file list.</param>
+        /// <param name="replaceCurrentContents">Whether or not to clear the contents of the file list before loading the new data into it. Default = true</param>
+        public void LoadDataIntoFileList(DataFilesContainer data, bool replaceCurrentContents = true)
+        {
+            // Clear the contents of the file list if specified
+            if (replaceCurrentContents)
+            {
+                ClearFileList();
+            }
+
+            try
+            {
+                // Fill the file list with the data from the provided container
+                foreach (DataFilesRow row in data.DataRows)
+                {
+                    // Create a new row first
+                    int rowId = data_Files.Rows.Add();
+
+                    // Grab the new row
+                    DataGridViewRow newRow = data_Files.Rows[rowId];
+
+                    // Initialize data into the new row
+                    newRow.Cells[STR_DATA_FILES_CHK_ENABLED].Value = row.Enabled;
+                    newRow.Cells[STR_DATA_FILES_CHK_COPY].Value = row.Copy;
+                    newRow.Cells[STR_DATA_FILES_TXT_FILE].Value = row.FilePath;
+                    newRow.Cells[STR_DATA_FILES_TXT_STAGING].Value = row.StagingDir;
+                    newRow.Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value = row.MungeDir;
+                    newRow.Cells[STR_DATA_FILES_TXT_MUNGED_FILES].Value = row.MungedFiles;
+                    newRow.Cells[STR_DATA_FILES_CHK_IS_MUNGE_SCRIPT].Value = row.IsMungeScript;
+                    newRow.Cells[STR_DATA_FILES_CHK_IS_VALID].Value = row.IsValid;
+                }
+            }
+            catch (NullReferenceException e)
+            {
+                Thread errorThread = new Thread(() =>
+                {
+                    Console.WriteLine("Failed to load data into file list. Reason: " + e.Message);
+                    Log("ZeroMunge: ERROR! File does not contain any data to load");
+                });
+                errorThread.Start();
+
+                //throw;
+            }
+        }
+
+
+        /// <summary>
+        /// Sets whether or not the file list is dirty.
+        /// </summary>
+        /// <param name="dirty">True, file list is dirty. False, file list is not dirty.</param>
+        private void FileListIsDirty(bool dirty)
+        {
+            if (dirty)
+            {
+
+            }
+
+            isFileListDirty = dirty;
+        }
+
+
+        /// <summary>
+        /// Updates the form's title with the file list's dirty state and the name of the file list's current save file.
+        /// </summary>
+        private void UpdateWindowTitle()
+        {
+            string baseName = "Zero Munge";
+            string fullName;
+
+            if (isFileListDirty)
+            {
+                fullName = baseName + " - " + "*" + curFileListName;
+            }
+            else
+            {
+                fullName = baseName + " - " + curFileListName;
+            }
+
+            this.Text = fullName;
+            this.Update();
+        }
+
+
         // When the user presses a key:
         // 
         private void AutomationTool_KeyDown(object sender, KeyEventArgs e)
@@ -1348,11 +1597,13 @@ namespace AutomationTool
             }
         }
 
-
         // When a cell's value in the file list has changed:
         // Validate or invalidate the cell.
         private void data_Files_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
+            FileListIsDirty(true);
+            UpdateWindowTitle();
+
             var senderGrid = (DataGridView)sender;
 
             bool fileIsNull = false;
@@ -2123,10 +2374,76 @@ namespace AutomationTool
             }
         }
 
+        // When the user clicks the New button in the File menu:
+        // Exit the application.
+        private void menu_newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            curFileListName = "Untitled";
+            UpdateWindowTitle();
+        }
+
+
+        // When the user clicks the Open button in the File menu:
+        // Open a prompt to load a new data container file's contents into the file list.
+        private void menu_openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+
+        // When the user clicks the Save button in the File menu:
+        // Immediately save the contents of the file list to the current file.
+        private void menu_saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (curFileListPath == "null" || curFileListName == "null")
+            {
+                saveDlg_SaveFileListPrompt.InitialDirectory = saveFileListLastDir;
+                saveDlg_SaveFileListPrompt.ShowDialog();
+            }
+        }
+
+
+        // When the user clicks the Save As button in the File menu:
+        // Open a prompt to save the contents of the file list to a new file.
+        private void menu_saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveDlg_SaveFileListPrompt.InitialDirectory = saveFileListLastDir;
+            saveDlg_SaveFileListPrompt.ShowDialog();
+        }
+
+        private void saveDlg_SaveFileListPrompt_FileOk(object sender, CancelEventArgs e)
+        {
+            // Has a file name been entered?
+            if (saveDlg_SaveFileListPrompt.FileName != "")
+            {
+                // Store the current directory
+                saveFileListLastDir = Utilities.GetFileDirectory(saveDlg_SaveFileListPrompt.FileName);
+
+                // Write the file list's contents to the file
+                SaveFileListToFile(saveDlg_SaveFileListPrompt.FileName);
+            }
+        }
+
+        private void SaveFileListToFile(string filePath)
+        {
+            // Serialize and save the data
+            SerializeData(filePath);
+            Log("ZeroMunge: Saved file list as " + filePath);
+            
+            // Update the current file list's save file path and name
+            curFileListPath = filePath;
+            DirectoryInfo dir = new DirectoryInfo(curFileListPath);
+            curFileListName = dir.Name;
+            
+            // Flag the file list as no longer being dirty
+            FileListIsDirty(false);
+            UpdateWindowTitle();
+        }
+
 
         // When the user clicks the Exit button in the File menu:
         // Exit the application.
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void menu_exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
@@ -2167,240 +2484,6 @@ namespace AutomationTool
             Debug.WriteLine("AutomationTool_Deactivate() entered");
         }
 
-
-        void Serialize()
-        {
-            // Create a hashtable of values that will eventually be serialized.
-            List<DataGridViewRow> rows = new List<DataGridViewRow>();
-
-            foreach (DataGridViewRow row in data_Files.Rows)
-            {
-                rows.Add(row);
-            }
-
-            // To serialize the hashtable and its key/value pairs,  
-            // you must first open a stream for writing. 
-            // In this case, use a file stream.
-            FileStream fs = new FileStream("DataFile.dat", FileMode.Create);
-
-            // Construct a BinaryFormatter and use it to serialize the data to the stream.
-            BinaryFormatter formatter = new BinaryFormatter();
-            try
-            {
-                formatter.Serialize(fs, rows);
-            }
-            catch (SerializationException e)
-            {
-                Console.WriteLine("Failed to serialize. Reason: " + e.Message);
-                throw;
-            }
-            finally
-            {
-                fs.Close();
-            }
-        }
-
-
-        void Deserialize()
-        {
-            // Declare the hashtable reference.
-            List<DataGridViewRow> rows = null;
-
-            // Open the file containing the data that you want to deserialize.
-            FileStream fs = new FileStream("DataFile.dat", FileMode.Open);
-            try
-            {
-                BinaryFormatter formatter = new BinaryFormatter();
-
-                // Deserialize the hashtable from the file and 
-                // assign the reference to the local variable.
-                rows = (List<DataGridViewRow>)formatter.Deserialize(fs);
-            }
-            catch (SerializationException e)
-            {
-                Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
-                throw;
-            }
-            finally
-            {
-                fs.Close();
-            }
-
-            // To prove that the table deserialized correctly, 
-            // display the key/value pairs.
-            Debug.WriteLine(rows[0].Cells[0].ToString());
-        }
-
-        public void SerializeData(string filePath)
-        {
-            DataFilesContainer saveData = new DataFilesContainer();
-
-            foreach (DataGridViewRow row in data_Files.Rows)
-            {
-                if (!row.IsNewRow)
-                {
-                    DataFilesRow rowData = new DataFilesRow();
-
-                    rowData.Enabled = (bool)row.Cells[INT_DATA_FILES_CHK_ENABLED].Value;
-                    rowData.Copy = (bool)row.Cells[INT_DATA_FILES_CHK_COPY].Value;
-                    rowData.IsMungeScript = (bool)row.Cells[INT_DATA_FILES_CHK_IS_MUNGE_SCRIPT].Value;
-                    rowData.IsValid = (bool)row.Cells[INT_DATA_FILES_CHK_IS_VALID].Value;
-
-                    if (row.Cells[INT_DATA_FILES_TXT_FILE].Value != null)
-                        rowData.FilePath = row.Cells[INT_DATA_FILES_TXT_FILE].Value.ToString();
-                    else
-                        rowData.FilePath = "";
-
-                    if (row.Cells[INT_DATA_FILES_TXT_STAGING].Value != null)
-                        rowData.StagingDir = row.Cells[INT_DATA_FILES_TXT_STAGING].Value.ToString();
-                    else
-                        rowData.StagingDir = "";
-
-                    if (row.Cells[INT_DATA_FILES_TXT_MUNGE_DIR].Value != null)
-                        rowData.MungeDir = row.Cells[INT_DATA_FILES_TXT_MUNGE_DIR].Value.ToString();
-                    else
-                        rowData.MungeDir = "";
-
-                    if (row.Cells[INT_DATA_FILES_TXT_MUNGED_FILES].Value != null)
-                        rowData.MungedFiles = row.Cells[INT_DATA_FILES_TXT_MUNGED_FILES].Value.ToString();
-                    else
-                        rowData.MungedFiles = "";
-
-
-                    saveData.AddRow(rowData);
-                }
-            }
-
-            // A FileStream is needed to save the binary file
-            FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None);
-            try
-            {
-                // Create an instance of the BinaryFormatter
-                IFormatter formatter = new BinaryFormatter();
-
-                // Serialize and save the data
-                formatter.Serialize(fs, saveData);
-            }
-            catch (SerializationException e)
-            {
-                Console.WriteLine("Failed to serialize. Reason: " + e.Message);
-                throw;
-            }
-            finally
-            {
-                fs.Close();
-            }
-        }
-
-        public DataFilesContainer DeserializeData(string filePath)
-        {
-            // Declare an object variable of the type to be deserialized
-            DataFilesContainer data;
-
-            // A FileStream is needed to read the binary file
-            FileStream fs = new FileStream(filePath, FileMode.Open);
-            try
-            {
-                // Create an instance of the BinaryFormatter
-                IFormatter formatter = new BinaryFormatter();
-
-                // Deserialize and store the data
-                data = (DataFilesContainer)formatter.Deserialize(fs);
-            }
-            catch (SerializationException e)
-            {
-                Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
-                throw;
-            }
-            finally
-            {
-                fs.Close();
-            }
-
-            return data;
-        }
-
-        /// <summary>
-        /// Removes all committed rows from the file list.
-        /// </summary>
-        /// <param name="printErrors">Whether or not error messages should be printed to the Output Log.</param>
-        public void ClearFileList(bool printErrors = false)
-        {
-            // Is there at least 1 committed row to remove?
-            if (data_Files.RowCount > 1 && !data_Files.Rows[0].IsNewRow)
-            {
-                Debug.WriteLine("Rows to remove: " + (data_Files.RowCount - 1));
-
-                // Keep removing the topmost row until only 1 row remains
-                do
-                {
-                    data_Files.Rows.RemoveAt(data_Files.Rows[0].Index);
-                    Debug.WriteLine("Rows remaining: " + (data_Files.RowCount - 1));
-                } while (data_Files.RowCount > 1);
-            }
-            else
-            {
-                Thread errorThread = new Thread(() =>
-                {
-                    if (printErrors)
-                    {
-                        Log("ZeroMunge: ERROR! File list must contain at least one file");
-                    }
-
-                    // Re-enable the UI
-                    EnableUI(true);
-                });
-                errorThread.Start();
-            }
-        }
-
-        /// <summary>
-        /// Loads data from the specified DataFilesContainer into the file list.
-        /// </summary>
-        /// <param name="data">DataFilesContainer object containing the data to load into the file list.</param>
-        /// <param name="replaceCurrentContents">Whether or not to clear the contents of the file list before loading the new data into it. Default = true</param>
-        public void LoadDataIntoFileList(DataFilesContainer data, bool replaceCurrentContents = true)
-        {
-            // Clear the contents of the file list if specified
-            if (replaceCurrentContents)
-            {
-                ClearFileList();
-            }
-
-            try
-            {
-                // Fill the file list with the data from the inputted container
-                foreach (DataFilesRow row in data.DataRows)
-                {
-                    // Create a new row first
-                    int rowId = data_Files.Rows.Add();
-
-                    // Grab the new row
-                    DataGridViewRow newRow = data_Files.Rows[rowId];
-
-                    // Initialize data into the new row
-                    newRow.Cells[STR_DATA_FILES_CHK_ENABLED].Value = row.Enabled;
-                    newRow.Cells[STR_DATA_FILES_CHK_COPY].Value = row.Copy;
-                    newRow.Cells[STR_DATA_FILES_TXT_FILE].Value = row.FilePath;
-                    newRow.Cells[STR_DATA_FILES_TXT_STAGING].Value = row.StagingDir;
-                    newRow.Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value = row.MungeDir;
-                    newRow.Cells[STR_DATA_FILES_TXT_MUNGED_FILES].Value = row.MungedFiles;
-                    newRow.Cells[STR_DATA_FILES_CHK_IS_MUNGE_SCRIPT].Value = row.IsMungeScript;
-                    newRow.Cells[STR_DATA_FILES_CHK_IS_VALID].Value = row.IsValid;
-                }
-            }
-            catch (NullReferenceException e)
-            {
-                Thread errorThread = new Thread(() =>
-                {
-                    Console.WriteLine("Failed to load data into file list. Reason: " + e.Message);
-                    Log("ZeroMunge: ERROR! File does not contain any data to load");
-                });
-                errorThread.Start();
-
-                //throw;
-            }
-        }
 
         private void button2_Click(object sender, EventArgs e)
         {

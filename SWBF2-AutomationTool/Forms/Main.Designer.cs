@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AutomationTool));
             this.btn_Run = new System.Windows.Forms.Button();
             this.btn_AddFiles = new System.Windows.Forms.Button();
@@ -113,6 +113,7 @@
             this.cont_FileButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.button3 = new System.Windows.Forms.Button();
             this.cont_LogButtons = new System.Windows.Forms.FlowLayoutPanel();
+            this.saveDlg_SaveFileListPrompt = new System.Windows.Forms.SaveFileDialog();
             this.pan_MungedFilesEdit.SuspendLayout();
             this.status_MungedFilesEdit.SuspendLayout();
             this.cmenu_Text.SuspendLayout();
@@ -501,9 +502,9 @@
             // 
             // col_FileBrowse
             // 
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle13.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle13;
             this.col_FileBrowse.HeaderText = "";
             this.col_FileBrowse.Name = "col_FileBrowse";
             this.col_FileBrowse.ReadOnly = true;
@@ -524,9 +525,9 @@
             // 
             // col_StagingBrowse
             // 
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-            this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle14.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+            this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle14;
             this.col_StagingBrowse.HeaderText = "";
             this.col_StagingBrowse.Name = "col_StagingBrowse";
             this.col_StagingBrowse.ReadOnly = true;
@@ -545,8 +546,8 @@
             // 
             // col_MungedFiles
             // 
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle15;
             this.col_MungedFiles.HeaderText = "Munged Files";
             this.col_MungedFiles.MinimumWidth = 100;
             this.col_MungedFiles.Name = "col_MungedFiles";
@@ -557,9 +558,9 @@
             // 
             // col_MungedFilesEdit
             // 
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-            this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle16.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+            this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle16;
             this.col_MungedFilesEdit.HeaderText = "";
             this.col_MungedFilesEdit.Name = "col_MungedFilesEdit";
             this.col_MungedFilesEdit.ReadOnly = true;
@@ -673,47 +674,47 @@
             // 
             this.menu_newToolStripMenuItem.Name = "menu_newToolStripMenuItem";
             this.menu_newToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+N";
-            this.menu_newToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.menu_newToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.menu_newToolStripMenuItem.Text = "New";
-            this.menu_newToolStripMenuItem.Visible = false;
+            this.menu_newToolStripMenuItem.Click += new System.EventHandler(this.menu_newToolStripMenuItem_Click);
             // 
             // menu_openToolStripMenuItem
             // 
             this.menu_openToolStripMenuItem.Name = "menu_openToolStripMenuItem";
             this.menu_openToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+O";
-            this.menu_openToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.menu_openToolStripMenuItem.Text = "Open";
-            this.menu_openToolStripMenuItem.Visible = false;
+            this.menu_openToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.menu_openToolStripMenuItem.Text = "Open...";
+            this.menu_openToolStripMenuItem.Click += new System.EventHandler(this.menu_openToolStripMenuItem_Click);
             // 
             // menu_saveToolStripMenuItem
             // 
             this.menu_saveToolStripMenuItem.Name = "menu_saveToolStripMenuItem";
             this.menu_saveToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+S";
-            this.menu_saveToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.menu_saveToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.menu_saveToolStripMenuItem.Text = "Save";
-            this.menu_saveToolStripMenuItem.Visible = false;
+            this.menu_saveToolStripMenuItem.Click += new System.EventHandler(this.menu_saveToolStripMenuItem_Click);
             // 
             // menu_saveAsToolStripMenuItem
             // 
             this.menu_saveAsToolStripMenuItem.Name = "menu_saveAsToolStripMenuItem";
             this.menu_saveAsToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Alt+S";
-            this.menu_saveAsToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.menu_saveAsToolStripMenuItem.Text = "Save As...";
-            this.menu_saveAsToolStripMenuItem.Visible = false;
+            this.menu_saveAsToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.menu_saveAsToolStripMenuItem.Text = "Save As";
+            this.menu_saveAsToolStripMenuItem.Click += new System.EventHandler(this.menu_saveAsToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(183, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(174, 6);
             this.toolStripSeparator4.Visible = false;
             // 
             // menu_exitToolStripMenuItem
             // 
             this.menu_exitToolStripMenuItem.Name = "menu_exitToolStripMenuItem";
             this.menu_exitToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Q";
-            this.menu_exitToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.menu_exitToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.menu_exitToolStripMenuItem.Text = "Exit";
-            this.menu_exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            this.menu_exitToolStripMenuItem.Click += new System.EventHandler(this.menu_exitToolStripMenuItem_Click);
             // 
             // actionsToolStripMenuItem
             // 
@@ -924,6 +925,14 @@
             this.cont_LogButtons.Size = new System.Drawing.Size(102, 88);
             this.cont_LogButtons.TabIndex = 20;
             // 
+            // saveDlg_SaveFileListPrompt
+            // 
+            this.saveDlg_SaveFileListPrompt.DefaultExt = "zmd";
+            this.saveDlg_SaveFileListPrompt.FileName = "Untitled";
+            this.saveDlg_SaveFileListPrompt.Filter = "Zero Munge Data files|*.zmd";
+            this.saveDlg_SaveFileListPrompt.Title = "Save File List As";
+            this.saveDlg_SaveFileListPrompt.FileOk += new System.ComponentModel.CancelEventHandler(this.saveDlg_SaveFileListPrompt_FileOk);
+            // 
             // AutomationTool
             // 
             this.AcceptButton = this.btn_Run;
@@ -1051,6 +1060,7 @@
         private System.Windows.Forms.DataGridViewButtonColumn col_MungedFilesEdit;
         private System.Windows.Forms.DataGridViewCheckBoxColumn col_IsMungeScript;
         private System.Windows.Forms.DataGridViewCheckBoxColumn col_IsValid;
+        public System.Windows.Forms.SaveFileDialog saveDlg_SaveFileListPrompt;
     }
 }
 
