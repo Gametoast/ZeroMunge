@@ -141,6 +141,42 @@ namespace AutomationTool
         }
 
 
+        /// <summary>
+        /// Open a prompt to load a new data container file's contents into the file list.
+        /// </summary>
+        private void Command_Open()
+        {
+
+        }
+
+
+        /// <summary>
+        /// Immediately save the contents of the file list to the current file.
+        /// </summary>
+        private void Command_Save()
+        {
+            if (curFileListPath == "null" || curFileListName == "null")
+            {
+                Command_SaveAs();
+            }
+            else
+            {
+                SaveFileListToFile(curFileListPath);
+            }
+        }
+
+
+        /// <summary>
+        /// Open a prompt to save the contents of the file list to a new file.
+        /// </summary>
+        private void Command_SaveAs()
+        {
+            saveDlg_SaveFileListPrompt.InitialDirectory = saveFileListLastDir;
+            saveDlg_SaveFileListPrompt.ShowDialog();
+        }
+
+
+
         // ***************************
         // ** PROCESS MANAGER
         // ***************************
@@ -1314,6 +1350,27 @@ namespace AutomationTool
 
 
         /// <summary>
+        /// Saves the contents of the file list to the specified file path.
+        /// </summary>
+        /// <param name="filePath">File path to save the file list to.</param>
+        private void SaveFileListToFile(string filePath)
+        {
+            // Serialize and save the data
+            SerializeData(filePath);
+            Log("ZeroMunge: Saved file list as " + filePath);
+
+            // Update the current file list's save file path and name
+            curFileListPath = filePath;
+            DirectoryInfo dir = new DirectoryInfo(curFileListPath);
+            curFileListName = dir.Name;
+
+            // Flag the file list as no longer being dirty
+            FileListIsDirty(false);
+            UpdateWindowTitle();
+        }
+
+
+        /// <summary>
         /// Sets whether or not the file list is dirty.
         /// </summary>
         /// <param name="dirty">True, file list is dirty. False, file list is not dirty.</param>
@@ -1336,13 +1393,20 @@ namespace AutomationTool
             string baseName = "Zero Munge";
             string fullName;
 
-            if (isFileListDirty)
+            if (curFileListName == "null")
             {
-                fullName = baseName + " - " + "*" + curFileListName;
+                fullName = baseName;
             }
             else
             {
-                fullName = baseName + " - " + curFileListName;
+                if (isFileListDirty)
+                {
+                    fullName = baseName + " - " + "*" + curFileListName;
+                }
+                else
+                {
+                    fullName = baseName + " - " + curFileListName;
+                }
             }
 
             this.Text = fullName;
@@ -2387,7 +2451,7 @@ namespace AutomationTool
         // Open a prompt to load a new data container file's contents into the file list.
         private void menu_openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+            Command_Open();
         }
 
 
@@ -2395,11 +2459,7 @@ namespace AutomationTool
         // Immediately save the contents of the file list to the current file.
         private void menu_saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (curFileListPath == "null" || curFileListName == "null")
-            {
-                saveDlg_SaveFileListPrompt.InitialDirectory = saveFileListLastDir;
-                saveDlg_SaveFileListPrompt.ShowDialog();
-            }
+            Command_Save();
         }
 
 
@@ -2407,8 +2467,7 @@ namespace AutomationTool
         // Open a prompt to save the contents of the file list to a new file.
         private void menu_saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            saveDlg_SaveFileListPrompt.InitialDirectory = saveFileListLastDir;
-            saveDlg_SaveFileListPrompt.ShowDialog();
+            Command_SaveAs();
         }
 
         private void saveDlg_SaveFileListPrompt_FileOk(object sender, CancelEventArgs e)
@@ -2422,22 +2481,6 @@ namespace AutomationTool
                 // Write the file list's contents to the file
                 SaveFileListToFile(saveDlg_SaveFileListPrompt.FileName);
             }
-        }
-
-        private void SaveFileListToFile(string filePath)
-        {
-            // Serialize and save the data
-            SerializeData(filePath);
-            Log("ZeroMunge: Saved file list as " + filePath);
-            
-            // Update the current file list's save file path and name
-            curFileListPath = filePath;
-            DirectoryInfo dir = new DirectoryInfo(curFileListPath);
-            curFileListName = dir.Name;
-            
-            // Flag the file list as no longer being dirty
-            FileListIsDirty(false);
-            UpdateWindowTitle();
         }
 
 
