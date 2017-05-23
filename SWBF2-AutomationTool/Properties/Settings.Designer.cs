@@ -97,7 +97,7 @@ namespace AutomationTool.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("05/22/2017 23:02:00")]
+        [global::System.Configuration.DefaultSettingValueAttribute("05/22/2017 23:20:00")]
         public global::System.DateTime Info_BuildDate {
             get {
                 return ((global::System.DateTime)(this["Info_BuildDate"]));
@@ -106,7 +106,7 @@ namespace AutomationTool.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("74")]
+        [global::System.Configuration.DefaultSettingValueAttribute("76")]
         public int Info_BuildNum {
             get {
                 return ((int)(this["Info_BuildNum"]));

@@ -133,8 +133,18 @@ namespace AutomationTool
         /// </summary>
         private void OpenWindow_Help()
         {
-            // TODO: Update CHM location!
-            Help.ShowHelp(this, @"C:\Users\aaron\Documents\Visual Studio 2015\Projects\SWBF2-AutomationTool\HelpDocs\ZeroMungeHelp.chm");
+            string helpPath = @"ZeroMunge\ZeroMungeHelp.chm";
+
+            if (File.Exists(helpPath))
+            {
+                Help.ShowHelp(this, helpPath);
+            }
+            else
+            {
+                var message = "ERROR! Help file does not exist at path " + helpPath;
+                Trace.WriteLine(message);
+                Log("ZeroMunge: " + message);
+            }
         }
 
 
