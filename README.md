@@ -14,4 +14,4 @@ This tool can be used to do the following things. Completed features are **bolde
 * **Auto-detect the munge.bat file inside a selected folder and add it to the file list**
 * **Add the common munge.bat files for an entire project to the file list**
 * **For each file, copy the associated LVL file(s) to another directory**
-* Save and load different "presets" of the file list's contents and toggle values
+* **Save and load different "presets" of the file list's contents and toggle values**
