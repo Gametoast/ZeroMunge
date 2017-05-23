@@ -52,6 +52,12 @@ namespace AutomationTool
         
         public Color errorRed = Color.FromArgb(251, 99, 99);
 
+        public enum CellChangeMethod
+        {
+            Button,
+            Cell
+        };
+
 
         // This is the very first method called by the application. It initializes the UI controls and loads user settings.
         public AutomationTool()
@@ -138,6 +144,13 @@ namespace AutomationTool
         {
             About aboutForm = new About();
             aboutForm.ShowDialog();
+        }
+
+        
+        private void Command_New()
+        {
+            curFileListName = "Untitled";
+            UpdateWindowTitle();
         }
 
 
@@ -859,6 +872,8 @@ namespace AutomationTool
         /// </summary>
         public bool isFileListDirty = false;
 
+        public CellChangeMethod lastCellChangeMethod = CellChangeMethod.Button;
+
 
         /// <summary>
         /// Returns a list of files that are currently checkmarked in the file list.
@@ -1445,34 +1460,43 @@ namespace AutomationTool
             if ((ModifierKeys & Keys.Control) == Keys.Control)
             {
                 // And the action key is N:
-                // 
+                // Run the New command.
                 if (e.KeyCode == Keys.N)
                 {
                     Debug.WriteLine("Ctrl + N was pressed");
 
-                    // TODO: build DataGridView serialization functionality
+                    if (!ProcManager_isRunning)
+                    {
+                        Command_New();
+                    }
 
                     e.Handled = true;
                 }
 
                 // And the action key is O:
-                // 
+                // Run the Open command.
                 if (e.KeyCode == Keys.O)
                 {
                     Debug.WriteLine("Ctrl + O was pressed");
 
-                    // TODO: build DataGridView serialization functionality
+                    if (!ProcManager_isRunning)
+                    {
+                        Command_Open();
+                    }
 
                     e.Handled = true;
                 }
 
                 // And the action key is S:
-                // 
+                // Run the Save command.
                 if (e.KeyCode == Keys.S)
                 {
                     Debug.WriteLine("Ctrl + S was pressed");
 
-                    // TODO: build DataGridView serialization functionality
+                    if (!ProcManager_isRunning)
+                    {
+                        Command_Save();
+                    }
 
                     e.Handled = true;
                 }
@@ -1483,7 +1507,10 @@ namespace AutomationTool
                 {
                     Debug.WriteLine("Ctrl + Q was pressed");
 
-                    Application.Exit();
+                    if (!ProcManager_isRunning)
+                    {
+                        Application.Exit();
+                    }
 
                     e.Handled = true;
                 }
@@ -1494,7 +1521,10 @@ namespace AutomationTool
                 {
                     Debug.WriteLine("Ctrl + P was pressed");
 
-                    OpenWindow_Preferences();
+                    if (!ProcManager_isRunning)
+                    {
+                        OpenWindow_Preferences();
+                    }
 
                     e.Handled = true;
                 }
@@ -1508,8 +1538,10 @@ namespace AutomationTool
 
                 Debug.WriteLine("F1 was pressed");
 
-                //HelpWin helpForm = new HelpWin();
-                //helpForm.Show();
+                if (!ProcManager_isRunning)
+                {
+                    OpenWindow_Help();
+                }
 
                 e.Handled = true;
             }
@@ -1538,8 +1570,10 @@ namespace AutomationTool
 
                 Debug.WriteLine("F12 was pressed");
 
-                About aboutForm = new About();
-                aboutForm.ShowDialog();
+                if (!ProcManager_isRunning)
+                {
+                    OpenWindow_About();
+                }
 
                 e.Handled = true;
             }
@@ -1550,14 +1584,17 @@ namespace AutomationTool
             {
                 Debug.WriteLine("Delete was pressed");
 
-                foreach (DataGridViewCell cell in data_Files.SelectedCells)
+                if (!ProcManager_isRunning)
                 {
-                    // Determine the cell type
-                    if (cell is DataGridViewTextBoxCell)
+                    foreach (DataGridViewCell cell in data_Files.SelectedCells)
                     {
-                        if (cell.Value != null)
+                        // Determine the cell type
+                        if (cell is DataGridViewTextBoxCell)
                         {
-                            cell.Value = "";
+                            if (cell.Value != null)
+                            {
+                                cell.Value = "";
+                            }
                         }
                     }
                 }
@@ -1571,6 +1608,8 @@ namespace AutomationTool
         // Reset the currently selected row header index.
         private void data_Files_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            lastCellChangeMethod = CellChangeMethod.Cell;
+
             var senderGrid = (DataGridView)sender;
 
             // Reset the currently selected header row
@@ -1677,7 +1716,7 @@ namespace AutomationTool
             var senderGrid = (DataGridView)sender;
 
             bool fileIsNull = false;
-            string cellType = "nil";
+            //string cellType = "nil";
 
             if (e.ColumnIndex == INT_DATA_FILES_TXT_FILE)
             {
@@ -1685,24 +1724,24 @@ namespace AutomationTool
             }
 
             // Debug messages
-            if (e.RowIndex >= 0)
-            {
-                // Determine the cell type
-                if (senderGrid.Columns[e.ColumnIndex] is DataGridViewTextBoxColumn)
-                {
-                    cellType = "TextBox";
-                }
-                else if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn)
-                {
-                    cellType = "Button";
-                }
-                else if (senderGrid.Columns[e.ColumnIndex] is DataGridViewCheckBoxColumn)
-                {
-                    cellType = "CheckBox";
-                }
+            //if (e.RowIndex >= 0)
+            //{
+            //    // Determine the cell type
+            //    if (senderGrid.Columns[e.ColumnIndex] is DataGridViewTextBoxColumn)
+            //    {
+            //        cellType = "TextBox";
+            //    }
+            //    else if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn)
+            //    {
+            //        cellType = "Button";
+            //    }
+            //    else if (senderGrid.Columns[e.ColumnIndex] is DataGridViewCheckBoxColumn)
+            //    {
+            //        cellType = "CheckBox";
+            //    }
 
-                //Debug.WriteLine(cellType + " cell content clicked at row index " + e.RowIndex + ", column index " + e.ColumnIndex);
-            }
+            //    //Debug.WriteLine(cellType + " cell content clicked at row index " + e.RowIndex + ", column index " + e.ColumnIndex);
+            //}
 
             if (e.RowIndex < 0 || data_Files.Rows[e.RowIndex].IsNewRow) { return; }
 
@@ -1713,12 +1752,15 @@ namespace AutomationTool
 
                 if (data_Files_CurSelectedColumn != INT_DATA_FILES_BTN_FILE_BROWSE)
                 {
-                    Thread errorThread = new Thread(() => {
-                        var message = "ERROR! File Path must first be specified";
-                        Debug.WriteLine(message);
-                        Log("ZeroMunge: " + message);
-                    });
-                    errorThread.Start();
+                    if (lastCellChangeMethod == CellChangeMethod.Cell)
+                    {
+                        Thread errorThread = new Thread(() => {
+                            var message = "ERROR! File Path must first be specified";
+                            Debug.WriteLine(message);
+                            Log("ZeroMunge: " + message);
+                        });
+                        errorThread.Start();
+                    }
                 }
             }
 
@@ -2027,6 +2069,8 @@ namespace AutomationTool
         // Prompt the user to select files to add to the file list.
         private void btn_AddFiles_Click(object sender, EventArgs e)
         {
+            lastCellChangeMethod = CellChangeMethod.Button;
+
             openDlg_AddFilesPrompt.InitialDirectory = addFilesLastDir;
 
             // Open the 'Add Files' prompt
@@ -2060,6 +2104,8 @@ namespace AutomationTool
         // Prompt the user to select folders containing munge.bat files to add to the file list.
         private void btn_AddFolders_Click(object sender, EventArgs e)
         {
+            lastCellChangeMethod = CellChangeMethod.Button;
+
             openDlg_AddFoldersPrompt.Title = "Select Folders";
             openDlg_AddFoldersPrompt.InitialDirectory = addFoldersLastDir;
             openDlg_AddFoldersPrompt.IsFolderPicker = true;
@@ -2100,6 +2146,8 @@ namespace AutomationTool
         // Prompt the user to select a project to add to the file list.
         private void btn_AddProject_Click(object sender, EventArgs e)
         {
+            lastCellChangeMethod = CellChangeMethod.Button;
+
             openDlg_AddProjectPrompt.Title = "Select Project Folder";
             openDlg_AddProjectPrompt.InitialDirectory = addProjectLastDir;
             openDlg_AddProjectPrompt.IsFolderPicker = true;
@@ -2141,6 +2189,8 @@ namespace AutomationTool
         // Remove the selected file from the file list.
         private void btn_RemoveFile_Click(object sender, EventArgs e)
         {
+            lastCellChangeMethod = CellChangeMethod.Button;
+
             // Don't continue if there aren't any files in the list
             if (data_Files.RowCount <= 0)
             {
@@ -2181,6 +2231,8 @@ namespace AutomationTool
         // Remove all files from the file list.
         private void btn_RemoveAllFiles_Click(object sender, EventArgs e)
         {
+            lastCellChangeMethod = CellChangeMethod.Button;
+
             ClearFileList(true);
         }
 
@@ -2448,8 +2500,7 @@ namespace AutomationTool
         // Exit the application.
         private void menu_newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            curFileListName = "Untitled";
-            UpdateWindowTitle();
+            Command_New();
         }
 
 
