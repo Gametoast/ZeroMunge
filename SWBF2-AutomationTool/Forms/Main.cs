@@ -22,7 +22,7 @@ namespace AutomationTool
     [Serializable]
     public partial class AutomationTool : Form
     {
-        public const bool BUILD_DEBUG = true;
+        public const bool BUILD_DEBUG = false;
 
         // data_Files : Column names
         public const string STR_DATA_FILES_CHK_ENABLED = "col_Enabled";
@@ -54,8 +54,8 @@ namespace AutomationTool
 
         public enum CellChangeMethod
         {
-            Button,
-            Cell
+            Button,     // Buttons outside the DataGridView
+            Cell        // Cells inside the DataGridView
         };
 
 
@@ -89,6 +89,8 @@ namespace AutomationTool
             col_MungeDir.Visible = BUILD_DEBUG;
             col_IsMungeScript.Visible = BUILD_DEBUG;
             col_IsValid.Visible = BUILD_DEBUG;
+            button2.Visible = BUILD_DEBUG;
+            button3.Visible = BUILD_DEBUG;
 
             // Set the visibility of the DataGridView buttons
             col_FileBrowse.UseColumnTextForButtonValue = true;
@@ -1397,6 +1399,7 @@ namespace AutomationTool
         /// <param name="dirty">True, file list is dirty. False, file list is not dirty.</param>
         private void FileListIsDirty(bool dirty)
         {
+            Debug.WriteLine("File list is dirty: " + dirty);
             if (dirty)
             {
 
@@ -1649,6 +1652,9 @@ namespace AutomationTool
                 else if (senderGrid.Columns[e.ColumnIndex] is DataGridViewCheckBoxColumn)
                 {
                     cellType = "CheckBox";
+
+                    FileListIsDirty(true);
+                    UpdateWindowTitle();
                 }
 
                 //Debug.WriteLine(cellType + " cell content clicked at row index " + e.RowIndex + ", column index " + e.ColumnIndex);
@@ -1710,6 +1716,7 @@ namespace AutomationTool
         // Validate or invalidate the cell.
         private void data_Files_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
+            //Debug.WriteLine("Cell value changed");
             FileListIsDirty(true);
             UpdateWindowTitle();
 
@@ -1919,7 +1926,12 @@ namespace AutomationTool
 
             // Attach our keyboard/mouse event handlers
             text_MungedFilesEdit.KeyDown += text_MungedFilesEdit_KeyDown;
+
             data_Files.MouseClick += text_MungedFilesEdit_MouseClickOutside;
+            menu_MainForm.MouseClick += text_MungedFilesEdit_MouseClickOutside;
+            text_OutputLog.MouseClick += text_MungedFilesEdit_MouseClickOutside;
+            cont_FileButtons.MouseClick += text_MungedFilesEdit_MouseClickOutside;
+            this.MouseClick += text_MungedFilesEdit_MouseClickOutside;
 
 
             // Show and focus the textbox
@@ -2046,6 +2058,10 @@ namespace AutomationTool
             // Detach our event handlers
             text_MungedFilesEdit.KeyDown -= text_MungedFilesEdit_KeyDown;
             data_Files.MouseClick -= text_MungedFilesEdit_MouseClickOutside;
+            menu_MainForm.MouseClick -= text_MungedFilesEdit_MouseClickOutside;
+            text_OutputLog.MouseClick -= text_MungedFilesEdit_MouseClickOutside;
+            cont_FileButtons.MouseClick -= text_MungedFilesEdit_MouseClickOutside;
+            this.MouseClick -= text_MungedFilesEdit_MouseClickOutside;
         }
 
 
