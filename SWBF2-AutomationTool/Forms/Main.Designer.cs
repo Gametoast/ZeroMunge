@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AutomationTool));
             this.btn_Run = new System.Windows.Forms.Button();
             this.btn_AddFiles = new System.Windows.Forms.Button();
@@ -114,6 +114,7 @@
             this.button3 = new System.Windows.Forms.Button();
             this.cont_LogButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.saveDlg_SaveFileListPrompt = new System.Windows.Forms.SaveFileDialog();
+            this.openDlg_OpenFileListPrompt = new System.Windows.Forms.OpenFileDialog();
             this.pan_MungedFilesEdit.SuspendLayout();
             this.status_MungedFilesEdit.SuspendLayout();
             this.cmenu_Text.SuspendLayout();
@@ -502,9 +503,9 @@
             // 
             // col_FileBrowse
             // 
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle13.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle9;
             this.col_FileBrowse.HeaderText = "";
             this.col_FileBrowse.Name = "col_FileBrowse";
             this.col_FileBrowse.ReadOnly = true;
@@ -525,9 +526,9 @@
             // 
             // col_StagingBrowse
             // 
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle14.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-            this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+            this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle10;
             this.col_StagingBrowse.HeaderText = "";
             this.col_StagingBrowse.Name = "col_StagingBrowse";
             this.col_StagingBrowse.ReadOnly = true;
@@ -546,8 +547,8 @@
             // 
             // col_MungedFiles
             // 
-            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle11;
             this.col_MungedFiles.HeaderText = "Munged Files";
             this.col_MungedFiles.MinimumWidth = 100;
             this.col_MungedFiles.Name = "col_MungedFiles";
@@ -558,9 +559,9 @@
             // 
             // col_MungedFilesEdit
             // 
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle16.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-            this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+            this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle12;
             this.col_MungedFilesEdit.HeaderText = "";
             this.col_MungedFilesEdit.Name = "col_MungedFilesEdit";
             this.col_MungedFilesEdit.ReadOnly = true;
@@ -933,6 +934,12 @@
             this.saveDlg_SaveFileListPrompt.Title = "Save File List As";
             this.saveDlg_SaveFileListPrompt.FileOk += new System.ComponentModel.CancelEventHandler(this.saveDlg_SaveFileListPrompt_FileOk);
             // 
+            // openDlg_OpenFileListPrompt
+            // 
+            this.openDlg_OpenFileListPrompt.Filter = "Zero Munge Data files|*.zmd";
+            this.openDlg_OpenFileListPrompt.Title = "Open File List";
+            this.openDlg_OpenFileListPrompt.FileOk += new System.ComponentModel.CancelEventHandler(this.openDlg_OpenFileListPrompt_FileOk);
+            // 
             // AutomationTool
             // 
             this.AcceptButton = this.btn_Run;
@@ -1061,6 +1068,7 @@
         private System.Windows.Forms.DataGridViewCheckBoxColumn col_IsMungeScript;
         private System.Windows.Forms.DataGridViewCheckBoxColumn col_IsValid;
         public System.Windows.Forms.SaveFileDialog saveDlg_SaveFileListPrompt;
+        public System.Windows.Forms.OpenFileDialog openDlg_OpenFileListPrompt;
     }
 }
 

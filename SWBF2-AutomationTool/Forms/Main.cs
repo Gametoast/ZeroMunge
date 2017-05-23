@@ -146,7 +146,8 @@ namespace AutomationTool
         /// </summary>
         private void Command_Open()
         {
-
+            openDlg_OpenFileListPrompt.InitialDirectory = openFileListLastDir;
+            openDlg_OpenFileListPrompt.ShowDialog();
         }
 
 
@@ -818,6 +819,11 @@ namespace AutomationTool
         /// Last directory user was in for the openDlg_AddProjectPrompt.
         /// </summary>
         public string addProjectLastDir = Directory.GetCurrentDirectory();
+
+        /// <summary>
+        /// Last directory user was in for the openDlg_OpenFileListPrompt.
+        /// </summary>
+        public string openFileListLastDir = Directory.GetCurrentDirectory();
 
         /// <summary>
         /// Last directory user was in for the saveDlg_SaveFileListPrompt.
@@ -2452,6 +2458,19 @@ namespace AutomationTool
         private void menu_openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Command_Open();
+        }
+
+        private void openDlg_OpenFileListPrompt_FileOk(object sender, CancelEventArgs e)
+        {
+            // Has a file name been entered?
+            if (openDlg_OpenFileListPrompt.FileName != "")
+            {
+                // Store the current directory
+                openFileListLastDir = Utilities.GetFileDirectory(openDlg_OpenFileListPrompt.FileName);
+                
+                DataFilesContainer data = DeserializeData(openDlg_OpenFileListPrompt.FileName);
+                LoadDataIntoFileList(data);
+            }
         }
 
 
