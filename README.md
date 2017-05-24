@@ -15,3 +15,9 @@ This tool can be used to do the following things. Completed features are **bolde
 * **Add the common munge.bat files for an entire project to the file list**
 * **For each file, copy the associated LVL file(s) to another directory**
 * **Save and load different "presets" of the file list's contents and toggle values**
+
+## Downloads
+* [**ZeroMunge-r78 (latest)**](http://bit.ly/ZeroMunge-r78-DL)
+* [ZeroMunge-r42](http://bit.ly/ZeroMunge-r42-DL)
+* [ZeroMunge-r35](http://bit.ly/ZeroMunge-r35-DL-new)
+* [ZeroMunge-r31](http://bit.ly/ZeroMunge-r31-DL)
