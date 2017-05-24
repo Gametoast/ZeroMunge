@@ -508,6 +508,7 @@ namespace AutomationTool
             });
             initOutputThread.Start();
 
+
             // Notify the manager that the process is done
             proc.Exited += ((sender, e) =>
             {
@@ -524,11 +525,24 @@ namespace AutomationTool
             });
 
 
-            // Start the process
-            proc.Start();
-            proc.BeginOutputReadLine();
-            //proc.WaitForExit();
-            //Thread.Sleep(5000);
+            try
+            {
+                // Start the process
+                proc.Start();
+                proc.BeginOutputReadLine();
+                //proc.WaitForExit();
+                //Thread.Sleep(5000);
+            }
+            catch (InvalidOperationException e)
+            {
+                Console.WriteLine("Invalid operation while starting process. Reason: " + e.Message);
+                throw;
+            }
+            catch (Win32Exception e)
+            {
+                Console.WriteLine("Win32 exception while starting process. Reason: " + e.Message);
+                throw;
+            }
 
             return proc;
         }
@@ -785,6 +799,7 @@ namespace AutomationTool
                 menu_prefsToolStripMenuItem.Enabled = enabled;
 
                 // Help menu
+                menu_viewHelpToolStripMenuItem.Enabled = enabled;
                 menu_aboutToolStripMenuItem.Enabled = enabled;
             }
         }
@@ -1247,11 +1262,13 @@ namespace AutomationTool
             catch (SerializationException e)
             {
                 Console.WriteLine("Failed to serialize. Reason: " + e.Message);
+                Log("ZeroMunge: Failed to serialize. Reason: " + e.Message);
                 throw;
             }
             catch (IOException e)
             {
                 Console.WriteLine("Failed to write to file path. Reason: " + e.Message);
+                Log("ZeroMunge: Failed to write to file path. Reason: " + e.Message);
                 throw;
             }
             finally
@@ -1284,11 +1301,13 @@ namespace AutomationTool
             catch (SerializationException e)
             {
                 Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
+                Log("ZeroMunge: Failed to deserialize. Reason: " + e.Message);
                 throw;
             }
             catch (IOException e)
             {
                 Console.WriteLine("Failed to read from file path. Reason: " + e.Message);
+                Log("ZeroMunge: Failed to read from file path. Reason: " + e.Message);
                 throw;
             }
             finally
@@ -1313,7 +1332,22 @@ namespace AutomationTool
                 // Keep removing the topmost row until only 1 row remains
                 do
                 {
-                    data_Files.Rows.RemoveAt(data_Files.Rows[0].Index);
+                    try
+                    {
+                        data_Files.Rows.RemoveAt(data_Files.Rows[0].Index);
+                    }
+                    catch (ArgumentOutOfRangeException e)
+                    {
+                        Console.WriteLine("Argument out of range while removing row. Reason: " + e.Message);
+                        Log("ZeroMunge: Argument out of range while removing row. Reason: " + e.Message);
+                        throw;
+                    }
+                    catch (InvalidOperationException e)
+                    {
+                        Console.WriteLine("Invalid operation while removing row. Reason: " + e.Message);
+                        Log("ZeroMunge: Invalid operation while removing row. Reason: " + e.Message);
+                        throw;
+                    }
                     Debug.WriteLine("Rows remaining: " + (data_Files.RowCount - 1));
                 } while (data_Files.RowCount > 1);
             }
@@ -1346,10 +1380,10 @@ namespace AutomationTool
                 ClearFileList();
             }
 
-            try
+            // Fill the file list with the data from the provided container
+            foreach (DataFilesRow row in data.DataRows)
             {
-                // Fill the file list with the data from the provided container
-                foreach (DataFilesRow row in data.DataRows)
+                try
                 {
                     // Create a new row first
                     int rowId = data_Files.Rows.Add();
@@ -1367,17 +1401,23 @@ namespace AutomationTool
                     newRow.Cells[STR_DATA_FILES_CHK_IS_MUNGE_SCRIPT].Value = row.IsMungeScript;
                     newRow.Cells[STR_DATA_FILES_CHK_IS_VALID].Value = row.IsValid;
                 }
-            }
-            catch (NullReferenceException e)
-            {
-                Thread errorThread = new Thread(() =>
+                catch (NullReferenceException e)
                 {
-                    Console.WriteLine("Failed to load data into file list. Reason: " + e.Message);
-                    Log("ZeroMunge: ERROR! File does not contain any data to load");
-                });
-                errorThread.Start();
+                    Thread errorThread = new Thread(() =>
+                    {
+                        Console.WriteLine("Failed to load data into file list. Reason: " + e.Message);
+                        Log("ZeroMunge: ERROR! File does not contain any data to load");
+                    });
+                    errorThread.Start();
 
-                //throw;
+                    //throw;
+                }
+                catch (InvalidOperationException e)
+                {
+                    Console.WriteLine("Invalid operation while adding row. Reason: " + e.Message);
+                    Log("ZeroMunge: Invalid operation while adding row. Reason: " + e.Message);
+                    throw;
+                }
             }
         }
 

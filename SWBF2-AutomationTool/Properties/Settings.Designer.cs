@@ -97,7 +97,7 @@ namespace AutomationTool.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("05/22/2017 23:20:00")]
+        [global::System.Configuration.DefaultSettingValueAttribute("05/23/2017 23:14:00")]
         public global::System.DateTime Info_BuildDate {
             get {
                 return ((global::System.DateTime)(this["Info_BuildDate"]));
@@ -106,21 +106,10 @@ namespace AutomationTool.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("76")]
+        [global::System.Configuration.DefaultSettingValueAttribute("78")]
         public int Info_BuildNum {
             get {
                 return ((int)(this["Info_BuildNum"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\dataSourceFil" +
-            "e.mdf;Integrated Security=True;Connect Timeout=30")]
-        public string dataSourceFileConnectionString {
-            get {
-                return ((string)(this["dataSourceFileConnectionString"]));
             }
         }
     }
