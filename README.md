@@ -1,3 +1,5 @@
+![Zero Munge](https://raw.githubusercontent.com/marth8880/SWBF2-AutomationTool/master/SWBF2-AutomationTool/Resources/app_banner.jpg)
+
 ## What it is
 The goal of this tool is to act as a robust replacement for VisualMunge (the automation tool provided with the SWBF2 mod tools).  
 
