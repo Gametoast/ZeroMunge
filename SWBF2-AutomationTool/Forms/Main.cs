@@ -2666,7 +2666,9 @@ namespace AutomationTool
 
         private void button2_Click(object sender, EventArgs e)
         {
-            SerializeData(@"data.zmd");
+            Utilities.ParseWorldReqs(@"J:\BF2_ModTools\data_MEU\data_ME5\_BUILD\Worlds\TAT\munge.bat");
+            
+            //SerializeData(@"data.zmd");
 
             //Serialize();
             //Deserialize();

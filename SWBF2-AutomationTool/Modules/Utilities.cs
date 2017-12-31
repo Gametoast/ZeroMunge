@@ -193,7 +193,7 @@ namespace AutomationTool
         /// <summary>
         /// Returns a list of names of files compiled by the munge script at the specified file path.  
         /// </summary>
-        /// <param name="mungeScriptPath">Path of munge script to list of compiled files from.</param>
+        /// <param name="mungeScriptPath">Path of munge script to get list of compiled files from.</param>
         /// <returns>List of names of files compiled by munge script.</returns>
         public static List<string> GetCompiledFiles(string mungeScriptPath)
         {
@@ -231,7 +231,7 @@ namespace AutomationTool
                     compiledFiles.Add("nil");   // since soundmunge takes care of copying files
                     break;
                 case MungeTypes.World:
-                    compiledFiles.Add(GetParentFolderName(mungeScriptPath) + ".lvl");
+                    compiledFiles = ParseWorldReqs(mungeScriptPath);
                     break;
             }
 
@@ -257,12 +257,61 @@ namespace AutomationTool
 
 
         /// <summary>
+        /// Returns the names of all of the main world LVLs munged by a given world munge script.
+        /// </summary>
+        /// <param name="mungeScriptPath">Path of world munge script to get munged LVL names from.</param>
+        /// <returns></returns>
+        public static List<string> ParseWorldReqs(string mungeScriptPath)
+        {
+            // Get world directories (e.g. Worlds\ABC\world1, Worlds\ABC\world2, Worlds\ABC\world3, etc.)
+            // Get all REQ files in each world directory (make sure to check subfolders as well)
+            // Put *.REQ file names formatted as *.LVL file names into List and return it
+
+            List<string> reqs = new List<string>();
+            List<string> worlds = new List<string>();
+            
+            //string path = "J:\\BF2_ModTools\\data_MEU\\data_ME5\\Worlds\\TAT";
+            string worldID = GetParentFolderName(mungeScriptPath);
+            string worldPath = GetProjectDirectory(mungeScriptPath) + "\\Worlds\\" + worldID; 
+            Debug.WriteLine("worldPath: " + worldPath);
+
+            // Get world directories (e.g. world1, world2, world3, etc.)
+            var worldsArray = Directory.GetDirectories(worldPath);
+            foreach (string world in worldsArray)
+            {
+                if (world.ToLower().Contains("world"))
+                {
+                    worlds.Add(world);
+                }
+            }
+
+            // Get all REQ files in each world directory (and all subfolders)
+            foreach (string dir in worlds)
+            {
+                var reqFiles = Directory.GetFiles(dir, "*.req", SearchOption.AllDirectories);
+                foreach (string file in reqFiles)
+                {
+                    // Get only the file name
+                    int index = file.LastIndexOf("\\");
+                    string fileName = file.Substring(index+1);
+
+                    // Replace the .req extension with .lvl
+                    fileName = fileName.Substring(0, fileName.LastIndexOf(".")) + ".lvl";
+                    reqs.Add(fileName);
+                }
+            }
+
+            return reqs;
+        }
+
+
+        /// <summary>
         /// Scans through the munge script at the specified path and extracts all of the names of the REQs compiled by levelpack.
         /// </summary>
         /// <param name="mungeScriptPath">Path of munge script to scan.</param>
         /// <param name="skipUserScripts">Whether or not to skip user scripts and custom GCs.</param>
         /// <param name="skipInshell">Whether or not to skip inshell.</param>
-        /// <returns>List of the names of the REQs compiled by levelpack.</returns>
+        /// <returns>List of the LVL files compiled by levelpack.</returns>
         public static List<string> ParseLevelpackReqs(string mungeScriptPath, bool skipUserScripts = true, bool skipInshell = true)
         {
             List<string> reqs = new List<string>();
