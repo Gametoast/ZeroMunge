@@ -260,44 +260,68 @@ namespace AutomationTool
         /// Returns the names of all of the main world LVLs munged by a given world munge script.
         /// </summary>
         /// <param name="mungeScriptPath">Path of world munge script to get munged LVL names from.</param>
-        /// <returns></returns>
+        /// <returns>List of the world LVL files compiled by levelpack.</returns>
         public static List<string> ParseWorldReqs(string mungeScriptPath)
         {
-            // Get world directories (e.g. Worlds\ABC\world1, Worlds\ABC\world2, Worlds\ABC\world3, etc.)
-            // Get all REQ files in each world directory (make sure to check subfolders as well)
-            // Put *.REQ file names formatted as *.LVL file names into List and return it
-
             List<string> reqs = new List<string>();
             List<string> worlds = new List<string>();
             
-            //string path = "J:\\BF2_ModTools\\data_MEU\\data_ME5\\Worlds\\TAT";
             string worldID = GetParentFolderName(mungeScriptPath);
-            string worldPath = GetProjectDirectory(mungeScriptPath) + "\\Worlds\\" + worldID; 
-            Debug.WriteLine("worldPath: " + worldPath);
+            string worldPath = GetProjectDirectory(mungeScriptPath) + "\\Worlds\\" + worldID;
 
-            // Get world directories (e.g. world1, world2, world3, etc.)
-            var worldsArray = Directory.GetDirectories(worldPath);
-            foreach (string world in worldsArray)
+            // Add world directories (e.g. world1, world2, world3, etc.) to list
+            try
             {
-                if (world.ToLower().Contains("world"))
+                var worldsArray = Directory.GetDirectories(worldPath);
+                foreach (string world in worldsArray)
                 {
-                    worlds.Add(world);
+                    if (world.ToLower().Contains("world"))
+                    {
+                        worlds.Add(world);
+                    }
                 }
+            }
+            catch (DirectoryNotFoundException e)
+            {
+                Trace.WriteLine(e.Message);
+            }
+            catch (IOException e)
+            {
+                Trace.WriteLine(e.Message);
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                Trace.WriteLine(e.Message);
             }
 
             // Get all REQ files in each world directory (and all subfolders)
             foreach (string dir in worlds)
             {
-                var reqFiles = Directory.GetFiles(dir, "*.req", SearchOption.AllDirectories);
-                foreach (string file in reqFiles)
+                try
                 {
-                    // Get only the file name
-                    int index = file.LastIndexOf("\\");
-                    string fileName = file.Substring(index+1);
+                    var reqFiles = Directory.GetFiles(dir, "*.req", SearchOption.AllDirectories);
+                    foreach (string file in reqFiles)
+                    {
+                        // Get only the file name
+                        int index = file.LastIndexOf("\\");
+                        string fileName = file.Substring(index + 1);
 
-                    // Replace the .req extension with .lvl
-                    fileName = fileName.Substring(0, fileName.LastIndexOf(".")) + ".lvl";
-                    reqs.Add(fileName);
+                        // Replace the .req extension with .lvl
+                        fileName = fileName.Substring(0, fileName.LastIndexOf(".")) + ".lvl";
+                        reqs.Add(fileName);
+                    }
+                }
+                catch (DirectoryNotFoundException e)
+                {
+                    Trace.WriteLine(e.Message);
+                }
+                catch (IOException e)
+                {
+                    Trace.WriteLine(e.Message);
+                }
+                catch (UnauthorizedAccessException e)
+                {
+                    Trace.WriteLine(e.Message);
                 }
             }
 
