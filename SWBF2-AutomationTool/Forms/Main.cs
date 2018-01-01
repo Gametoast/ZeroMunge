@@ -22,7 +22,7 @@ namespace AutomationTool
     [Serializable]
     public partial class AutomationTool : Form
     {
-        public const bool BUILD_DEBUG = false;
+        public const bool BUILD_DEBUG = true;
 
         // data_Files : Column names
         public const string STR_DATA_FILES_CHK_ENABLED = "col_Enabled";
@@ -2666,7 +2666,7 @@ namespace AutomationTool
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Utilities.ParseWorldReqs(@"J:\BF2_ModTools\data_MEU\data_ME5\_BUILD\Worlds\TAT\munge.bat");
+            Utilities.ParseReqChunk(@"J:\BF2_ModTools\data_SOL\data_SOL\Sides\SOL\sol.req", "lvl");
             
             //SerializeData(@"data.zmd");
 

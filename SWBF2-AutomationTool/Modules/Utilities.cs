@@ -21,6 +21,17 @@ namespace AutomationTool
             World
         };
 
+        public enum ReqChunkParseState
+        {
+            Header,
+            ChunkBegin,
+            ChunkName,
+            ChunkAlign,
+            ChunkPlatform,
+            ChunkContents,
+            ChunkEnd
+        };
+
 
         /// <summary>
         /// Returns the first N characters of the specified string.
@@ -55,6 +66,18 @@ namespace AutomationTool
             }
 
             return newStr;
+        }
+
+
+        /// <summary>
+        /// Returns the extension of the file at the given path.  
+        /// Example: Inputting "C:\Documents\foo.bar" or simply "foo.bar" would return "bar".
+        /// </summary>
+        /// <param name="filePath">File path or name to get extension from.</param>
+        /// <returns>File extension of given file (e.g., "txt")</returns>
+        public static string GetFileExtension(string filePath)
+        {
+            return filePath.ToLower().Substring(filePath.LastIndexOf(".") + 1);
         }
 
 
@@ -265,7 +288,7 @@ namespace AutomationTool
         {
             List<string> reqs = new List<string>();
             List<string> worlds = new List<string>();
-            
+
             string worldID = GetParentFolderName(mungeScriptPath);
             string worldPath = GetProjectDirectory(mungeScriptPath) + "\\Worlds\\" + worldID;
 
@@ -326,6 +349,121 @@ namespace AutomationTool
             }
 
             return reqs;
+        }
+
+
+        public static List<string> ParseReqChunk(string reqFilePath, string reqChunkName)
+        {
+            List<string> chunkContents = new List<string>();
+
+            if (!File.Exists(reqFilePath))
+            {
+                var message = "ERROR! File does not exist at " + reqFilePath;
+                Trace.WriteLine(message);
+                return chunkContents;
+            }
+            
+            if (GetFileExtension(reqFilePath) != "req")
+            {
+                var message = "ERROR! File extension is " + reqFilePath;
+                Trace.WriteLine(message);
+                return chunkContents;
+            }
+
+            string curLine;
+            string chunkName = "nil";
+            ReqChunkParseState curState = ReqChunkParseState.Header;
+
+            string ParseLine(string line)
+            {
+                return line.Substring(line.IndexOf("\"") + 1, line.LastIndexOf("\"") - line.IndexOf("\"") - 1);
+            }
+            
+
+            // Scan the file line by line and extract the REQ names from the levelpack lines
+            StreamReader file = new StreamReader(reqFilePath);
+            while ((curLine = file.ReadLine()) != null)
+            {
+                if (curLine.Contains("REQN"))
+                {
+                    curState = ReqChunkParseState.Header;
+                }
+                if (curLine.Contains("{"))
+                {
+                    curState = ReqChunkParseState.ChunkBegin;
+                }
+                if (curState == ReqChunkParseState.ChunkBegin && !curLine.Contains("{"))
+                {
+                    curState = ReqChunkParseState.ChunkName;
+                    chunkName = ParseLine(curLine);
+                    Debug.WriteLine("Current chunk: " + chunkName);
+                    
+                    if (chunkName == reqChunkName)
+                    {
+                        Debug.WriteLine("Found chunk!");
+                    }
+                }
+                if (curLine.ToLower().Contains("platform="))
+                {
+                    curState = ReqChunkParseState.ChunkPlatform;
+                }
+
+                // Is the line a levelpack line?
+                /*if (TruncateLongString(curLine, 9).ToLower() == "levelpack")
+                {
+                    string reqName = curLine;
+                    bool skipFile = false;
+
+                    // Sample of the beginning of a levelpack line
+                    var levelpackSample = "levelpack -inputfile";
+
+                    // Remove the right half of the string from the file extension onwards
+                    reqName = reqName.TruncateLongString(reqName.(".req"));
+
+                    // Remove the left half of the string from the inputfile command onwards
+                    reqName = reqName.Remove(0, levelpackSample.Length);
+
+                    // Trim any excess spaces from the ends of the string
+                    reqName = reqName.Trim(" "[0]);
+
+                    // Add the LVL file extension to the end
+                    reqName = string.Concat(reqName, ".lvl");
+
+
+                    // Determine whether or not to skip the file
+                    if (skipUserScripts && !skipFile)
+                    {
+                        // Exclude user scripts
+                        skipFile = reqName.Contains("user_script");
+                    }
+                    if (skipUserScripts && !skipFile)
+                    {
+                        // Exclude custom GCs
+                        skipFile = reqName.Contains("custom_gc");
+                    }
+                    if (skipInshell && !skipFile)
+                    {
+                        // Exclude custom GCs
+                        skipFile = reqName.Contains("inshell");
+                    }
+                    if (!skipFile)
+                    {
+                        // Exclude any lines that are for munging sub-lvls (they typically look like this: "MISSION\*.req")
+                        skipFile = reqName.Contains("*");
+                    }
+
+
+                    if (!skipFile)
+                    {
+                        //Debug.WriteLine(reqName);
+                        chunkContents.Add(reqName);
+                    }
+                }*/
+            }
+
+            file.Close();
+
+            return chunkContents;
         }
 
 
