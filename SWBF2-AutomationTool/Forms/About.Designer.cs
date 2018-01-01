@@ -33,9 +33,9 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.lbl_BuildInfo = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.pnl_License = new System.Windows.Forms.Panel();
             this.text_License = new System.Windows.Forms.RichTextBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.lbl_LicensePre = new System.Windows.Forms.Label();
             this.flow_License = new System.Windows.Forms.FlowLayoutPanel();
             this.img_Logo = new System.Windows.Forms.PictureBox();
@@ -94,6 +94,16 @@
             this.lbl_BuildInfo.TabIndex = 1;
             this.lbl_BuildInfo.Text = "BUILD_INFO";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(3, 38);
+            this.label3.Name = "label3";
+            this.label3.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.label3.Size = new System.Drawing.Size(137, 19);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "Developed by Aaron Gilbert";
+            // 
             // pnl_License
             // 
             this.pnl_License.Controls.Add(this.text_License);
@@ -114,16 +124,6 @@
             this.text_License.TabStop = false;
             this.text_License.Text = "";
             this.text_License.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.text_License_LinkClicked);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 38);
-            this.label3.Name = "label3";
-            this.label3.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.label3.Size = new System.Drawing.Size(137, 19);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Developed by Aaron Gilbert";
             // 
             // lbl_LicensePre
             // 
@@ -210,7 +210,7 @@
             this.link_FrayedWires.TabIndex = 2;
             this.link_FrayedWires.TabStop = true;
             this.link_FrayedWires.Text = "Frayed Wires Studios";
-            this.FormTooltips.SetToolTip(this.link_FrayedWires, "Open a link to the Mod DB page for Frayed Wires Studios.");
+            this.FormTooltips.SetToolTip(this.link_FrayedWires, "Open a link to the official website for Frayed Wires Studios.");
             this.link_FrayedWires.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.link_FrayedWires_LinkClicked);
             // 
             // About

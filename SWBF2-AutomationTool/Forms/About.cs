@@ -26,7 +26,7 @@ namespace AutomationTool
 
             // Initialize license text
             text_License.SelectedText = "BSD 3-Clause License" + "\n\n";
-            text_License.SelectedText = "Copyright (c) 2017, Aaron Gilbert All rights reserved." + "\n\n";
+            text_License.SelectedText = "Copyright (c) 2018, Aaron Gilbert All rights reserved." + "\n\n";
             text_License.SelectedText = "Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:" + "\n\n";
 
             text_License.SelectionBullet = true;
@@ -60,7 +60,7 @@ namespace AutomationTool
         // Open a link to the GitHub page in the default web browser.
         private void link_Updates_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://github.com/marth8880/SWBF2-AutomationTool");
+            Process.Start("https://github.com/marth8880/SWBF2-AutomationTool/releases");
         }
 
 
@@ -76,7 +76,7 @@ namespace AutomationTool
         // Open a link to the FWS Mod DB page in the default web browser.
         private void link_FrayedWires_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("http://www.moddb.com/company/frayedwiresstudios");
+            Process.Start("https://www.frayedwiresstudios.com/");
         }
     }
 }

@@ -12,7 +12,7 @@ namespace AutomationTool.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.1.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -97,7 +97,7 @@ namespace AutomationTool.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("05/23/2017 23:14:00")]
+        [global::System.Configuration.DefaultSettingValueAttribute("12/31/2017 17:16:00")]
         public global::System.DateTime Info_BuildDate {
             get {
                 return ((global::System.DateTime)(this["Info_BuildDate"]));
@@ -106,7 +106,7 @@ namespace AutomationTool.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("78")]
+        [global::System.Configuration.DefaultSettingValueAttribute("89")]
         public int Info_BuildNum {
             get {
                 return ((int)(this["Info_BuildNum"]));
