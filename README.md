@@ -19,7 +19,8 @@ This tool can be used to do the following things. Completed features are **bolde
 - [x] Save and load different "presets" of the file list's contents and toggle values
 
 ## Downloads
-* [**ZeroMunge-r78 (latest)**](http://bit.ly/ZeroMunge-r78-DL)
+* [**ZeroMunge-r89 (latest)**](http://bit.ly/ZeroMunge-r89-DL)
+* [ZeroMunge-r78](http://bit.ly/ZeroMunge-r78-DL)
 * [ZeroMunge-r42](http://bit.ly/ZeroMunge-r42-DL)
 * [ZeroMunge-r35](http://bit.ly/ZeroMunge-r35-DL-new)
 * [ZeroMunge-r31](http://bit.ly/ZeroMunge-r31-DL)
