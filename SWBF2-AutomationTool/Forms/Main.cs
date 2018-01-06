@@ -905,7 +905,7 @@ namespace AutomationTool
         /// <summary>
         /// Returns a list of files that are currently checkmarked in the file list.
         /// </summary>
-        /// <returns>List<MungeFactory> of files that are checkmarked.</MungeFactory></returns>
+        /// <returns>List<MungeFactory> of files that are checkmarked.</returns>
         private List<MungeFactory> GetCheckedFiles()
         {
             var checkedFiles = new List<MungeFactory>();
@@ -2666,7 +2666,8 @@ namespace AutomationTool
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Utilities.ParseReqChunk(@"J:\BF2_ModTools\data_SOL\data_SOL\Sides\SOL\sol.req", "lvl");
+            var reqChunk = Utilities.ParseReqChunk(@"J:\BF2_ModTools\data_SOL\data_SOL\Sides\SOL\sol.req", "lvl");
+			reqChunk.PrintAll();
             
             //SerializeData(@"data.zmd");
 

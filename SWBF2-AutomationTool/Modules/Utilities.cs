@@ -23,13 +23,17 @@ namespace AutomationTool
 
         public enum ReqChunkParseState
         {
-            Header,
+			CheckBegin,
+			FileHeader,
+			FileBegin,
+            ChunkHeader,
             ChunkBegin,
             ChunkName,
             ChunkAlign,
             ChunkPlatform,
             ChunkContents,
-            ChunkEnd
+            ChunkEnd,
+			FileEnd
         };
 
 
@@ -352,118 +356,176 @@ namespace AutomationTool
         }
 
 
-        public static List<string> ParseReqChunk(string reqFilePath, string reqChunkName)
-        {
-            List<string> chunkContents = new List<string>();
+        public static ReqChunk ParseReqChunk(string reqFilePath, string reqChunkName)
+		{
+			string ParseLine(string line)
+			{
+				if (line.Contains("\""))
+				{
+					return line.Substring(line.IndexOf("\"") + 1, line.LastIndexOf("\"") - line.IndexOf("\"") - 1);
+				}
+				else
+				{
+					return line;
+				}
+			}
+
+			bool CheckLine(string line, string match)
+			{
+				if (line.ToLower().Contains(match.ToLower()))
+				{
+					//Debug.WriteLine("match: " + match.ToLower());
+				}
+				return line.ToLower().Contains(match.ToLower());
+			}
+
+			ReqChunk reqChunk = new ReqChunk();
+			reqChunk.Contents = new List<string>();
 
             if (!File.Exists(reqFilePath))
             {
                 var message = "ERROR! File does not exist at " + reqFilePath;
                 Trace.WriteLine(message);
-                return chunkContents;
+                return reqChunk;
             }
             
             if (GetFileExtension(reqFilePath) != "req")
             {
                 var message = "ERROR! File extension is " + reqFilePath;
                 Trace.WriteLine(message);
-                return chunkContents;
+                return reqChunk;
             }
 
-            string curLine;
-            string chunkName = "nil";
-            ReqChunkParseState curState = ReqChunkParseState.Header;
+			string curLine;
+			int numChunks = 0;
+			int curChunkIdx = 0;
+			bool foundChunk = false;
+			ReqChunkParseState curState = ReqChunkParseState.CheckBegin;
+			StreamReader file = new StreamReader(reqFilePath);
 
-            string ParseLine(string line)
-            {
-                return line.Substring(line.IndexOf("\"") + 1, line.LastIndexOf("\"") - line.IndexOf("\"") - 1);
-            }
-            
+			// Count the number of REQ chunks in the file
+			while ((curLine = file.ReadLine()) != null)
+			{
+				//Debug.WriteLine("curLine: " + curLine);
+				if (CheckLine(curLine, "REQN"))
+				{
+					numChunks++;
+				}
+			}
 
-            // Scan the file line by line and extract the REQ names from the levelpack lines
-            StreamReader file = new StreamReader(reqFilePath);
-            while ((curLine = file.ReadLine()) != null)
-            {
-                if (curLine.Contains("REQN"))
-                {
-                    curState = ReqChunkParseState.Header;
-                }
-                if (curLine.Contains("{"))
-                {
-                    curState = ReqChunkParseState.ChunkBegin;
-                }
-                if (curState == ReqChunkParseState.ChunkBegin && !curLine.Contains("{"))
-                {
-                    curState = ReqChunkParseState.ChunkName;
-                    chunkName = ParseLine(curLine);
-                    Debug.WriteLine("Current chunk: " + chunkName);
-                    
-                    if (chunkName == reqChunkName)
-                    {
-                        Debug.WriteLine("Found chunk!");
-                    }
-                }
-                if (curLine.ToLower().Contains("platform="))
-                {
-                    curState = ReqChunkParseState.ChunkPlatform;
-                }
+			Debug.WriteLine("numChunks: " + numChunks);
 
-                // Is the line a levelpack line?
-                /*if (TruncateLongString(curLine, 9).ToLower() == "levelpack")
-                {
-                    string reqName = curLine;
-                    bool skipFile = false;
+			// Scan the file line by line and extract the segments from the given REQ chunk
+			Debug.WriteLine("Looking for chunk: " + reqChunkName);
+			file = new StreamReader(reqFilePath);
+			if (numChunks > 0)
+			{
+				while ((curLine = file.ReadLine()) != null)
+				{
+					var parsedLine = ParseLine(curLine);
+					//Debug.WriteLine("curLine: " + curLine);
 
-                    // Sample of the beginning of a levelpack line
-                    var levelpackSample = "levelpack -inputfile";
+					// File Header
+					if (CheckLine(parsedLine, "ucft") && curState == ReqChunkParseState.CheckBegin)
+					{
+						curState = ReqChunkParseState.FileHeader;
+					}
 
-                    // Remove the right half of the string from the file extension onwards
-                    reqName = reqName.TruncateLongString(reqName.(".req"));
+					// File Begin - opening bracket
+					if (CheckLine(parsedLine, "{") && curState == ReqChunkParseState.FileHeader)
+					{
+						curState = ReqChunkParseState.FileBegin;
+					}
 
-                    // Remove the left half of the string from the inputfile command onwards
-                    reqName = reqName.Remove(0, levelpackSample.Length);
+					// Chunk Header
+					if (CheckLine(parsedLine, "REQN"))
+					{
+						curState = ReqChunkParseState.ChunkHeader;
+						curChunkIdx++;
+					}
 
-                    // Trim any excess spaces from the ends of the string
-                    reqName = reqName.Trim(" "[0]);
+					// Chunk Begin - opening bracket
+					if (CheckLine(parsedLine, "{") && curState == ReqChunkParseState.ChunkHeader)
+					{
+						curState = ReqChunkParseState.ChunkBegin;
+					}
 
-                    // Add the LVL file extension to the end
-                    reqName = string.Concat(reqName, ".lvl");
+					// Chunk Name - declaration of chunk type, e.g. "lvl", "class", "config", etc.
+					if (!parsedLine.Contains("{") && curState == ReqChunkParseState.ChunkBegin)
+					{
+						curState = ReqChunkParseState.ChunkName;
+						//Debug.WriteLine("Current chunk: " + parsedLine);
 
+						if (parsedLine == reqChunkName)
+						{
+							Debug.WriteLine("Found chunk: " + parsedLine);
+							Debug.WriteLine("Adding Name: " + parsedLine);
+							reqChunk.Name = parsedLine;
+							foundChunk = true;
+						}
+						else
+						{
+							Debug.WriteLine("Wrong chunk: " + parsedLine);
+							foundChunk = false;
+						}
+					}
 
-                    // Determine whether or not to skip the file
-                    if (skipUserScripts && !skipFile)
-                    {
-                        // Exclude user scripts
-                        skipFile = reqName.Contains("user_script");
-                    }
-                    if (skipUserScripts && !skipFile)
-                    {
-                        // Exclude custom GCs
-                        skipFile = reqName.Contains("custom_gc");
-                    }
-                    if (skipInshell && !skipFile)
-                    {
-                        // Exclude custom GCs
-                        skipFile = reqName.Contains("inshell");
-                    }
-                    if (!skipFile)
-                    {
-                        // Exclude any lines that are for munging sub-lvls (they typically look like this: "MISSION\*.req")
-                        skipFile = reqName.Contains("*");
-                    }
+					// Start processing and storing the different chunk segments if we have the right chunk
+					if (foundChunk && reqChunk.Name != null)
+					{
+						// Chunk Align - chunk header byte align value, pretty much almost always "align=2048"
+						if (CheckLine(parsedLine, "align=") && (curState == ReqChunkParseState.ChunkName || curState == ReqChunkParseState.ChunkPlatform))
+						{
+							curState = ReqChunkParseState.ChunkAlign;
+							Debug.WriteLine("Adding Align: " + parsedLine);
+							reqChunk.Align = parsedLine;
+						}
 
+						// Chunk Platform - platform designation for the chunk, always "platform=" followed by "pc", "ps2" or "xbox", e.g. "platform=pc"
+						if ((curState == ReqChunkParseState.ChunkName || curState == ReqChunkParseState.ChunkAlign) && CheckLine(parsedLine, "platform="))
+						{
+							curState = ReqChunkParseState.ChunkPlatform;
+							Debug.WriteLine("Adding Platform: " + parsedLine);
+							reqChunk.Platform = parsedLine;
+						}
 
-                    if (!skipFile)
-                    {
-                        //Debug.WriteLine(reqName);
-                        chunkContents.Add(reqName);
-                    }
-                }*/
-            }
+						// Chunk Contents - list of files within the chunk
+						if (!CheckLine(parsedLine, "align=") && !CheckLine(parsedLine, "platform=") && !CheckLine(parsedLine, reqChunk.Name) && !CheckLine(parsedLine, "}") &&
+							(curState == ReqChunkParseState.ChunkContents || curState == ReqChunkParseState.ChunkName || curState == ReqChunkParseState.ChunkAlign || curState == ReqChunkParseState.ChunkPlatform))
+						{
+							curState = ReqChunkParseState.ChunkContents;
+							
+							// Don't add blank lines!
+							if (curLine.Contains("\""))
+							{
+								Debug.WriteLine("Adding Contents: " + parsedLine);
+								reqChunk.AddContents(parsedLine);
+							}
+						}
+					}
+
+					// Chunk End - closing bracket
+					if (CheckLine(parsedLine, "}") && ((curState == ReqChunkParseState.ChunkContents) || (curState == ReqChunkParseState.ChunkName && !foundChunk)))
+					{
+						curState = ReqChunkParseState.ChunkEnd;
+					}
+
+					// File End - closing bracket
+					if (CheckLine(parsedLine, "}") && curState == ReqChunkParseState.ChunkEnd && curChunkIdx == numChunks)
+					{
+						Debug.WriteLine("END OF FILE");
+						curState = ReqChunkParseState.FileEnd;
+					}
+				}
+			}
+			else
+			{
+				Trace.WriteLine("ERROR! There are no chunks in the REQ file @ " + @reqFilePath);
+			}
 
             file.Close();
 
-            return chunkContents;
+            return reqChunk;
         }
 
 
@@ -693,5 +755,62 @@ namespace AutomationTool
         public bool PlayNotificationSounds { get; set; }
         public bool AutoDetectStagingDir { get; set; }
         public bool AutoDetectMungedFiles { get; set; }
+    }
+
+    public class ReqChunk
+    {
+        /// <summary>
+        /// Name of the chunk.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Header byte align value.
+        /// </summary>
+        public string Align { get; set; }
+
+        /// <summary>
+        /// Chunk's platform designation.
+        /// </summary>
+        public string Platform { get; set; }
+
+        /// <summary>
+        /// List of files within the chunk.
+        /// </summary>
+        public List<string> Contents { get; set; }
+
+		public void AddContents(string file)
+		{
+			if (Contents == null)
+			{
+				Contents = new List<string>();
+			}
+			Contents.Add(file);
+		}
+
+		/// <summary>
+		/// Print all of the chunk's segments.
+		/// </summary>
+		public void PrintAll()
+		{
+			Debug.WriteLine("PrintAll(): START OF CHUNK");
+			Debug.WriteLine("PrintAll(): Name        = " + Name);
+			if (Align != null)
+			{
+				Debug.WriteLine("PrintAll(): Align       = " + Align);
+			}
+			if (Platform != null)
+			{
+				Debug.WriteLine("PrintAll(): Platform    = " + Platform);
+			}
+			if (Contents != null)
+			{
+				foreach (string file in Contents)
+				{
+					Debug.WriteLine("PrintAll(): Contents    = " + file);
+				}
+			}
+			Debug.WriteLine("PrintAll(): END OF CHUNK");
+		}
     }
 }
