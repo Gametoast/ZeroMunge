@@ -252,13 +252,13 @@ namespace AutomationTool
 					compiledFiles = ParseLevelpackReqs(mungeScriptPath);
 					break;
 				case MungeTypes.Side:
-					compiledFiles.Add(GetParentFolderName(mungeScriptPath) + ".lvl");
+					compiledFiles = ParseReqsInDirectory(GetProjectDirectory(mungeScriptPath) + "\\Sides\\" + GetParentFolderName(mungeScriptPath));
 					break;
 				case MungeTypes.Sound:
 					compiledFiles.Add("nil");   // since soundmunge takes care of copying files
 					break;
 				case MungeTypes.World:
-					compiledFiles = ParseWorldReqs(mungeScriptPath);
+					compiledFiles = ParseReqsInDirectory(GetProjectDirectory(mungeScriptPath) + "\\Worlds\\" + GetParentFolderName(mungeScriptPath));
 					break;
 			}
 
@@ -284,29 +284,66 @@ namespace AutomationTool
 
 
 		/// <summary>
-		/// Returns the names of all of the main world LVLs munged by a given world munge script.
+		/// Returns the names of all of the LVLs munged from the REQ files in the given directory (typically side or world). Also automatically excludes sub-LVLs.
 		/// </summary>
-		/// <param name="mungeScriptPath">Path of world munge script to get munged LVL names from.</param>
-		/// <returns>List of the world LVL files compiled by levelpack.</returns>
-		public static List<string> ParseWorldReqs(string mungeScriptPath)
+		/// <param name="directory">File directory containing the REQ files to parse.</param>
+		/// <returns>List of the LVL files compiled from the REQ files in the given directory.</returns>
+		public static List<string> ParseReqsInDirectory(string directory)
 		{
 			List<string> reqs = new List<string>();
-			List<string> worlds = new List<string>();
 
-			string worldID = GetParentFolderName(mungeScriptPath);
-			string worldPath = GetProjectDirectory(mungeScriptPath) + "\\Worlds\\" + worldID;
-
-			// Add world directories (e.g. world1, world2, world3, etc.) to list
 			try
 			{
-				var worldsArray = Directory.GetDirectories(worldPath);
-				foreach (string world in worldsArray)
+				string[] reqFiles = Directory.GetFiles(directory, "*.req", SearchOption.AllDirectories);
+
+				// Sub-reqs that should be excluded from the req list
+				List<string> excludeReqs = new List<string>();
+
+				// Get all REQ files in the world's directory (and all subfolders)
+				foreach (string file in reqFiles)
 				{
-					if (world.ToLower().Contains("world"))
+					// Find any sub-reqs to exclude
+					List<string> subReqs = ParseReqChunk(file, "lvl").Contents;
+					if (subReqs != null)
 					{
-						worlds.Add(world);
+						excludeReqs.AddRange(subReqs);
+					}
+
+					// Get only the file name
+					int index = file.LastIndexOf("\\");
+					string fileName = file.Substring(index + 1);
+
+					// Replace the .req extension with .lvl
+					fileName = fileName.Substring(0, fileName.LastIndexOf(".")) + ".lvl";
+					reqs.Add(fileName);
+				}
+
+				// Are there any sub-reqs to exclude?
+				if (excludeReqs != null)
+				{
+					foreach (string req in reqs.ToArray())
+					{
+						// Check if the req matches any of the reqs that should be excluded
+						foreach (string subReq in excludeReqs)
+						{
+							// Should this req be excluded?
+							if (subReq == req.Substring(0, req.LastIndexOf(".")))
+							{
+								Debug.WriteLine("Match found. Removing req: " + req);
+								reqs.Remove(req);
+								break;
+							}
+						}
 					}
 				}
+			}
+			catch (ArgumentNullException e)
+			{
+				Trace.WriteLine(e.Message);
+			}
+			catch (ArgumentOutOfRangeException e)
+			{
+				Trace.WriteLine(e.Message);
 			}
 			catch (DirectoryNotFoundException e)
 			{
@@ -319,37 +356,6 @@ namespace AutomationTool
 			catch (UnauthorizedAccessException e)
 			{
 				Trace.WriteLine(e.Message);
-			}
-
-			// Get all REQ files in each world directory (and all subfolders)
-			foreach (string dir in worlds)
-			{
-				try
-				{
-					var reqFiles = Directory.GetFiles(dir, "*.req", SearchOption.AllDirectories);
-					foreach (string file in reqFiles)
-					{
-						// Get only the file name
-						int index = file.LastIndexOf("\\");
-						string fileName = file.Substring(index + 1);
-
-						// Replace the .req extension with .lvl
-						fileName = fileName.Substring(0, fileName.LastIndexOf(".")) + ".lvl";
-						reqs.Add(fileName);
-					}
-				}
-				catch (DirectoryNotFoundException e)
-				{
-					Trace.WriteLine(e.Message);
-				}
-				catch (IOException e)
-				{
-					Trace.WriteLine(e.Message);
-				}
-				catch (UnauthorizedAccessException e)
-				{
-					Trace.WriteLine(e.Message);
-				}
 			}
 
 			return reqs;
