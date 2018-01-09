@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Media;
+using System.Net;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 
 namespace AutomationTool
 {
@@ -672,6 +674,36 @@ namespace AutomationTool
 			}
 
 			return type;
+		}
+
+
+		public static List<JsonPair> ParseJsonStrings(string url)
+		{
+			var json = new WebClient().DownloadString(url);
+
+			List<JsonPair> parsedJson = new List<JsonPair>();
+			JsonPair curPair = new JsonPair();
+
+			JsonTextReader reader = new JsonTextReader(new StringReader(json));
+			while (reader.Read())
+			{
+				if (reader.Value != null)
+				{
+					switch (reader.TokenType)
+					{
+						case JsonToken.PropertyName:
+							curPair.Key = reader.Value;
+							break;
+						case JsonToken.String:
+							curPair.Value = reader.Value;
+							if (curPair.Key != null)
+								parsedJson.Add(curPair);
+							break;
+					}
+				}
+			}
+
+			return parsedJson;
 		}
 
 

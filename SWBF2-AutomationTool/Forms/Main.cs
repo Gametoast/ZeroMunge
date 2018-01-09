@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
@@ -16,6 +17,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Newtonsoft.Json;
 
 namespace AutomationTool
 {
@@ -2666,8 +2668,15 @@ namespace AutomationTool
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			var reqChunk = Utilities.ParseReqChunk(@"J:\BF2_ModTools\data_SOL\data_SOL\Sides\SOL\sol.req", "lvl");
-			reqChunk.PrintAll();
+			var parsedJson = Utilities.ParseJsonStrings("https://raw.githubusercontent.com/marth8880/SWBF2-AutomationTool/master/test.json");
+
+			foreach (JsonPair pair in parsedJson)
+			{
+				Debug.WriteLine("Key, Value:    {0}, {1}", pair.Key, pair.Value);
+			}
+
+			//var reqChunk = Utilities.ParseReqChunk(@"J:\BF2_ModTools\data_SOL\data_SOL\Sides\SOL\sol.req", "lvl");
+			//reqChunk.PrintAll();
 			
 			//SerializeData(@"data.zmd");
 
@@ -2720,6 +2729,12 @@ namespace AutomationTool
 		public string StagingDir { get; set; }
 		public string MungeDir { get; set; }
 		public List<string> MungedFiles { get; set; }
+	}
+
+	public class JsonPair
+	{
+		public object Key { get; set; }
+		public object Value { get; set; }
 	}
 
 	[Serializable]
