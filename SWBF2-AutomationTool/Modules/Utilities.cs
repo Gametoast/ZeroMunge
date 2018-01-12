@@ -699,6 +699,11 @@ namespace AutomationTool
 							if (curPair.Key != null)
 								parsedJson.Add(curPair);
 							break;
+						case JsonToken.Integer:
+							curPair.Value = reader.Value;
+							if (curPair.Key != null)
+								parsedJson.Add(curPair);
+							break;
 					}
 				}
 			}

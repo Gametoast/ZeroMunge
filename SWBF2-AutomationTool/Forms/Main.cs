@@ -118,6 +118,40 @@ namespace AutomationTool
 		}
 
 
+		public bool IsLatestVersion()
+		{
+			int buildNum = Properties.Settings.Default.Info_BuildNum;
+			var parsedJson = Utilities.ParseJsonStrings("https://raw.githubusercontent.com/marth8880/SWBF2-AutomationTool/master/json/updates.json");
+			int latestBuild = 0;
+
+			foreach (JsonPair pair in parsedJson)
+			{
+				Debug.WriteLine("Key, Value:    {0}, {1}", pair.Key, pair.Value);
+
+				if ((string)pair.Key == "latestVersion")
+				{
+					latestBuild = Convert.ToInt32(pair.Value);
+				}
+			}
+
+			Debug.WriteLine("buildNum, latestBuild:    {0}, {1}", buildNum, latestBuild);
+
+			if (latestBuild == 0)
+			{
+				return false;
+			}
+
+			if (buildNum < latestBuild)
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
+
+
 		/// <summary>
 		/// Call this to open a new instance of the Preferences window.  
 		/// NOTE: The window will be opened as a dialog.
@@ -2674,6 +2708,10 @@ namespace AutomationTool
 			{
 				Debug.WriteLine("Key, Value:    {0}, {1}", pair.Key, pair.Value);
 			}
+
+			var isLatest = IsLatestVersion();
+
+			Debug.WriteLine("isLatest: " + isLatest);
 
 			//var reqChunk = Utilities.ParseReqChunk(@"J:\BF2_ModTools\data_SOL\data_SOL\Sides\SOL\sol.req", "lvl");
 			//reqChunk.PrintAll();
