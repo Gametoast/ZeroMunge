@@ -26,5 +26,8 @@
     <Setting Name="Info_BuildNum" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">89</Value>
     </Setting>
+    <Setting Name="ShowUpdatePromptOnStartup" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

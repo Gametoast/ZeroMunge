@@ -683,23 +683,42 @@ namespace AutomationTool
 
 			List<JsonPair> parsedJson = new List<JsonPair>();
 			JsonPair curPair = new JsonPair();
+			int curStep = 0;
 
 			JsonTextReader reader = new JsonTextReader(new StringReader(json));
 			while (reader.Read())
 			{
 				if (reader.Value != null)
 				{
+					Debug.WriteLine("ParseJsonStrings - Value: " + reader.Value);
+
+					// Determine if this is a key or value
 					switch (reader.TokenType)
 					{
 						case JsonToken.PropertyName:
-							curPair.Key = reader.Value;
+							curStep = 0;
 							break;
 						case JsonToken.String:
-							curPair.Value = reader.Value;
-							if (curPair.Key != null)
-								parsedJson.Add(curPair);
+							curStep = 1;
 							break;
 						case JsonToken.Integer:
+							curStep = 1;
+							break;
+					}
+
+					// Create a new JsonPair if this is a key
+					if (curStep == 0)
+					{
+						curPair = new JsonPair();
+					}
+
+					// Store the key or value in the current JsonPair
+					switch (curStep)
+					{
+						case 0:
+							curPair.Key = reader.Value;
+							break;
+						case 1:
 							curPair.Value = reader.Value;
 							if (curPair.Key != null)
 								parsedJson.Add(curPair);
@@ -712,32 +731,52 @@ namespace AutomationTool
 		}
 
 
-		public static int GetLatestVersion()
+		/// <summary>
+		/// Checks for the latest application version from a pre-specified updates URL and returns an UpdateInfo object containing the information.
+		/// </summary>
+		/// <returns>UpdateInfo object containing the latest build number, the download URL, and release notes.</returns>
+		public static UpdateInfo GetLatestVersion()
 		{
 			var parsedJson = Utilities.ParseJsonStrings("https://raw.githubusercontent.com/marth8880/SWBF2-AutomationTool/master/json/updates.json");
-			int latestBuild = 0;
+			UpdateInfo info = new UpdateInfo
+			{
+				BuildNum = 0
+			};
 
 			foreach (JsonPair pair in parsedJson)
 			{
 				Debug.WriteLine("Key, Value:    {0}, {1}", pair.Key, pair.Value);
 
-				if ((string)pair.Key == "latestVersion")
+				if ((string)pair.Key == "BuildNum")
 				{
-					latestBuild = Convert.ToInt32(pair.Value);
+					info.BuildNum = Convert.ToInt32(pair.Value);
+				}
+				if ((string)pair.Key == "DownloadUrl")
+				{
+					info.DownloadUrl = pair.Value.ToString();
+				}
+				if ((string)pair.Key == "ReleaseNotes")
+				{
+					info.ReleaseNotes = pair.Value.ToString();
 				}
 			}
 
-			return latestBuild;
+			return info;
 		}
 
 
+		/// <summary>
+		/// Checks for an internet connection by attempting to read the contents of a pre-specified URL.
+		/// </summary>
+		/// <returns>True if there is an internet connection, false if not.</returns>
 		public static bool CheckForInternetConnection()
 		{
+			string url = "http://clients3.google.com/generate_204";
 			try
 			{
 				using (var client = new WebClient())
 				{
-					using (client.OpenRead("http://clients3.google.com/generate_204"))
+					using (client.OpenRead(url))
 					{
 						return true;
 					}
@@ -804,7 +843,8 @@ namespace AutomationTool
 				ShowNotificationPopups = Properties.Settings.Default.ShowNotificationPopups,
 				PlayNotificationSounds = Properties.Settings.Default.PlayNotificationSounds,
 				AutoDetectStagingDir = Properties.Settings.Default.AutoDetectStagingDir,
-				AutoDetectMungedFiles = Properties.Settings.Default.AutoDetectMungedFiles
+				AutoDetectMungedFiles = Properties.Settings.Default.AutoDetectMungedFiles,
+				ShowUpdatePromptOnStartup = Properties.Settings.Default.ShowUpdatePromptOnStartup
 			};
 
 			return prefs;
@@ -823,9 +863,17 @@ namespace AutomationTool
 			Properties.Settings.Default.PlayNotificationSounds = prefs.PlayNotificationSounds;
 			Properties.Settings.Default.AutoDetectStagingDir = prefs.AutoDetectStagingDir;
 			Properties.Settings.Default.AutoDetectMungedFiles = prefs.AutoDetectMungedFiles;
+			Properties.Settings.Default.ShowUpdatePromptOnStartup = prefs.ShowUpdatePromptOnStartup;
 
 			Properties.Settings.Default.Save();
 		}
+	}
+
+	public class UpdateInfo
+	{
+		public int BuildNum { get; set; }
+		public string DownloadUrl { get; set; }
+		public string ReleaseNotes { get; set; }
 	}
 
 	public class Prefs
@@ -836,6 +884,7 @@ namespace AutomationTool
 		public bool PlayNotificationSounds { get; set; }
 		public bool AutoDetectStagingDir { get; set; }
 		public bool AutoDetectMungedFiles { get; set; }
+		public bool ShowUpdatePromptOnStartup { get; set; }
 	}
 
 	public class ReqChunk

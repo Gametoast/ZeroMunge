@@ -32,6 +32,7 @@
 			this.btn_Yes = new System.Windows.Forms.Button();
 			this.btn_No = new System.Windows.Forms.Button();
 			this.cont_Btns = new System.Windows.Forms.Panel();
+			this.chk_ShowUpdatePrompt = new System.Windows.Forms.CheckBox();
 			this.cont_Btns.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -74,10 +75,23 @@
 			this.cont_Btns.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
 			this.cont_Btns.Controls.Add(this.btn_Yes);
 			this.cont_Btns.Controls.Add(this.btn_No);
-			this.cont_Btns.Location = new System.Drawing.Point(69, 36);
+			this.cont_Btns.Location = new System.Drawing.Point(69, 63);
 			this.cont_Btns.Name = "cont_Btns";
 			this.cont_Btns.Size = new System.Drawing.Size(157, 23);
 			this.cont_Btns.TabIndex = 3;
+			// 
+			// chk_ShowUpdatePrompt
+			// 
+			this.chk_ShowUpdatePrompt.AutoSize = true;
+			this.chk_ShowUpdatePrompt.Checked = true;
+			this.chk_ShowUpdatePrompt.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chk_ShowUpdatePrompt.Location = new System.Drawing.Point(15, 33);
+			this.chk_ShowUpdatePrompt.Name = "chk_ShowUpdatePrompt";
+			this.chk_ShowUpdatePrompt.Size = new System.Drawing.Size(240, 17);
+			this.chk_ShowUpdatePrompt.TabIndex = 4;
+			this.chk_ShowUpdatePrompt.Text = "Show this prompt when updates are available";
+			this.chk_ShowUpdatePrompt.UseVisualStyleBackColor = true;
+			this.chk_ShowUpdatePrompt.CheckedChanged += new System.EventHandler(this.chk_ShowUpdatePrompt_CheckedChanged);
 			// 
 			// Updates
 			// 
@@ -85,9 +99,11 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btn_No;
-			this.ClientSize = new System.Drawing.Size(297, 71);
+			this.ClientSize = new System.Drawing.Size(297, 98);
+			this.Controls.Add(this.chk_ShowUpdatePrompt);
 			this.Controls.Add(this.cont_Btns);
 			this.Controls.Add(this.lbl_Description);
+			this.KeyPreview = true;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "Updates";
@@ -97,6 +113,7 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Updates Available";
 			this.TopMost = true;
+			this.Load += new System.EventHandler(this.Updates_Load);
 			this.cont_Btns.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -109,5 +126,6 @@
 		private System.Windows.Forms.Button btn_Yes;
 		private System.Windows.Forms.Button btn_No;
 		private System.Windows.Forms.Panel cont_Btns;
+		private System.Windows.Forms.CheckBox chk_ShowUpdatePrompt;
 	}
 }

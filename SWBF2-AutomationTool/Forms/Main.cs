@@ -24,7 +24,8 @@ namespace AutomationTool
 	[Serializable]
 	public partial class AutomationTool : Form
 	{
-		public const bool BUILD_DEBUG = true;
+		// Is this a debug build?
+		public bool BUILD_DEBUG;
 
 		// data_Files : Column names
 		public const string STR_DATA_FILES_CHK_ENABLED = "col_Enabled";
@@ -52,9 +53,11 @@ namespace AutomationTool
 		public const int INT_DATA_FILES_CHK_IS_MUNGE_SCRIPT = 9;
 		public const int INT_DATA_FILES_CHK_IS_VALID = 10;
 		
+		// data_Files : Cell error color
 		public Color errorRed = Color.FromArgb(251, 99, 99);
 
-		public static int latestAppBuild = 0;
+		// Updates
+		public static UpdateInfo latestAppVersion = new UpdateInfo();
 		public static bool updateAvailable = false;
 
 		public enum CellChangeMethod
@@ -68,6 +71,16 @@ namespace AutomationTool
 		public AutomationTool()
 		{
 			InitializeComponent();
+
+			// Set debug flag based on solution configuration
+			#if (BUILD_DEBUG)
+				BUILD_DEBUG = true;
+			#elif (BUILD_RELEASE)
+				BUILD_DEBUG = false;
+			#endif
+			Trace.WriteLine("BUILD_DEBUG: " + BUILD_DEBUG);
+
+			latestAppVersion.BuildNum = 0;
 
 			// Load any saved settings
 			LoadSettings();
@@ -110,7 +123,31 @@ namespace AutomationTool
 		private void AutomationTool_Shown(object sender, EventArgs e)
 		{
 			// Check for application updates
-			CheckForUpdates();
+			updateAvailable = CheckForUpdates();
+			if (updateAvailable)
+			{
+				if (prefs.ShowUpdatePromptOnStartup)
+				{
+					Trace.WriteLine("Update is available. Pushing update prompt.");
+					StartUpdateFlow();
+				}
+				else
+				{
+					Trace.WriteLine("Update is available, but user has specified to not show the update prompt on startup.");
+				}
+			}
+
+			SetUpdateStatusBar(updateAvailable);
+		}
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="available"></param>
+		public void SetUpdateStatusBar(bool available)
+		{
+
 		}
 
 
@@ -127,33 +164,40 @@ namespace AutomationTool
 		}
 
 
-		public void CheckForUpdates()
+		public static bool CheckForUpdates()
 		{
 			Trace.WriteLine("Checking for application updates...");
 
 			if (Utilities.CheckForInternetConnection())
 			{
-				latestAppBuild = Utilities.GetLatestVersion();
+				latestAppVersion = Utilities.GetLatestVersion();
 				int curBuild = Properties.Settings.Default.Info_BuildNum;
 
-				Debug.WriteLine("Current build, latest build:    {0}, {1}", curBuild, latestAppBuild);
+				Debug.WriteLine("Current build, latest build:    {0}, {1}", curBuild, latestAppVersion.BuildNum);
 
 				// Prompt for update if one is available
-				if (curBuild > latestAppBuild)
+				if (curBuild < latestAppVersion.BuildNum)
 				{
-					Trace.WriteLine("Update is available. Popping update prompt.");
-					Updates updatesForm = new Updates();
-					updatesForm.ShowDialog();
+					Trace.WriteLine("Update is available.");
+					return true;
 				}
 				else
 				{
 					Trace.WriteLine("No updates available!");
+					return false;
 				}
 			}
 			else
 			{
 				Trace.WriteLine("There is no internet connection!");
+				return false;
 			}
+		}
+
+
+		public static void StartUpdateFlow()
+		{
+			OpenWindow_Updates();
 		}
 
 
@@ -186,6 +230,16 @@ namespace AutomationTool
 				Trace.WriteLine(message);
 				Log("ZeroMunge: " + message);
 			}
+		}
+
+
+		/// <summary>
+		/// Shows the update prompt in a new window.
+		/// </summary>
+		private static void OpenWindow_Updates()
+		{
+			Updates updatesForm = new Updates();
+			updatesForm.ShowDialog();
 		}
 
 

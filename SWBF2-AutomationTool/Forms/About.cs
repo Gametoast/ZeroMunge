@@ -60,7 +60,16 @@ namespace AutomationTool
 		// Open a link to the GitHub page in the default web browser.
 		private void link_Updates_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			Process.Start("https://github.com/marth8880/SWBF2-AutomationTool/releases");
+			bool updateAvailable = AutomationTool.CheckForUpdates();
+			if (updateAvailable)
+			{
+				Trace.WriteLine("Update is available. Pushing update prompt.");
+				AutomationTool.StartUpdateFlow();
+			}
+			else
+			{
+				MessageBox.Show(this, "No new updates are available.", "Check for updates");
+			}
 		}
 
 

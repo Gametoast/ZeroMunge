@@ -30,6 +30,7 @@ namespace AutomationTool
 			chk_PlayNotificationSounds.Checked = prefs.PlayNotificationSounds;
 			chk_AutoDetectStagingDir.Checked = prefs.AutoDetectStagingDir;
 			chk_AutoDetectMungedFiles.Checked = prefs.AutoDetectMungedFiles;
+			chk_ShowUpdatePromptOnStartup.Checked = prefs.ShowUpdatePromptOnStartup;
 		}
 
 
@@ -94,6 +95,11 @@ namespace AutomationTool
 		private void chk_AutoDetectMungedFiles_CheckedChanged(object sender, EventArgs e)
 		{
 			prefs.AutoDetectMungedFiles = chk_AutoDetectMungedFiles.Checked;
+		}
+
+		private void chk_ShowUpdatePromptOnStartup_CheckedChanged(object sender, EventArgs e)
+		{
+			prefs.ShowUpdatePromptOnStartup = chk_ShowUpdatePromptOnStartup.Checked;
 		}
 	}
 }
