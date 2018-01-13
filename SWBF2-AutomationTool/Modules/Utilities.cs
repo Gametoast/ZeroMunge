@@ -712,6 +712,44 @@ namespace AutomationTool
 		}
 
 
+		public static int GetLatestVersion()
+		{
+			var parsedJson = Utilities.ParseJsonStrings("https://raw.githubusercontent.com/marth8880/SWBF2-AutomationTool/master/json/updates.json");
+			int latestBuild = 0;
+
+			foreach (JsonPair pair in parsedJson)
+			{
+				Debug.WriteLine("Key, Value:    {0}, {1}", pair.Key, pair.Value);
+
+				if ((string)pair.Key == "latestVersion")
+				{
+					latestBuild = Convert.ToInt32(pair.Value);
+				}
+			}
+
+			return latestBuild;
+		}
+
+
+		public static bool CheckForInternetConnection()
+		{
+			try
+			{
+				using (var client = new WebClient())
+				{
+					using (client.OpenRead("http://clients3.google.com/generate_204"))
+					{
+						return true;
+					}
+				}
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
+
 		/// <summary>
 		/// Returns the current time in 12-hour format, e.g. "12:40:34 AM".
 		/// </summary>

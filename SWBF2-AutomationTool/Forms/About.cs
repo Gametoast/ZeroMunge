@@ -73,7 +73,7 @@ namespace AutomationTool
 
 
 		// When the user clicks the "Frayed Wires Studios" link:
-		// Open a link to the FWS Mod DB page in the default web browser.
+		// Open a link to the FWS web site in the default web browser.
 		private void link_FrayedWires_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			Process.Start("https://www.frayedwiresstudios.com/");

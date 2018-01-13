@@ -54,6 +54,9 @@ namespace AutomationTool
 		
 		public Color errorRed = Color.FromArgb(251, 99, 99);
 
+		public static int latestAppBuild = 0;
+		public static bool updateAvailable = false;
+
 		public enum CellChangeMethod
 		{
 			Button,     // Buttons outside the DataGridView
@@ -104,6 +107,12 @@ namespace AutomationTool
 			File.WriteAllText(Directory.GetCurrentDirectory() + @"\ZeroMunge_OutputLog.log", openMessage + Environment.NewLine);
 		}
 
+		private void AutomationTool_Shown(object sender, EventArgs e)
+		{
+			// Check for application updates
+			CheckForUpdates();
+		}
+
 
 		/// <summary>
 		/// Loads and initializes saved user settings.
@@ -118,36 +127,32 @@ namespace AutomationTool
 		}
 
 
-		public bool IsLatestVersion()
+		public void CheckForUpdates()
 		{
-			int buildNum = Properties.Settings.Default.Info_BuildNum;
-			var parsedJson = Utilities.ParseJsonStrings("https://raw.githubusercontent.com/marth8880/SWBF2-AutomationTool/master/json/updates.json");
-			int latestBuild = 0;
+			Trace.WriteLine("Checking for application updates...");
 
-			foreach (JsonPair pair in parsedJson)
+			if (Utilities.CheckForInternetConnection())
 			{
-				Debug.WriteLine("Key, Value:    {0}, {1}", pair.Key, pair.Value);
+				latestAppBuild = Utilities.GetLatestVersion();
+				int curBuild = Properties.Settings.Default.Info_BuildNum;
 
-				if ((string)pair.Key == "latestVersion")
+				Debug.WriteLine("Current build, latest build:    {0}, {1}", curBuild, latestAppBuild);
+
+				// Prompt for update if one is available
+				if (curBuild > latestAppBuild)
 				{
-					latestBuild = Convert.ToInt32(pair.Value);
+					Trace.WriteLine("Update is available. Popping update prompt.");
+					Updates updatesForm = new Updates();
+					updatesForm.ShowDialog();
 				}
-			}
-
-			Debug.WriteLine("buildNum, latestBuild:    {0}, {1}", buildNum, latestBuild);
-
-			if (latestBuild == 0)
-			{
-				return false;
-			}
-
-			if (buildNum < latestBuild)
-			{
-				return false;
+				else
+				{
+					Trace.WriteLine("No updates available!");
+				}
 			}
 			else
 			{
-				return true;
+				Trace.WriteLine("There is no internet connection!");
 			}
 		}
 
@@ -2709,7 +2714,7 @@ namespace AutomationTool
 				Debug.WriteLine("Key, Value:    {0}, {1}", pair.Key, pair.Value);
 			}
 
-			var isLatest = IsLatestVersion();
+			var isLatest = Utilities.GetLatestVersion();
 
 			Debug.WriteLine("isLatest: " + isLatest);
 
