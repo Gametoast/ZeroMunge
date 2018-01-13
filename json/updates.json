@@ -1,3 +1,5 @@
 {
-	'latestVersion': 100
+	'BuildNum': 100,
+	'DownloadUrl': 'https://github.com/marth8880/SWBF2-AutomationTool/releases/tag/r89',
+	'ReleaseNotes': 'NONE'
 }
