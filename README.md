@@ -24,7 +24,8 @@ This tool can be used to do the following things. Completed features are checked
 
 ## Downloads
 
-* [**ZeroMunge-r89 (latest)**](http://bit.ly/ZeroMunge-r89-DL)
+* [**ZeroMunge-r113 (latest)**](http://bit.ly/ZeroMunge-r113-DL)
+* [ZeroMunge-r89](http://bit.ly/ZeroMunge-r89-DL)
 * [ZeroMunge-r78](http://bit.ly/ZeroMunge-r78-DL)
 * [ZeroMunge-r42](http://bit.ly/ZeroMunge-r42-DL)
 * [ZeroMunge-r35](http://bit.ly/ZeroMunge-r35-DL-new)
