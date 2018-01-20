@@ -1,4 +1,4 @@
-﻿namespace AutomationTool
+﻿namespace ZeroMunge
 {
     partial class About
     {
@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(About));
 			this.btn_Accept = new System.Windows.Forms.Button();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.label1 = new System.Windows.Forms.Label();
@@ -151,7 +152,7 @@
 			// 
 			this.img_Logo.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.img_Logo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.img_Logo.Image = global::AutomationTool.Properties.Resources.app_banner;
+			this.img_Logo.Image = ((System.Drawing.Image)(resources.GetObject("img_Logo.Image")));
 			this.img_Logo.Location = new System.Drawing.Point(12, 12);
 			this.img_Logo.Name = "img_Logo";
 			this.img_Logo.Size = new System.Drawing.Size(440, 113);
@@ -210,7 +211,7 @@
 			this.link_FrayedWires.TabIndex = 2;
 			this.link_FrayedWires.TabStop = true;
 			this.link_FrayedWires.Text = "Frayed Wires Studios";
-			this.FormTooltips.SetToolTip(this.link_FrayedWires, "Open a link to the official website for Frayed Wires Studios.");
+			this.FormTooltips.SetToolTip(this.link_FrayedWires, "Open a link to the official web site for Frayed Wires Studios.");
 			this.link_FrayedWires.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.link_FrayedWires_LinkClicked);
 			// 
 			// About

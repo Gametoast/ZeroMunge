@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace AutomationTool
+namespace ZeroMunge
 {
 	public partial class About : Form
 	{
@@ -57,14 +57,14 @@ namespace AutomationTool
 
 
 		// When the user clicks the "Check for updates" link:
-		// Open a link to the GitHub page in the default web browser.
+		// Start the update flow.
 		private void link_Updates_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			bool updateAvailable = AutomationTool.CheckForUpdates();
+			bool updateAvailable = ZeroMunge.CheckForUpdates();
 			if (updateAvailable)
 			{
 				Trace.WriteLine("Update is available. Pushing update prompt.");
-				AutomationTool.StartUpdateFlow();
+				ZeroMunge.StartUpdateFlow();
 			}
 			else
 			{

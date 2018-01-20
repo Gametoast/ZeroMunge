@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Zero Munge")]
 [assembly: AssemblyDescription("Zero Munge")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Frayed Wires Studios")]
+[assembly: AssemblyCompany("Frayed Wires Studios, LLC")]
 [assembly: AssemblyProduct("Zero Munge")]
-[assembly: AssemblyCopyright("Copyright © 2017 Aaron Gilbert, All Rights Reserved")]
+[assembly: AssemblyCopyright("Copyright © 2018 Aaron Gilbert, All Rights Reserved")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace AutomationTool
+namespace ZeroMunge
 {
 	public partial class Preferences : Form
 	{

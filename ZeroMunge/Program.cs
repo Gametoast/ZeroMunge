@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace AutomationTool
+namespace ZeroMunge
 {
     static class Program
     {
@@ -16,7 +16,7 @@ namespace AutomationTool
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new AutomationTool());
+            Application.Run(new ZeroMunge());
         }
     }
 }

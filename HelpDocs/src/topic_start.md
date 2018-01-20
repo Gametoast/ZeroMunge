@@ -1,6 +1,6 @@
 **Zero Munge revision 89**  
 **Copyright © 2018 Aaron Gilbert. All rights reserved.**    
-[**View project on GitHub**](https://github.com/marth8880/SWBF2-AutomationTool)
+[**View project on GitHub**](https://github.com/marth8880/ZeroMunge)
 
 ## What it is
 The goal of this tool is to act as a robust replacement for VisualMunge (the automation tool provided with the SWBF2 mod tools).  

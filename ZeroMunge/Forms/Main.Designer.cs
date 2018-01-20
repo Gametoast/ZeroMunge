@@ -1,6 +1,6 @@
-﻿namespace AutomationTool
+﻿namespace ZeroMunge
 {
-    partial class AutomationTool
+    partial class ZeroMunge
     {
         /// <summary>
         /// Required designer variable.
@@ -33,7 +33,7 @@
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AutomationTool));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ZeroMunge));
 			this.btn_Run = new System.Windows.Forms.Button();
 			this.btn_AddFiles = new System.Windows.Forms.Button();
 			this.openDlg_AddFilesPrompt = new System.Windows.Forms.OpenFileDialog();
@@ -808,20 +808,23 @@
 			// menu_copyLogToolStripMenuItem
 			// 
 			this.menu_copyLogToolStripMenuItem.Name = "menu_copyLogToolStripMenuItem";
-			this.menu_copyLogToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+			this.menu_copyLogToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.menu_copyLogToolStripMenuItem.Text = "Copy Log";
+			this.menu_copyLogToolStripMenuItem.Click += new System.EventHandler(this.btn_CopyLog_Click);
 			// 
 			// menu_saveLogAsToolStripMenuItem
 			// 
 			this.menu_saveLogAsToolStripMenuItem.Name = "menu_saveLogAsToolStripMenuItem";
-			this.menu_saveLogAsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+			this.menu_saveLogAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.menu_saveLogAsToolStripMenuItem.Text = "Save Log As...";
+			this.menu_saveLogAsToolStripMenuItem.Click += new System.EventHandler(this.btn_SaveLog_Click);
 			// 
 			// menu_clearLogToolStripMenuItem
 			// 
 			this.menu_clearLogToolStripMenuItem.Name = "menu_clearLogToolStripMenuItem";
-			this.menu_clearLogToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+			this.menu_clearLogToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.menu_clearLogToolStripMenuItem.Text = "Clear Log";
+			this.menu_clearLogToolStripMenuItem.Click += new System.EventHandler(this.btn_ClearLog_Click);
 			// 
 			// settingsToolStripMenuItem
 			// 
@@ -940,7 +943,7 @@
 			this.openDlg_OpenFileListPrompt.Title = "Open File List";
 			this.openDlg_OpenFileListPrompt.FileOk += new System.ComponentModel.CancelEventHandler(this.openDlg_OpenFileListPrompt_FileOk);
 			// 
-			// AutomationTool
+			// ZeroMunge
 			// 
 			this.AcceptButton = this.btn_Run;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -958,14 +961,14 @@
 			this.KeyPreview = true;
 			this.MainMenuStrip = this.menu_MainForm;
 			this.MinimumSize = new System.Drawing.Size(800, 600);
-			this.Name = "AutomationTool";
+			this.Name = "ZeroMunge";
 			this.Text = "Zero Munge";
-			this.Activated += new System.EventHandler(this.AutomationTool_Activated);
-			this.Deactivate += new System.EventHandler(this.AutomationTool_Deactivate);
-			this.Load += new System.EventHandler(this.AutomationTool_Load);
-			this.Shown += new System.EventHandler(this.AutomationTool_Shown);
-			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.AutomationTool_KeyDown);
-			this.Resize += new System.EventHandler(this.AutomationTool_Resize);
+			this.Activated += new System.EventHandler(this.ZeroMunge_Activated);
+			this.Deactivate += new System.EventHandler(this.ZeroMunge_Deactivate);
+			this.Load += new System.EventHandler(this.ZeroMunge_Load);
+			this.Shown += new System.EventHandler(this.ZeroMunge_Shown);
+			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ZeroMunge_KeyDown);
+			this.Resize += new System.EventHandler(this.ZeroMunge_Resize);
 			this.pan_MungedFilesEdit.ResumeLayout(false);
 			this.pan_MungedFilesEdit.PerformLayout();
 			this.status_MungedFilesEdit.ResumeLayout(false);

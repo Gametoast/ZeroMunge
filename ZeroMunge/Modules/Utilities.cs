@@ -7,7 +7,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 
-namespace AutomationTool
+namespace ZeroMunge
 {
 	public static class Utilities
 	{
@@ -737,7 +737,7 @@ namespace AutomationTool
 		/// <returns>UpdateInfo object containing the latest build number, the download URL, and release notes.</returns>
 		public static UpdateInfo GetLatestVersion()
 		{
-			var parsedJson = Utilities.ParseJsonStrings("https://raw.githubusercontent.com/marth8880/SWBF2-AutomationTool/master/json/updates.json");
+			var parsedJson = Utilities.ParseJsonStrings("https://raw.githubusercontent.com/marth8880/ZeroMunge/master/json/updates.json");
 			UpdateInfo info = new UpdateInfo
 			{
 				BuildNum = 0

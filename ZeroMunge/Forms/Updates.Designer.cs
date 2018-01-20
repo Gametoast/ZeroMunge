@@ -1,4 +1,4 @@
-﻿namespace AutomationTool
+﻿namespace ZeroMunge
 {
 	partial class Updates
 	{

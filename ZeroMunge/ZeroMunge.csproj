@@ -7,7 +7,7 @@
     <ProjectGuid>{08322025-AE41-4654-A4FD-D5FFA8F04BDA}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AutomationTool</RootNamespace>
+    <RootNamespace>ZeroMunge</RootNamespace>
     <AssemblyName>ZeroMunge</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -72,6 +72,9 @@
   <PropertyGroup />
   <PropertyGroup>
     <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>ZeroMungeNameKey.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -158,6 +161,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="ZeroMungeNameKey.pfx" />
     <None Include="ZeroMunge\ZeroMungeHelp.chm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

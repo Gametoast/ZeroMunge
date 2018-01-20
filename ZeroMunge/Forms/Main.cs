@@ -19,10 +19,10 @@ using System.Xml.Serialization;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Newtonsoft.Json;
 
-namespace AutomationTool
+namespace ZeroMunge
 {
 	[Serializable]
-	public partial class AutomationTool : Form
+	public partial class ZeroMunge : Form
 	{
 		// Is this a debug build?
 		public bool BUILD_DEBUG;
@@ -68,7 +68,7 @@ namespace AutomationTool
 
 
 		// This is the very first method called by the application. It initializes the UI controls and loads user settings.
-		public AutomationTool()
+		public ZeroMunge()
 		{
 			InitializeComponent();
 
@@ -88,9 +88,9 @@ namespace AutomationTool
 
 		public Prefs prefs = new Prefs();
 
-		// When the AutomationTool form is finished loading:
+		// When the ZeroMunge form is finished loading:
 		// Create the tray icon, initialize some stuff with the file list, and start a new output log.
-		private void AutomationTool_Load(object sender, EventArgs e)
+		private void ZeroMunge_Load(object sender, EventArgs e)
 		{
 			// Set the tray icon if it's enabled
 			if (prefs.ShowTrayIcon)
@@ -120,7 +120,7 @@ namespace AutomationTool
 			File.WriteAllText(Directory.GetCurrentDirectory() + @"\ZeroMunge_OutputLog.log", openMessage + Environment.NewLine);
 		}
 
-		private void AutomationTool_Shown(object sender, EventArgs e)
+		private void ZeroMunge_Shown(object sender, EventArgs e)
 		{
 			// Check for application updates
 			updateAvailable = CheckForUpdates();
@@ -137,17 +137,17 @@ namespace AutomationTool
 				}
 			}
 
-			SetUpdateStatusBar(updateAvailable);
+			
 		}
+		
 
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="available"></param>
 		public void SetUpdateStatusBar(bool available)
 		{
-
+			this.SetUpdateStatusBar(available, null);
+		}
+		public void SetUpdateStatusBar(bool available, string downloadUrl)
+		{
+			// do stuff
 		}
 
 
@@ -164,6 +164,10 @@ namespace AutomationTool
 		}
 
 
+		/// <summary>
+		/// If there is an internet connection, checks for updates and returns true if an update is available.
+		/// </summary>
+		/// <returns>True if an update is available, false if not.</returns>
 		public static bool CheckForUpdates()
 		{
 			Trace.WriteLine("Checking for application updates...");
@@ -195,6 +199,9 @@ namespace AutomationTool
 		}
 
 
+		/// <summary>
+		/// Starts the update flow (duh).
+		/// </summary>
 		public static void StartUpdateFlow()
 		{
 			OpenWindow_Updates();
@@ -1585,7 +1592,7 @@ namespace AutomationTool
 
 		// When the user presses a key:
 		// 
-		private void AutomationTool_KeyDown(object sender, KeyEventArgs e)
+		private void ZeroMunge_KeyDown(object sender, KeyEventArgs e)
 		{
 			// When the key combination is Shift + F5:
 			// Stop processing files in the file list.
@@ -2492,7 +2499,7 @@ namespace AutomationTool
 
 		// When the user resizes the window by dragging the handles, maximizing, restoring, or minimizing:
 		// Store the WindowState for future reference when the user double-clicks the trayIcon.
-		private void AutomationTool_Resize(object sender, EventArgs e)
+		private void ZeroMunge_Resize(object sender, EventArgs e)
 		{
 			Debug.WriteLine("WindowState changed");
 			lastWindowState = WindowState;
@@ -2743,9 +2750,9 @@ namespace AutomationTool
 
 		// When the form is focused on and activated:
 		// Reload the application settings.
-		private void AutomationTool_Activated(object sender, EventArgs e)
+		private void ZeroMunge_Activated(object sender, EventArgs e)
 		{
-			Debug.WriteLine("AutomationTool_Activated() entered");
+			Debug.WriteLine("ZeroMunge_Activated() entered");
 
 			prefs = Utilities.LoadPrefs();
 		}
@@ -2753,15 +2760,15 @@ namespace AutomationTool
 
 		// When the form is unfocused and deactivated:
 		// 
-		private void AutomationTool_Deactivate(object sender, EventArgs e)
+		private void ZeroMunge_Deactivate(object sender, EventArgs e)
 		{
-			Debug.WriteLine("AutomationTool_Deactivate() entered");
+			Debug.WriteLine("ZeroMunge_Deactivate() entered");
 		}
 
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			var parsedJson = Utilities.ParseJsonStrings("https://raw.githubusercontent.com/marth8880/SWBF2-AutomationTool/master/test.json");
+			var parsedJson = Utilities.ParseJsonStrings("https://raw.githubusercontent.com/marth8880/ZeroMunge/master/test.json");
 
 			foreach (JsonPair pair in parsedJson)
 			{

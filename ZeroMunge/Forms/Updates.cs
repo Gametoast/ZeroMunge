@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace AutomationTool
+namespace ZeroMunge
 {
 	public partial class Updates : Form
 	{
@@ -35,10 +35,10 @@ namespace AutomationTool
 		/// </summary>
 		private void GoToUpdate()
 		{
-			int build = AutomationTool.latestAppVersion.BuildNum;
+			int build = ZeroMunge.latestAppVersion.BuildNum;
 			if (build == 0)
 				return;
-			string url = AutomationTool.latestAppVersion.DownloadUrl;
+			string url = ZeroMunge.latestAppVersion.DownloadUrl;
 			Process.Start(url);
 		}
 
