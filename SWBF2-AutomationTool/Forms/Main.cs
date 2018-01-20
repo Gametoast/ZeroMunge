@@ -137,17 +137,17 @@ namespace AutomationTool
 				}
 			}
 
-			
+			SetUpdateStatusBar(updateAvailable);
 		}
-		
 
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="available"></param>
 		public void SetUpdateStatusBar(bool available)
 		{
-			this.SetUpdateStatusBar(available, null);
-		}
-		public void SetUpdateStatusBar(bool available, string downloadUrl)
-		{
-			// do stuff
+
 		}
 
 
@@ -164,10 +164,6 @@ namespace AutomationTool
 		}
 
 
-		/// <summary>
-		/// If there is an internet connection, checks for updates and returns true if an update is available.
-		/// </summary>
-		/// <returns>True if an update is available, false if not.</returns>
 		public static bool CheckForUpdates()
 		{
 			Trace.WriteLine("Checking for application updates...");
@@ -199,9 +195,6 @@ namespace AutomationTool
 		}
 
 
-		/// <summary>
-		/// Starts the update flow (duh).
-		/// </summary>
 		public static void StartUpdateFlow()
 		{
 			OpenWindow_Updates();
