@@ -313,7 +313,7 @@ namespace ZeroMunge
 
 					// Get only the file name
 					int index = file.LastIndexOf("\\");
-					string fileName = file.Substring(index + 1);
+					string fileName = file.Substring(index + 1).ToLower();
 
 					// Replace the .req extension with .lvl
 					fileName = fileName.Substring(0, fileName.LastIndexOf(".")) + ".lvl";
@@ -329,7 +329,7 @@ namespace ZeroMunge
 						foreach (string subReq in excludeReqs)
 						{
 							// Should this req be excluded?
-							if (subReq == req.Substring(0, req.LastIndexOf(".")))
+							if (subReq.ToLower() == req.Substring(0, req.LastIndexOf(".")))
 							{
 								Debug.WriteLine("Match found. Removing req: " + req);
 								reqs.Remove(req);
@@ -364,6 +364,12 @@ namespace ZeroMunge
 		}
 
 
+		/// <summary>
+		/// Returns the contents of a given chunk name in a REQ file.
+		/// </summary>
+		/// <param name="reqFilePath">File path of REQ file to parse chunk from.</param>
+		/// <param name="reqChunkName">Name of REQ chunk to parse.</param>
+		/// <returns>Contents of parsed REQ chunk.</returns>
 		public static ReqChunk ParseReqChunk(string reqFilePath, string reqChunkName)
 		{
 			string ParseLine(string line)
@@ -506,8 +512,8 @@ namespace ZeroMunge
 							// Don't add blank lines!
 							if (curLine.Contains("\""))
 							{
-								Debug.WriteLine("Adding Contents: " + parsedLine);
-								reqChunk.AddContents(parsedLine);
+								Debug.WriteLine("Adding Contents: " + parsedLine.ToLower());
+								reqChunk.AddContents(parsedLine.ToLower());
 							}
 						}
 					}
