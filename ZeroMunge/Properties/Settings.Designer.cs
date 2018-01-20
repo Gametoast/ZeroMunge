@@ -97,7 +97,7 @@ namespace ZeroMunge.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("12/31/2017 17:16:00")]
+        [global::System.Configuration.DefaultSettingValueAttribute("01/20/2018 11:59:00")]
         public global::System.DateTime Info_BuildDate {
             get {
                 return ((global::System.DateTime)(this["Info_BuildDate"]));
@@ -106,7 +106,7 @@ namespace ZeroMunge.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("89")]
+        [global::System.Configuration.DefaultSettingValueAttribute("113")]
         public int Info_BuildNum {
             get {
                 return ((int)(this["Info_BuildNum"]));
