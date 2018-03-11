@@ -254,13 +254,13 @@ namespace ZeroMunge
 					compiledFiles = ParseLevelpackReqs(mungeScriptPath);
 					break;
 				case MungeTypes.Side:
-					compiledFiles = ParseReqsInDirectory(GetProjectDirectory(mungeScriptPath) + "\\Sides\\" + GetParentFolderName(mungeScriptPath));
+					compiledFiles = ParseReqsInDirectory(GetProjectDirectory(mungeScriptPath) + "\\Sides\\" + GetParentFolderName(mungeScriptPath), SearchOption.TopDirectoryOnly);
 					break;
 				case MungeTypes.Sound:
 					compiledFiles.Add("nil");   // since soundmunge takes care of copying files
 					break;
 				case MungeTypes.World:
-					compiledFiles = ParseReqsInDirectory(GetProjectDirectory(mungeScriptPath) + "\\Worlds\\" + GetParentFolderName(mungeScriptPath));
+					compiledFiles = ParseReqsInDirectory(GetProjectDirectory(mungeScriptPath) + "\\Worlds\\" + GetParentFolderName(mungeScriptPath), SearchOption.AllDirectories);
 					break;
 			}
 
@@ -290,13 +290,13 @@ namespace ZeroMunge
 		/// </summary>
 		/// <param name="directory">File directory containing the REQ files to parse.</param>
 		/// <returns>List of the LVL files compiled from the REQ files in the given directory.</returns>
-		public static List<string> ParseReqsInDirectory(string directory)
+		public static List<string> ParseReqsInDirectory(string directory, SearchOption searchOption)
 		{
 			List<string> reqs = new List<string>();
 
 			try
 			{
-				string[] reqFiles = Directory.GetFiles(directory, "*.req", SearchOption.AllDirectories);
+				string[] reqFiles = Directory.GetFiles(directory, "*.req", searchOption);
 
 				// Sub-reqs that should be excluded from the req list
 				List<string> excludeReqs = new List<string>();
