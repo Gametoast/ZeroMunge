@@ -324,6 +324,18 @@ namespace ZeroMunge
 			EnableUI(false);
 
 			ProcManager_isRunning = true;
+			
+			Thread logPollThread = new Thread(() => {
+				while (ProcManager_isRunning)
+				{
+					if (notifyLogThread)
+					{
+						notifyLogThread = false;
+						NotifyOutputLog();
+					}
+				}
+			});
+			logPollThread.Start();
 
 			Thread soundThread = new Thread(() => {
 				if (prefs.ShowTrayIcon)
@@ -420,101 +432,111 @@ namespace ZeroMunge
 		/// <param name="singleFile"></param>
 		private void ProcManager_NotifyProcessComplete(int whichFile, bool singleFile)
 		{
-			if (ProcManager_fileList.ElementAt(whichFile).MungedFiles != null && 
-				ProcManager_fileList.ElementAt(whichFile).MungedFiles[0] != "nil" && 
-				ProcManager_fileList.ElementAt(whichFile).StagingDir != null && 
-				ProcManager_fileList.ElementAt(whichFile).CopyToStaging != null)
+			try
 			{
-				if (ProcManager_fileList.ElementAt(whichFile).CopyToStaging == "True")
+				if (ProcManager_fileList.ElementAt(whichFile).MungedFiles != null &&
+				ProcManager_fileList.ElementAt(whichFile).MungedFiles[0] != "nil" &&
+				ProcManager_fileList.ElementAt(whichFile).StagingDir != null &&
+				ProcManager_fileList.ElementAt(whichFile).CopyToStaging != null)
 				{
-					// Copy the compiled files to the staging directory
-					List<string> filesToCopy = ProcManager_fileList.ElementAt(whichFile).MungedFiles;
-
-					string sourceDir = ProcManager_fileList.ElementAt(whichFile).MungeDir;
-					string targetDir = ProcManager_fileList.ElementAt(whichFile).StagingDir;
-
-					// Copy each file to the staging directory
-					foreach (string file in filesToCopy)
+					if (ProcManager_fileList.ElementAt(whichFile).CopyToStaging == "True")
 					{
-						// Assemble the full file paths
-						var fullSourceFilePath = string.Concat(sourceDir, "\\", file);
-						var fullTargetFilePath = string.Concat(targetDir, "\\", file);
+						// Copy the compiled files to the staging directory
+						List<string> filesToCopy = ProcManager_fileList.ElementAt(whichFile).MungedFiles;
 
-						// Remove any duplicate backslashes
-						fullSourceFilePath = fullSourceFilePath.Replace(@"\\", @"\");
-						fullTargetFilePath = fullTargetFilePath.Replace(@"\\", @"\");
+						string sourceDir = ProcManager_fileList.ElementAt(whichFile).MungeDir;
+						string targetDir = ProcManager_fileList.ElementAt(whichFile).StagingDir;
 
-
-						// Make sure the source file exists before attempting to copy it
-						if (!File.Exists(fullSourceFilePath))
+						// Copy each file to the staging directory
+						foreach (string file in filesToCopy)
 						{
-							var message = "ERROR! Source file does not exist at path " + fullSourceFilePath;
-							Trace.WriteLine(message);
-							Log("ZeroMunge: " + message);
-						}
-						else
-						{
-							// Create the target directory if it doesn't already exist
-							if (!Directory.Exists(targetDir))
+							// Assemble the full file paths
+							var fullSourceFilePath = string.Concat(sourceDir, "\\", file);
+							var fullTargetFilePath = string.Concat(targetDir, "\\", file);
+
+							// Remove any duplicate backslashes
+							fullSourceFilePath = fullSourceFilePath.Replace(@"\\", @"\");
+							fullTargetFilePath = fullTargetFilePath.Replace(@"\\", @"\");
+
+
+							// Make sure the source file exists before attempting to copy it
+							if (!File.Exists(fullSourceFilePath))
 							{
-								try
+								var message = "ERROR! Source file does not exist at path " + fullSourceFilePath;
+								Trace.WriteLine(message);
+								Log("ZeroMunge: " + message);
+							}
+							else
+							{
+								// Create the target directory if it doesn't already exist
+								if (!Directory.Exists(targetDir))
 								{
-									Directory.CreateDirectory(targetDir);
-								}
-								catch (IOException e)
-								{
-									Trace.WriteLine(e.Message);
-									Log(e.Message);
-								}
-								catch (UnauthorizedAccessException e)
-								{
-									Trace.WriteLine(e.Message);
-									Log(e.Message);
+									try
+									{
+										Directory.CreateDirectory(targetDir);
+									}
+									catch (IOException e)
+									{
+										Trace.WriteLine(e.Message);
+										Log(e.Message);
+									}
+									catch (UnauthorizedAccessException e)
+									{
+										Trace.WriteLine(e.Message);
+										Log(e.Message);
 
-									var message = "Try running the application with administrative privileges";
+										var message = "Try running the application with administrative privileges";
+										Trace.WriteLine(message);
+										Log("ZeroMunge: " + message);
+									}
+								}
+
+								// Copy the file
+								if (File.Exists(fullSourceFilePath))
+								{
+									try
+									{
+										File.Copy(fullSourceFilePath, fullTargetFilePath, true);
+
+										var message = "Successfully copied " + fullSourceFilePath + " to " + fullTargetFilePath;
+										Debug.WriteLine(message);
+										Log("ZeroMunge: " + message);
+									}
+									catch (IOException e)
+									{
+										Trace.WriteLine(e.Message);
+										Log(e.Message);
+									}
+									catch (UnauthorizedAccessException e)
+									{
+										Trace.WriteLine(e.Message);
+										Log(e.Message);
+									}
+								}
+								else
+								{
+									var message = "ERROR! File does not exist at path " + fullSourceFilePath;
 									Trace.WriteLine(message);
 									Log("ZeroMunge: " + message);
 								}
 							}
-
-							// Copy the file
-							if (File.Exists(fullSourceFilePath))
-							{
-								try
-								{
-									File.Copy(fullSourceFilePath, fullTargetFilePath, true);
-
-									var message = "Successfully copied " + fullSourceFilePath + " to " + fullTargetFilePath;
-									Debug.WriteLine(message);
-									Log("ZeroMunge: " + message);
-								}
-								catch (IOException e)
-								{
-									Trace.WriteLine(e.Message);
-									Log(e.Message);
-								}
-								catch (UnauthorizedAccessException e)
-								{
-									Trace.WriteLine(e.Message);
-									Log(e.Message);
-								}
-							}
-							else
-							{
-								var message = "ERROR! File does not exist at path " + fullSourceFilePath;
-								Trace.WriteLine(message);
-								Log("ZeroMunge: " + message);
-							}
 						}
 					}
-				}
-				else
-				{
-					var message = "Copy is unchecked, skipping copy operation for " + ProcManager_fileList.ElementAt(whichFile).FileDir;
-					Debug.WriteLine(message);
-					Log("ZeroMunge: " + message);
+					else
+					{
+						var message = "Copy is unchecked, skipping copy operation for " + ProcManager_fileList.ElementAt(whichFile).FileDir;
+						Debug.WriteLine(message);
+						Log("ZeroMunge: " + message);
+					}
 				}
 			}
+			catch (ArgumentOutOfRangeException e)
+			{
+				var message = "ArgumentOutOfRangeException! Reason: " + e.Message;
+				Console.WriteLine(message);
+				Log(message);
+			}
+			
 
 
 			// Are we processing multiple files?
@@ -759,57 +781,119 @@ namespace ZeroMunge
 			}
 			else
 			{
-				string newLineText = "";
+				//Thread swThread = new Thread(() => {
+					string newLineText = "";
 
-				if (newLine)
+					if (newLine)
+					{
+						newLineText = Environment.NewLine;
+					}
+
+					// Assemble message
+					string messageToLog = string.Concat(Utilities.GetTimestamp(), " : ", message, newLineText);
+
+					// Print message
+					//text_OutputLog.AppendText(messageToLog);
+
+					// Are we supposed to print a new line?
+					if (newLine)
+					{
+						// Print message on new line
+						//text_OutputLog.AppendText(Environment.NewLine);
+					}
+
+					// Log the message to the log file
+					StreamWriter sw = File.AppendText(string.Concat(Directory.GetCurrentDirectory(), @"\ZeroMunge_OutputLog.log"));
+					sw.WriteLine(messageToLog);
+					sw.Close();
+
+
+					// Remove the previous temporary blank line from the end if the log isn't empty
+					if (logLineCollection.Count > 0)
+					{
+						logLineCollection.RemoveAt(logLineCollection.Count - 1);
+					}
+
+					// Add the message to the line collection
+					logLineCollection.Add(messageToLog);
+
+					// Add a temporary new blank line to the end
+					logLineCollection.Add("");
+
+
+					// Remove the first line if the output log is full
+					if (logLineCollection.Count >= 100)
+					{
+						logLineCollection.RemoveAt(0);
+					}
+				//});
+				//swThread.Start();
+				
+				if (ProcManager_isRunning)
 				{
-					newLineText = Environment.NewLine;
+					notifyLogThread = true;
 				}
-
-				// Assemble message
-				string messageToLog = string.Concat(Utilities.GetTimestamp(), " : ", message, newLineText);
-
-				// Print message
-				text_OutputLog.AppendText(messageToLog);
-
-				// Are we supposed to print a new line?
-				if (newLine)
+				else
 				{
-					// Print message on new line
-					//text_OutputLog.AppendText(Environment.NewLine);
+					UpdateOutputLog();
 				}
-
-				// Log the message to the log file
-				StreamWriter sw = File.AppendText(string.Concat(Directory.GetCurrentDirectory(), @"\ZeroMunge_OutputLog.log"));
-				sw.WriteLine(messageToLog);
-				sw.Close();
+			}
+		}
 
 
-				// Remove the previous temporary blank line from the end if the log isn't empty
-				if (logLineCollection.Count > 0)
-				{
-					logLineCollection.RemoveAt(logLineCollection.Count - 1);
-				}
+		private bool notifyLogThread = false;
+		private bool logThreadReady = true;
+		
+		public void NotifyOutputLog()
+		{
+			if (logThreadReady)
+			{
+				logThreadReady = false;
+				UpdateOutputLog();
+			}
+		}
 
-				// Add the message to the line collection
-				logLineCollection.Add(messageToLog);
 
-				// Add a temporary new blank line to the end
-				logLineCollection.Add("");
+		// This method is executed on the worker thread and makes a thread-safe call on the RichTextBox control.
+		/// <summary>
+		/// Updates the Output Log with the text in the logLineCollection.
+		/// </summary>
+		public void UpdateOutputLog()
+		{
+			Debug.WriteLine(string.Concat(Utilities.GetTimestamp(), " : ", "UpdateOutputLog: Entered"));
+			UpdateOutputLog_Proc();
+		}
 
 
-				// Remove the first line if the output log is full
-				if (logLineCollection.Count >= 100)
-				{
-					logLineCollection.RemoveAt(0);
-				}
+		// This delegate enables asynchronous calls for setting the text property on the output log.
+		delegate void UpdateOutputLogCallback();
 
+		public void UpdateOutputLog_Proc()
+		{
+			// InvokeRequired required compares the thread ID of the 
+			// calling thread to the thread ID of the creating thread. 
+			// If these threads are different, it returns true.
+			if (text_OutputLog.InvokeRequired)
+			{
+				UpdateOutputLogCallback cb = new UpdateOutputLogCallback(UpdateOutputLog_Proc);
+				BeginInvoke(cb);
+			}
+			else
+			{
 				// Display the new data in the control
 				text_OutputLog.Lines = logLineCollection.ToArray();
 
 				// Auto-scroll to the most recent line
 				text_OutputLog.Select(text_OutputLog.Text.Length, text_OutputLog.Text.Length);
 				text_OutputLog.ScrollToCaret();
+
+				if (ProcManager_isRunning)
+				{
+					// Only update the Output Log once every X milliseconds
+					Thread.Sleep(500);
+				}
+
+				logThreadReady = true;
 			}
 		}
 
