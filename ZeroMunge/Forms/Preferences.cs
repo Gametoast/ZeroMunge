@@ -12,6 +12,8 @@ namespace ZeroMunge
 {
 	public partial class Preferences : Form
 	{
+		public const int PREFS_POLLING_RATE_MAX = 50;
+
 		public Preferences()
 		{
 			InitializeComponent();
@@ -30,6 +32,9 @@ namespace ZeroMunge
 			chk_PlayNotificationSounds.Checked = prefs.PlayNotificationSounds;
 			chk_AutoDetectStagingDir.Checked = prefs.AutoDetectStagingDir;
 			chk_AutoDetectMungedFiles.Checked = prefs.AutoDetectMungedFiles;
+			txt_LogPollingRate.Text = prefs.LogPollingRate.ToString();
+			chk_OutputLogToFile.Checked = prefs.OutputLogToFile;
+			chk_LogPrintTimestamps.Checked = prefs.LogPrintTimestamps;
 			chk_ShowUpdatePromptOnStartup.Checked = prefs.ShowUpdatePromptOnStartup;
 		}
 
@@ -48,6 +53,24 @@ namespace ZeroMunge
 		// Commit their set preferences by saving them to the application settings, then close the form.
 		private void btn_Accept_Click(object sender, EventArgs e)
 		{
+			// Save the LogPollingRate value
+			string logPollingRateStr = txt_LogPollingRate.Text;
+			if (int.TryParse(logPollingRateStr, out int logPollingRate))
+			{
+				if (logPollingRate >= PREFS_POLLING_RATE_MAX)
+				{
+					prefs.LogPollingRate = logPollingRate;
+				}
+				else
+				{
+					Console.WriteLine("ERROR: Value of LogPollingRate must be >= " + PREFS_POLLING_RATE_MAX);
+				}
+			}
+			else
+			{
+				Console.WriteLine("ERROR: Could not convert LogPollingRate input value '" + logPollingRateStr + "' to int");
+			}
+
 			Utilities.SavePrefs(prefs);
 			CloseForm();
 		}
@@ -100,6 +123,16 @@ namespace ZeroMunge
 		private void chk_ShowUpdatePromptOnStartup_CheckedChanged(object sender, EventArgs e)
 		{
 			prefs.ShowUpdatePromptOnStartup = chk_ShowUpdatePromptOnStartup.Checked;
+		}
+
+		private void chk_OutputLogToFile_CheckedChanged(object sender, EventArgs e)
+		{
+			prefs.OutputLogToFile = chk_OutputLogToFile.Checked;
+		}
+
+		private void chk_LogPrintTimestamps_CheckedChanged(object sender, EventArgs e)
+		{
+			prefs.LogPrintTimestamps = chk_LogPrintTimestamps.Checked;
 		}
 	}
 }

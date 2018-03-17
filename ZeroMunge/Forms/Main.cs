@@ -160,7 +160,7 @@ namespace ZeroMunge
 			prefs = Utilities.LoadPrefs();
 
 			Debug.WriteLine("Loading GameDirectory: " + prefs.GameDirectory);
-			Log("Loading GameDirectory: " + prefs.GameDirectory);
+			Log("Loading GameDirectory: " + prefs.GameDirectory, LogType.Info);
 		}
 
 
@@ -233,9 +233,9 @@ namespace ZeroMunge
 			}
 			else
 			{
-				var message = "ERROR! Help file does not exist at path " + helpPath;
+				var message = "Help file does not exist at path " + helpPath;
 				Trace.WriteLine(message);
-				Log("ZeroMunge: " + message);
+				Log(message, LogType.Error);
 			}
 		}
 
@@ -384,14 +384,14 @@ namespace ZeroMunge
 					switch (procError)
 					{
 						case 1:
-							errorMessage = "ZeroMunge: ERROR! File list must contain at least one file";
+							errorMessage = "File list must contain at least one file";
 							break;
 						case 2:
-							errorMessage = "ZeroMunge: ERROR! At least one item must be checked";
+							errorMessage = "At least one item must be checked";
 							break;
 					}
 
-					Log(errorMessage);
+					Log(errorMessage, LogType.Error);
 
 					// Re-enable the UI
 					EnableUI(true);
@@ -462,9 +462,9 @@ namespace ZeroMunge
 							// Make sure the source file exists before attempting to copy it
 							if (!File.Exists(fullSourceFilePath))
 							{
-								var message = "ERROR! Source file does not exist at path " + fullSourceFilePath;
+								var message = "Source file does not exist at path " + fullSourceFilePath;
 								Trace.WriteLine(message);
-								Log("ZeroMunge: " + message);
+								Log(message, LogType.Error);
 							}
 							else
 							{
@@ -478,16 +478,16 @@ namespace ZeroMunge
 									catch (IOException e)
 									{
 										Trace.WriteLine(e.Message);
-										Log(e.Message);
+										Log(e.Message, LogType.Error);
 									}
 									catch (UnauthorizedAccessException e)
 									{
 										Trace.WriteLine(e.Message);
-										Log(e.Message);
+										Log(e.Message, LogType.Error);
 
 										var message = "Try running the application with administrative privileges";
 										Trace.WriteLine(message);
-										Log("ZeroMunge: " + message);
+										Log(message, LogType.Error);
 									}
 								}
 
@@ -500,24 +500,24 @@ namespace ZeroMunge
 
 										var message = "Successfully copied " + fullSourceFilePath + " to " + fullTargetFilePath;
 										Debug.WriteLine(message);
-										Log("ZeroMunge: " + message);
+										Log(message, LogType.Info);
 									}
 									catch (IOException e)
 									{
 										Trace.WriteLine(e.Message);
-										Log(e.Message);
+										Log(e.Message, LogType.Error);
 									}
 									catch (UnauthorizedAccessException e)
 									{
 										Trace.WriteLine(e.Message);
-										Log(e.Message);
+										Log(e.Message, LogType.Error);
 									}
 								}
 								else
 								{
-									var message = "ERROR! File does not exist at path " + fullSourceFilePath;
+									var message = "File does not exist at path " + fullSourceFilePath;
 									Trace.WriteLine(message);
-									Log("ZeroMunge: " + message);
+									Log(message, LogType.Error);
 								}
 							}
 						}
@@ -534,7 +534,7 @@ namespace ZeroMunge
 			{
 				var message = "ArgumentOutOfRangeException! Reason: " + e.Message;
 				Console.WriteLine(message);
-				Log(message);
+				Log(message, LogType.Error);
 			}
 			
 
@@ -618,7 +618,7 @@ namespace ZeroMunge
 			{
 				if (!ProcManager_procAborted)
 				{
-					Thread outputThread = new Thread(() => Log(e.Data));
+					Thread outputThread = new Thread(() => Log(e.Data, LogType.Munge));
 					outputThread.Start();
 				}
 			});
@@ -627,7 +627,7 @@ namespace ZeroMunge
 			// Print the file path before starting
 			Thread initOutputThread = new Thread(() =>
 			{
-				Log("ZeroMunge: Executing file " + @filePath);
+				Log("Executing file " + @filePath, LogType.Info);
 				Log("");
 			});
 			initOutputThread.Start();
@@ -640,7 +640,7 @@ namespace ZeroMunge
 				if (!ProcManager_procAborted)
 				{
 					Thread procExitThread = new Thread(() => {
-						Log("ZeroMunge: File done");
+						Log("File done", LogType.Info);
 					});
 					procExitThread.Start();
 
@@ -745,20 +745,30 @@ namespace ZeroMunge
 		// ** OUTPUT LOG
 		// ***************************
 
+		public enum LogType
+		{
+			None,
+			Munge,
+			Info,
+			Warning,
+			Error
+		};
+
 		// This method is executed on the worker thread and makes a thread-safe call on the RichTextBox control.
 		/// <summary>
 		/// Prints the specified text to the output log.
 		/// </summary>
 		/// <param name="message">Text to print.</param>
+		/// <param name="logType">Log type. See enum 'LogType'.</param>
 		/// <param name="newLine">Optional: True to append a new line to the end of the message.</param>
-		public void Log(string message, bool newLine = false)
+		public void Log(string message, LogType logType = LogType.None, bool newLine = false)
 		{
-			Log_Proc(message, newLine);
+			Log_Proc(message, logType, newLine);
 		}
 
 
 		// This delegate enables asynchronous calls for setting the text property on the output log.
-		delegate void LogCallback(string message, bool newLine = false);
+		delegate void LogCallback(string message, LogType logType = LogType.None, bool newLine = false);
 
 
 		private List<string> logLineCollection = new List<string>();
@@ -768,8 +778,9 @@ namespace ZeroMunge
 		/// WARNING: Don't call this directly, please call `Log` instead.
 		/// </summary>
 		/// <param name="message">Text to print.</param>
+		/// <param name="logType">Log type. See enum 'LogType'.</param>
 		/// <param name="newLine">Optional: True to append a new line to the end of the message.</param>
-		private void Log_Proc(string message, bool newLine = false)
+		private void Log_Proc(string message, LogType logType = LogType.None, bool newLine = false)
 		{
 			// InvokeRequired required compares the thread ID of the 
 			// calling thread to the thread ID of the creating thread. 
@@ -777,55 +788,70 @@ namespace ZeroMunge
 			if (text_OutputLog.InvokeRequired)
 			{
 				LogCallback cb = new LogCallback(Log_Proc);
-				BeginInvoke(cb, new object[] { message, newLine });
+				BeginInvoke(cb, new object[] { message, logType, newLine });
 			}
 			else
 			{
 				//Thread swThread = new Thread(() => {
-					string newLineText = "";
+				string newLineText = "";
 
-					if (newLine)
-					{
-						newLineText = Environment.NewLine;
-					}
+				if (newLine)
+				{
+					newLineText = Environment.NewLine;
+				}
 
-					// Assemble message
-					string messageToLog = string.Concat(Utilities.GetTimestamp(), " : ", message, newLineText);
+				string timestamp = "";
+				if (prefs.LogPrintTimestamps)
+				{
+					timestamp = string.Concat(Utilities.GetTimestamp(), " : ");
+				}
 
-					// Print message
-					//text_OutputLog.AppendText(messageToLog);
+				string typeInfo = "";
+				if (logType != LogType.None)
+				{
+					typeInfo = string.Concat("[", logType.ToString(), "]\t");
+				}
 
-					// Are we supposed to print a new line?
-					if (newLine)
-					{
-						// Print message on new line
-						//text_OutputLog.AppendText(Environment.NewLine);
-					}
+				// Assemble message
+				string messageToLog = string.Concat(timestamp, typeInfo, message, newLineText);
 
-					// Log the message to the log file
+				// Print message
+				//text_OutputLog.AppendText(messageToLog);
+
+				// Are we supposed to print a new line?
+				if (newLine)
+				{
+					// Print message on new line
+					//text_OutputLog.AppendText(Environment.NewLine);
+				}
+
+				// Log the message to the log file
+				if (prefs.OutputLogToFile)
+				{
 					StreamWriter sw = File.AppendText(string.Concat(Directory.GetCurrentDirectory(), @"\ZeroMunge_OutputLog.log"));
 					sw.WriteLine(messageToLog);
 					sw.Close();
+				}
 
 
-					// Remove the previous temporary blank line from the end if the log isn't empty
-					if (logLineCollection.Count > 0)
-					{
-						logLineCollection.RemoveAt(logLineCollection.Count - 1);
-					}
+				// Remove the previous temporary blank line from the end if the log isn't empty
+				if (logLineCollection.Count > 0)
+				{
+					logLineCollection.RemoveAt(logLineCollection.Count - 1);
+				}
 
-					// Add the message to the line collection
-					logLineCollection.Add(messageToLog);
+				// Add the message to the line collection
+				logLineCollection.Add(messageToLog);
 
-					// Add a temporary new blank line to the end
-					logLineCollection.Add("");
+				// Add a temporary new blank line to the end
+				logLineCollection.Add("");
 
 
-					// Remove the first line if the output log is full
-					if (logLineCollection.Count >= 100)
-					{
-						logLineCollection.RemoveAt(0);
-					}
+				// Remove the first line if the output log is full
+				if (logLineCollection.Count >= 100)
+				{
+					logLineCollection.RemoveAt(0);
+				}
 				//});
 				//swThread.Start();
 				
@@ -890,7 +916,7 @@ namespace ZeroMunge
 				if (ProcManager_isRunning)
 				{
 					// Only update the Output Log once every X milliseconds
-					Thread.Sleep(500);
+					Thread.Sleep(prefs.LogPollingRate);
 				}
 
 				logThreadReady = true;
@@ -1116,38 +1142,38 @@ namespace ZeroMunge
 
 							if (row.Cells[STR_DATA_FILES_TXT_FILE].Value == null)
 							{
-								var message = "ERROR! FilePath at row index " + row.Index + " isn't specified!";
+								var message = "FilePath at row index " + row.Index + " isn't specified!";
 								Debug.WriteLine(message);
-								Log("ZeroMunge: " + message);
+								Log(message, LogType.Error);
 							}
 
 							if (row.Cells[STR_DATA_FILES_TXT_STAGING].Value == null)
 							{
-								var message = "WARNING! StagingDirectory at row index " + row.Index + " isn't specified!";
+								var message = "StagingDirectory at row index " + row.Index + " isn't specified!";
 								Debug.WriteLine(message);
-								Log("ZeroMunge: " + message);
+								Log(message, LogType.Warning);
 							}
 
 							if (row.Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value == null)
 							{
-								var message = "ERROR! MungeDirectory at row index " + row.Index + " isn't specified!";
+								var message = "MungeDirectory at row index " + row.Index + " isn't specified!";
 								Debug.WriteLine(message);
-								Log("ZeroMunge: " + message);
+								Log(message, LogType.Error);
 							}
 
 							if (row.Cells[STR_DATA_FILES_TXT_MUNGED_FILES].Value == null)
 							{
-								var message = "WARNING! MungedFiles at row index " + row.Index + " isn't specified!";
+								var message = "MungedFiles at row index " + row.Index + " isn't specified!";
 								Debug.WriteLine(message);
-								Log("ZeroMunge: " + message);
+								Log(message, LogType.Warning);
 							}
 
 
 							if (!File.Exists(row.Cells[STR_DATA_FILES_TXT_FILE].Value.ToString()))
 							{
-								var message = "ERROR! FilePath at row index " + row.Index + " cannot be found!";
+								var message = "FilePath at row index " + row.Index + " cannot be found!";
 								Debug.WriteLine(message);
-								Log("ZeroMunge: " + message);
+								Log(message, LogType.Error);
 							}
 						});
 						errorThread.Start();
@@ -1281,7 +1307,7 @@ namespace ZeroMunge
 							Thread infoThread = new Thread(() => {
 								var message = "File is not a munge script, copy operations will be disabled for it";
 								Debug.WriteLine(message);
-								Log("ZeroMunge: " + message);
+								Log(message, LogType.Info);
 							});
 							infoThread.Start();
 						}
@@ -1294,7 +1320,7 @@ namespace ZeroMunge
 							Thread infoThread = new Thread(() => {
 								var message = "Not setting Staging Directory in accordance with preferences";
 								Debug.WriteLine(message);
-								Log("ZeroMunge: " + message);
+								Log(message, LogType.Info);
 							});
 							infoThread.Start();
 						}
@@ -1307,7 +1333,7 @@ namespace ZeroMunge
 							Thread infoThread = new Thread(() => {
 								var message = "Not setting Munged Files in accordance with preferences";
 								Debug.WriteLine(message);
-								Log("ZeroMunge: " + message);
+								Log(message, LogType.Info);
 							});
 							infoThread.Start();
 						}
@@ -1352,9 +1378,9 @@ namespace ZeroMunge
 						
 						Thread logThread = new Thread(() => {
 							Log("");
-							Log("ZeroMunge: Adding file: " + file);
-							Log("ZeroMunge: Staging directory: " + stagingDirectory);
-							Log("ZeroMunge: Munge output directory: " + mungeOutputDirectory);
+							Log("Adding file: " + file, LogType.Info);
+							Log("Staging directory: " + stagingDirectory, LogType.Info);
+							Log("Munge output directory: " + mungeOutputDirectory, LogType.Info);
 						});
 						logThread.Start();
 
@@ -1365,9 +1391,9 @@ namespace ZeroMunge
 					else
 					{
 						Thread errorThread = new Thread(() => {
-							var message = "ERROR! Game directory not set";
+							var message = "Game directory not set";
 							Debug.WriteLine(message);
-							Log("ZeroMunge: " + message);
+							Log(message, LogType.Error);
 						});
 						errorThread.Start();
 
@@ -1380,9 +1406,9 @@ namespace ZeroMunge
 			else
 			{
 				Thread errorThread = new Thread(() => {
-					var message = "ERROR! File does not exist at " + file;
+					var message = "File does not exist at " + file;
 					Debug.WriteLine(message);
-					Log("ZeroMunge: " + message);
+					Log(message, LogType.Error);
 				});
 				errorThread.Start();
 
@@ -1448,13 +1474,13 @@ namespace ZeroMunge
 			catch (SerializationException e)
 			{
 				Console.WriteLine("Failed to serialize. Reason: " + e.Message);
-				Log("ZeroMunge: Failed to serialize. Reason: " + e.Message);
+				Log("Failed to serialize. Reason: " + e.Message, LogType.Error);
 				throw;
 			}
 			catch (IOException e)
 			{
 				Console.WriteLine("Failed to write to file path. Reason: " + e.Message);
-				Log("ZeroMunge: Failed to write to file path. Reason: " + e.Message);
+				Log("Failed to write to file path. Reason: " + e.Message, LogType.Error);
 				throw;
 			}
 			finally
@@ -1487,13 +1513,13 @@ namespace ZeroMunge
 			catch (SerializationException e)
 			{
 				Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
-				Log("ZeroMunge: Failed to deserialize. Reason: " + e.Message);
+				Log("Failed to deserialize. Reason: " + e.Message, LogType.Error);
 				throw;
 			}
 			catch (IOException e)
 			{
 				Console.WriteLine("Failed to read from file path. Reason: " + e.Message);
-				Log("ZeroMunge: Failed to read from file path. Reason: " + e.Message);
+				Log("Failed to read from file path. Reason: " + e.Message, LogType.Error);
 				throw;
 			}
 			finally
@@ -1525,13 +1551,13 @@ namespace ZeroMunge
 					catch (ArgumentOutOfRangeException e)
 					{
 						Console.WriteLine("Argument out of range while removing row. Reason: " + e.Message);
-						Log("ZeroMunge: Argument out of range while removing row. Reason: " + e.Message);
+						Log("Argument out of range while removing row. Reason: " + e.Message, LogType.Error);
 						throw;
 					}
 					catch (InvalidOperationException e)
 					{
 						Console.WriteLine("Invalid operation while removing row. Reason: " + e.Message);
-						Log("ZeroMunge: Invalid operation while removing row. Reason: " + e.Message);
+						Log("Invalid operation while removing row. Reason: " + e.Message, LogType.Error);
 						throw;
 					}
 					Debug.WriteLine("Rows remaining: " + (data_Files.RowCount - 1));
@@ -1543,7 +1569,7 @@ namespace ZeroMunge
 				{
 					if (printErrors)
 					{
-						Log("ZeroMunge: ERROR! File list must contain at least one file");
+						Log("File list must contain at least one file", LogType.Error);
 					}
 
 					// Re-enable the UI
@@ -1592,7 +1618,7 @@ namespace ZeroMunge
 					Thread errorThread = new Thread(() =>
 					{
 						Console.WriteLine("Failed to load data into file list. Reason: " + e.Message);
-						Log("ZeroMunge: ERROR! File does not contain any data to load");
+						Log("File does not contain any data to load", LogType.Error);
 					});
 					errorThread.Start();
 
@@ -1601,7 +1627,7 @@ namespace ZeroMunge
 				catch (InvalidOperationException e)
 				{
 					Console.WriteLine("Invalid operation while adding row. Reason: " + e.Message);
-					Log("ZeroMunge: Invalid operation while adding row. Reason: " + e.Message);
+					Log("Invalid operation while adding row. Reason: " + e.Message, LogType.Error);
 					throw;
 				}
 			}
@@ -1616,7 +1642,7 @@ namespace ZeroMunge
 		{
 			// Serialize and save the data
 			SerializeData(filePath);
-			Log("ZeroMunge: Saved file list as " + filePath);
+			Log("Saved file list as " + filePath, LogType.Info);
 
 			// Update the current file list's save file path and name
 			curFileListPath = filePath;
@@ -1908,9 +1934,9 @@ namespace ZeroMunge
 					if (data_Files_CurSelectedColumn != INT_DATA_FILES_BTN_FILE_BROWSE)
 					{
 						Thread errorThread = new Thread(() => {
-							var message = "ERROR! File Path must first be specified";
+							var message = "File Path must first be specified";
 							Debug.WriteLine(message);
-							Log("ZeroMunge: " + message);
+							Log(message, LogType.Error);
 						});
 						errorThread.Start();
 					}
@@ -1998,9 +2024,9 @@ namespace ZeroMunge
 					if (lastCellChangeMethod == CellChangeMethod.Cell)
 					{
 						Thread errorThread = new Thread(() => {
-							var message = "ERROR! File Path must first be specified";
+							var message = "File Path must first be specified";
 							Debug.WriteLine(message);
-							Log("ZeroMunge: " + message);
+							Log(message, LogType.Error);
 						});
 						errorThread.Start();
 					}
@@ -2018,9 +2044,9 @@ namespace ZeroMunge
 						data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_CHK_IS_VALID].Value = false;
 
 						Thread errorThread = new Thread(() => {
-							var message = "ERROR! File Path is blank";
+							var message = "File Path is blank";
 							Debug.WriteLine(message);
-							Log("ZeroMunge: " + message);
+							Log(message, LogType.Error);
 						});
 						errorThread.Start();
 					}
@@ -2031,9 +2057,9 @@ namespace ZeroMunge
 						data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_CHK_IS_VALID].Value = false;
 
 						Thread errorThread = new Thread(() => {
-							var message = "ERROR! File Path doesn't exist at " + data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value.ToString();
+							var message = "File Path doesn't exist at " + data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value.ToString();
 							Debug.WriteLine(message);
-							Log("ZeroMunge: " + message);
+							Log(message, LogType.Error);
 						});
 						errorThread.Start();
 					}
@@ -2383,9 +2409,9 @@ namespace ZeroMunge
 					else
 					{
 						Thread errorThread = new Thread(() => {
-							var message = "ERROR! File does not exist at " + file;
+							var message = "File does not exist at " + file;
 							Debug.WriteLine(message);
-							Log("ZeroMunge: " + message);
+							Log(message, LogType.Error);
 						});
 						errorThread.Start();
 					}
@@ -2447,7 +2473,7 @@ namespace ZeroMunge
 			if (data_Files.RowCount <= 0)
 			{
 				Thread errorThread = new Thread(() => {
-					Log("ZeroMunge: ERROR! File list must contain at least one file");
+					Log("File list must contain at least one file", LogType.Error);
 
 					// Re-enable the UI
 					EnableUI(true);
@@ -2468,7 +2494,7 @@ namespace ZeroMunge
 				else
 				{
 					Thread errorThread = new Thread(() => {
-						Log("ZeroMunge: ERROR! Cannot remove the last (uncommitted) row");
+						Log("Cannot remove the last (uncommitted) row", LogType.Error);
 
 						// Re-enable the UI
 						EnableUI(true);
@@ -2513,7 +2539,7 @@ namespace ZeroMunge
 
 				Thread outputThread = new Thread(() => {
 					Debug.WriteLine("Saving GameDirectory: " + Properties.Settings.Default.GameDirectory);
-					Log("ZeroMunge: Saving GameDirectory: " + Properties.Settings.Default.GameDirectory);
+					Log("Saving GameDirectory: " + Properties.Settings.Default.GameDirectory, LogType.Info);
 				});
 				outputThread.Start();
 			}
@@ -2549,7 +2575,7 @@ namespace ZeroMunge
 				// Get the file name
 				string name = saveDlg_SaveLogPrompt.FileName;
 
-				Log("ZeroMunge: Saved logfile as " + name);
+				Log("Saved logfile as " + name, LogType.Info);
 
 				// Write the output log's contents to the file
 				File.WriteAllLines(name, text_OutputLog.Lines);
