@@ -184,8 +184,7 @@
 			this.link_Updates.TabIndex = 0;
 			this.link_Updates.TabStop = true;
 			this.link_Updates.Text = "Check for updates";
-			this.FormTooltips.SetToolTip(this.link_Updates, "Open a link to the application\'s GitHub page where you can check for application " +
-        "updates and more.");
+			this.FormTooltips.SetToolTip(this.link_Updates, "Check to see if a new release of Zero Munge is available.");
 			this.link_Updates.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.link_Updates_LinkClicked);
 			// 
 			// link_Contact
