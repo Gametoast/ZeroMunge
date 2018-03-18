@@ -57,7 +57,7 @@ namespace ZeroMunge
 		public Color errorRed = Color.FromArgb(251, 99, 99);
 
 		// Updates
-		public static UpdateInfo latestAppVersion = new UpdateInfo();
+		public static VersionInfo latestAppVersion = new VersionInfo();
 		public static bool updateAvailable = false;
 
 		public enum CellChangeMethod
@@ -116,27 +116,74 @@ namespace ZeroMunge
 			col_MungedFilesEdit.UseColumnTextForButtonValue = true;
 
 			// Start a new log file
-			string openMessage = "Opened logfile ZeroMunge_OutputLog.log  " + DateTime.Now.ToString("yyyy-MM-dd") +  " " + Utilities.GetTimestamp();
-			File.WriteAllText(Directory.GetCurrentDirectory() + @"\ZeroMunge_OutputLog.log", openMessage + Environment.NewLine);
+			if (prefs.OutputLogToFile)
+			{
+				try
+				{
+					string openMessage = "Opened logfile ZeroMunge_OutputLog.log  " + DateTime.Now.ToString("yyyy-MM-dd") + " " + Utilities.GetTimestamp();
+					File.WriteAllText(Directory.GetCurrentDirectory() + @"\ZeroMunge_OutputLog.log", openMessage + Environment.NewLine);
+				}
+				catch (IOException ex)
+				{
+					Trace.WriteLine(ex.Message);
+					Log(ex.Message, LogType.Error);
+				}
+				catch (UnauthorizedAccessException ex)
+				{
+					Trace.WriteLine(ex.Message);
+					Log(ex.Message, LogType.Error);
+				}
+			}
 		}
 
 		private void ZeroMunge_Shown(object sender, EventArgs e)
 		{
 			// Check for application updates
-			updateAvailable = CheckForUpdates();
-			if (updateAvailable)
-			{
-				if (prefs.ShowUpdatePromptOnStartup)
-				{
-					Trace.WriteLine("Update is available. Pushing update prompt.");
-					StartUpdateFlow();
-				}
-				else
-				{
-					Trace.WriteLine("Update is available, but user has specified to not show the update prompt on startup.");
-				}
-			}
+			UpdateInfo updateInfo = Utilities.CheckForUpdates();
+			latestAppVersion = updateInfo.LatestVersionInfo;
 
+			switch (updateInfo.CheckResult)
+			{
+				case Utilities.UpdateResult.Available:
+					string latestVer = string.Format("r{0}--{1}", updateInfo.LatestVersionInfo.BuildNum.ToString(), updateInfo.LatestVersionInfo.BuildDate);
+					string currentVer = string.Format("r{0}--{1}", Properties.Settings.Default.Info_BuildNum.ToString(), Properties.Settings.Default.Info_BuildDate.ToString("MMM-dd-yyyy"));
+					string releaseNotes = updateInfo.LatestVersionInfo.ReleaseNotes.Replace("\n", "\n\t\t");
+
+					string logMessage = string.Concat("Application update is available!", "\n\t", 
+						"Current version:", "   ", currentVer, "\n\t", 
+						"Latest version:", "    ", latestVer, "\n\t", 
+						"Download link:", "     ", updateInfo.LatestVersionInfo.DownloadUrl, "\n\t", 
+						"Release notes:", "\n\t\t", releaseNotes);
+
+					if (prefs.ShowUpdatePromptOnStartup)
+					{
+						Trace.WriteLine("Check succeeded. Update is available. Pushing update prompt.");
+						Thread logThread = new Thread(() =>
+						{
+							Log(logMessage, LogType.Info);
+						});
+						logThread.Start();
+						StartUpdateFlow();
+					}
+					else
+					{
+						Trace.WriteLine("Check succeeded. Update is available, but user has specified to not show the update prompt on startup.");
+						Thread logThread = new Thread(() =>
+						{
+							Log(logMessage, LogType.Info);
+						});
+						logThread.Start();
+					}
+					break;
+
+				case Utilities.UpdateResult.NoneAvailable:
+					Trace.WriteLine("Check succeeded. No updates are available.");
+					break;
+
+				case Utilities.UpdateResult.NetConnectionError:
+					Trace.WriteLine("Check failed. Network connection could not be established.");
+					break;
+			}
 			
 		}
 		
@@ -161,41 +208,6 @@ namespace ZeroMunge
 
 			Debug.WriteLine("Loading GameDirectory: " + prefs.GameDirectory);
 			Log("Loading GameDirectory: " + prefs.GameDirectory, LogType.Info);
-		}
-
-
-		/// <summary>
-		/// If there is an internet connection, checks for updates and returns true if an update is available.
-		/// </summary>
-		/// <returns>True if an update is available, false if not.</returns>
-		public static bool CheckForUpdates()
-		{
-			Trace.WriteLine("Checking for application updates...");
-
-			if (Utilities.CheckForInternetConnection())
-			{
-				latestAppVersion = Utilities.GetLatestVersion();
-				int curBuild = Properties.Settings.Default.Info_BuildNum;
-
-				Debug.WriteLine("Current build, latest build:    {0}, {1}", curBuild, latestAppVersion.BuildNum);
-
-				// Prompt for update if one is available
-				if (curBuild < latestAppVersion.BuildNum)
-				{
-					Trace.WriteLine("Update is available.");
-					return true;
-				}
-				else
-				{
-					Trace.WriteLine("No updates available!");
-					return false;
-				}
-			}
-			else
-			{
-				Trace.WriteLine("There is no internet connection!");
-				return false;
-			}
 		}
 
 
@@ -414,7 +426,7 @@ namespace ZeroMunge
 			Thread enterThread = new Thread(() => {
 				Log("");
 				Log("**************************************************************");
-				Log("******** ZeroMunge: Entered");
+				Log("******** STARTED JOB");
 				Log("**************************************************************");
 				Log("");
 			});
@@ -526,7 +538,7 @@ namespace ZeroMunge
 					{
 						var message = "Copy is unchecked, skipping copy operation for " + ProcManager_fileList.ElementAt(whichFile).FileDir;
 						Debug.WriteLine(message);
-						Log("ZeroMunge: " + message);
+						Log(message, LogType.Info);
 					}
 				}
 			}
@@ -699,7 +711,7 @@ namespace ZeroMunge
 			Thread exitThread = new Thread(() => {
 				Log("");
 				Log("**************************************************************");
-				Log("******** ZeroMunge: Aborted");
+				Log("******** ABORTED JOB");
 				Log("**************************************************************");
 
 				// Re-enable the UI
@@ -719,7 +731,7 @@ namespace ZeroMunge
 			Thread exitThread = new Thread(() => {
 				Log("");
 				Log("**************************************************************");
-				Log("******** ZeroMunge: Exited");
+				Log("******** FINISHED JOB");
 				Log("**************************************************************");
 
 				// Re-enable the UI
@@ -803,7 +815,7 @@ namespace ZeroMunge
 				string timestamp = "";
 				if (prefs.LogPrintTimestamps)
 				{
-					timestamp = string.Concat(Utilities.GetTimestamp(), " : ");
+					timestamp = string.Concat(Utilities.GetTimestamp(), "  ");
 				}
 
 				string typeInfo = "";
@@ -2591,7 +2603,7 @@ namespace ZeroMunge
 		}
 
 
-		// When the output log's text is changed:
+		// When the Output Log's text is changed:
 		// Scroll to the bottom of the output log, deal with the log being full, and update the line count.
 		private void text_OutputLog_TextChanged(object sender, EventArgs e)
 		{
@@ -2600,6 +2612,14 @@ namespace ZeroMunge
 
 			// Update line count
 			lbl_OutputLogLines.Text = string.Concat("Lines: ", text_OutputLog.Lines.Count().ToString());
+		}
+
+
+		// When a link in the Output Log is clicked:
+		// Open the link in a web browser.
+		private void text_OutputLog_LinkClicked(object sender, LinkClickedEventArgs e)
+		{
+			Process.Start(e.LinkText);
 		}
 
 
@@ -2972,12 +2992,6 @@ namespace ZeroMunge
 		public string StagingDir { get; set; }
 		public string MungeDir { get; set; }
 		public List<string> MungedFiles { get; set; }
-	}
-
-	public class JsonPair
-	{
-		public object Key { get; set; }
-		public object Value { get; set; }
 	}
 
 	[Serializable]

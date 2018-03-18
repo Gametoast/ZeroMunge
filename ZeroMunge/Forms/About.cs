@@ -60,15 +60,23 @@ namespace ZeroMunge
 		// Start the update flow.
 		private void link_Updates_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			bool updateAvailable = ZeroMunge.CheckForUpdates();
-			if (updateAvailable)
+			UpdateInfo updateInfo = Utilities.CheckForUpdates();
+			switch (updateInfo.CheckResult)
 			{
-				Trace.WriteLine("Update is available. Pushing update prompt.");
-				ZeroMunge.StartUpdateFlow();
-			}
-			else
-			{
-				MessageBox.Show(this, "No new updates are available.", "Check for updates");
+				case Utilities.UpdateResult.Available:
+					Trace.WriteLine("Check succeeded. Update is available. Pushing update prompt.");
+					ZeroMunge.StartUpdateFlow();
+					break;
+
+				case Utilities.UpdateResult.NoneAvailable:
+					Trace.WriteLine("Check succeeded. No updates are available.");
+					MessageBox.Show(this, "No new updates are available.", "Check for updates");
+					break;
+
+				case Utilities.UpdateResult.NetConnectionError:
+					Trace.WriteLine("Check failed. Network connection could not be established.");
+					MessageBox.Show(this, "Unable to check for updates. Please check your Internet connection.", "Check for updates");
+					break;
 			}
 		}
 

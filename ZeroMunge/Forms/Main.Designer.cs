@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ZeroMunge));
 			this.btn_Run = new System.Windows.Forms.Button();
 			this.btn_AddFiles = new System.Windows.Forms.Button();
@@ -351,7 +351,7 @@
 			this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
 			this.copyToolStripMenuItem.ShortcutKeyDisplayString = "";
 			this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-			this.copyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.copyToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
 			this.copyToolStripMenuItem.Text = "Copy";
 			this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
 			// 
@@ -401,6 +401,7 @@
 			this.text_OutputLog.TabStop = false;
 			this.text_OutputLog.Text = "";
 			this.text_OutputLog.WordWrap = false;
+			this.text_OutputLog.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.text_OutputLog_LinkClicked);
 			this.text_OutputLog.TextChanged += new System.EventHandler(this.text_OutputLog_TextChanged);
 			// 
 			// lbl_OutputLogLines
@@ -506,9 +507,9 @@
 			// 
 			// col_FileBrowse
 			// 
-			dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle21.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle21;
+			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle1;
 			this.col_FileBrowse.HeaderText = "";
 			this.col_FileBrowse.Name = "col_FileBrowse";
 			this.col_FileBrowse.ReadOnly = true;
@@ -529,9 +530,9 @@
 			// 
 			// col_StagingBrowse
 			// 
-			dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle22.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-			this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle22;
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle2.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+			this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle2;
 			this.col_StagingBrowse.HeaderText = "";
 			this.col_StagingBrowse.Name = "col_StagingBrowse";
 			this.col_StagingBrowse.ReadOnly = true;
@@ -550,8 +551,8 @@
 			// 
 			// col_MungedFiles
 			// 
-			dataGridViewCellStyle23.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle23;
+			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle3;
 			this.col_MungedFiles.HeaderText = "Munged Files";
 			this.col_MungedFiles.MinimumWidth = 100;
 			this.col_MungedFiles.Name = "col_MungedFiles";
@@ -562,9 +563,9 @@
 			// 
 			// col_MungedFilesEdit
 			// 
-			dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle24.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-			this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle24;
+			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle4.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+			this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle4;
 			this.col_MungedFilesEdit.HeaderText = "";
 			this.col_MungedFilesEdit.Name = "col_MungedFilesEdit";
 			this.col_MungedFilesEdit.ReadOnly = true;

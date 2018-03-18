@@ -5,12 +5,16 @@ using System.IO;
 using System.Media;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using Newtonsoft.Json;
 
 namespace ZeroMunge
 {
 	public static class Utilities
 	{
+		public const string UPDATES_URL = "https://raw.githubusercontent.com/marth8880/ZeroMunge/master/json/updates.json";
+		public const string NET_CHECK_URL = "http://clients3.google.com/generate_204";
+
 		public enum MungeTypes
 		{
 			Nil,
@@ -36,6 +40,13 @@ namespace ZeroMunge
 			ChunkContents,
 			ChunkEnd,
 			FileEnd
+		};
+
+		public enum UpdateResult
+		{
+			NoneAvailable,
+			Available,
+			NetConnectionError
 		};
 
 
@@ -738,13 +749,52 @@ namespace ZeroMunge
 
 
 		/// <summary>
-		/// Checks for the latest application version from a pre-specified updates URL and returns an UpdateInfo object containing the information.
+		/// If there is an internet connection, checks for updates and returns true if an update is available.
+		/// </summary>
+		/// <returns>True if an update is available, false if not.</returns>
+		public static UpdateInfo CheckForUpdates()
+		{
+			Trace.WriteLine("Checking for application updates...");
+
+			UpdateInfo updateInfo = new UpdateInfo();
+
+			if (CheckForInternetConnection())
+			{
+				updateInfo.LatestVersionInfo = GetLatestVersion();
+				int curBuild = Properties.Settings.Default.Info_BuildNum;
+
+				Debug.WriteLine("Current build, latest build:    {0}, {1}", curBuild, updateInfo.LatestVersionInfo.BuildNum);
+
+				// Prompt for update if one is available
+				if (curBuild < updateInfo.LatestVersionInfo.BuildNum)
+				{
+					Trace.WriteLine("Update is available.");
+					updateInfo.CheckResult = UpdateResult.Available;
+				}
+				else
+				{
+					Trace.WriteLine("No updates available!");
+					updateInfo.CheckResult = UpdateResult.NoneAvailable;
+				}
+			}
+			else
+			{
+				Trace.WriteLine("There is no internet connection!");
+				updateInfo.CheckResult = UpdateResult.NetConnectionError;
+			}
+
+			return updateInfo;
+		}
+
+
+		/// <summary>
+		/// Checks for the latest application version from a pre-specified updates URL and returns a VersionInfo object containing the information.
 		/// </summary>
 		/// <returns>UpdateInfo object containing the latest build number, the download URL, and release notes.</returns>
-		public static UpdateInfo GetLatestVersion()
+		public static VersionInfo GetLatestVersion()
 		{
-			var parsedJson = Utilities.ParseJsonStrings("https://raw.githubusercontent.com/marth8880/ZeroMunge/master/json/updates.json");
-			UpdateInfo info = new UpdateInfo
+			var parsedJson = ParseJsonStrings(UPDATES_URL);
+			VersionInfo info = new VersionInfo
 			{
 				BuildNum = 0
 			};
@@ -756,6 +806,10 @@ namespace ZeroMunge
 				if ((string)pair.Key == "BuildNum")
 				{
 					info.BuildNum = Convert.ToInt32(pair.Value);
+				}
+				if ((string)pair.Key == "BuildDate")
+				{
+					info.BuildDate = pair.Value.ToString();
 				}
 				if ((string)pair.Key == "DownloadUrl")
 				{
@@ -774,24 +828,42 @@ namespace ZeroMunge
 		/// <summary>
 		/// Checks for an internet connection by attempting to read the contents of a pre-specified URL.
 		/// </summary>
-		/// <returns>True if there is an internet connection, false if not.</returns>
+		/// <returns>True if an internet connection could be established, false if not.</returns>
 		public static bool CheckForInternetConnection()
 		{
-			string url = "http://clients3.google.com/generate_204";
-			try
+			bool TryConnection(string url)
 			{
-				using (var client = new WebClient())
+				Form.ActiveForm.Cursor = Cursors.WaitCursor;
+				Application.DoEvents();
+
+				try
 				{
-					using (client.OpenRead(url))
+					using (var client = new WebClient())
 					{
-						return true;
+						using (client.OpenRead(url))
+						{
+							Trace.WriteLine("Trying '" + url + "' ...");
+							Form.ActiveForm.Cursor = Cursors.Default;
+							Application.DoEvents();
+							return true;
+						}
 					}
 				}
+				catch
+				{
+					Trace.WriteLine("Failed to establish connection with '" + url + "'");
+					Form.ActiveForm.Cursor = Cursors.Default;
+					Application.DoEvents();
+					return false;
+				}
 			}
-			catch
-			{
-				return false;
-			}
+
+			// First try the Google test url, then if it fails try the actual updates url
+			if (TryConnection(NET_CHECK_URL)) { return true; }
+			if (TryConnection(UPDATES_URL)) { return true; }
+
+			// Can't establish a connection if we've made it this far
+			return false;
 		}
 
 
@@ -881,11 +953,24 @@ namespace ZeroMunge
 		}
 	}
 
-	public class UpdateInfo
+	public class JsonPair
+	{
+		public object Key { get; set; }
+		public object Value { get; set; }
+	}
+
+	public class VersionInfo
 	{
 		public int BuildNum { get; set; }
+		public string BuildDate { get; set; }
 		public string DownloadUrl { get; set; }
 		public string ReleaseNotes { get; set; }
+	}
+
+	public class UpdateInfo
+	{
+		public Utilities.UpdateResult CheckResult { get; set; }
+		public VersionInfo LatestVersionInfo { get; set; }
 	}
 
 	public class Prefs
