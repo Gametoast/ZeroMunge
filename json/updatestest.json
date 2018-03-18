@@ -2,5 +2,5 @@
 	'BuildNum': 1130,
 	'BuildDate': 'Mar-18-2018',
 	'DownloadUrl': 'https://github.com/marth8880/ZeroMunge/releases/tag/r113',
-	'ReleaseNotes': 'NONE'
+	'ReleaseNotes': '- Some note\n- Another note\n- More notes\n- etc'
 }
