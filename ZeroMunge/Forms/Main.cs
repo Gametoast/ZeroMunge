@@ -2221,7 +2221,7 @@ namespace ZeroMunge
 					e.Handled = true;
 				}
 
-				if (e.KeyCode == Keys.C)
+				/*if (e.KeyCode == Keys.C)
 				{
 					Debug.WriteLine("Ctrl + C was pressed");
 					
@@ -2246,25 +2246,25 @@ namespace ZeroMunge
 					text_MungedFilesEdit.SelectAll();
 
 					e.Handled = true;
-				}
+				}*/
 			}
 			
 			if (e.KeyCode == Keys.Escape)
 			{
-				Debug.WriteLine("Ctrl + Enter was pressed");
+				Debug.WriteLine("Escape was pressed");
 
 				text_MungedFilesEdit_Dispose();
 				e.Handled = true;
 			}
 
-			if (e.KeyCode == Keys.Delete)
+			/*if (e.KeyCode == Keys.Delete)
 			{
 				Debug.WriteLine("Delete was pressed");
 
 				text_MungedFilesEdit.Text.Remove(text_MungedFilesEdit.SelectionStart, text_MungedFilesEdit.SelectionLength);
 				
 				e.Handled = true;
-			}
+			}*/
 		}
 
 
@@ -2659,6 +2659,35 @@ namespace ZeroMunge
 		}
 
 
+		Control rightClickedControl = null;
+
+		// When the Text context menu is opened:
+		// Set the rightClickedControl.
+		private void cmenu_Text_Opened(object sender, EventArgs e)
+		{
+			rightClickedControl = cmenu_Text.SourceControl;
+		}
+
+
+		// When the Munged Files Edit control enters focus:
+		// Set the rightClickedControl.
+		private void text_MungedFilesEdit_Enter(object sender, EventArgs e)
+		{
+			Debug.WriteLine("text_MungedFilesEdit_Enter() entered");
+
+			rightClickedControl = (RichTextBox)sender;
+		}
+
+
+		// When the Munged Files Edit control leaves focus:
+		// Unset the rightClickedControl.
+		private void text_MungedFilesEdit_Leave(object sender, EventArgs e)
+		{
+			Debug.WriteLine("text_MungedFilesEdit_Leave() entered");
+
+			rightClickedControl = null;
+		}
+
 		// When the user clicks the Copy button in the text context menu:
 		// Copy the selected text in the textbox.
 		private void copyToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2674,12 +2703,12 @@ namespace ZeroMunge
 				if (owner != null)
 				{
 					// Get the control that is displaying this context menu
-					Control sourceControl = owner.SourceControl;
+					//Control rightClickedControl = owner.SourceControl;
 
-					if (sourceControl is RichTextBox)
+					if (rightClickedControl is RichTextBox)
 					{
 						Debug.WriteLine("Control is RichTextBox");
-						var rtb = (RichTextBox)sourceControl;
+						var rtb = (RichTextBox)rightClickedControl;
 
 						rtb.Copy();
 					}
@@ -2703,12 +2732,12 @@ namespace ZeroMunge
 				if (owner != null)
 				{
 					// Get the control that is displaying this context menu
-					Control sourceControl = owner.SourceControl;
+					//Control sourceControl = owner.SourceControl;
 
-					if (sourceControl is RichTextBox)
+					if (rightClickedControl is RichTextBox)
 					{
 						Debug.WriteLine("Control is RichTextBox");
-						var rtb = (RichTextBox)sourceControl;
+						var rtb = (RichTextBox)rightClickedControl;
 
 						rtb.Paste();
 					}
@@ -2732,12 +2761,12 @@ namespace ZeroMunge
 				if (owner != null)
 				{
 					// Get the control that is displaying this context menu
-					Control sourceControl = owner.SourceControl;
+					//Control sourceControl = owner.SourceControl;
 
-					if (sourceControl is RichTextBox)
+					if (rightClickedControl is RichTextBox)
 					{
 						Debug.WriteLine("Control is RichTextBox");
-						var rtb = (RichTextBox)sourceControl;
+						var rtb = (RichTextBox)rightClickedControl;
 						
 						rtb.Text = rtb.Text.Remove(rtb.SelectionStart, rtb.SelectionLength);
 					}
@@ -2761,12 +2790,12 @@ namespace ZeroMunge
 				if (owner != null)
 				{
 					// Get the control that is displaying this context menu
-					Control sourceControl = owner.SourceControl;
+					//Control rightClickedControl = owner.SourceControl;
 
-					if (sourceControl is RichTextBox)
+					if (rightClickedControl is RichTextBox)
 					{
 						Debug.WriteLine("Control is RichTextBox");
-						var rtb = (RichTextBox)sourceControl;
+						var rtb = (RichTextBox)rightClickedControl;
 
 						rtb.SelectAll();
 					}
