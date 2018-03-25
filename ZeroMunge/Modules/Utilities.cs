@@ -868,6 +868,33 @@ namespace ZeroMunge
 
 
 		/// <summary>
+		/// Starts the menu flow for checking for updates.
+		/// </summary>
+		/// <param name="sender">Sending Form, `this` can usually be used.</param>
+		public static void StartFlow_CheckForUpdates(Form sender)
+		{
+			UpdateInfo updateInfo = CheckForUpdates(sender);
+			switch (updateInfo.CheckResult)
+			{
+				case UpdateResult.Available:
+					Trace.WriteLine("Check succeeded. Update is available. Pushing update prompt.");
+					ZeroMunge.StartUpdateFlow();
+					break;
+
+				case UpdateResult.NoneAvailable:
+					Trace.WriteLine("Check succeeded. No updates are available.");
+					MessageBox.Show(sender, "No new updates are available.", "Check for updates");
+					break;
+
+				case UpdateResult.NetConnectionError:
+					Trace.WriteLine("Check failed. Network connection could not be established.");
+					MessageBox.Show(sender, "Unable to check for updates. Please check your Internet connection.", "Check for updates");
+					break;
+			}
+		}
+
+
+		/// <summary>
 		/// Returns the current time in 12-hour format, e.g. "12:40:34 AM".
 		/// </summary>
 		/// <returns>Current time in 12-hour format.</returns>

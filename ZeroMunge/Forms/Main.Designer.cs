@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ZeroMunge));
 			this.btn_Run = new System.Windows.Forms.Button();
 			this.btn_AddFiles = new System.Windows.Forms.Button();
@@ -109,6 +109,8 @@
 			this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_viewHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+			this.menu_checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
 			this.menu_aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.cont_FileButtons = new System.Windows.Forms.FlowLayoutPanel();
 			this.button3 = new System.Windows.Forms.Button();
@@ -507,9 +509,9 @@
 			// 
 			// col_FileBrowse
 			// 
-			dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle9.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle9;
+			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle5.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle5;
 			this.col_FileBrowse.HeaderText = "";
 			this.col_FileBrowse.Name = "col_FileBrowse";
 			this.col_FileBrowse.ReadOnly = true;
@@ -530,9 +532,9 @@
 			// 
 			// col_StagingBrowse
 			// 
-			dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle10.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-			this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle10;
+			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle6.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+			this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle6;
 			this.col_StagingBrowse.HeaderText = "";
 			this.col_StagingBrowse.Name = "col_StagingBrowse";
 			this.col_StagingBrowse.ReadOnly = true;
@@ -551,8 +553,8 @@
 			// 
 			// col_MungedFiles
 			// 
-			dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle11;
+			dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle7;
 			this.col_MungedFiles.HeaderText = "Munged Files";
 			this.col_MungedFiles.MinimumWidth = 100;
 			this.col_MungedFiles.Name = "col_MungedFiles";
@@ -563,9 +565,9 @@
 			// 
 			// col_MungedFilesEdit
 			// 
-			dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle12.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-			this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle12;
+			dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle8.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+			this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle8;
 			this.col_MungedFilesEdit.HeaderText = "";
 			this.col_MungedFilesEdit.Name = "col_MungedFilesEdit";
 			this.col_MungedFilesEdit.ReadOnly = true;
@@ -865,6 +867,8 @@
 			this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menu_viewHelpToolStripMenuItem,
             this.toolStripSeparator6,
+            this.menu_checkForUpdatesToolStripMenuItem,
+            this.toolStripSeparator7,
             this.menu_aboutToolStripMenuItem});
 			this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
 			this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
@@ -874,20 +878,32 @@
 			// 
 			this.menu_viewHelpToolStripMenuItem.Name = "menu_viewHelpToolStripMenuItem";
 			this.menu_viewHelpToolStripMenuItem.ShortcutKeyDisplayString = "F1";
-			this.menu_viewHelpToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+			this.menu_viewHelpToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
 			this.menu_viewHelpToolStripMenuItem.Text = "View Help";
 			this.menu_viewHelpToolStripMenuItem.Click += new System.EventHandler(this.menu_viewHelpToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator6
 			// 
 			this.toolStripSeparator6.Name = "toolStripSeparator6";
-			this.toolStripSeparator6.Size = new System.Drawing.Size(143, 6);
+			this.toolStripSeparator6.Size = new System.Drawing.Size(168, 6);
+			// 
+			// menu_checkForUpdatesToolStripMenuItem
+			// 
+			this.menu_checkForUpdatesToolStripMenuItem.Name = "menu_checkForUpdatesToolStripMenuItem";
+			this.menu_checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+			this.menu_checkForUpdatesToolStripMenuItem.Text = "Check for Updates";
+			this.menu_checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.menu_checkForUpdatesToolStripMenuItem_Click);
+			// 
+			// toolStripSeparator7
+			// 
+			this.toolStripSeparator7.Name = "toolStripSeparator7";
+			this.toolStripSeparator7.Size = new System.Drawing.Size(168, 6);
 			// 
 			// menu_aboutToolStripMenuItem
 			// 
 			this.menu_aboutToolStripMenuItem.Name = "menu_aboutToolStripMenuItem";
 			this.menu_aboutToolStripMenuItem.ShortcutKeyDisplayString = "F12";
-			this.menu_aboutToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+			this.menu_aboutToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
 			this.menu_aboutToolStripMenuItem.Text = "About";
 			this.menu_aboutToolStripMenuItem.Click += new System.EventHandler(this.menu_aboutToolStripMenuItem_Click);
 			// 
@@ -1077,6 +1093,8 @@
         private System.Windows.Forms.DataGridViewCheckBoxColumn col_IsValid;
         public System.Windows.Forms.SaveFileDialog saveDlg_SaveFileListPrompt;
         public System.Windows.Forms.OpenFileDialog openDlg_OpenFileListPrompt;
-    }
+		private System.Windows.Forms.ToolStripMenuItem menu_checkForUpdatesToolStripMenuItem;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+	}
 }
 

@@ -2967,6 +2967,11 @@ namespace ZeroMunge
 			OpenWindow_Help();
 		}
 
+		private void menu_checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Utilities.StartFlow_CheckForUpdates(this);
+		}
+
 
 		// When the form is focused on and activated:
 		// Reload the application settings.
