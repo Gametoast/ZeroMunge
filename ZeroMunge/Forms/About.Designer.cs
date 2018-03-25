@@ -31,7 +31,7 @@
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(About));
 			this.btn_Accept = new System.Windows.Forms.Button();
-			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+			this.flow_AppInfo = new System.Windows.Forms.FlowLayoutPanel();
 			this.label1 = new System.Windows.Forms.Label();
 			this.lbl_BuildInfo = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
@@ -40,16 +40,16 @@
 			this.lbl_LicensePre = new System.Windows.Forms.Label();
 			this.flow_License = new System.Windows.Forms.FlowLayoutPanel();
 			this.img_Logo = new System.Windows.Forms.PictureBox();
-			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+			this.flow_Links = new System.Windows.Forms.FlowLayoutPanel();
 			this.link_Updates = new System.Windows.Forms.LinkLabel();
 			this.link_Contact = new System.Windows.Forms.LinkLabel();
 			this.link_FrayedWires = new System.Windows.Forms.LinkLabel();
 			this.FormTooltips = new System.Windows.Forms.ToolTip(this.components);
-			this.flowLayoutPanel1.SuspendLayout();
+			this.flow_AppInfo.SuspendLayout();
 			this.pnl_License.SuspendLayout();
 			this.flow_License.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.img_Logo)).BeginInit();
-			this.flowLayoutPanel2.SuspendLayout();
+			this.flow_Links.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btn_Accept
@@ -64,16 +64,16 @@
 			this.btn_Accept.UseVisualStyleBackColor = true;
 			this.btn_Accept.Click += new System.EventHandler(this.btn_Accept_Click);
 			// 
-			// flowLayoutPanel1
+			// flow_AppInfo
 			// 
-			this.flowLayoutPanel1.Controls.Add(this.label1);
-			this.flowLayoutPanel1.Controls.Add(this.lbl_BuildInfo);
-			this.flowLayoutPanel1.Controls.Add(this.label3);
-			this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 131);
-			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(314, 70);
-			this.flowLayoutPanel1.TabIndex = 2;
+			this.flow_AppInfo.Controls.Add(this.label1);
+			this.flow_AppInfo.Controls.Add(this.lbl_BuildInfo);
+			this.flow_AppInfo.Controls.Add(this.label3);
+			this.flow_AppInfo.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+			this.flow_AppInfo.Location = new System.Drawing.Point(12, 131);
+			this.flow_AppInfo.Name = "flow_AppInfo";
+			this.flow_AppInfo.Size = new System.Drawing.Size(314, 70);
+			this.flow_AppInfo.TabIndex = 2;
 			// 
 			// label1
 			// 
@@ -163,29 +163,29 @@
 			this.img_Logo.WaitOnLoad = true;
 			this.img_Logo.Click += new System.EventHandler(this.img_Logo_Click);
 			// 
-			// flowLayoutPanel2
+			// flow_Links
 			// 
-			this.flowLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.flowLayoutPanel2.Controls.Add(this.link_Updates);
-			this.flowLayoutPanel2.Controls.Add(this.link_Contact);
-			this.flowLayoutPanel2.Controls.Add(this.link_FrayedWires);
-			this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flowLayoutPanel2.Location = new System.Drawing.Point(332, 131);
-			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-			this.flowLayoutPanel2.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-			this.flowLayoutPanel2.Size = new System.Drawing.Size(120, 70);
-			this.flowLayoutPanel2.TabIndex = 5;
+			this.flow_Links.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.flow_Links.Controls.Add(this.link_Updates);
+			this.flow_Links.Controls.Add(this.link_Contact);
+			this.flow_Links.Controls.Add(this.link_FrayedWires);
+			this.flow_Links.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+			this.flow_Links.Location = new System.Drawing.Point(332, 131);
+			this.flow_Links.Name = "flow_Links";
+			this.flow_Links.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+			this.flow_Links.Size = new System.Drawing.Size(120, 70);
+			this.flow_Links.TabIndex = 5;
 			// 
 			// link_Updates
 			// 
 			this.link_Updates.AutoSize = true;
-			this.link_Updates.Location = new System.Drawing.Point(23, 0);
+			this.link_Updates.Location = new System.Drawing.Point(21, 0);
 			this.link_Updates.Name = "link_Updates";
 			this.link_Updates.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
-			this.link_Updates.Size = new System.Drawing.Size(94, 19);
+			this.link_Updates.Size = new System.Drawing.Size(96, 19);
 			this.link_Updates.TabIndex = 0;
 			this.link_Updates.TabStop = true;
-			this.link_Updates.Text = "Check for updates";
+			this.link_Updates.Text = "Check for Updates";
 			this.FormTooltips.SetToolTip(this.link_Updates, "Check to see if a new release of Zero Munge is available.");
 			this.link_Updates.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.link_Updates_LinkClicked);
 			// 
@@ -222,9 +222,9 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btn_Accept;
 			this.ClientSize = new System.Drawing.Size(464, 381);
-			this.Controls.Add(this.flowLayoutPanel2);
+			this.Controls.Add(this.flow_Links);
 			this.Controls.Add(this.flow_License);
-			this.Controls.Add(this.flowLayoutPanel1);
+			this.Controls.Add(this.flow_AppInfo);
 			this.Controls.Add(this.img_Logo);
 			this.Controls.Add(this.btn_Accept);
 			this.KeyPreview = true;
@@ -238,14 +238,14 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "About Zero Munge";
 			this.Load += new System.EventHandler(this.About_Load);
-			this.flowLayoutPanel1.ResumeLayout(false);
-			this.flowLayoutPanel1.PerformLayout();
+			this.flow_AppInfo.ResumeLayout(false);
+			this.flow_AppInfo.PerformLayout();
 			this.pnl_License.ResumeLayout(false);
 			this.flow_License.ResumeLayout(false);
 			this.flow_License.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.img_Logo)).EndInit();
-			this.flowLayoutPanel2.ResumeLayout(false);
-			this.flowLayoutPanel2.PerformLayout();
+			this.flow_Links.ResumeLayout(false);
+			this.flow_Links.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -254,7 +254,7 @@
 
         private System.Windows.Forms.Button btn_Accept;
         private System.Windows.Forms.PictureBox img_Logo;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.FlowLayoutPanel flow_AppInfo;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lbl_BuildInfo;
         private System.Windows.Forms.Panel pnl_License;
@@ -262,7 +262,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label lbl_LicensePre;
         private System.Windows.Forms.FlowLayoutPanel flow_License;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+        private System.Windows.Forms.FlowLayoutPanel flow_Links;
         private System.Windows.Forms.LinkLabel link_Updates;
         private System.Windows.Forms.LinkLabel link_Contact;
         private System.Windows.Forms.LinkLabel link_FrayedWires;

@@ -12,10 +12,6 @@ namespace ZeroMunge
 {
 	public partial class About : Form
 	{
-		public const string LINK_LICENSE = "https://www.w3.org/Consortium/Legal/2008/03-bsd-license.html";
-		public const string LINK_EMAIL = "mailto:marth8880@gmail.com";
-		public const string LINK_WEBSITE = "https://www.frayedwiresstudios.com/";
-		public const string LINK_PROJECT = "https://github.com/marth8880/ZeroMunge";
 
 		public About()
 		{
@@ -41,7 +37,7 @@ namespace ZeroMunge
 			text_License.SelectionBullet = false;
 
 			text_License.SelectedText = "\n" + "THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE." + "\n\n";
-			text_License.SelectedText = LINK_LICENSE;
+			text_License.SelectedText = ZeroMunge.LINK_LICENSE;
 		}
 
 
@@ -73,7 +69,7 @@ namespace ZeroMunge
 		// Start a new e-mail to the contact e-mail address in the default e-mail program.
 		private void link_Contact_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			Process.Start(LINK_EMAIL);
+			Process.Start(ZeroMunge.LINK_EMAIL);
 		}
 
 
@@ -81,12 +77,12 @@ namespace ZeroMunge
 		// Open a link to the FWS web site in the default web browser.
 		private void link_FrayedWires_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			Process.Start(LINK_WEBSITE);
+			Process.Start(ZeroMunge.LINK_WEBSITE);
 		}
 
 		private void img_Logo_Click(object sender, EventArgs e)
 		{
-			Process.Start(LINK_PROJECT);
+			Process.Start(ZeroMunge.LINK_PROJECT);
 		}
 	}
 }

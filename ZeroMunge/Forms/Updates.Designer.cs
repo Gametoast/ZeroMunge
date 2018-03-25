@@ -105,13 +105,15 @@
 			this.Controls.Add(this.lbl_Description);
 			this.KeyPreview = true;
 			this.MaximizeBox = false;
+			this.MaximumSize = new System.Drawing.Size(313, 137);
 			this.MinimizeBox = false;
+			this.MinimumSize = new System.Drawing.Size(313, 137);
 			this.Name = "Updates";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Updates Available";
+			this.Text = "Updates";
 			this.TopMost = true;
 			this.Load += new System.EventHandler(this.Updates_Load);
 			this.cont_Btns.ResumeLayout(false);

@@ -27,6 +27,15 @@ namespace ZeroMunge
 		// Is this a debug build?
 		public bool BUILD_DEBUG;
 
+		// Web links
+		public const string LINK_GH_OPENISSUES = "https://github.com/marth8880/ZeroMunge/issues";
+		public const string LINK_GH_BUGS = "https://github.com/marth8880/ZeroMunge/issues?q=is%3Aopen+is%3Aissue+label%3Abug";
+		public const string LINK_GH_SUGGESTIONS = "https://github.com/marth8880/ZeroMunge/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement";
+		public const string LINK_LICENSE = "https://www.w3.org/Consortium/Legal/2008/03-bsd-license.html";
+		public const string LINK_EMAIL = "mailto:marth8880@gmail.com";
+		public const string LINK_WEBSITE = "https://www.frayedwiresstudios.com/";
+		public const string LINK_PROJECT = "https://github.com/marth8880/ZeroMunge";
+
 		// data_Files : Column names
 		public const string STR_DATA_FILES_CHK_ENABLED = "col_Enabled";
 		public const string STR_DATA_FILES_CHK_COPY = "col_Copy";
@@ -2970,6 +2979,21 @@ namespace ZeroMunge
 		private void menu_checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			Utilities.StartFlow_CheckForUpdates(this);
+		}
+
+		private void menu_reportBugToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Process.Start(LINK_GH_BUGS);
+		}
+
+		private void menu_provideSuggestionToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Process.Start(LINK_GH_SUGGESTIONS);
+		}
+
+		private void menu_viewOpenIssuesToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Process.Start(LINK_GH_OPENISSUES);
 		}
 
 

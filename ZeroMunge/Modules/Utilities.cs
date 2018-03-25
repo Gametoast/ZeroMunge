@@ -883,12 +883,12 @@ namespace ZeroMunge
 
 				case UpdateResult.NoneAvailable:
 					Trace.WriteLine("Check succeeded. No updates are available.");
-					MessageBox.Show(sender, "No new updates are available.", "Check for updates");
+					MessageBox.Show(sender, "No new updates are available.", "Updates");
 					break;
 
 				case UpdateResult.NetConnectionError:
 					Trace.WriteLine("Check failed. Network connection could not be established.");
-					MessageBox.Show(sender, "Unable to check for updates. Please check your Internet connection.", "Check for updates");
+					MessageBox.Show(sender, "Unable to check for updates. Please check your Internet connection.", "Updates");
 					break;
 			}
 		}

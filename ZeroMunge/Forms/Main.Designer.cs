@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ZeroMunge));
 			this.btn_Run = new System.Windows.Forms.Button();
 			this.btn_AddFiles = new System.Windows.Forms.Button();
@@ -117,6 +117,11 @@
 			this.cont_LogButtons = new System.Windows.Forms.FlowLayoutPanel();
 			this.saveDlg_SaveFileListPrompt = new System.Windows.Forms.SaveFileDialog();
 			this.openDlg_OpenFileListPrompt = new System.Windows.Forms.OpenFileDialog();
+			this.menu_provideFeedbackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.menu_reportBugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.menu_provideSuggestionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.menu_viewOpenIssuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
 			this.pan_MungedFilesEdit.SuspendLayout();
 			this.status_MungedFilesEdit.SuspendLayout();
 			this.cmenu_Text.SuspendLayout();
@@ -509,9 +514,9 @@
 			// 
 			// col_FileBrowse
 			// 
-			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle5.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle5;
+			dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle9.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle9;
 			this.col_FileBrowse.HeaderText = "";
 			this.col_FileBrowse.Name = "col_FileBrowse";
 			this.col_FileBrowse.ReadOnly = true;
@@ -532,9 +537,9 @@
 			// 
 			// col_StagingBrowse
 			// 
-			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle6.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-			this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle6;
+			dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle10.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+			this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle10;
 			this.col_StagingBrowse.HeaderText = "";
 			this.col_StagingBrowse.Name = "col_StagingBrowse";
 			this.col_StagingBrowse.ReadOnly = true;
@@ -553,8 +558,8 @@
 			// 
 			// col_MungedFiles
 			// 
-			dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle7;
+			dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle11;
 			this.col_MungedFiles.HeaderText = "Munged Files";
 			this.col_MungedFiles.MinimumWidth = 100;
 			this.col_MungedFiles.Name = "col_MungedFiles";
@@ -565,9 +570,9 @@
 			// 
 			// col_MungedFilesEdit
 			// 
-			dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle8.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-			this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle8;
+			dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle12.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+			this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle12;
 			this.col_MungedFilesEdit.HeaderText = "";
 			this.col_MungedFilesEdit.Name = "col_MungedFilesEdit";
 			this.col_MungedFilesEdit.ReadOnly = true;
@@ -867,6 +872,7 @@
 			this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menu_viewHelpToolStripMenuItem,
             this.toolStripSeparator6,
+            this.menu_provideFeedbackToolStripMenuItem,
             this.menu_checkForUpdatesToolStripMenuItem,
             this.toolStripSeparator7,
             this.menu_aboutToolStripMenuItem});
@@ -962,6 +968,43 @@
 			this.openDlg_OpenFileListPrompt.Filter = "Zero Munge Data files|*.zmd";
 			this.openDlg_OpenFileListPrompt.Title = "Open File List";
 			this.openDlg_OpenFileListPrompt.FileOk += new System.ComponentModel.CancelEventHandler(this.openDlg_OpenFileListPrompt_FileOk);
+			// 
+			// menu_provideFeedbackToolStripMenuItem
+			// 
+			this.menu_provideFeedbackToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_reportBugToolStripMenuItem,
+            this.menu_provideSuggestionToolStripMenuItem,
+            this.toolStripSeparator8,
+            this.menu_viewOpenIssuesToolStripMenuItem});
+			this.menu_provideFeedbackToolStripMenuItem.Name = "menu_provideFeedbackToolStripMenuItem";
+			this.menu_provideFeedbackToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+			this.menu_provideFeedbackToolStripMenuItem.Text = "Feedback";
+			// 
+			// menu_reportBugToolStripMenuItem
+			// 
+			this.menu_reportBugToolStripMenuItem.Name = "menu_reportBugToolStripMenuItem";
+			this.menu_reportBugToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+			this.menu_reportBugToolStripMenuItem.Text = "Report a Problem...";
+			this.menu_reportBugToolStripMenuItem.Click += new System.EventHandler(this.menu_reportBugToolStripMenuItem_Click);
+			// 
+			// menu_provideSuggestionToolStripMenuItem
+			// 
+			this.menu_provideSuggestionToolStripMenuItem.Name = "menu_provideSuggestionToolStripMenuItem";
+			this.menu_provideSuggestionToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+			this.menu_provideSuggestionToolStripMenuItem.Text = "Provide a Suggestion...";
+			this.menu_provideSuggestionToolStripMenuItem.Click += new System.EventHandler(this.menu_provideSuggestionToolStripMenuItem_Click);
+			// 
+			// menu_viewOpenIssuesToolStripMenuItem
+			// 
+			this.menu_viewOpenIssuesToolStripMenuItem.Name = "menu_viewOpenIssuesToolStripMenuItem";
+			this.menu_viewOpenIssuesToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+			this.menu_viewOpenIssuesToolStripMenuItem.Text = "View Open Issues...";
+			this.menu_viewOpenIssuesToolStripMenuItem.Click += new System.EventHandler(this.menu_viewOpenIssuesToolStripMenuItem_Click);
+			// 
+			// toolStripSeparator8
+			// 
+			this.toolStripSeparator8.Name = "toolStripSeparator8";
+			this.toolStripSeparator8.Size = new System.Drawing.Size(191, 6);
 			// 
 			// ZeroMunge
 			// 
@@ -1095,6 +1138,11 @@
         public System.Windows.Forms.OpenFileDialog openDlg_OpenFileListPrompt;
 		private System.Windows.Forms.ToolStripMenuItem menu_checkForUpdatesToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+		private System.Windows.Forms.ToolStripMenuItem menu_provideFeedbackToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem menu_reportBugToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem menu_provideSuggestionToolStripMenuItem;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
+		private System.Windows.Forms.ToolStripMenuItem menu_viewOpenIssuesToolStripMenuItem;
 	}
 }
 
