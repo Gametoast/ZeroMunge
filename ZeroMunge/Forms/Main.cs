@@ -2362,6 +2362,12 @@ namespace ZeroMunge
 		{
 			lastCellChangeMethod = CellChangeMethod.Button;
 
+			// Reset the row selection to the bottom of the file list
+			data_Files.ClearSelection();
+			data_Files[INT_DATA_FILES_BTN_FILE_BROWSE, data_Files.RowCount - 1].Selected = true;
+			data_Files_CurSelectedRow = data_Files.RowCount - 1;
+
+			// Set the initial directory to the previous-most one
 			openDlg_AddFilesPrompt.InitialDirectory = addFilesLastDir;
 
 			// Open the 'Add Files' prompt
