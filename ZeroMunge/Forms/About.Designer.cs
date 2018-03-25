@@ -152,6 +152,7 @@
 			// 
 			this.img_Logo.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.img_Logo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.img_Logo.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.img_Logo.Image = ((System.Drawing.Image)(resources.GetObject("img_Logo.Image")));
 			this.img_Logo.Location = new System.Drawing.Point(12, 12);
 			this.img_Logo.Name = "img_Logo";
@@ -160,6 +161,7 @@
 			this.img_Logo.TabIndex = 1;
 			this.img_Logo.TabStop = false;
 			this.img_Logo.WaitOnLoad = true;
+			this.img_Logo.Click += new System.EventHandler(this.img_Logo_Click);
 			// 
 			// flowLayoutPanel2
 			// 
