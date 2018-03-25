@@ -139,7 +139,7 @@ namespace ZeroMunge
 		private void ZeroMunge_Shown(object sender, EventArgs e)
 		{
 			// Check for application updates
-			UpdateInfo updateInfo = Utilities.CheckForUpdates();
+			UpdateInfo updateInfo = Utilities.CheckForUpdates(this);
 			latestAppVersion = updateInfo.LatestVersionInfo;
 
 			switch (updateInfo.CheckResult)
@@ -539,7 +539,7 @@ namespace ZeroMunge
 					{
 						var message = "Copy is unchecked, skipping copy operation for " + ProcManager_fileList.ElementAt(whichFile).FileDir;
 						Debug.WriteLine(message);
-						Log(message, LogType.Info);
+						Log(message, LogType.Warning);
 					}
 				}
 			}

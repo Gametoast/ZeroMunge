@@ -60,7 +60,7 @@ namespace ZeroMunge
 		// Start the update flow.
 		private void link_Updates_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			UpdateInfo updateInfo = Utilities.CheckForUpdates();
+			UpdateInfo updateInfo = Utilities.CheckForUpdates(this);
 			switch (updateInfo.CheckResult)
 			{
 				case Utilities.UpdateResult.Available:

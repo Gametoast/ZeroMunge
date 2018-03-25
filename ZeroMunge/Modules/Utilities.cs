@@ -752,13 +752,13 @@ namespace ZeroMunge
 		/// If there is an internet connection, checks for updates and returns true if an update is available.
 		/// </summary>
 		/// <returns>True if an update is available, false if not.</returns>
-		public static UpdateInfo CheckForUpdates()
+		public static UpdateInfo CheckForUpdates(Form sender)
 		{
 			Trace.WriteLine("Checking for application updates...");
 
 			UpdateInfo updateInfo = new UpdateInfo();
 
-			if (CheckForInternetConnection())
+			if (CheckForInternetConnection(sender))
 			{
 				updateInfo.LatestVersionInfo = GetLatestVersion();
 				int curBuild = Properties.Settings.Default.Info_BuildNum;
@@ -829,11 +829,11 @@ namespace ZeroMunge
 		/// Checks for an internet connection by attempting to read the contents of a pre-specified URL.
 		/// </summary>
 		/// <returns>True if an internet connection could be established, false if not.</returns>
-		public static bool CheckForInternetConnection()
+		public static bool CheckForInternetConnection(Form sender)
 		{
 			bool TryConnection(string url)
 			{
-				Form.ActiveForm.Cursor = Cursors.WaitCursor;
+				sender.Cursor = Cursors.WaitCursor;
 				Application.DoEvents();
 
 				try
@@ -852,7 +852,7 @@ namespace ZeroMunge
 				catch
 				{
 					Trace.WriteLine("Failed to establish connection with '" + url + "'");
-					Form.ActiveForm.Cursor = Cursors.Default;
+					sender.Cursor = Cursors.Default;
 					Application.DoEvents();
 					return false;
 				}
