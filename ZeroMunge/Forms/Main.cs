@@ -2504,25 +2504,77 @@ namespace ZeroMunge
 				return;
 			}
 
-			// Is the currently selected column the row header?
-			if (data_Files_CurSelectedColumn == -1)
+			// Did the user select the rows by the column header? If not, we'll need to remove them manually
+			if (data_Files.SelectedRows.Count > 0)
 			{
-				if (!data_Files.Rows[data_Files_CurSelectedRow].IsNewRow)
+				foreach (DataGridViewRow row in data_Files.SelectedRows)
 				{
-					// Remove the currently selected file from the list
-					data_Files.Rows.RemoveAt(data_Files_CurSelectedRow);
-				}
-				else
-				{
-					Thread errorThread = new Thread(() => {
-						Log("Cannot remove the last (uncommitted) row", LogType.Error);
-
-						// Re-enable the UI
-						EnableUI(true);
-					});
-					errorThread.Start();
+					data_Files.Rows.RemoveAt(row.Index);
 				}
 			}
+			else
+			{
+				var selectedCells = data_Files.SelectedCells;
+				List<DataGridViewRow> selectedRows = new List<DataGridViewRow>();
+				
+				// Go through the selected cells and add its row to the list of selected rows (without duplicates!)
+				foreach (DataGridViewCell cell in selectedCells)
+				{
+					bool rowExists = false;
+
+					// Is the row already present in the list of selected rows?
+					if (selectedRows.Count > 0)
+					{
+						foreach (DataGridViewRow row in selectedRows)
+						{
+							if (row == cell.OwningRow)
+							{
+								rowExists = true;
+							}
+						}
+					}
+
+					// If not, add the row to the list
+					if (!rowExists)
+					{
+						selectedRows.Add(cell.OwningRow);
+					}
+				}
+
+				// Remove all the selected rows
+				foreach (DataGridViewRow row in selectedRows)
+				{
+					try
+					{
+						data_Files.Rows.RemoveAt(row.Index);
+					}
+					catch (InvalidOperationException ex)
+					{
+						Trace.WriteLine(ex.Message);
+						Log("Cannot remove the last (uncommitted) row", LogType.Error);
+					}
+				}
+			}
+
+			// Is the currently selected column the row header?
+			//if (data_Files_CurSelectedColumn == -1)
+			//{
+			//	if (!data_Files.Rows[data_Files_CurSelectedRow].IsNewRow)
+			//	{
+			//		// Remove the currently selected file from the list
+			//		data_Files.Rows.RemoveAt(data_Files_CurSelectedRow);
+			//	}
+			//	else
+			//	{
+			//		Thread errorThread = new Thread(() => {
+			//			Log("Cannot remove the last (uncommitted) row", LogType.Error);
+
+			//			// Re-enable the UI
+			//			EnableUI(true);
+			//		});
+			//		errorThread.Start();
+			//	}
+			//}
 		}
 
 
