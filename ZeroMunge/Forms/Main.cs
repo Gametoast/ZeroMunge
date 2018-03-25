@@ -1549,8 +1549,10 @@ namespace ZeroMunge
 		/// <param name="printErrors">Whether or not error messages should be printed to the Output Log.</param>
 		public void ClearFileList(bool printErrors = false)
 		{
+			data_Files.Rows.Clear();
+
 			// Is there at least 1 committed row to remove?
-			if (data_Files.RowCount > 1 && !data_Files.Rows[0].IsNewRow)
+			/*if (data_Files.RowCount > 1 && !data_Files.Rows[0].IsNewRow)
 			{
 				Debug.WriteLine("Rows to remove: " + (data_Files.RowCount - 1));
 
@@ -1589,7 +1591,7 @@ namespace ZeroMunge
 					EnableUI(true);
 				});
 				errorThread.Start();
-			}
+			}*/
 		}
 
 		/// <summary>
