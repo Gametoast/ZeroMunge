@@ -24,8 +24,14 @@ namespace ZeroMunge
 	[Serializable]
 	public partial class ZeroMunge : Form
 	{
+		public enum BuildType
+		{
+			Debug,
+			DebugClearSettings,
+			Release
+		};
 		// Is this a debug build?
-		public bool BUILD_DEBUG;
+		public BuildType BUILD_TYPE;
 
 		// Web links
 		public const string LINK_GH_OPENISSUES = "https://github.com/marth8880/ZeroMunge/issues";
@@ -83,11 +89,18 @@ namespace ZeroMunge
 
 			// Set debug flag based on solution configuration
 			#if (BUILD_DEBUG)
-				BUILD_DEBUG = true;
+				BUILD_TYPE = BuildType.Debug;
+			#elif (BUILD_DEBUG_CLEARSETTINGS)
+				BUILD_TYPE = BuildType.DebugClearSettings;
 			#elif (BUILD_RELEASE)
-				BUILD_DEBUG = false;
+				BUILD_TYPE = BuildType.Release;
 			#endif
-			Trace.WriteLine("BUILD_DEBUG: " + BUILD_DEBUG);
+			Trace.WriteLine("BUILD_TYPE: " + BUILD_TYPE.ToString());
+
+			if (BUILD_TYPE == BuildType.DebugClearSettings)
+			{
+				Properties.Settings.Default.Reset();
+			}
 
 			latestAppVersion.BuildNum = 0;
 
@@ -113,11 +126,11 @@ namespace ZeroMunge
 			}
 
 			// Set the visibility of the debug columns in the file list
-			col_MungeDir.Visible = BUILD_DEBUG;
-			col_IsMungeScript.Visible = BUILD_DEBUG;
-			col_IsValid.Visible = BUILD_DEBUG;
-			button2.Visible = BUILD_DEBUG;
-			button3.Visible = BUILD_DEBUG;
+			col_MungeDir.Visible = BUILD_TYPE == BuildType.Debug || BUILD_TYPE == BuildType.DebugClearSettings;
+			col_IsMungeScript.Visible = BUILD_TYPE == BuildType.Debug || BUILD_TYPE == BuildType.DebugClearSettings;
+			col_IsValid.Visible = BUILD_TYPE == BuildType.Debug || BUILD_TYPE == BuildType.DebugClearSettings;
+			button2.Visible = BUILD_TYPE == BuildType.Debug || BUILD_TYPE == BuildType.DebugClearSettings;
+			button3.Visible = BUILD_TYPE == BuildType.Debug || BUILD_TYPE == BuildType.DebugClearSettings;
 
 			// Set the visibility of the DataGridView buttons
 			col_FileBrowse.UseColumnTextForButtonValue = true;
@@ -172,7 +185,7 @@ namespace ZeroMunge
 							Log(logMessage, LogType.Info);
 						});
 						logThread.Start();
-						StartUpdateFlow();
+						Flow_Updates_Start();
 					}
 					else
 					{
@@ -215,18 +228,23 @@ namespace ZeroMunge
 			// Load the saved user settings into our prefs object
 			prefs = Utilities.LoadPrefs();
 
-			Debug.WriteLine("Loading GameDirectory: " + prefs.GameDirectory);
-			Log("Loading GameDirectory: " + prefs.GameDirectory, LogType.Info);
+			if (prefs.GameDirectory != "")
+			{
+				Debug.WriteLine("Loading GameDirectory: " + prefs.GameDirectory);
+				Log("Loading GameDirectory: " + prefs.GameDirectory, LogType.Info);
+			}
+			else
+			{
+				SetGameDirectoryPrompt prompt = new SetGameDirectoryPrompt(this);
+				prompt.Show();
+			}
 		}
 
 
 		/// <summary>
 		/// Starts the update flow (duh).
 		/// </summary>
-		public static void StartUpdateFlow()
-		{
-			OpenWindow_Updates();
-		}
+		public static void Flow_Updates_Start() => OpenWindow_Updates();
 
 
 		/// <summary>
@@ -1451,35 +1469,44 @@ namespace ZeroMunge
 			{
 				if (!row.IsNewRow)
 				{
-					DataFilesRow rowData = new DataFilesRow();
+					try
+					{
+						DataFilesRow rowData = new DataFilesRow();
 
-					rowData.Enabled = (bool)row.Cells[INT_DATA_FILES_CHK_ENABLED].Value;
-					rowData.Copy = (bool)row.Cells[INT_DATA_FILES_CHK_COPY].Value;
-					rowData.IsMungeScript = (bool)row.Cells[INT_DATA_FILES_CHK_IS_MUNGE_SCRIPT].Value;
-					rowData.IsValid = (bool)row.Cells[INT_DATA_FILES_CHK_IS_VALID].Value;
+						rowData.Enabled = (bool)row.Cells[INT_DATA_FILES_CHK_ENABLED].Value;
+						rowData.Copy = (bool)row.Cells[INT_DATA_FILES_CHK_COPY].Value;
+						rowData.IsMungeScript = (bool)row.Cells[INT_DATA_FILES_CHK_IS_MUNGE_SCRIPT].Value;
+						rowData.IsValid = (bool)row.Cells[INT_DATA_FILES_CHK_IS_VALID].Value;
 
-					if (row.Cells[INT_DATA_FILES_TXT_FILE].Value != null)
-						rowData.FilePath = row.Cells[INT_DATA_FILES_TXT_FILE].Value.ToString();
-					else
-						rowData.FilePath = "";
+						if (row.Cells[INT_DATA_FILES_TXT_FILE].Value != null)
+							rowData.FilePath = row.Cells[INT_DATA_FILES_TXT_FILE].Value.ToString();
+						else
+							rowData.FilePath = "";
 
-					if (row.Cells[INT_DATA_FILES_TXT_STAGING].Value != null)
-						rowData.StagingDir = row.Cells[INT_DATA_FILES_TXT_STAGING].Value.ToString();
-					else
-						rowData.StagingDir = "";
+						if (row.Cells[INT_DATA_FILES_TXT_STAGING].Value != null)
+							rowData.StagingDir = row.Cells[INT_DATA_FILES_TXT_STAGING].Value.ToString();
+						else
+							rowData.StagingDir = "";
 
-					if (row.Cells[INT_DATA_FILES_TXT_MUNGE_DIR].Value != null)
-						rowData.MungeDir = row.Cells[INT_DATA_FILES_TXT_MUNGE_DIR].Value.ToString();
-					else
-						rowData.MungeDir = "";
+						if (row.Cells[INT_DATA_FILES_TXT_MUNGE_DIR].Value != null)
+							rowData.MungeDir = row.Cells[INT_DATA_FILES_TXT_MUNGE_DIR].Value.ToString();
+						else
+							rowData.MungeDir = "";
 
-					if (row.Cells[INT_DATA_FILES_TXT_MUNGED_FILES].Value != null)
-						rowData.MungedFiles = row.Cells[INT_DATA_FILES_TXT_MUNGED_FILES].Value.ToString();
-					else
-						rowData.MungedFiles = "";
+						if (row.Cells[INT_DATA_FILES_TXT_MUNGED_FILES].Value != null)
+							rowData.MungedFiles = row.Cells[INT_DATA_FILES_TXT_MUNGED_FILES].Value.ToString();
+						else
+							rowData.MungedFiles = "";
 
 
-					saveData.AddRow(rowData);
+						saveData.AddRow(rowData);
+					}
+					catch (NullReferenceException e)
+					{
+						var message = "Failed to write row " + row.Index.ToString() + " to file. Reason: " + e.Message;
+						Trace.WriteLine(message);
+						Log(message, LogType.Error);
+					}
 				}
 			}
 
@@ -2601,8 +2628,39 @@ namespace ZeroMunge
 		// Prompt the user to select the file path of SWBF2's executable.
 		private void btn_SetGamePath_Click(object sender, EventArgs e)
 		{
-			openDlg_SelectGameExePrompt.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
-			openDlg_SelectGameExePrompt.ShowDialog();
+			Flow_SetGameDirectory_Start();
+		}
+
+
+		/// <summary>
+		/// Start the flow for setting the GameDirectory.
+		/// </summary>
+		/// <returns>True, the user completed the flow successfully. False, the user cancelled out of the flow at some point.</returns>
+		public bool Flow_SetGameDirectory_Start()
+		{
+			// If the GameDirectory isn't already set, start in Program Files
+			string initialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+			if (prefs.GameDirectory != "")
+			{
+				initialDirectory = prefs.GameDirectory;
+				return true;
+			}
+
+			openDlg_SelectGameExePrompt.InitialDirectory = initialDirectory;
+			// Did the user quit out of the dialog?
+			if (openDlg_SelectGameExePrompt.ShowDialog() != DialogResult.OK)
+			{
+				Flow_SetGameDirectory_WarnQuit();
+				return false;
+			}
+
+			return false;
+		}
+
+
+		public void Flow_SetGameDirectory_WarnQuit()
+		{
+			Log("GameDirectory is not set!", LogType.Warning);
 		}
 
 

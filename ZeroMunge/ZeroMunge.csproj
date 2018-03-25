@@ -76,6 +76,16 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>ZeroMungeNameKey.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugClearSettings|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DebugClearSettings\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;BUILD_DEBUG_CLEARSETTINGS</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAPICodePack-Core.1.1.2\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
@@ -112,6 +122,12 @@
     <Compile Include="Forms\Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SetGameDirectoryPrompt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SetGameDirectoryPrompt.Designer.cs">
+      <DependentUpon>SetGameDirectoryPrompt.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Updates.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -137,6 +153,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Preferences.resx">
       <DependentUpon>Preferences.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SetGameDirectoryPrompt.resx">
+      <DependentUpon>SetGameDirectoryPrompt.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Updates.resx">
       <DependentUpon>Updates.cs</DependentUpon>

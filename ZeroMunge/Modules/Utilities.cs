@@ -878,7 +878,7 @@ namespace ZeroMunge
 			{
 				case UpdateResult.Available:
 					Trace.WriteLine("Check succeeded. Update is available. Pushing update prompt.");
-					ZeroMunge.StartUpdateFlow();
+					ZeroMunge.Flow_Updates_Start();
 					break;
 
 				case UpdateResult.NoneAvailable:
