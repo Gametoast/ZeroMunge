@@ -2298,7 +2298,7 @@ namespace ZeroMunge
 
 			// Remove any empty lines that were somehow missed
 			string[] lines = text_MungedFilesEdit.Lines;
-			if (lines[lines.Length - 1] == "" || lines[lines.Length - 1] == "\n")
+			if (lines.Count() > 0 && (lines[lines.Length - 1] == "" || lines[lines.Length - 1] == "\n"))
 			{
 				Debug.WriteLine("Found empty line! EXTERMINATE, EXTERMINATE, EXTERMINATE...");
 
