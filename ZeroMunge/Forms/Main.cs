@@ -446,7 +446,8 @@ namespace ZeroMunge
 		{
 			try
 			{
-				if (ProcManager_fileList.ElementAt(whichFile).MungedFiles != null &&
+				if (ProcManager_fileList.ElementAt(whichFile).MungedFiles.Count() > 0 &&
+				ProcManager_fileList.ElementAt(whichFile).MungedFiles != null &&
 				ProcManager_fileList.ElementAt(whichFile).MungedFiles[0] != "nil" &&
 				ProcManager_fileList.ElementAt(whichFile).StagingDir != null &&
 				ProcManager_fileList.ElementAt(whichFile).CopyToStaging != null)
