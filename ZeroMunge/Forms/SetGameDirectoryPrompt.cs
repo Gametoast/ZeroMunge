@@ -44,6 +44,10 @@ namespace ZeroMunge
 		private void btn_No_Click(object sender, EventArgs e)
 		{
 			//mainForm.Flow_SetGameDirectory_WarnQuit();
+			if (!promptResult)
+			{
+				//mainForm.Flow_SetGameDirectory_WarnQuit();
+			}
 			Close();
 		}
 

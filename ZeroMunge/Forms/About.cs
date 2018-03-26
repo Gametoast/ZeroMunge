@@ -22,7 +22,7 @@ namespace ZeroMunge
 		{
 			// Initialize build info text
 			string buildNum = Properties.Settings.Default.Info_BuildNum.ToString();
-			string buildDate = Properties.Settings.Default.Info_BuildDate.ToString();
+			string buildDate = Properties.Settings.Default.Info_BuildDate.ToString("yyyy-MM-dd");
 			lbl_BuildInfo.Text = "Revision " + buildNum + " — " + buildDate;
 
 			// Initialize license text

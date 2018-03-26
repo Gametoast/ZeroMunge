@@ -39,17 +39,17 @@
 			this.text_License = new System.Windows.Forms.RichTextBox();
 			this.lbl_LicensePre = new System.Windows.Forms.Label();
 			this.flow_License = new System.Windows.Forms.FlowLayoutPanel();
-			this.img_Logo = new System.Windows.Forms.PictureBox();
 			this.flow_Links = new System.Windows.Forms.FlowLayoutPanel();
 			this.link_Updates = new System.Windows.Forms.LinkLabel();
 			this.link_Contact = new System.Windows.Forms.LinkLabel();
 			this.link_FrayedWires = new System.Windows.Forms.LinkLabel();
 			this.FormTooltips = new System.Windows.Forms.ToolTip(this.components);
+			this.img_Logo = new System.Windows.Forms.PictureBox();
 			this.flow_AppInfo.SuspendLayout();
 			this.pnl_License.SuspendLayout();
 			this.flow_License.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.img_Logo)).BeginInit();
 			this.flow_Links.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.img_Logo)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// btn_Accept
@@ -148,21 +148,6 @@
 			this.flow_License.TabIndex = 4;
 			this.flow_License.WrapContents = false;
 			// 
-			// img_Logo
-			// 
-			this.img_Logo.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.img_Logo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.img_Logo.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.img_Logo.Image = ((System.Drawing.Image)(resources.GetObject("img_Logo.Image")));
-			this.img_Logo.Location = new System.Drawing.Point(12, 12);
-			this.img_Logo.Name = "img_Logo";
-			this.img_Logo.Size = new System.Drawing.Size(440, 113);
-			this.img_Logo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-			this.img_Logo.TabIndex = 1;
-			this.img_Logo.TabStop = false;
-			this.img_Logo.WaitOnLoad = true;
-			this.img_Logo.Click += new System.EventHandler(this.img_Logo_Click);
-			// 
 			// flow_Links
 			// 
 			this.flow_Links.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -215,6 +200,21 @@
 			this.FormTooltips.SetToolTip(this.link_FrayedWires, "Open a link to the official web site for Frayed Wires Studios.");
 			this.link_FrayedWires.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.link_FrayedWires_LinkClicked);
 			// 
+			// img_Logo
+			// 
+			this.img_Logo.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.img_Logo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.img_Logo.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.img_Logo.Image = ((System.Drawing.Image)(resources.GetObject("img_Logo.Image")));
+			this.img_Logo.Location = new System.Drawing.Point(12, 12);
+			this.img_Logo.Name = "img_Logo";
+			this.img_Logo.Size = new System.Drawing.Size(440, 113);
+			this.img_Logo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.img_Logo.TabIndex = 1;
+			this.img_Logo.TabStop = false;
+			this.img_Logo.WaitOnLoad = true;
+			this.img_Logo.Click += new System.EventHandler(this.img_Logo_Click);
+			// 
 			// About
 			// 
 			this.AcceptButton = this.btn_Accept;
@@ -229,8 +229,9 @@
 			this.Controls.Add(this.btn_Accept);
 			this.KeyPreview = true;
 			this.MaximizeBox = false;
+			this.MaximumSize = new System.Drawing.Size(480, 420);
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(480, 400);
+			this.MinimumSize = new System.Drawing.Size(480, 420);
 			this.Name = "About";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
@@ -243,9 +244,9 @@
 			this.pnl_License.ResumeLayout(false);
 			this.flow_License.ResumeLayout(false);
 			this.flow_License.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.img_Logo)).EndInit();
 			this.flow_Links.ResumeLayout(false);
 			this.flow_Links.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.img_Logo)).EndInit();
 			this.ResumeLayout(false);
 
         }

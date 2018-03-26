@@ -694,9 +694,27 @@ namespace ZeroMunge
 		}
 
 
-		public static List<JsonPair> ParseJsonStrings(string url)
+		public static List<JsonPair> ParseJsonStrings(Form sender, string url)
 		{
-			var json = new WebClient().DownloadString(url);
+			string json;
+
+			try
+			{
+				json = new WebClient().DownloadString(url);
+			}
+			catch (WebException e)
+			{
+				var message = "Failed to retrieve update payload. Reason: " + e.Message;
+				Trace.WriteLine(message);
+
+				ZeroMunge mainForm = sender as ZeroMunge;
+				if (mainForm != null)
+				{
+					mainForm.Log(message, ZeroMunge.LogType.Error);
+				}
+
+				return null;
+			}
 
 			List<JsonPair> parsedJson = new List<JsonPair>();
 			JsonPair curPair = new JsonPair();
@@ -760,7 +778,9 @@ namespace ZeroMunge
 
 			if (CheckForInternetConnection(sender))
 			{
-				updateInfo.LatestVersionInfo = GetLatestVersion();
+				updateInfo.LatestVersionInfo = GetLatestVersion(sender);
+				if (updateInfo.LatestVersionInfo == null) return null;
+
 				int curBuild = Properties.Settings.Default.Info_BuildNum;
 
 				Debug.WriteLine("Current build, latest build:    {0}, {1}", curBuild, updateInfo.LatestVersionInfo.BuildNum);
@@ -791,9 +811,11 @@ namespace ZeroMunge
 		/// Checks for the latest application version from a pre-specified updates URL and returns a VersionInfo object containing the information.
 		/// </summary>
 		/// <returns>UpdateInfo object containing the latest build number, the download URL, and release notes.</returns>
-		public static VersionInfo GetLatestVersion()
+		public static VersionInfo GetLatestVersion(Form sender)
 		{
-			var parsedJson = ParseJsonStrings(UPDATES_URL);
+			List<JsonPair> parsedJson = new List<JsonPair>();
+			parsedJson = ParseJsonStrings(sender, UPDATES_URL);
+			if (parsedJson == null) return null;
 			VersionInfo info = new VersionInfo
 			{
 				BuildNum = 0
@@ -874,6 +896,13 @@ namespace ZeroMunge
 		public static void StartFlow_CheckForUpdates(Form sender)
 		{
 			UpdateInfo updateInfo = CheckForUpdates(sender);
+			if (updateInfo == null)
+			{
+				Trace.WriteLine("Check failed for an unknown reason.");
+				MessageBox.Show(sender, "Unable to check for updates for an unknown reason.", "Updates");
+				return;
+			}
+
 			switch (updateInfo.CheckResult)
 			{
 				case UpdateResult.Available:
@@ -911,33 +940,32 @@ namespace ZeroMunge
 		/// <returns>If the file is opened successfully, a success message is returned. If not, an error message is returned.</returns>
 		public static string OpenFile(string fileName)
 		{
-			string path = "ZeroMunge\\" + fileName;
+			string file = Directory.GetCurrentDirectory() + "\\ZeroMunge\\" + fileName;
 			string result = "";
 
 			try
 			{
-				string file = Directory.GetCurrentDirectory() + "\\" + path;
 				Process.Start(file);
-				result = "Opening " + path;
+				result = "Opening " + file;
 			}
 			catch (UnauthorizedAccessException ex)
 			{
-				result = "Could not open " + path + ". Reason: " + ex.Message;
+				result = "Could not open " + file + ". Reason: " + ex.Message;
 				Trace.WriteLine(result);
 			}
 			catch (FileNotFoundException ex)
 			{
-				result = "Could not open " + path + ". Reason: " + ex.Message;
+				result = "Could not open " + file + ". Reason: " + ex.Message;
 				Trace.WriteLine(result);
 			}
 			catch (ObjectDisposedException ex)
 			{
-				result = "Could not open " + path + ". Reason: " + ex.Message;
+				result = "Could not open " + file + ". Reason: " + ex.Message;
 				Trace.WriteLine(result);
 			}
 			catch (System.ComponentModel.Win32Exception ex)
 			{
-				result = "Could not open " + path + ". Reason: " + ex.Message;
+				result = "Could not open " + file + ". Reason: " + ex.Message;
 				Trace.WriteLine(result);
 			}
 
@@ -993,7 +1021,8 @@ namespace ZeroMunge
 				LogPollingRate = Properties.Settings.Default.LogPollingRate,
 				OutputLogToFile = Properties.Settings.Default.OutputLogToFile,
 				LogPrintTimestamps = Properties.Settings.Default.LogPrintTimestamps,
-				ShowUpdatePromptOnStartup = Properties.Settings.Default.ShowUpdatePromptOnStartup
+				ShowUpdatePromptOnStartup = Properties.Settings.Default.ShowUpdatePromptOnStartup,
+				CheckForUpdatesOnStartup = Properties.Settings.Default.CheckForUpdatesOnStartup
 			};
 
 			return prefs;
@@ -1016,6 +1045,7 @@ namespace ZeroMunge
 			Properties.Settings.Default.OutputLogToFile = prefs.OutputLogToFile;
 			Properties.Settings.Default.LogPrintTimestamps = prefs.LogPrintTimestamps;
 			Properties.Settings.Default.ShowUpdatePromptOnStartup = prefs.ShowUpdatePromptOnStartup;
+			Properties.Settings.Default.CheckForUpdatesOnStartup = prefs.CheckForUpdatesOnStartup;
 
 			Properties.Settings.Default.Save();
 		}
@@ -1053,6 +1083,7 @@ namespace ZeroMunge
 		public bool OutputLogToFile { get; set; }
 		public bool LogPrintTimestamps { get; set; }
 		public bool ShowUpdatePromptOnStartup { get; set; }
+		public bool CheckForUpdatesOnStartup { get; set; }
 	}
 
 	public class ReqChunk

@@ -42,6 +42,14 @@ namespace ZeroMunge
 		public const string LINK_WEBSITE = "https://www.frayedwiresstudios.com/";
 		public const string LINK_PROJECT = "https://github.com/marth8880/ZeroMunge";
 
+		// Message requesting the user to report a problem, if found
+		public string MSG_REPORT_PROBLEM = string.Concat("\n\n\t", "Please report this problem here: ", LINK_GH_OPENISSUES, "\n\n",
+						"\t", "Be sure to include:", "\n",
+						"\t\t", "1. The log file, which can be saved with the 'Save Log As...' button.", "\n",
+						"\t\t", "2. A short summary of what you were doing when this problem occurred.", "\n",
+						"\t\t", "3. Steps to reproduce this issue, if possible.", "\n\n",
+						"Thanks!", "\n\n");
+
 		// data_Files : Column names
 		public const string STR_DATA_FILES_CHK_ENABLED = "col_Enabled";
 		public const string STR_DATA_FILES_CHK_COPY = "col_Copy";
@@ -156,57 +164,88 @@ namespace ZeroMunge
 					Log(ex.Message, LogType.Error);
 				}
 			}
+
+			Log(string.Format("Starting Zero Munge  r{0}--{1}", Properties.Settings.Default.Info_BuildNum.ToString(), Properties.Settings.Default.Info_BuildDate.ToString("yyyy-MM-dd")), LogType.Info);
 		}
 
 		private void ZeroMunge_Shown(object sender, EventArgs e)
 		{
 			// Check for application updates
-			UpdateInfo updateInfo = Utilities.CheckForUpdates(this);
-			latestAppVersion = updateInfo.LatestVersionInfo;
-
-			switch (updateInfo.CheckResult)
+			if (prefs.CheckForUpdatesOnStartup)
 			{
-				case Utilities.UpdateResult.Available:
-					string latestVer = string.Format("r{0}--{1}", updateInfo.LatestVersionInfo.BuildNum.ToString(), updateInfo.LatestVersionInfo.BuildDate);
-					string currentVer = string.Format("r{0}--{1}", Properties.Settings.Default.Info_BuildNum.ToString(), Properties.Settings.Default.Info_BuildDate.ToString("MMM-dd-yyyy"));
-					string releaseNotes = updateInfo.LatestVersionInfo.ReleaseNotes.Replace("\n", "\n\t\t");
+				Log("Checking for updates... (Auto-check can be disabled in Preferences)", LogType.Update);
 
-					string logMessage = string.Concat("Application update is available!", "\n\t", 
-						"Current version:", "   ", currentVer, "\n\t", 
-						"Latest version:", "    ", latestVer, "\n\t", 
-						"Download link:", "     ", updateInfo.LatestVersionInfo.DownloadUrl, "\n\t", 
-						"Release notes:", "\n\t\t", releaseNotes);
+				ActiveForm.Cursor = Cursors.WaitCursor;
+				Application.DoEvents();
 
-					if (prefs.ShowUpdatePromptOnStartup)
+				UpdateInfo updateInfo = Utilities.CheckForUpdates(this);
+
+				ActiveForm.Cursor = Cursors.Default;
+				Application.DoEvents();
+
+				if (updateInfo != null)
+				{
+					latestAppVersion = updateInfo.LatestVersionInfo;
+
+					switch (updateInfo.CheckResult)
 					{
-						Trace.WriteLine("Check succeeded. Update is available. Pushing update prompt.");
-						Thread logThread = new Thread(() =>
-						{
-							Log(logMessage, LogType.Info);
-						});
-						logThread.Start();
-						Flow_Updates_Start();
-					}
-					else
-					{
-						Trace.WriteLine("Check succeeded. Update is available, but user has specified to not show the update prompt on startup.");
-						Thread logThread = new Thread(() =>
-						{
-							Log(logMessage, LogType.Info);
-						});
-						logThread.Start();
-					}
-					break;
+						case Utilities.UpdateResult.Available:
+							string latestVer = string.Format("r{0}--{1}", updateInfo.LatestVersionInfo.BuildNum.ToString(), updateInfo.LatestVersionInfo.BuildDate);
+							string currentVer = string.Format("r{0}--{1}", Properties.Settings.Default.Info_BuildNum.ToString(), Properties.Settings.Default.Info_BuildDate.ToString("yyyy-dd-mm"));
+							string releaseNotes = updateInfo.LatestVersionInfo.ReleaseNotes.Replace("\n", "\n\t\t");
 
-				case Utilities.UpdateResult.NoneAvailable:
-					Trace.WriteLine("Check succeeded. No updates are available.");
-					break;
+							string logMessage = string.Concat("Application update is available!", "\n\t",
+								"Current version:", "   ", currentVer, "\n\t",
+								"Latest version:", "    ", latestVer, "\n\t",
+								"Download link:", "     ", updateInfo.LatestVersionInfo.DownloadUrl, "\n\t",
+								"Release notes:", "\n\t\t", releaseNotes);
 
-				case Utilities.UpdateResult.NetConnectionError:
-					Trace.WriteLine("Check failed. Network connection could not be established.");
-					break;
+							if (prefs.ShowUpdatePromptOnStartup)
+							{
+								Trace.WriteLine("Check succeeded. Update is available. Pushing update prompt.");
+								Thread logThread = new Thread(() =>
+								{
+									Log(logMessage, LogType.Update);
+								});
+								logThread.Start();
+								Flow_Updates_Start();
+							}
+							else
+							{
+								Trace.WriteLine("Check succeeded. Update is available, but user has specified to not show the update prompt on startup.");
+								Thread logThread = new Thread(() =>
+								{
+									Log(logMessage, LogType.Update);
+								});
+								logThread.Start();
+							}
+							break;
+
+						case Utilities.UpdateResult.NoneAvailable:
+							Trace.WriteLine("Check succeeded. No updates are available.");
+							Log("No updates are available", LogType.Update);
+							break;
+
+						case Utilities.UpdateResult.NetConnectionError:
+							Trace.WriteLine("Check failed. Network connection could not be established.");
+							Log("Network connection could not be established.", LogType.Update);
+							break;
+					}
+				}
 			}
-			
+
+			Log("Checking GameDirectory...", LogType.Info);
+			if (prefs.GameDirectory != "")
+			{
+				Debug.WriteLine("Loading GameDirectory: " + prefs.GameDirectory);
+				Log("Loading GameDirectory: " + prefs.GameDirectory, LogType.Info);
+			}
+			else
+			{
+				SetGameDirectoryPrompt prompt = new SetGameDirectoryPrompt(this);
+				prompt.Show();
+			}
+
 		}
 		
 
@@ -227,17 +266,6 @@ namespace ZeroMunge
 		{
 			// Load the saved user settings into our prefs object
 			prefs = Utilities.LoadPrefs();
-
-			if (prefs.GameDirectory != "")
-			{
-				Debug.WriteLine("Loading GameDirectory: " + prefs.GameDirectory);
-				Log("Loading GameDirectory: " + prefs.GameDirectory, LogType.Info);
-			}
-			else
-			{
-				SetGameDirectoryPrompt prompt = new SetGameDirectoryPrompt(this);
-				prompt.Show();
-			}
 		}
 
 
@@ -808,6 +836,7 @@ namespace ZeroMunge
 			None,
 			Munge,
 			Info,
+			Update,
 			Warning,
 			Error
 		};
@@ -2656,28 +2685,53 @@ namespace ZeroMunge
 
 
 		/// <summary>
-		/// Start the flow for setting the GameDirectory.
+		/// Starts the flow for setting the GameDirectory.
 		/// </summary>
-		/// <returns>True, the user completed the flow successfully. False, the user cancelled out of the flow at some point.</returns>
 		public bool Flow_SetGameDirectory_Start()
+		{
+			return Flow_SetGameDirectory_ShowDialog();
+		}
+
+
+		/// <summary>
+		/// Gets the initial directory in which to start the SetGameDirectory dialog.
+		/// </summary>
+		/// <returns>Program Files directory if the GameDirectory isn't already set, otherwise the existing GameDirectory value from user prefs.</returns>
+		public string Flow_SetGameDirectory_GetInitialDirectory()
 		{
 			// If the GameDirectory isn't already set, start in Program Files
 			string initialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
 			if (prefs.GameDirectory != "")
 			{
 				initialDirectory = prefs.GameDirectory;
-				return true;
 			}
 
-			openDlg_SelectGameExePrompt.InitialDirectory = initialDirectory;
+			return initialDirectory;
+		}
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns>True, the user completed the flow successfully. False, the user cancelled out of the flow at some point.</returns>
+		public bool Flow_SetGameDirectory_ShowDialog()
+		{
+			openDlg_SelectGameExePrompt.InitialDirectory = Flow_SetGameDirectory_GetInitialDirectory();
+
 			// Did the user quit out of the dialog?
 			if (openDlg_SelectGameExePrompt.ShowDialog() != DialogResult.OK)
 			{
-				Flow_SetGameDirectory_WarnQuit();
+				// Give a warning if the user cancelled the flow and the GameDirectory is still unset
+				if (prefs.GameDirectory == "")
+				{
+					Flow_SetGameDirectory_WarnQuit();
+				}
 				return false;
 			}
-
-			return false;
+			else
+			{
+				return true;
+			}
 		}
 
 
@@ -3059,17 +3113,17 @@ namespace ZeroMunge
 
 		private void menu_viewChangelogToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			OpenFile("CHANGELOG.md");
+			OpenFile("CHANGELOG.html");
 		}
 
 		private void menu_viewLicenseToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			OpenFile("LICENSE.md");
+			OpenFile("LICENSE.html");
 		}
 
 		private void menu_viewReadmeToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			OpenFile("README.md");
+			OpenFile("README.html");
 		}
 
 		private void menu_checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -3113,14 +3167,15 @@ namespace ZeroMunge
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			var parsedJson = Utilities.ParseJsonStrings("https://raw.githubusercontent.com/marth8880/ZeroMunge/master/test.json");
+			var parsedJson = Utilities.ParseJsonStrings(this, "https://raw.githubusercontent.com/marth8880/ZeroMunge/master/test.json");
+			if (parsedJson == null) return;
 
 			foreach (JsonPair pair in parsedJson)
 			{
 				Debug.WriteLine("Key, Value:    {0}, {1}", pair.Key, pair.Value);
 			}
 
-			var isLatest = Utilities.GetLatestVersion();
+			var isLatest = Utilities.GetLatestVersion(this);
 
 			Debug.WriteLine("isLatest: " + isLatest);
 

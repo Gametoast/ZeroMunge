@@ -36,6 +36,7 @@ namespace ZeroMunge
 			chk_OutputLogToFile.Checked = prefs.OutputLogToFile;
 			chk_LogPrintTimestamps.Checked = prefs.LogPrintTimestamps;
 			chk_ShowUpdatePromptOnStartup.Checked = prefs.ShowUpdatePromptOnStartup;
+			chk_CheckForUpdatesOnStartup.Checked = prefs.CheckForUpdatesOnStartup;
 		}
 
 
@@ -123,6 +124,11 @@ namespace ZeroMunge
 		private void chk_ShowUpdatePromptOnStartup_CheckedChanged(object sender, EventArgs e)
 		{
 			prefs.ShowUpdatePromptOnStartup = chk_ShowUpdatePromptOnStartup.Checked;
+		}
+
+		private void chk_CheckForUpdatesOnStartup_CheckedChanged(object sender, EventArgs e)
+		{
+			prefs.CheckForUpdatesOnStartup = chk_CheckForUpdatesOnStartup.Checked;
 		}
 
 		private void chk_OutputLogToFile_CheckedChanged(object sender, EventArgs e)
