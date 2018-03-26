@@ -181,9 +181,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <None Include="ZeroMungeNameKey.pfx" />
-    <None Include="ZeroMunge\ZeroMungeHelp.chm">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -216,10 +213,8 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /y "$(SolutionDir)CHANGELOG.md" "$(TargetDir)ZeroMunge\CHANGELOG.md"
-copy /y "$(SolutionDir)LICENSE.md" "$(TargetDir)ZeroMunge\LICENSE.md"
-copy /y "$(SolutionDir)README.md" "$(TargetDir)ZeroMunge\README.md"
-copy /y "$(SolutionDir)HelpDocs\ZeroMungeHelp.chm" "$(TargetDir)ZeroMunge\ZeroMungeHelp.chm"</PostBuildEvent>
+    <PostBuildEvent>copy /y "$(SolutionDir)HelpDocs\ZeroMungeHelp.chm" "$(TargetDir)ZeroMunge\ZeroMungeHelp.chm"
+copy /y "$(SolutionDir)app_banner.jpg" "$(TargetDir)ZeroMunge\app_banner.jpg"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
