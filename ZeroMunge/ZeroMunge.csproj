@@ -203,6 +203,15 @@
     <Content Include="ZeroMunge\abort.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="ZeroMunge\CHANGELOG.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ZeroMunge\LICENSE.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ZeroMunge\README.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="ZeroMunge\start.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -1,6 +1,6 @@
 {
-	'BuildNum': 1130,
-	'BuildDate': 'Mar-18-2018',
-	'DownloadUrl': 'https://github.com/marth8880/ZeroMunge/releases/tag/r113',
-	'ReleaseNotes': '- Some note\n- Another note\n- More notes\n- etc'
+	"BuildNum": 1130,
+	"BuildDate": "2018-03-18",
+	"DownloadUrl": "https://github.com/marth8880/ZeroMunge/releases/tag/r113",
+	"ReleaseNotes": "- Some note\n- Another note\n- More notes\n- etc"
 }
