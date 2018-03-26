@@ -6,6 +6,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeroMunge", "ZeroMunge\Zero
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D07E96B9-0EA9-4A5D-BDDE-FB50508D41DE}"
 	ProjectSection(SolutionItems) = preProject
+		CHANGELOG.md = CHANGELOG.md
+		LICENSE.md = LICENSE.md
+		README.md = README.md
 		HelpDocs\src\styles.css = HelpDocs\src\styles.css
 		HelpDocs\src\topic_filelist.html = HelpDocs\src\topic_filelist.html
 		HelpDocs\src\topic_gs.html = HelpDocs\src\topic_gs.html
