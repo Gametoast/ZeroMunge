@@ -4,7 +4,7 @@ All notable changes to Zero Munge will be documented in this file. Numbers enclo
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
-## [145] - 2018-03-26
+## [r146] - 2018-03-26
 
 ### Added
 

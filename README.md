@@ -23,7 +23,7 @@ Zero Munge includes the following features. Completed features are checked off.
 
 ## Downloads
 
-* [**ZeroMunge-r145 (latest)**](http://bit.ly/ZeroMunge-r145-DL)
+* [**ZeroMunge-r146 (latest)**](http://bit.ly/ZeroMunge-r146-DL)
 * [ZeroMunge-r113](http://bit.ly/ZeroMunge-r113-DL)
 * [ZeroMunge-r89](http://bit.ly/ZeroMunge-r89-DL)
 * [ZeroMunge-r78](http://bit.ly/ZeroMunge-r78-DL)

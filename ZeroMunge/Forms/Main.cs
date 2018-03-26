@@ -191,14 +191,14 @@ namespace ZeroMunge
 					{
 						case Utilities.UpdateResult.Available:
 							string latestVer = string.Format("r{0}--{1}", updateInfo.LatestVersionInfo.BuildNum.ToString(), updateInfo.LatestVersionInfo.BuildDate);
-							string currentVer = string.Format("r{0}--{1}", Properties.Settings.Default.Info_BuildNum.ToString(), Properties.Settings.Default.Info_BuildDate.ToString("yyyy-dd-mm"));
+							string currentVer = string.Format("r{0}--{1}", Properties.Settings.Default.Info_BuildNum.ToString(), Properties.Settings.Default.Info_BuildDate.ToString("yyyy-MM-dd"));
 							string releaseNotes = updateInfo.LatestVersionInfo.ReleaseNotes.Replace("\n", "\n\t\t");
 
 							string logMessage = string.Concat("Application update is available!", "\n\t",
 								"Current version:", "   ", currentVer, "\n\t",
 								"Latest version:", "    ", latestVer, "\n\t",
 								"Download link:", "     ", updateInfo.LatestVersionInfo.DownloadUrl, "\n\t",
-								"Release notes:", "\n\t\t", releaseNotes);
+								"Release notes:", "\n\t\t", releaseNotes, "\n");
 
 							if (prefs.ShowUpdatePromptOnStartup)
 							{
