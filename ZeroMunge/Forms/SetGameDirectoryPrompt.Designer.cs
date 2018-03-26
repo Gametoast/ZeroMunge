@@ -71,10 +71,11 @@
 			// 
 			// cont_Btns
 			// 
-			this.cont_Btns.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+			this.cont_Btns.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.cont_Btns.Controls.Add(this.btn_Yes);
 			this.cont_Btns.Controls.Add(this.btn_No);
-			this.cont_Btns.Location = new System.Drawing.Point(81, 33);
+			this.cont_Btns.Location = new System.Drawing.Point(82, 33);
 			this.cont_Btns.Name = "cont_Btns";
 			this.cont_Btns.Size = new System.Drawing.Size(157, 23);
 			this.cont_Btns.TabIndex = 3;
@@ -90,7 +91,9 @@
 			this.Controls.Add(this.lbl_Description);
 			this.KeyPreview = true;
 			this.MaximizeBox = false;
+			this.MaximumSize = new System.Drawing.Size(336, 107);
 			this.MinimizeBox = false;
+			this.MinimumSize = new System.Drawing.Size(336, 107);
 			this.Name = "SetGameDirectoryPrompt";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;

@@ -72,10 +72,11 @@
 			// 
 			// cont_Btns
 			// 
-			this.cont_Btns.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+			this.cont_Btns.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.cont_Btns.Controls.Add(this.btn_Yes);
 			this.cont_Btns.Controls.Add(this.btn_No);
-			this.cont_Btns.Location = new System.Drawing.Point(69, 63);
+			this.cont_Btns.Location = new System.Drawing.Point(70, 63);
 			this.cont_Btns.Name = "cont_Btns";
 			this.cont_Btns.Size = new System.Drawing.Size(157, 23);
 			this.cont_Btns.TabIndex = 3;
