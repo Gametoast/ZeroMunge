@@ -1,5 +1,6 @@
 {
-	'BuildNum': 113,
-	'DownloadUrl': 'https://github.com/marth8880/ZeroMunge/releases/tag/r113',
-	'ReleaseNotes': 'NONE'
+	"BuildNum": 146,
+	"BuildDate": "2018-03-26",
+	"DownloadUrl": "https://github.com/marth8880/ZeroMunge/releases/tag/r146",
+	"ReleaseNotes": "Added:\n\n- When an update is available, the build num/date, download link, and release notes are printed to the Output Log on application load\n- If GameDirectory is unset, user is prompted on application load to set it (#15)\n- Menu items to check for updates, report bugs, provide suggestions, view all open issues, and view changelog/license/readme files (#17)\n- User preference to toggle whether application should check for updates on startup\n\nChanged:\n\n- Output Log now updates at a timed interval when a job is running, fixing its performance issues\n- 'Remove' button now removes all selected rows instead of only the last-selected row (#13)\n- User can now target any executable when setting GameDirectory\n\nFixed:\n\n- Stray sub-REQs are added to the Munged Files list for side REQs (#4)\n- Copy/Cut/Paste/Select All/Delete key combos in Munged Files Edit window don't do anything (#7)\n- Out-of-date tooltip text for 'Check for updates' link (#9)\n- Exception thrown when attempting to commit an empty Munged Files list (#5)\n- Exception thrown when a job finishes that contains an empty Munged Files list (#6)\n- 'Add Files...' button updates the selected row instead of always inserting a new row (#11)\n- 'Remove All' button doesn't always remove all rows from the file list (#12)\n- Exception thrown when attempting to save a file list with an empty row (#16)\n- Exception thrown when update URL domain can't be resolved during update check"
 }
