@@ -918,7 +918,7 @@ namespace ZeroMunge
 			{
 				string file = Directory.GetCurrentDirectory() + "\\" + path;
 				Process.Start(file);
-				result = "Opened " + path;
+				result = "Opening " + path;
 			}
 			catch (UnauthorizedAccessException ex)
 			{
