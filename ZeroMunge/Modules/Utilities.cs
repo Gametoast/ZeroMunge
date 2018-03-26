@@ -905,6 +905,47 @@ namespace ZeroMunge
 
 
 		/// <summary>
+		/// Opens the specified file in the 'ZeroMunge' directory.
+		/// </summary>
+		/// <param name="fileName">Name of the file to open.</param>
+		/// <returns>If the file is opened successfully, a success message is returned. If not, an error message is returned.</returns>
+		public static string OpenFile(string fileName)
+		{
+			string path = "ZeroMunge\\" + fileName;
+			string result = "";
+
+			try
+			{
+				string file = Directory.GetCurrentDirectory() + "\\" + path;
+				Process.Start(file);
+				result = "Opened " + path;
+			}
+			catch (UnauthorizedAccessException ex)
+			{
+				result = "Could not open " + path + ". Reason: " + ex.Message;
+				Trace.WriteLine(result);
+			}
+			catch (FileNotFoundException ex)
+			{
+				result = "Could not open " + path + ". Reason: " + ex.Message;
+				Trace.WriteLine(result);
+			}
+			catch (ObjectDisposedException ex)
+			{
+				result = "Could not open " + path + ". Reason: " + ex.Message;
+				Trace.WriteLine(result);
+			}
+			catch (System.ComponentModel.Win32Exception ex)
+			{
+				result = "Could not open " + path + ". Reason: " + ex.Message;
+				Trace.WriteLine(result);
+			}
+
+			return result;
+		}
+
+
+		/// <summary>
 		/// Plays the specified sound type.
 		/// </summary>
 		/// <param name="type">Type of sound to play ("start", "success", or "abort").</param>

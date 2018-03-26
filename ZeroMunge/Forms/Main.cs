@@ -242,6 +242,24 @@ namespace ZeroMunge
 
 
 		/// <summary>
+		/// Shortcut method to call Utilities.OpenFile and log the result.
+		/// </summary>
+		/// <param name="fileName">Name of the file to open.</param>
+		private void OpenFile(string fileName)
+		{
+			var result = Utilities.OpenFile(fileName);
+			LogType logType = LogType.Info;
+
+			if (result.Contains("Could not open"))
+			{
+				logType = LogType.Error;
+			}
+
+			Log(result, logType);
+		}
+
+
+		/// <summary>
 		/// Starts the update flow (duh).
 		/// </summary>
 		public static void Flow_Updates_Start() => OpenWindow_Updates();
@@ -1052,6 +1070,11 @@ namespace ZeroMunge
 
 				// Help menu
 				menu_viewHelpToolStripMenuItem.Enabled = enabled;
+				menu_viewChangelogToolStripMenuItem.Enabled = enabled;
+				menu_viewLicenseToolStripMenuItem.Enabled = enabled;
+				menu_viewReadmeToolStripMenuItem.Enabled = enabled;
+				menu_provideFeedbackToolStripMenuItem.Enabled = enabled;
+				menu_checkForUpdatesToolStripMenuItem.Enabled = enabled;
 				menu_aboutToolStripMenuItem.Enabled = enabled;
 			}
 		}
@@ -3032,6 +3055,21 @@ namespace ZeroMunge
 		private void menu_viewHelpToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			OpenWindow_Help();
+		}
+
+		private void menu_viewChangelogToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			OpenFile("CHANGELOG.md");
+		}
+
+		private void menu_viewLicenseToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			OpenFile("LICENSE.md");
+		}
+
+		private void menu_viewReadmeToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			OpenFile("README.md");
 		}
 
 		private void menu_checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
