@@ -389,6 +389,9 @@ namespace ZeroMunge
 		{
 			curFileListName = "Untitled";
 			UpdateWindowTitle();
+
+			lastCellChangeMethod = CellChangeMethod.Button;
+			ClearFileList(true);
 		}
 
 
