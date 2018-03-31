@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ZeroMunge));
 			this.btn_Run = new System.Windows.Forms.Button();
 			this.btn_AddFiles = new System.Windows.Forms.Button();
@@ -108,7 +108,16 @@
 			this.menu_prefsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_viewHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
+			this.menu_viewChangelogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.menu_viewLicenseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.menu_viewReadmeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+			this.menu_provideFeedbackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.menu_reportBugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.menu_provideSuggestionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+			this.menu_viewOpenIssuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
 			this.menu_aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -117,15 +126,6 @@
 			this.cont_LogButtons = new System.Windows.Forms.FlowLayoutPanel();
 			this.saveDlg_SaveFileListPrompt = new System.Windows.Forms.SaveFileDialog();
 			this.openDlg_OpenFileListPrompt = new System.Windows.Forms.OpenFileDialog();
-			this.menu_provideFeedbackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.menu_reportBugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.menu_provideSuggestionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.menu_viewOpenIssuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-			this.menu_viewChangelogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.menu_viewReadmeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.menu_viewLicenseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
 			this.pan_MungedFilesEdit.SuspendLayout();
 			this.status_MungedFilesEdit.SuspendLayout();
 			this.cmenu_Text.SuspendLayout();
@@ -518,9 +518,9 @@
 			// 
 			// col_FileBrowse
 			// 
-			dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle9.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle9;
+			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle1;
 			this.col_FileBrowse.HeaderText = "";
 			this.col_FileBrowse.Name = "col_FileBrowse";
 			this.col_FileBrowse.ReadOnly = true;
@@ -541,9 +541,9 @@
 			// 
 			// col_StagingBrowse
 			// 
-			dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle10.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-			this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle10;
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle2.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+			this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle2;
 			this.col_StagingBrowse.HeaderText = "";
 			this.col_StagingBrowse.Name = "col_StagingBrowse";
 			this.col_StagingBrowse.ReadOnly = true;
@@ -562,8 +562,8 @@
 			// 
 			// col_MungedFiles
 			// 
-			dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle11;
+			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle3;
 			this.col_MungedFiles.HeaderText = "Munged Files";
 			this.col_MungedFiles.MinimumWidth = 100;
 			this.col_MungedFiles.Name = "col_MungedFiles";
@@ -574,9 +574,9 @@
 			// 
 			// col_MungedFilesEdit
 			// 
-			dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle12.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-			this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle12;
+			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle4.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+			this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle4;
 			this.col_MungedFilesEdit.HeaderText = "";
 			this.col_MungedFilesEdit.Name = "col_MungedFilesEdit";
 			this.col_MungedFilesEdit.ReadOnly = true;
@@ -692,7 +692,7 @@
 			// 
 			this.menu_newToolStripMenuItem.Name = "menu_newToolStripMenuItem";
 			this.menu_newToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+N";
-			this.menu_newToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+			this.menu_newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.menu_newToolStripMenuItem.Text = "New";
 			this.menu_newToolStripMenuItem.Click += new System.EventHandler(this.menu_newToolStripMenuItem_Click);
 			// 
@@ -700,7 +700,7 @@
 			// 
 			this.menu_openToolStripMenuItem.Name = "menu_openToolStripMenuItem";
 			this.menu_openToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+O";
-			this.menu_openToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+			this.menu_openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.menu_openToolStripMenuItem.Text = "Open...";
 			this.menu_openToolStripMenuItem.Click += new System.EventHandler(this.menu_openToolStripMenuItem_Click);
 			// 
@@ -708,7 +708,7 @@
 			// 
 			this.menu_saveToolStripMenuItem.Name = "menu_saveToolStripMenuItem";
 			this.menu_saveToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+S";
-			this.menu_saveToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+			this.menu_saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.menu_saveToolStripMenuItem.Text = "Save";
 			this.menu_saveToolStripMenuItem.Click += new System.EventHandler(this.menu_saveToolStripMenuItem_Click);
 			// 
@@ -716,20 +716,20 @@
 			// 
 			this.menu_saveAsToolStripMenuItem.Name = "menu_saveAsToolStripMenuItem";
 			this.menu_saveAsToolStripMenuItem.ShortcutKeyDisplayString = "";
-			this.menu_saveAsToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+			this.menu_saveAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.menu_saveAsToolStripMenuItem.Text = "Save As...";
 			this.menu_saveAsToolStripMenuItem.Click += new System.EventHandler(this.menu_saveAsToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator4
 			// 
 			this.toolStripSeparator4.Name = "toolStripSeparator4";
-			this.toolStripSeparator4.Size = new System.Drawing.Size(152, 6);
+			this.toolStripSeparator4.Size = new System.Drawing.Size(177, 6);
 			// 
 			// menu_exitToolStripMenuItem
 			// 
 			this.menu_exitToolStripMenuItem.Name = "menu_exitToolStripMenuItem";
 			this.menu_exitToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Q";
-			this.menu_exitToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+			this.menu_exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.menu_exitToolStripMenuItem.Text = "Exit";
 			this.menu_exitToolStripMenuItem.Click += new System.EventHandler(this.menu_exitToolStripMenuItem_Click);
 			// 
@@ -897,10 +897,73 @@
 			this.menu_viewHelpToolStripMenuItem.Text = "View Help";
 			this.menu_viewHelpToolStripMenuItem.Click += new System.EventHandler(this.menu_viewHelpToolStripMenuItem_Click);
 			// 
+			// toolStripSeparator9
+			// 
+			this.toolStripSeparator9.Name = "toolStripSeparator9";
+			this.toolStripSeparator9.Size = new System.Drawing.Size(168, 6);
+			// 
+			// menu_viewChangelogToolStripMenuItem
+			// 
+			this.menu_viewChangelogToolStripMenuItem.Name = "menu_viewChangelogToolStripMenuItem";
+			this.menu_viewChangelogToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+			this.menu_viewChangelogToolStripMenuItem.Text = "View Changelog";
+			this.menu_viewChangelogToolStripMenuItem.Click += new System.EventHandler(this.menu_viewChangelogToolStripMenuItem_Click);
+			// 
+			// menu_viewLicenseToolStripMenuItem
+			// 
+			this.menu_viewLicenseToolStripMenuItem.Name = "menu_viewLicenseToolStripMenuItem";
+			this.menu_viewLicenseToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+			this.menu_viewLicenseToolStripMenuItem.Text = "View License";
+			this.menu_viewLicenseToolStripMenuItem.Click += new System.EventHandler(this.menu_viewLicenseToolStripMenuItem_Click);
+			// 
+			// menu_viewReadmeToolStripMenuItem
+			// 
+			this.menu_viewReadmeToolStripMenuItem.Name = "menu_viewReadmeToolStripMenuItem";
+			this.menu_viewReadmeToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+			this.menu_viewReadmeToolStripMenuItem.Text = "View Readme";
+			this.menu_viewReadmeToolStripMenuItem.Click += new System.EventHandler(this.menu_viewReadmeToolStripMenuItem_Click);
+			// 
 			// toolStripSeparator6
 			// 
 			this.toolStripSeparator6.Name = "toolStripSeparator6";
 			this.toolStripSeparator6.Size = new System.Drawing.Size(168, 6);
+			// 
+			// menu_provideFeedbackToolStripMenuItem
+			// 
+			this.menu_provideFeedbackToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_reportBugToolStripMenuItem,
+            this.menu_provideSuggestionToolStripMenuItem,
+            this.toolStripSeparator8,
+            this.menu_viewOpenIssuesToolStripMenuItem});
+			this.menu_provideFeedbackToolStripMenuItem.Name = "menu_provideFeedbackToolStripMenuItem";
+			this.menu_provideFeedbackToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+			this.menu_provideFeedbackToolStripMenuItem.Text = "Feedback";
+			// 
+			// menu_reportBugToolStripMenuItem
+			// 
+			this.menu_reportBugToolStripMenuItem.Name = "menu_reportBugToolStripMenuItem";
+			this.menu_reportBugToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+			this.menu_reportBugToolStripMenuItem.Text = "Report a Problem...";
+			this.menu_reportBugToolStripMenuItem.Click += new System.EventHandler(this.menu_reportBugToolStripMenuItem_Click);
+			// 
+			// menu_provideSuggestionToolStripMenuItem
+			// 
+			this.menu_provideSuggestionToolStripMenuItem.Name = "menu_provideSuggestionToolStripMenuItem";
+			this.menu_provideSuggestionToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+			this.menu_provideSuggestionToolStripMenuItem.Text = "Provide a Suggestion...";
+			this.menu_provideSuggestionToolStripMenuItem.Click += new System.EventHandler(this.menu_provideSuggestionToolStripMenuItem_Click);
+			// 
+			// toolStripSeparator8
+			// 
+			this.toolStripSeparator8.Name = "toolStripSeparator8";
+			this.toolStripSeparator8.Size = new System.Drawing.Size(191, 6);
+			// 
+			// menu_viewOpenIssuesToolStripMenuItem
+			// 
+			this.menu_viewOpenIssuesToolStripMenuItem.Name = "menu_viewOpenIssuesToolStripMenuItem";
+			this.menu_viewOpenIssuesToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+			this.menu_viewOpenIssuesToolStripMenuItem.Text = "View Open Issues...";
+			this.menu_viewOpenIssuesToolStripMenuItem.Click += new System.EventHandler(this.menu_viewOpenIssuesToolStripMenuItem_Click);
 			// 
 			// menu_checkForUpdatesToolStripMenuItem
 			// 
@@ -978,69 +1041,6 @@
 			this.openDlg_OpenFileListPrompt.Title = "Open File List";
 			this.openDlg_OpenFileListPrompt.FileOk += new System.ComponentModel.CancelEventHandler(this.openDlg_OpenFileListPrompt_FileOk);
 			// 
-			// menu_provideFeedbackToolStripMenuItem
-			// 
-			this.menu_provideFeedbackToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menu_reportBugToolStripMenuItem,
-            this.menu_provideSuggestionToolStripMenuItem,
-            this.toolStripSeparator8,
-            this.menu_viewOpenIssuesToolStripMenuItem});
-			this.menu_provideFeedbackToolStripMenuItem.Name = "menu_provideFeedbackToolStripMenuItem";
-			this.menu_provideFeedbackToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-			this.menu_provideFeedbackToolStripMenuItem.Text = "Feedback";
-			// 
-			// menu_reportBugToolStripMenuItem
-			// 
-			this.menu_reportBugToolStripMenuItem.Name = "menu_reportBugToolStripMenuItem";
-			this.menu_reportBugToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-			this.menu_reportBugToolStripMenuItem.Text = "Report a Problem...";
-			this.menu_reportBugToolStripMenuItem.Click += new System.EventHandler(this.menu_reportBugToolStripMenuItem_Click);
-			// 
-			// menu_provideSuggestionToolStripMenuItem
-			// 
-			this.menu_provideSuggestionToolStripMenuItem.Name = "menu_provideSuggestionToolStripMenuItem";
-			this.menu_provideSuggestionToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-			this.menu_provideSuggestionToolStripMenuItem.Text = "Provide a Suggestion...";
-			this.menu_provideSuggestionToolStripMenuItem.Click += new System.EventHandler(this.menu_provideSuggestionToolStripMenuItem_Click);
-			// 
-			// menu_viewOpenIssuesToolStripMenuItem
-			// 
-			this.menu_viewOpenIssuesToolStripMenuItem.Name = "menu_viewOpenIssuesToolStripMenuItem";
-			this.menu_viewOpenIssuesToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-			this.menu_viewOpenIssuesToolStripMenuItem.Text = "View Open Issues...";
-			this.menu_viewOpenIssuesToolStripMenuItem.Click += new System.EventHandler(this.menu_viewOpenIssuesToolStripMenuItem_Click);
-			// 
-			// toolStripSeparator8
-			// 
-			this.toolStripSeparator8.Name = "toolStripSeparator8";
-			this.toolStripSeparator8.Size = new System.Drawing.Size(191, 6);
-			// 
-			// menu_viewChangelogToolStripMenuItem
-			// 
-			this.menu_viewChangelogToolStripMenuItem.Name = "menu_viewChangelogToolStripMenuItem";
-			this.menu_viewChangelogToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-			this.menu_viewChangelogToolStripMenuItem.Text = "View Changelog";
-			this.menu_viewChangelogToolStripMenuItem.Click += new System.EventHandler(this.menu_viewChangelogToolStripMenuItem_Click);
-			// 
-			// menu_viewReadmeToolStripMenuItem
-			// 
-			this.menu_viewReadmeToolStripMenuItem.Name = "menu_viewReadmeToolStripMenuItem";
-			this.menu_viewReadmeToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-			this.menu_viewReadmeToolStripMenuItem.Text = "View Readme";
-			this.menu_viewReadmeToolStripMenuItem.Click += new System.EventHandler(this.menu_viewReadmeToolStripMenuItem_Click);
-			// 
-			// menu_viewLicenseToolStripMenuItem
-			// 
-			this.menu_viewLicenseToolStripMenuItem.Name = "menu_viewLicenseToolStripMenuItem";
-			this.menu_viewLicenseToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-			this.menu_viewLicenseToolStripMenuItem.Text = "View License";
-			this.menu_viewLicenseToolStripMenuItem.Click += new System.EventHandler(this.menu_viewLicenseToolStripMenuItem_Click);
-			// 
-			// toolStripSeparator9
-			// 
-			this.toolStripSeparator9.Name = "toolStripSeparator9";
-			this.toolStripSeparator9.Size = new System.Drawing.Size(168, 6);
-			// 
 			// ZeroMunge
 			// 
 			this.AcceptButton = this.btn_Run;
@@ -1063,6 +1063,7 @@
 			this.Text = "Zero Munge";
 			this.Activated += new System.EventHandler(this.ZeroMunge_Activated);
 			this.Deactivate += new System.EventHandler(this.ZeroMunge_Deactivate);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ZeroMunge_FormClosing);
 			this.Load += new System.EventHandler(this.ZeroMunge_Load);
 			this.Shown += new System.EventHandler(this.ZeroMunge_Shown);
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ZeroMunge_KeyDown);

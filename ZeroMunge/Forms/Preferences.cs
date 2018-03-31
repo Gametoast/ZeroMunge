@@ -121,6 +121,11 @@ namespace ZeroMunge
 			prefs.AutoDetectMungedFiles = chk_AutoDetectMungedFiles.Checked;
 		}
 
+		private void chk_AutoSaveEnabled_CheckedChanged(object sender, EventArgs e)
+		{
+			prefs.AutoSaveEnabled = chk_AutoSaveEnabled.Checked;
+		}
+
 		private void chk_ShowUpdatePromptOnStartup_CheckedChanged(object sender, EventArgs e)
 		{
 			prefs.ShowUpdatePromptOnStartup = chk_ShowUpdatePromptOnStartup.Checked;

@@ -41,5 +41,11 @@
     <Setting Name="CheckForUpdatesOnStartup" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="AutoSaveEnabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="LastSaveFilePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">UNSET</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

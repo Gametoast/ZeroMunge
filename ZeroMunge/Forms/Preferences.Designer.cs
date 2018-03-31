@@ -54,6 +54,7 @@
 			this.chk_ShowUpdatePromptOnStartup = new System.Windows.Forms.CheckBox();
 			this.chk_CheckForUpdatesOnStartup = new System.Windows.Forms.CheckBox();
 			this.FormTooltips = new System.Windows.Forms.ToolTip(this.components);
+			this.chk_AutoSaveEnabled = new System.Windows.Forms.CheckBox();
 			this.cont_Prefs.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
@@ -70,7 +71,7 @@
 			// 
 			this.btn_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btn_Cancel.Location = new System.Drawing.Point(197, 351);
+			this.btn_Cancel.Location = new System.Drawing.Point(197, 374);
 			this.btn_Cancel.Name = "btn_Cancel";
 			this.btn_Cancel.Size = new System.Drawing.Size(75, 23);
 			this.btn_Cancel.TabIndex = 6;
@@ -81,7 +82,7 @@
 			// btn_Accept
 			// 
 			this.btn_Accept.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_Accept.Location = new System.Drawing.Point(116, 351);
+			this.btn_Accept.Location = new System.Drawing.Point(116, 374);
 			this.btn_Accept.Name = "btn_Accept";
 			this.btn_Accept.Size = new System.Drawing.Size(75, 23);
 			this.btn_Accept.TabIndex = 5;
@@ -101,7 +102,7 @@
 			this.cont_Prefs.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.cont_Prefs.Location = new System.Drawing.Point(12, 12);
 			this.cont_Prefs.Name = "cont_Prefs";
-			this.cont_Prefs.Size = new System.Drawing.Size(260, 333);
+			this.cont_Prefs.Size = new System.Drawing.Size(260, 356);
 			this.cont_Prefs.TabIndex = 4;
 			// 
 			// groupBox1
@@ -181,7 +182,7 @@
 			this.groupBox2.Controls.Add(this.flowLayoutPanel2);
 			this.groupBox2.Location = new System.Drawing.Point(3, 97);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(254, 65);
+			this.groupBox2.Size = new System.Drawing.Size(254, 88);
 			this.groupBox2.TabIndex = 5;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "File List";
@@ -192,11 +193,12 @@
 			this.flowLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.flowLayoutPanel2.Controls.Add(this.chk_AutoDetectStagingDir);
 			this.flowLayoutPanel2.Controls.Add(this.chk_AutoDetectMungedFiles);
+			this.flowLayoutPanel2.Controls.Add(this.chk_AutoSaveEnabled);
 			this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 16);
 			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-			this.flowLayoutPanel2.Size = new System.Drawing.Size(248, 46);
+			this.flowLayoutPanel2.Size = new System.Drawing.Size(248, 69);
 			this.flowLayoutPanel2.TabIndex = 0;
 			// 
 			// chk_AutoDetectStagingDir
@@ -233,7 +235,7 @@
 			// 
 			this.groupBox4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.groupBox4.Controls.Add(this.flowLayoutPanel4);
-			this.groupBox4.Location = new System.Drawing.Point(3, 168);
+			this.groupBox4.Location = new System.Drawing.Point(3, 191);
 			this.groupBox4.Name = "groupBox4";
 			this.groupBox4.Size = new System.Drawing.Size(254, 91);
 			this.groupBox4.TabIndex = 7;
@@ -322,7 +324,7 @@
 			// 
 			this.groupBox3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.groupBox3.Controls.Add(this.flowLayoutPanel3);
-			this.groupBox3.Location = new System.Drawing.Point(3, 265);
+			this.groupBox3.Location = new System.Drawing.Point(3, 288);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Size = new System.Drawing.Size(254, 65);
 			this.groupBox3.TabIndex = 6;
@@ -370,22 +372,37 @@
 			this.chk_CheckForUpdatesOnStartup.UseVisualStyleBackColor = true;
 			this.chk_CheckForUpdatesOnStartup.CheckedChanged += new System.EventHandler(this.chk_CheckForUpdatesOnStartup_CheckedChanged);
 			// 
+			// chk_AutoSaveEnabled
+			// 
+			this.chk_AutoSaveEnabled.AutoSize = true;
+			this.chk_AutoSaveEnabled.Checked = true;
+			this.chk_AutoSaveEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chk_AutoSaveEnabled.Location = new System.Drawing.Point(3, 49);
+			this.chk_AutoSaveEnabled.Name = "chk_AutoSaveEnabled";
+			this.chk_AutoSaveEnabled.Size = new System.Drawing.Size(114, 17);
+			this.chk_AutoSaveEnabled.TabIndex = 5;
+			this.chk_AutoSaveEnabled.Text = "Auto-Save File List";
+			this.FormTooltips.SetToolTip(this.chk_AutoSaveEnabled, "Whether or not to automatically save the file list\'s contents to file when the ap" +
+        "plication exits.");
+			this.chk_AutoSaveEnabled.UseVisualStyleBackColor = true;
+			this.chk_AutoSaveEnabled.CheckedChanged += new System.EventHandler(this.chk_AutoSaveEnabled_CheckedChanged);
+			// 
 			// Preferences
 			// 
 			this.AcceptButton = this.btn_Accept;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btn_Cancel;
-			this.ClientSize = new System.Drawing.Size(284, 386);
+			this.ClientSize = new System.Drawing.Size(284, 409);
 			this.Controls.Add(this.cont_Prefs);
 			this.Controls.Add(this.btn_Accept);
 			this.Controls.Add(this.btn_Cancel);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
 			this.MaximizeBox = false;
-			this.MaximumSize = new System.Drawing.Size(300, 425);
+			this.MaximumSize = new System.Drawing.Size(300, 448);
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(300, 425);
+			this.MinimumSize = new System.Drawing.Size(300, 448);
 			this.Name = "Preferences";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
@@ -442,5 +459,6 @@
 		private System.Windows.Forms.CheckBox chk_OutputLogToFile;
 		private System.Windows.Forms.CheckBox chk_LogPrintTimestamps;
 		private System.Windows.Forms.CheckBox chk_CheckForUpdatesOnStartup;
+		private System.Windows.Forms.CheckBox chk_AutoSaveEnabled;
 	}
 }

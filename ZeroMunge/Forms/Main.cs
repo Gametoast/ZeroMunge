@@ -118,6 +118,7 @@ namespace ZeroMunge
 
 		public Prefs prefs = new Prefs();
 
+
 		// When the ZeroMunge form is finished loading:
 		// Create the tray icon, initialize some stuff with the file list, and start a new output log.
 		private void ZeroMunge_Load(object sender, EventArgs e)
@@ -168,19 +169,20 @@ namespace ZeroMunge
 			Log(string.Format("Starting Zero Munge  r{0}--{1}", Properties.Settings.Default.Info_BuildNum.ToString(), Properties.Settings.Default.Info_BuildDate.ToString("yyyy-MM-dd")), LogType.Info);
 		}
 
+
 		private void ZeroMunge_Shown(object sender, EventArgs e)
 		{
 			// Check for application updates
 			if (prefs.CheckForUpdatesOnStartup)
 			{
 				Log("Checking for updates... (Auto-check can be disabled in Preferences)", LogType.Update);
-
-				ActiveForm.Cursor = Cursors.WaitCursor;
+				
+				Cursor = Cursors.WaitCursor;
 				Application.DoEvents();
 
 				UpdateInfo updateInfo = Utilities.CheckForUpdates(this);
 
-				ActiveForm.Cursor = Cursors.Default;
+				Cursor = Cursors.Default;
 				Application.DoEvents();
 
 				if (updateInfo != null)
@@ -247,7 +249,44 @@ namespace ZeroMunge
 			}
 
 		}
-		
+
+
+		// When the form is focused on and activated:
+		// Reload the application settings.
+		private void ZeroMunge_Activated(object sender, EventArgs e)
+		{
+			Debug.WriteLine("ZeroMunge_Activated() entered");
+
+			prefs = Utilities.LoadPrefs();
+		}
+
+
+		// When the form is unfocused and deactivated:
+		// 
+		private void ZeroMunge_Deactivate(object sender, EventArgs e)
+		{
+			Debug.WriteLine("ZeroMunge_Deactivate() entered");
+		}
+
+
+		// When the form is in the process of closing:
+		// Auto-save the file list (if enabled).
+		private void ZeroMunge_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			if (prefs.AutoSaveEnabled)
+			{
+				string filePath = prefs.LastSaveFilePath;
+
+				// Use the default autosave file path if LastSaveFilePath is unset
+				if (filePath == "UNSET")
+				{
+					filePath = Directory.GetCurrentDirectory() + @"\ZeroMunge_auto.zmd";
+				}
+
+				SaveFileListToFile(filePath, false);
+			}
+		}
+
 
 		public void SetUpdateStatusBar(bool available)
 		{
@@ -374,7 +413,7 @@ namespace ZeroMunge
 			}
 			else
 			{
-				SaveFileListToFile(curFileListPath);
+				SaveFileListToFile(curFileListPath, true);
 			}
 		}
 
@@ -1741,11 +1780,14 @@ namespace ZeroMunge
 		/// Saves the contents of the file list to the specified file path.
 		/// </summary>
 		/// <param name="filePath">File path to save the file list to.</param>
-		private void SaveFileListToFile(string filePath)
+		private void SaveFileListToFile(string filePath, bool isManual)
 		{
 			// Serialize and save the data
 			SerializeData(filePath);
 			Log("Saved file list as " + filePath, LogType.Info);
+
+			prefs.LastSaveFilePath = filePath;
+			Utilities.SavePrefs(prefs);
 
 			// Update the current file list's save file path and name
 			curFileListPath = filePath;
@@ -3081,7 +3123,7 @@ namespace ZeroMunge
 				saveFileListLastDir = Utilities.GetFileDirectory(saveDlg_SaveFileListPrompt.FileName);
 
 				// Write the file list's contents to the file
-				SaveFileListToFile(saveDlg_SaveFileListPrompt.FileName);
+				SaveFileListToFile(saveDlg_SaveFileListPrompt.FileName, true);
 			}
 		}
 
@@ -3144,24 +3186,6 @@ namespace ZeroMunge
 		private void menu_viewOpenIssuesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			Process.Start(LINK_GH_OPENISSUES);
-		}
-
-
-		// When the form is focused on and activated:
-		// Reload the application settings.
-		private void ZeroMunge_Activated(object sender, EventArgs e)
-		{
-			Debug.WriteLine("ZeroMunge_Activated() entered");
-
-			prefs = Utilities.LoadPrefs();
-		}
-
-
-		// When the form is unfocused and deactivated:
-		// 
-		private void ZeroMunge_Deactivate(object sender, EventArgs e)
-		{
-			Debug.WriteLine("ZeroMunge_Deactivate() entered");
 		}
 
 

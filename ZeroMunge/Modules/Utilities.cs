@@ -1022,7 +1022,9 @@ namespace ZeroMunge
 				OutputLogToFile = Properties.Settings.Default.OutputLogToFile,
 				LogPrintTimestamps = Properties.Settings.Default.LogPrintTimestamps,
 				ShowUpdatePromptOnStartup = Properties.Settings.Default.ShowUpdatePromptOnStartup,
-				CheckForUpdatesOnStartup = Properties.Settings.Default.CheckForUpdatesOnStartup
+				CheckForUpdatesOnStartup = Properties.Settings.Default.CheckForUpdatesOnStartup,
+				AutoSaveEnabled = Properties.Settings.Default.AutoSaveEnabled,
+				LastSaveFilePath = Properties.Settings.Default.LastSaveFilePath
 			};
 
 			return prefs;
@@ -1046,6 +1048,8 @@ namespace ZeroMunge
 			Properties.Settings.Default.LogPrintTimestamps = prefs.LogPrintTimestamps;
 			Properties.Settings.Default.ShowUpdatePromptOnStartup = prefs.ShowUpdatePromptOnStartup;
 			Properties.Settings.Default.CheckForUpdatesOnStartup = prefs.CheckForUpdatesOnStartup;
+			Properties.Settings.Default.AutoSaveEnabled = prefs.AutoSaveEnabled;
+			Properties.Settings.Default.LastSaveFilePath = prefs.LastSaveFilePath;
 
 			Properties.Settings.Default.Save();
 		}
@@ -1084,6 +1088,8 @@ namespace ZeroMunge
 		public bool LogPrintTimestamps { get; set; }
 		public bool ShowUpdatePromptOnStartup { get; set; }
 		public bool CheckForUpdatesOnStartup { get; set; }
+		public bool AutoSaveEnabled { get; set; }
+		public string LastSaveFilePath { get; set; }
 	}
 
 	public class ReqChunk
