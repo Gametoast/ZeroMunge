@@ -248,6 +248,16 @@ namespace ZeroMunge
 				prompt.Show();
 			}
 
+			if (prefs.LastSaveFilePath != "UNSET")
+			{
+				if (prefs.LastSaveFilePath != "" && File.Exists(prefs.LastSaveFilePath))
+				{
+					Log("Loading save file " + prefs.LastSaveFilePath, LogType.Info);
+
+					DataFilesContainer data = DeserializeData(prefs.LastSaveFilePath);
+					LoadDataIntoFileList(data);
+				}
+			}
 		}
 
 
