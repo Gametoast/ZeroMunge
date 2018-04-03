@@ -770,13 +770,13 @@ namespace ZeroMunge
 		/// If there is an internet connection, checks for updates and returns true if an update is available.
 		/// </summary>
 		/// <returns>True if an update is available, false if not.</returns>
-		public static UpdateInfo CheckForUpdates(Form sender)
+		public static UpdateInfo CheckForUpdates(Form sender, bool useWaitCursor)
 		{
 			Trace.WriteLine("Checking for application updates...");
 
 			UpdateInfo updateInfo = new UpdateInfo();
 
-			if (CheckForInternetConnection(sender))
+			if (CheckForInternetConnection(sender, useWaitCursor))
 			{
 				updateInfo.LatestVersionInfo = GetLatestVersion(sender);
 				if (updateInfo.LatestVersionInfo == null) return null;
@@ -851,12 +851,15 @@ namespace ZeroMunge
 		/// Checks for an internet connection by attempting to read the contents of a pre-specified URL.
 		/// </summary>
 		/// <returns>True if an internet connection could be established, false if not.</returns>
-		public static bool CheckForInternetConnection(Form sender)
+		public static bool CheckForInternetConnection(Form sender, bool useWaitCursor)
 		{
 			bool TryConnection(string url)
 			{
-				sender.Cursor = Cursors.WaitCursor;
-				Application.DoEvents();
+				if (useWaitCursor)
+				{
+					sender.Cursor = Cursors.WaitCursor;
+					Application.DoEvents();
+				}
 
 				try
 				{
@@ -865,8 +868,11 @@ namespace ZeroMunge
 						using (client.OpenRead(url))
 						{
 							Trace.WriteLine("Trying '" + url + "' ...");
-							Form.ActiveForm.Cursor = Cursors.Default;
-							Application.DoEvents();
+							if (useWaitCursor)
+							{
+								sender.Cursor = Cursors.Default;
+								Application.DoEvents();
+							}
 							return true;
 						}
 					}
@@ -874,8 +880,11 @@ namespace ZeroMunge
 				catch
 				{
 					Trace.WriteLine("Failed to establish connection with '" + url + "'");
-					sender.Cursor = Cursors.Default;
-					Application.DoEvents();
+					if (useWaitCursor)
+					{
+						sender.Cursor = Cursors.Default;
+						Application.DoEvents();
+					}
 					return false;
 				}
 			}
@@ -893,9 +902,9 @@ namespace ZeroMunge
 		/// Starts the menu flow for checking for updates.
 		/// </summary>
 		/// <param name="sender">Sending Form, `this` can usually be used.</param>
-		public static void StartFlow_CheckForUpdates(Form sender)
+		public static void StartFlow_CheckForUpdates(Form sender, bool useWaitCursor)
 		{
-			UpdateInfo updateInfo = CheckForUpdates(sender);
+			UpdateInfo updateInfo = CheckForUpdates(sender, useWaitCursor);
 			if (updateInfo == null)
 			{
 				Trace.WriteLine("Check failed for an unknown reason.");

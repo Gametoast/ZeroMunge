@@ -61,7 +61,7 @@ namespace ZeroMunge
 		// Start the update flow.
 		private void link_Updates_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			Utilities.StartFlow_CheckForUpdates(this);
+			Utilities.StartFlow_CheckForUpdates(this, true);
 		}
 
 

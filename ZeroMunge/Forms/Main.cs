@@ -170,70 +170,70 @@ namespace ZeroMunge
 		}
 
 
+		public Thread updateCheckThread;
+
 		private void ZeroMunge_Shown(object sender, EventArgs e)
 		{
 			// Check for application updates
 			if (prefs.CheckForUpdatesOnStartup)
 			{
-				Log("Checking for updates... (Auto-check can be disabled in Preferences)", LogType.Update);
-				
-				Cursor = Cursors.WaitCursor;
-				Application.DoEvents();
-
-				UpdateInfo updateInfo = Utilities.CheckForUpdates(this);
-
-				Cursor = Cursors.Default;
-				Application.DoEvents();
-
-				if (updateInfo != null)
+				updateCheckThread = new Thread(() =>
 				{
-					latestAppVersion = updateInfo.LatestVersionInfo;
+					Log("Checking for updates... (Auto-check can be disabled in Preferences)", LogType.Update);
+					
+					UpdateInfo updateInfo = Utilities.CheckForUpdates(this, false);
 
-					switch (updateInfo.CheckResult)
+					if (updateInfo != null)
 					{
-						case Utilities.UpdateResult.Available:
-							string latestVer = string.Format("r{0}--{1}", updateInfo.LatestVersionInfo.BuildNum.ToString(), updateInfo.LatestVersionInfo.BuildDate);
-							string currentVer = string.Format("r{0}--{1}", Properties.Settings.Default.Info_BuildNum.ToString(), Properties.Settings.Default.Info_BuildDate.ToString("yyyy-MM-dd"));
-							string releaseNotes = updateInfo.LatestVersionInfo.ReleaseNotes.Replace("\n", "\n\t\t");
+						latestAppVersion = updateInfo.LatestVersionInfo;
 
-							string logMessage = string.Concat("Application update is available!", "\n\t",
-								"Current version:", "   ", currentVer, "\n\t",
-								"Latest version:", "    ", latestVer, "\n\t",
-								"Download link:", "     ", updateInfo.LatestVersionInfo.DownloadUrl, "\n\t",
-								"Release notes:", "\n\t\t", releaseNotes, "\n");
+						switch (updateInfo.CheckResult)
+						{
+							case Utilities.UpdateResult.Available:
+								string latestVer = string.Format("r{0}--{1}", updateInfo.LatestVersionInfo.BuildNum.ToString(), updateInfo.LatestVersionInfo.BuildDate);
+								string currentVer = string.Format("r{0}--{1}", Properties.Settings.Default.Info_BuildNum.ToString(), Properties.Settings.Default.Info_BuildDate.ToString("yyyy-MM-dd"));
+								string releaseNotes = updateInfo.LatestVersionInfo.ReleaseNotes.Replace("\n", "\n\t\t");
 
-							if (prefs.ShowUpdatePromptOnStartup)
-							{
-								Trace.WriteLine("Check succeeded. Update is available. Pushing update prompt.");
-								Thread logThread = new Thread(() =>
+								string logMessage = string.Concat("Application update is available!", "\n\t",
+									"Current version:", "   ", currentVer, "\n\t",
+									"Latest version:", "    ", latestVer, "\n\t",
+									"Download link:", "     ", updateInfo.LatestVersionInfo.DownloadUrl, "\n\t",
+									"Release notes:", "\n\t\t", releaseNotes, "\n");
+
+								if (prefs.ShowUpdatePromptOnStartup)
 								{
-									Log(logMessage, LogType.Update);
-								});
-								logThread.Start();
-								Flow_Updates_Start();
-							}
-							else
-							{
-								Trace.WriteLine("Check succeeded. Update is available, but user has specified to not show the update prompt on startup.");
-								Thread logThread = new Thread(() =>
+									Trace.WriteLine("Check succeeded. Update is available. Pushing update prompt.");
+									Thread logThread = new Thread(() =>
+									{
+										Log(logMessage, LogType.Update);
+									});
+									logThread.Start();
+									Flow_Updates_Start();
+								}
+								else
 								{
-									Log(logMessage, LogType.Update);
-								});
-								logThread.Start();
-							}
-							break;
+									Trace.WriteLine("Check succeeded. Update is available, but user has specified to not show the update prompt on startup.");
+									Thread logThread = new Thread(() =>
+									{
+										Log(logMessage, LogType.Update);
+									});
+									logThread.Start();
+								}
+								break;
 
-						case Utilities.UpdateResult.NoneAvailable:
-							Trace.WriteLine("Check succeeded. No updates are available.");
-							Log("No updates are available", LogType.Update);
-							break;
+							case Utilities.UpdateResult.NoneAvailable:
+								Trace.WriteLine("Check succeeded. No updates are available.");
+								Log("No updates are available", LogType.Update);
+								break;
 
-						case Utilities.UpdateResult.NetConnectionError:
-							Trace.WriteLine("Check failed. Network connection could not be established.");
-							Log("Network connection could not be established.", LogType.Update);
-							break;
+							case Utilities.UpdateResult.NetConnectionError:
+								Trace.WriteLine("Check failed. Network connection could not be established.");
+								Log("Network connection could not be established.", LogType.Update);
+								break;
+						}
 					}
-				}
+				});
+				updateCheckThread.Start();
 			}
 
 			Log("Checking GameDirectory...", LogType.Info);
@@ -275,15 +275,36 @@ namespace ZeroMunge
 		{
 			if (prefs.AutoSaveEnabled)
 			{
-				string filePath = prefs.LastSaveFilePath;
-
-				// Use the default autosave file path if LastSaveFilePath is unset
-				if (filePath == "UNSET")
+				if (!IsFileListEmpty())
 				{
-					filePath = Directory.GetCurrentDirectory() + @"\ZeroMunge_auto.zmd";
-				}
+					string filePath = prefs.LastSaveFilePath;
 
-				SaveFileListToFile(filePath, false);
+					// Use the default autosave file path if LastSaveFilePath is unset
+					if (filePath == "UNSET")
+					{
+						filePath = Directory.GetCurrentDirectory() + @"\ZeroMunge_auto.zmd";
+					}
+
+					SaveFileListToFile(filePath, false);
+				}
+				else
+				{
+					var message = "Cannot save empty file list!";
+					Trace.WriteLine(message);
+					Log(message, LogType.Error);
+				}
+			}
+
+			if (updateCheckThread.ThreadState == System.Threading.ThreadState.Running)
+			{
+				try
+				{
+					updateCheckThread.Abort();
+				}
+				catch (ThreadStateException ex)
+				{
+					Trace.WriteLine(ex);
+				}
 			}
 		}
 
@@ -410,13 +431,22 @@ namespace ZeroMunge
 		/// </summary>
 		private void Command_Save()
 		{
-			if (curFileListPath == "null" || curFileListName == "null")
+			if (!IsFileListEmpty())
 			{
-				Command_SaveAs();
+				if (curFileListPath == "null" || curFileListName == "null")
+				{
+					Command_SaveAs();
+				}
+				else
+				{
+					SaveFileListToFile(curFileListPath, true);
+				}
 			}
 			else
 			{
-				SaveFileListToFile(curFileListPath, true);
+				var message = "Cannot save empty file list!";
+				Trace.WriteLine(message);
+				Log(message, LogType.Error);
 			}
 		}
 
@@ -1820,6 +1850,31 @@ namespace ZeroMunge
 
 
 		/// <summary>
+		/// Checks whether or not the file list contains any filled rows.
+		/// </summary>
+		/// <returns>True, file list contains one or more filled rows. False, it's empty.</returns>
+		public bool IsFileListEmpty()
+		{
+			foreach (DataGridViewRow row in data_Files.Rows)
+			{
+				// Are all of the string cells null?
+				foreach (DataGridViewCell cell in row.Cells)
+				{
+					if (cell.Value is string)
+					{
+						if ((string)cell.Value != null && cell.ColumnIndex != INT_DATA_FILES_TXT_MUNGED_FILES)
+						{
+							return false;
+						}
+					}
+				}
+			}
+
+			return true;
+		}
+
+
+		/// <summary>
 		/// Updates the form's title with the file list's dirty state and the name of the file list's current save file.
 		/// </summary>
 		private void UpdateWindowTitle()
@@ -1835,7 +1890,7 @@ namespace ZeroMunge
 			{
 				if (isFileListDirty)
 				{
-					fullName = baseName + " - " + "*" + curFileListName;
+					fullName = baseName + " - " + "* " + curFileListName;
 				}
 				else
 				{
@@ -1908,7 +1963,16 @@ namespace ZeroMunge
 
 					if (!ProcManager_isRunning)
 					{
-						Command_Save();
+						if (!IsFileListEmpty())
+						{
+							Command_Save();
+						}
+						else
+						{
+							var message = "Cannot save empty file list!";
+							Trace.WriteLine(message);
+							Log(message, LogType.Error);
+						}
 					}
 
 					e.Handled = true;
@@ -3106,7 +3170,16 @@ namespace ZeroMunge
 		// Immediately save the contents of the file list to the current file.
 		private void menu_saveToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			Command_Save();
+			if (!IsFileListEmpty())
+			{
+				Command_Save();
+			}
+			else
+			{
+				var message = "Cannot save empty file list!";
+				Trace.WriteLine(message);
+				Log(message, LogType.Error);
+			}
 		}
 
 
@@ -3114,7 +3187,16 @@ namespace ZeroMunge
 		// Open a prompt to save the contents of the file list to a new file.
 		private void menu_saveAsToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			Command_SaveAs();
+			if (!IsFileListEmpty())
+			{
+				Command_SaveAs();
+			}
+			else
+			{
+				var message = "Cannot save empty file list!";
+				Trace.WriteLine(message);
+				Log(message, LogType.Error);
+			}
 		}
 
 		private void saveDlg_SaveFileListPrompt_FileOk(object sender, CancelEventArgs e)
@@ -3173,7 +3255,7 @@ namespace ZeroMunge
 
 		private void menu_checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			Utilities.StartFlow_CheckForUpdates(this);
+			Utilities.StartFlow_CheckForUpdates(this, true);
 		}
 
 		private void menu_reportBugToolStripMenuItem_Click(object sender, EventArgs e)
@@ -3194,17 +3276,19 @@ namespace ZeroMunge
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			var parsedJson = Utilities.ParseJsonStrings(this, "https://raw.githubusercontent.com/marth8880/ZeroMunge/master/test.json");
-			if (parsedJson == null) return;
+			Debug.WriteLine(IsFileListEmpty().ToString());
 
-			foreach (JsonPair pair in parsedJson)
-			{
-				Debug.WriteLine("Key, Value:    {0}, {1}", pair.Key, pair.Value);
-			}
+			//var parsedJson = Utilities.ParseJsonStrings(this, "https://raw.githubusercontent.com/marth8880/ZeroMunge/master/test.json");
+			//if (parsedJson == null) return;
 
-			var isLatest = Utilities.GetLatestVersion(this);
+			//foreach (JsonPair pair in parsedJson)
+			//{
+			//	Debug.WriteLine("Key, Value:    {0}, {1}", pair.Key, pair.Value);
+			//}
 
-			Debug.WriteLine("isLatest: " + isLatest);
+			//var isLatest = Utilities.GetLatestVersion(this);
+
+			//Debug.WriteLine("isLatest: " + isLatest);
 
 			//var reqChunk = Utilities.ParseReqChunk(@"J:\BF2_ModTools\data_SOL\data_SOL\Sides\SOL\sol.req", "lvl");
 			//reqChunk.PrintAll();
