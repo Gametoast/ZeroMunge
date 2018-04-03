@@ -32,6 +32,7 @@ namespace ZeroMunge
 			chk_PlayNotificationSounds.Checked = prefs.PlayNotificationSounds;
 			chk_AutoDetectStagingDir.Checked = prefs.AutoDetectStagingDir;
 			chk_AutoDetectMungedFiles.Checked = prefs.AutoDetectMungedFiles;
+			chk_AutoSaveEnabled.Checked = prefs.AutoSaveEnabled;
 			txt_LogPollingRate.Text = prefs.LogPollingRate.ToString();
 			chk_OutputLogToFile.Checked = prefs.OutputLogToFile;
 			chk_LogPrintTimestamps.Checked = prefs.LogPrintTimestamps;
