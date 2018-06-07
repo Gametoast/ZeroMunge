@@ -94,9 +94,9 @@ namespace ZeroMunge
 			prefs.ShowTrayIcon = chk_ShowTrayIcon.Checked;
 
 			// Disable/enable the Show Notification Popups checkbox based on this one's checked state
-			chk_ShowNotificationPopups.Enabled = chk_ShowTrayIcon.Checked;
+			//chk_ShowNotificationPopups.Enabled = chk_ShowTrayIcon.Checked;
 
-			// Uncheck Show Notification Popups if Show Tray Icon is unchecked
+			// Show Notification Popups is dependent on this setting
 			if (!chk_ShowTrayIcon.Checked)
 			{
 				chk_ShowNotificationPopups.Checked = false;
@@ -106,6 +106,12 @@ namespace ZeroMunge
 		private void chk_ShowNotificationPopups_CheckedChanged(object sender, EventArgs e)
 		{
 			prefs.ShowNotificationPopups = chk_ShowNotificationPopups.Checked;
+
+			// This setting requires Show Icon Tray
+			if (chk_ShowNotificationPopups.Checked)
+			{
+				chk_ShowTrayIcon.Checked = true;
+			}
 		}
 
 		private void chk_PlayNotificationSounds_CheckedChanged(object sender, EventArgs e)
@@ -133,14 +139,29 @@ namespace ZeroMunge
 			prefs.AutoLoadEnabled = chk_AutoLoadEnabled.Checked;
 		}
 
-		private void chk_ShowUpdatePromptOnStartup_CheckedChanged(object sender, EventArgs e)
-		{
-			prefs.ShowUpdatePromptOnStartup = chk_ShowUpdatePromptOnStartup.Checked;
-		}
-
 		private void chk_CheckForUpdatesOnStartup_CheckedChanged(object sender, EventArgs e)
 		{
 			prefs.CheckForUpdatesOnStartup = chk_CheckForUpdatesOnStartup.Checked;
+
+			// Disable/enable the Show Update Prompt On Startup checkbox based on this one's checked state
+			//chk_ShowUpdatePromptOnStartup.Enabled = chk_CheckForUpdatesOnStartup.Checked;
+
+			// Show Update Prompt On Startup is dependent on this setting
+			if (!chk_CheckForUpdatesOnStartup.Checked)
+			{
+				chk_ShowUpdatePromptOnStartup.Checked = false;
+			}
+		}
+
+		private void chk_ShowUpdatePromptOnStartup_CheckedChanged(object sender, EventArgs e)
+		{
+			prefs.ShowUpdatePromptOnStartup = chk_ShowUpdatePromptOnStartup.Checked;
+
+			// This setting requires Check For Updates On Startup
+			if (chk_ShowUpdatePromptOnStartup.Checked)
+			{
+				chk_CheckForUpdatesOnStartup.Checked = true;
+			}
 		}
 
 		private void chk_OutputLogToFile_CheckedChanged(object sender, EventArgs e)
