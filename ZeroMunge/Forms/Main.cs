@@ -146,6 +146,9 @@ namespace ZeroMunge
 			col_StagingBrowse.UseColumnTextForButtonValue = true;
 			col_MungedFilesEdit.UseColumnTextForButtonValue = true;
 
+			// Set the menu strip tooltip text
+			SetMenuStripToolTips();
+
 			// Start a new log file
 			if (prefs.OutputLogToFile)
 			{
@@ -316,6 +319,27 @@ namespace ZeroMunge
 					Trace.WriteLine(ex);
 				}
 			}
+		}
+
+
+		public void SetMenuStripToolTips()
+		{
+			// Actions
+			menu_runToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_Run);
+			menu_cancelToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_Cancel);
+			menu_addFilesToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_AddFiles);
+			menu_addFoldersToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_AddFolders);
+			menu_addProjectToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_AddProject);
+			menu_removeToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_RemoveFile);
+			menu_removeAllToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_RemoveAllFiles);
+
+			// Log
+			menu_copyLogToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_CopyLog);
+			menu_saveLogAsToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_SaveLog);
+			menu_clearLogToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_ClearLog);
+
+			// Settings
+			menu_setGamePathToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_SetGamePath);
 		}
 
 

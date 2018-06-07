@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle27 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle28 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ZeroMunge));
 			this.btn_Run = new System.Windows.Forms.Button();
 			this.btn_AddFiles = new System.Windows.Forms.Button();
@@ -149,7 +149,7 @@
 			this.btn_Run.Size = new System.Drawing.Size(102, 23);
 			this.btn_Run.TabIndex = 0;
 			this.btn_Run.Text = "Run";
-			this.FormTooltips.SetToolTip(this.btn_Run, "Executes each file in the list in order.");
+			this.FormTooltips.SetToolTip(this.btn_Run, "Sequentially executes each file in the file list.");
 			this.btn_Run.UseVisualStyleBackColor = true;
 			this.btn_Run.Click += new System.EventHandler(this.btn_Run_Click);
 			// 
@@ -165,7 +165,7 @@
 			this.btn_AddFiles.TabIndex = 2;
 			this.btn_AddFiles.Tag = "";
 			this.btn_AddFiles.Text = "Add Files...";
-			this.FormTooltips.SetToolTip(this.btn_AddFiles, "Opens a prompt to add files to the list of files.");
+			this.FormTooltips.SetToolTip(this.btn_AddFiles, "Opens a prompt to add files to the file list.");
 			this.btn_AddFiles.UseVisualStyleBackColor = true;
 			this.btn_AddFiles.Click += new System.EventHandler(this.btn_AddFiles_Click);
 			// 
@@ -185,7 +185,7 @@
 			this.btn_RemoveFile.Size = new System.Drawing.Size(102, 23);
 			this.btn_RemoveFile.TabIndex = 5;
 			this.btn_RemoveFile.Text = "Remove";
-			this.FormTooltips.SetToolTip(this.btn_RemoveFile, "Removes the selected file.");
+			this.FormTooltips.SetToolTip(this.btn_RemoveFile, "Removes the selected file from the file list.");
 			this.btn_RemoveFile.UseVisualStyleBackColor = true;
 			this.btn_RemoveFile.Click += new System.EventHandler(this.btn_RemoveFile_Click);
 			// 
@@ -238,7 +238,8 @@
 			this.btn_AddFolders.Size = new System.Drawing.Size(102, 23);
 			this.btn_AddFolders.TabIndex = 3;
 			this.btn_AddFolders.Text = "Add Folders...";
-			this.FormTooltips.SetToolTip(this.btn_AddFolders, "Opens a prompt to add folders containing munge.bat files to the file list.");
+			this.FormTooltips.SetToolTip(this.btn_AddFolders, "Opens a prompt to select folders containing munge.bat files to add to the file li" +
+        "st.");
 			this.btn_AddFolders.UseVisualStyleBackColor = true;
 			this.btn_AddFolders.Click += new System.EventHandler(this.btn_AddFolders_Click);
 			// 
@@ -282,7 +283,8 @@
 			this.btn_Cancel.TabIndex = 1;
 			this.btn_Cancel.TabStop = false;
 			this.btn_Cancel.Text = "Cancel";
-			this.FormTooltips.SetToolTip(this.btn_Cancel, "Stops processing files. WARNING: Canceling a munge is strongly NOT recommended.");
+			this.FormTooltips.SetToolTip(this.btn_Cancel, "Stops processing files. \r\n\r\nWARNING: Canceling a munge is strongly NOT recommende" +
+        "d.");
 			this.btn_Cancel.UseVisualStyleBackColor = true;
 			this.btn_Cancel.Click += new System.EventHandler(this.btn_Cancel_Click);
 			// 
@@ -518,9 +520,9 @@
 			// 
 			// col_FileBrowse
 			// 
-			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle25.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle25;
 			this.col_FileBrowse.HeaderText = "";
 			this.col_FileBrowse.Name = "col_FileBrowse";
 			this.col_FileBrowse.ReadOnly = true;
@@ -541,9 +543,9 @@
 			// 
 			// col_StagingBrowse
 			// 
-			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle2.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-			this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle26.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+			this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle26;
 			this.col_StagingBrowse.HeaderText = "";
 			this.col_StagingBrowse.Name = "col_StagingBrowse";
 			this.col_StagingBrowse.ReadOnly = true;
@@ -562,8 +564,8 @@
 			// 
 			// col_MungedFiles
 			// 
-			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle27.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle27;
 			this.col_MungedFiles.HeaderText = "Munged Files";
 			this.col_MungedFiles.MinimumWidth = 100;
 			this.col_MungedFiles.Name = "col_MungedFiles";
@@ -574,9 +576,9 @@
 			// 
 			// col_MungedFilesEdit
 			// 
-			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle4.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-			this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle28.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+			this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle28;
 			this.col_MungedFilesEdit.HeaderText = "";
 			this.col_MungedFilesEdit.Name = "col_MungedFilesEdit";
 			this.col_MungedFilesEdit.ReadOnly = true;
@@ -692,7 +694,7 @@
 			// 
 			this.menu_newToolStripMenuItem.Name = "menu_newToolStripMenuItem";
 			this.menu_newToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+N";
-			this.menu_newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.menu_newToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
 			this.menu_newToolStripMenuItem.Text = "New";
 			this.menu_newToolStripMenuItem.Click += new System.EventHandler(this.menu_newToolStripMenuItem_Click);
 			// 
@@ -700,7 +702,7 @@
 			// 
 			this.menu_openToolStripMenuItem.Name = "menu_openToolStripMenuItem";
 			this.menu_openToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+O";
-			this.menu_openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.menu_openToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
 			this.menu_openToolStripMenuItem.Text = "Open...";
 			this.menu_openToolStripMenuItem.Click += new System.EventHandler(this.menu_openToolStripMenuItem_Click);
 			// 
@@ -708,7 +710,7 @@
 			// 
 			this.menu_saveToolStripMenuItem.Name = "menu_saveToolStripMenuItem";
 			this.menu_saveToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+S";
-			this.menu_saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.menu_saveToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
 			this.menu_saveToolStripMenuItem.Text = "Save";
 			this.menu_saveToolStripMenuItem.Click += new System.EventHandler(this.menu_saveToolStripMenuItem_Click);
 			// 
@@ -716,20 +718,20 @@
 			// 
 			this.menu_saveAsToolStripMenuItem.Name = "menu_saveAsToolStripMenuItem";
 			this.menu_saveAsToolStripMenuItem.ShortcutKeyDisplayString = "";
-			this.menu_saveAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.menu_saveAsToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
 			this.menu_saveAsToolStripMenuItem.Text = "Save As...";
 			this.menu_saveAsToolStripMenuItem.Click += new System.EventHandler(this.menu_saveAsToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator4
 			// 
 			this.toolStripSeparator4.Name = "toolStripSeparator4";
-			this.toolStripSeparator4.Size = new System.Drawing.Size(177, 6);
+			this.toolStripSeparator4.Size = new System.Drawing.Size(152, 6);
 			// 
 			// menu_exitToolStripMenuItem
 			// 
 			this.menu_exitToolStripMenuItem.Name = "menu_exitToolStripMenuItem";
 			this.menu_exitToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Q";
-			this.menu_exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.menu_exitToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
 			this.menu_exitToolStripMenuItem.Text = "Exit";
 			this.menu_exitToolStripMenuItem.Click += new System.EventHandler(this.menu_exitToolStripMenuItem_Click);
 			// 
@@ -753,7 +755,7 @@
 			// 
 			this.menu_runToolStripMenuItem.Name = "menu_runToolStripMenuItem";
 			this.menu_runToolStripMenuItem.ShortcutKeyDisplayString = "F5";
-			this.menu_runToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+			this.menu_runToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.menu_runToolStripMenuItem.Text = "Run";
 			this.menu_runToolStripMenuItem.Click += new System.EventHandler(this.btn_Run_Click);
 			// 

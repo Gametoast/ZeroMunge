@@ -141,8 +141,9 @@
 			this.chk_ShowTrayIcon.Size = new System.Drawing.Size(179, 17);
 			this.chk_ShowTrayIcon.TabIndex = 0;
 			this.chk_ShowTrayIcon.Text = "Show Tray Icon (requires restart)";
-			this.FormTooltips.SetToolTip(this.chk_ShowTrayIcon, "Whether or not to show the application\'s icon in the system tray. Note: The appli" +
-        "cation must be restarted in order for changes to this setting to take effect.");
+			this.FormTooltips.SetToolTip(this.chk_ShowTrayIcon, "Whether or not to show the application\'s icon in the system tray. \r\n\r\nNOTE: The a" +
+        "pplication must be restarted in order for changes to this setting to take effect" +
+        ".");
 			this.chk_ShowTrayIcon.UseVisualStyleBackColor = true;
 			this.chk_ShowTrayIcon.CheckedChanged += new System.EventHandler(this.chk_ShowTrayIcon_CheckedChanged);
 			// 
@@ -157,8 +158,8 @@
 			this.chk_ShowNotificationPopups.TabIndex = 1;
 			this.chk_ShowNotificationPopups.Text = "Show Notification Popups";
 			this.FormTooltips.SetToolTip(this.chk_ShowNotificationPopups, "Whether or not to show notification popups for events such as when a job is compl" +
-        "eted or aborted. Note: \'Show Tray Icons\' must be checked in order for this setti" +
-        "ng to work.");
+        "eted or aborted. \r\n\r\nNOTE: \'Show Tray Icon\' must be checked in order for this se" +
+        "tting to work.");
 			this.chk_ShowNotificationPopups.UseVisualStyleBackColor = true;
 			this.chk_ShowNotificationPopups.CheckedChanged += new System.EventHandler(this.chk_ShowNotificationPopups_CheckedChanged);
 			// 
@@ -297,7 +298,7 @@
 			this.label1.Size = new System.Drawing.Size(89, 13);
 			this.label1.TabIndex = 0;
 			this.label1.Text = "Polling Rate (ms):";
-			this.FormTooltips.SetToolTip(this.label1, "The rate (in milliseconds) at which the contents of the Output Log are updated.");
+			this.FormTooltips.SetToolTip(this.label1, "The rate (in milliseconds) at which the contents of the output log are updated.");
 			// 
 			// txt_LogPollingRate
 			// 
@@ -319,7 +320,7 @@
 			this.chk_OutputLogToFile.Size = new System.Drawing.Size(93, 17);
 			this.chk_OutputLogToFile.TabIndex = 4;
 			this.chk_OutputLogToFile.Text = "Output To File";
-			this.FormTooltips.SetToolTip(this.chk_OutputLogToFile, "Whether or not to output the log to a file.s");
+			this.FormTooltips.SetToolTip(this.chk_OutputLogToFile, resources.GetString("chk_OutputLogToFile.ToolTip"));
 			this.chk_OutputLogToFile.UseVisualStyleBackColor = true;
 			this.chk_OutputLogToFile.CheckedChanged += new System.EventHandler(this.chk_OutputLogToFile_CheckedChanged);
 			// 
@@ -333,7 +334,7 @@
 			this.chk_LogPrintTimestamps.Size = new System.Drawing.Size(106, 17);
 			this.chk_LogPrintTimestamps.TabIndex = 3;
 			this.chk_LogPrintTimestamps.Text = "Print Timestamps";
-			this.FormTooltips.SetToolTip(this.chk_LogPrintTimestamps, "Whether or not to print timestamps in the Output Log.");
+			this.FormTooltips.SetToolTip(this.chk_LogPrintTimestamps, "Whether or not to prepend timestamps to output log messages.");
 			this.chk_LogPrintTimestamps.UseVisualStyleBackColor = true;
 			this.chk_LogPrintTimestamps.CheckedChanged += new System.EventHandler(this.chk_LogPrintTimestamps_CheckedChanged);
 			// 
@@ -352,8 +353,8 @@
 			// 
 			this.flowLayoutPanel3.AutoSize = true;
 			this.flowLayoutPanel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.flowLayoutPanel3.Controls.Add(this.chk_ShowUpdatePromptOnStartup);
 			this.flowLayoutPanel3.Controls.Add(this.chk_CheckForUpdatesOnStartup);
+			this.flowLayoutPanel3.Controls.Add(this.chk_ShowUpdatePromptOnStartup);
 			this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel3.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.flowLayoutPanel3.Location = new System.Drawing.Point(3, 16);
@@ -366,12 +367,12 @@
 			this.chk_ShowUpdatePromptOnStartup.AutoSize = true;
 			this.chk_ShowUpdatePromptOnStartup.Checked = true;
 			this.chk_ShowUpdatePromptOnStartup.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chk_ShowUpdatePromptOnStartup.Location = new System.Drawing.Point(3, 3);
+			this.chk_ShowUpdatePromptOnStartup.Location = new System.Drawing.Point(3, 26);
 			this.chk_ShowUpdatePromptOnStartup.Name = "chk_ShowUpdatePromptOnStartup";
 			this.chk_ShowUpdatePromptOnStartup.Size = new System.Drawing.Size(181, 17);
 			this.chk_ShowUpdatePromptOnStartup.TabIndex = 3;
 			this.chk_ShowUpdatePromptOnStartup.Text = "Show Update Prompt On Startup";
-			this.FormTooltips.SetToolTip(this.chk_ShowUpdatePromptOnStartup, "Whether or not to show an update prompt if an update is available.");
+			this.FormTooltips.SetToolTip(this.chk_ShowUpdatePromptOnStartup, resources.GetString("chk_ShowUpdatePromptOnStartup.ToolTip"));
 			this.chk_ShowUpdatePromptOnStartup.UseVisualStyleBackColor = true;
 			this.chk_ShowUpdatePromptOnStartup.CheckedChanged += new System.EventHandler(this.chk_ShowUpdatePromptOnStartup_CheckedChanged);
 			// 
@@ -380,7 +381,7 @@
 			this.chk_CheckForUpdatesOnStartup.AutoSize = true;
 			this.chk_CheckForUpdatesOnStartup.Checked = true;
 			this.chk_CheckForUpdatesOnStartup.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chk_CheckForUpdatesOnStartup.Location = new System.Drawing.Point(3, 26);
+			this.chk_CheckForUpdatesOnStartup.Location = new System.Drawing.Point(3, 3);
 			this.chk_CheckForUpdatesOnStartup.Name = "chk_CheckForUpdatesOnStartup";
 			this.chk_CheckForUpdatesOnStartup.Size = new System.Drawing.Size(172, 17);
 			this.chk_CheckForUpdatesOnStartup.TabIndex = 4;
