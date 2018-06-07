@@ -1033,7 +1033,8 @@ namespace ZeroMunge
 				ShowUpdatePromptOnStartup = Properties.Settings.Default.ShowUpdatePromptOnStartup,
 				CheckForUpdatesOnStartup = Properties.Settings.Default.CheckForUpdatesOnStartup,
 				AutoSaveEnabled = Properties.Settings.Default.AutoSaveEnabled,
-				LastSaveFilePath = Properties.Settings.Default.LastSaveFilePath
+				LastSaveFilePath = Properties.Settings.Default.LastSaveFilePath,
+				AutoLoadEnabled = Properties.Settings.Default.AutoLoadEnabled
 			};
 
 			return prefs;
@@ -1059,6 +1060,7 @@ namespace ZeroMunge
 			Properties.Settings.Default.CheckForUpdatesOnStartup = prefs.CheckForUpdatesOnStartup;
 			Properties.Settings.Default.AutoSaveEnabled = prefs.AutoSaveEnabled;
 			Properties.Settings.Default.LastSaveFilePath = prefs.LastSaveFilePath;
+			Properties.Settings.Default.AutoLoadEnabled = prefs.AutoLoadEnabled;
 
 			Properties.Settings.Default.Save();
 		}
@@ -1098,6 +1100,7 @@ namespace ZeroMunge
 		public bool ShowUpdatePromptOnStartup { get; set; }
 		public bool CheckForUpdatesOnStartup { get; set; }
 		public bool AutoSaveEnabled { get; set; }
+		public bool AutoLoadEnabled { get; set; }
 		public string LastSaveFilePath { get; set; }
 	}
 

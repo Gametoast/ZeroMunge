@@ -196,5 +196,17 @@ namespace ZeroMunge.Properties {
                 this["LastSaveFilePath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AutoLoadEnabled {
+            get {
+                return ((bool)(this["AutoLoadEnabled"]));
+            }
+            set {
+                this["AutoLoadEnabled"] = value;
+            }
+        }
     }
 }

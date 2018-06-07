@@ -248,11 +248,11 @@ namespace ZeroMunge
 				prompt.Show();
 			}
 
-			if (prefs.LastSaveFilePath != "UNSET")
+			if (prefs.AutoLoadEnabled && prefs.LastSaveFilePath != "UNSET")
 			{
 				if (prefs.LastSaveFilePath != "" && File.Exists(prefs.LastSaveFilePath))
 				{
-					Log("Loading save file " + prefs.LastSaveFilePath, LogType.Info);
+					Log("Auto-load is enabled. Loading save file " + prefs.LastSaveFilePath, LogType.Info);
 
 					DataFilesContainer data = DeserializeData(prefs.LastSaveFilePath);
 					LoadDataIntoFileList(data);
@@ -292,7 +292,7 @@ namespace ZeroMunge
 					// Use the default autosave file path if LastSaveFilePath is unset
 					if (filePath == "UNSET")
 					{
-						filePath = Directory.GetCurrentDirectory() + @"\ZeroMunge_auto.zmd";
+						filePath = Directory.GetCurrentDirectory() + @"\ZeroMunge-auto.zmd";
 					}
 
 					SaveFileListToFile(filePath, false);
@@ -1823,11 +1823,15 @@ namespace ZeroMunge
 		/// Saves the contents of the file list to the specified file path.
 		/// </summary>
 		/// <param name="filePath">File path to save the file list to.</param>
-		private void SaveFileListToFile(string filePath, bool isManual)
+		/// <param name="isAutoSave">Whether or not this an auto-save.</param>
+		private void SaveFileListToFile(string filePath, bool isAutoSave)
 		{
 			// Serialize and save the data
 			SerializeData(filePath);
-			Log("Saved file list as " + filePath, LogType.Info);
+
+			string autoSaveMsg = "";
+			if (isAutoSave) autoSaveMsg = "Auto-save is enabled. ";
+			Log(autoSaveMsg + "Saving file list as " + filePath, LogType.Info);
 
 			prefs.LastSaveFilePath = filePath;
 			Utilities.SavePrefs(prefs);
@@ -3043,8 +3047,7 @@ namespace ZeroMunge
 			if (menuItem != null)
 			{
 				// Retrieve the ContextMenuStrip that owns this ToolStripItem
-				ContextMenuStrip owner = menuItem.Owner as ContextMenuStrip;
-				if (owner != null)
+				if (menuItem.Owner is ContextMenuStrip owner)
 				{
 					// Get the control that is displaying this context menu
 					//Control rightClickedControl = owner.SourceControl;

@@ -47,5 +47,8 @@
     <Setting Name="LastSaveFilePath" Type="System.String" Scope="User">
       <Value Profile="(Default)">UNSET</Value>
     </Setting>
+    <Setting Name="AutoLoadEnabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -33,6 +33,7 @@ namespace ZeroMunge
 			chk_AutoDetectStagingDir.Checked = prefs.AutoDetectStagingDir;
 			chk_AutoDetectMungedFiles.Checked = prefs.AutoDetectMungedFiles;
 			chk_AutoSaveEnabled.Checked = prefs.AutoSaveEnabled;
+			chk_AutoLoadEnabled.Checked = prefs.AutoLoadEnabled;
 			txt_LogPollingRate.Text = prefs.LogPollingRate.ToString();
 			chk_OutputLogToFile.Checked = prefs.OutputLogToFile;
 			chk_LogPrintTimestamps.Checked = prefs.LogPrintTimestamps;
@@ -125,6 +126,11 @@ namespace ZeroMunge
 		private void chk_AutoSaveEnabled_CheckedChanged(object sender, EventArgs e)
 		{
 			prefs.AutoSaveEnabled = chk_AutoSaveEnabled.Checked;
+		}
+
+		private void chk_AutoLoadEnabled_CheckedChanged(object sender, EventArgs e)
+		{
+			prefs.AutoLoadEnabled = chk_AutoLoadEnabled.Checked;
 		}
 
 		private void chk_ShowUpdatePromptOnStartup_CheckedChanged(object sender, EventArgs e)
