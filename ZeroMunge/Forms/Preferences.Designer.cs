@@ -43,6 +43,7 @@
 			this.chk_AutoDetectStagingDir = new System.Windows.Forms.CheckBox();
 			this.chk_AutoDetectMungedFiles = new System.Windows.Forms.CheckBox();
 			this.chk_AutoSaveEnabled = new System.Windows.Forms.CheckBox();
+			this.chk_AutoLoadEnabled = new System.Windows.Forms.CheckBox();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
 			this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -55,7 +56,6 @@
 			this.chk_CheckForUpdatesOnStartup = new System.Windows.Forms.CheckBox();
 			this.chk_ShowUpdatePromptOnStartup = new System.Windows.Forms.CheckBox();
 			this.FormTooltips = new System.Windows.Forms.ToolTip(this.components);
-			this.chk_AutoLoadEnabled = new System.Windows.Forms.CheckBox();
 			this.cont_Prefs.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
@@ -234,6 +234,19 @@
 			this.chk_AutoSaveEnabled.Text = "Auto-Save File List";
 			this.chk_AutoSaveEnabled.UseVisualStyleBackColor = true;
 			this.chk_AutoSaveEnabled.CheckedChanged += new System.EventHandler(this.chk_AutoSaveEnabled_CheckedChanged);
+			// 
+			// chk_AutoLoadEnabled
+			// 
+			this.chk_AutoLoadEnabled.AutoSize = true;
+			this.chk_AutoLoadEnabled.Checked = true;
+			this.chk_AutoLoadEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chk_AutoLoadEnabled.Location = new System.Drawing.Point(3, 72);
+			this.chk_AutoLoadEnabled.Name = "chk_AutoLoadEnabled";
+			this.chk_AutoLoadEnabled.Size = new System.Drawing.Size(145, 17);
+			this.chk_AutoLoadEnabled.TabIndex = 6;
+			this.chk_AutoLoadEnabled.Text = "Auto-Load Last Save File";
+			this.chk_AutoLoadEnabled.UseVisualStyleBackColor = true;
+			this.chk_AutoLoadEnabled.CheckedChanged += new System.EventHandler(this.chk_AutoLoadEnabled_CheckedChanged);
 			// 
 			// groupBox4
 			// 
