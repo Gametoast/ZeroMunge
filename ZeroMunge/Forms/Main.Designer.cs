@@ -29,24 +29,16 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle41 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle42 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle43 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle44 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ZeroMunge));
 			this.btn_Run = new System.Windows.Forms.Button();
 			this.btn_AddFiles = new System.Windows.Forms.Button();
 			this.openDlg_AddFilesPrompt = new System.Windows.Forms.OpenFileDialog();
 			this.btn_RemoveFile = new System.Windows.Forms.Button();
 			this.FormTooltips = new System.Windows.Forms.ToolTip(this.components);
-			this.btn_ClearLog = new System.Windows.Forms.Button();
-			this.btn_CopyLog = new System.Windows.Forms.Button();
-			this.btn_SaveLog = new System.Windows.Forms.Button();
-			this.btn_AddFolders = new System.Windows.Forms.Button();
-			this.btn_AddProject = new System.Windows.Forms.Button();
-			this.btn_RemoveAllFiles = new System.Windows.Forms.Button();
-			this.btn_Cancel = new System.Windows.Forms.Button();
-			this.btn_SetGamePath = new System.Windows.Forms.Button();
 			this.pan_MungedFilesEdit = new System.Windows.Forms.Panel();
 			this.status_MungedFilesEdit = new System.Windows.Forms.StatusStrip();
 			this.label_MungedFilesEdit = new System.Windows.Forms.ToolStripStatusLabel();
@@ -57,6 +49,14 @@
 			this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.selectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.btn_ClearLog = new System.Windows.Forms.Button();
+			this.btn_CopyLog = new System.Windows.Forms.Button();
+			this.btn_SaveLog = new System.Windows.Forms.Button();
+			this.btn_AddFolders = new System.Windows.Forms.Button();
+			this.btn_AddProject = new System.Windows.Forms.Button();
+			this.btn_RemoveAllFiles = new System.Windows.Forms.Button();
+			this.btn_Cancel = new System.Windows.Forms.Button();
+			this.btn_SetGamePath = new System.Windows.Forms.Button();
 			this.text_OutputLog = new System.Windows.Forms.RichTextBox();
 			this.lbl_OutputLogLines = new System.Windows.Forms.Label();
 			this.saveDlg_SaveLogPrompt = new System.Windows.Forms.SaveFileDialog();
@@ -186,6 +186,104 @@
 			this.btn_RemoveFile.UseVisualStyleBackColor = true;
 			this.btn_RemoveFile.Click += new System.EventHandler(this.btn_RemoveFile_Click);
 			// 
+			// pan_MungedFilesEdit
+			// 
+			this.pan_MungedFilesEdit.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pan_MungedFilesEdit.Controls.Add(this.status_MungedFilesEdit);
+			this.pan_MungedFilesEdit.Controls.Add(this.text_MungedFilesEdit);
+			this.pan_MungedFilesEdit.Location = new System.Drawing.Point(775, 300);
+			this.pan_MungedFilesEdit.Name = "pan_MungedFilesEdit";
+			this.pan_MungedFilesEdit.Size = new System.Drawing.Size(360, 170);
+			this.pan_MungedFilesEdit.TabIndex = 17;
+			this.FormTooltips.SetToolTip(this.pan_MungedFilesEdit, "Enter each file name on a new line.");
+			this.pan_MungedFilesEdit.Visible = false;
+			// 
+			// status_MungedFilesEdit
+			// 
+			this.status_MungedFilesEdit.BackColor = System.Drawing.SystemColors.Control;
+			this.status_MungedFilesEdit.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.label_MungedFilesEdit});
+			this.status_MungedFilesEdit.Location = new System.Drawing.Point(0, 146);
+			this.status_MungedFilesEdit.Name = "status_MungedFilesEdit";
+			this.status_MungedFilesEdit.Size = new System.Drawing.Size(358, 22);
+			this.status_MungedFilesEdit.SizingGrip = false;
+			this.status_MungedFilesEdit.TabIndex = 6;
+			// 
+			// label_MungedFilesEdit
+			// 
+			this.label_MungedFilesEdit.Name = "label_MungedFilesEdit";
+			this.label_MungedFilesEdit.Size = new System.Drawing.Size(334, 17);
+			this.label_MungedFilesEdit.Text = "Press Enter to begin a new line. Press Ctrl+Enter to accept text.";
+			// 
+			// text_MungedFilesEdit
+			// 
+			this.text_MungedFilesEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.text_MungedFilesEdit.BackColor = System.Drawing.SystemColors.Info;
+			this.text_MungedFilesEdit.ContextMenuStrip = this.cmenu_Text;
+			this.text_MungedFilesEdit.Location = new System.Drawing.Point(0, 0);
+			this.text_MungedFilesEdit.Name = "text_MungedFilesEdit";
+			this.text_MungedFilesEdit.Size = new System.Drawing.Size(358, 143);
+			this.text_MungedFilesEdit.TabIndex = 5;
+			this.text_MungedFilesEdit.Text = "";
+			this.text_MungedFilesEdit.WordWrap = false;
+			this.text_MungedFilesEdit.Enter += new System.EventHandler(this.text_MungedFilesEdit_Enter);
+			this.text_MungedFilesEdit.Leave += new System.EventHandler(this.text_MungedFilesEdit_Leave);
+			// 
+			// cmenu_Text
+			// 
+			this.cmenu_Text.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copyToolStripMenuItem,
+            this.pasteToolStripMenuItem,
+            this.deleteToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.selectAllToolStripMenuItem});
+			this.cmenu_Text.Name = "cmenu_Text";
+			this.cmenu_Text.Size = new System.Drawing.Size(165, 98);
+			this.cmenu_Text.Opened += new System.EventHandler(this.cmenu_Text_Opened);
+			// 
+			// copyToolStripMenuItem
+			// 
+			this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+			this.copyToolStripMenuItem.ShortcutKeyDisplayString = "";
+			this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+			this.copyToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+			this.copyToolStripMenuItem.Text = "Copy";
+			this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
+			// 
+			// pasteToolStripMenuItem
+			// 
+			this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
+			this.pasteToolStripMenuItem.ShortcutKeyDisplayString = "";
+			this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
+			this.pasteToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+			this.pasteToolStripMenuItem.Text = "Paste";
+			this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
+			// 
+			// deleteToolStripMenuItem
+			// 
+			this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+			this.deleteToolStripMenuItem.ShortcutKeyDisplayString = "";
+			this.deleteToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
+			this.deleteToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+			this.deleteToolStripMenuItem.Text = "Delete";
+			this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+			// 
+			// toolStripSeparator1
+			// 
+			this.toolStripSeparator1.Name = "toolStripSeparator1";
+			this.toolStripSeparator1.Size = new System.Drawing.Size(161, 6);
+			// 
+			// selectAllToolStripMenuItem
+			// 
+			this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
+			this.selectAllToolStripMenuItem.ShortcutKeyDisplayString = "";
+			this.selectAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
+			this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+			this.selectAllToolStripMenuItem.Text = "Select All";
+			this.selectAllToolStripMenuItem.Click += new System.EventHandler(this.selectAllToolStripMenuItem_Click);
+			// 
 			// btn_ClearLog
 			// 
 			this.btn_ClearLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -286,104 +384,6 @@
 			this.btn_SetGamePath.Text = "Set Game Path...";
 			this.btn_SetGamePath.UseVisualStyleBackColor = true;
 			this.btn_SetGamePath.Click += new System.EventHandler(this.btn_SetGamePath_Click);
-			// 
-			// pan_MungedFilesEdit
-			// 
-			this.pan_MungedFilesEdit.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pan_MungedFilesEdit.Controls.Add(this.status_MungedFilesEdit);
-			this.pan_MungedFilesEdit.Controls.Add(this.text_MungedFilesEdit);
-			this.pan_MungedFilesEdit.Location = new System.Drawing.Point(775, 300);
-			this.pan_MungedFilesEdit.Name = "pan_MungedFilesEdit";
-			this.pan_MungedFilesEdit.Size = new System.Drawing.Size(360, 170);
-			this.pan_MungedFilesEdit.TabIndex = 17;
-			this.FormTooltips.SetToolTip(this.pan_MungedFilesEdit, "Enter each file name on a new line.");
-			this.pan_MungedFilesEdit.Visible = false;
-			// 
-			// status_MungedFilesEdit
-			// 
-			this.status_MungedFilesEdit.BackColor = System.Drawing.SystemColors.Control;
-			this.status_MungedFilesEdit.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.label_MungedFilesEdit});
-			this.status_MungedFilesEdit.Location = new System.Drawing.Point(0, 146);
-			this.status_MungedFilesEdit.Name = "status_MungedFilesEdit";
-			this.status_MungedFilesEdit.Size = new System.Drawing.Size(358, 22);
-			this.status_MungedFilesEdit.SizingGrip = false;
-			this.status_MungedFilesEdit.TabIndex = 6;
-			// 
-			// label_MungedFilesEdit
-			// 
-			this.label_MungedFilesEdit.Name = "label_MungedFilesEdit";
-			this.label_MungedFilesEdit.Size = new System.Drawing.Size(334, 17);
-			this.label_MungedFilesEdit.Text = "Press Enter to begin a new line. Press Ctrl+Enter to accept text.";
-			// 
-			// text_MungedFilesEdit
-			// 
-			this.text_MungedFilesEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.text_MungedFilesEdit.BackColor = System.Drawing.SystemColors.Info;
-			this.text_MungedFilesEdit.ContextMenuStrip = this.cmenu_Text;
-			this.text_MungedFilesEdit.Location = new System.Drawing.Point(0, 0);
-			this.text_MungedFilesEdit.Name = "text_MungedFilesEdit";
-			this.text_MungedFilesEdit.Size = new System.Drawing.Size(358, 143);
-			this.text_MungedFilesEdit.TabIndex = 5;
-			this.text_MungedFilesEdit.Text = "";
-			this.text_MungedFilesEdit.WordWrap = false;
-			this.text_MungedFilesEdit.Enter += new System.EventHandler(this.text_MungedFilesEdit_Enter);
-			this.text_MungedFilesEdit.Leave += new System.EventHandler(this.text_MungedFilesEdit_Leave);
-			// 
-			// cmenu_Text
-			// 
-			this.cmenu_Text.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.copyToolStripMenuItem,
-            this.pasteToolStripMenuItem,
-            this.deleteToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.selectAllToolStripMenuItem});
-			this.cmenu_Text.Name = "cmenu_Text";
-			this.cmenu_Text.Size = new System.Drawing.Size(165, 98);
-			this.cmenu_Text.Opened += new System.EventHandler(this.cmenu_Text_Opened);
-			// 
-			// copyToolStripMenuItem
-			// 
-			this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-			this.copyToolStripMenuItem.ShortcutKeyDisplayString = "";
-			this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-			this.copyToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-			this.copyToolStripMenuItem.Text = "Copy";
-			this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
-			// 
-			// pasteToolStripMenuItem
-			// 
-			this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-			this.pasteToolStripMenuItem.ShortcutKeyDisplayString = "";
-			this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-			this.pasteToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-			this.pasteToolStripMenuItem.Text = "Paste";
-			this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
-			// 
-			// deleteToolStripMenuItem
-			// 
-			this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-			this.deleteToolStripMenuItem.ShortcutKeyDisplayString = "";
-			this.deleteToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-			this.deleteToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-			this.deleteToolStripMenuItem.Text = "Delete";
-			this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
-			// 
-			// toolStripSeparator1
-			// 
-			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(161, 6);
-			// 
-			// selectAllToolStripMenuItem
-			// 
-			this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
-			this.selectAllToolStripMenuItem.ShortcutKeyDisplayString = "";
-			this.selectAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
-			this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-			this.selectAllToolStripMenuItem.Text = "Select All";
-			this.selectAllToolStripMenuItem.Click += new System.EventHandler(this.selectAllToolStripMenuItem_Click);
 			// 
 			// text_OutputLog
 			// 
@@ -505,9 +505,9 @@
 			// 
 			// col_FileBrowse
 			// 
-			dataGridViewCellStyle41.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle41.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle41;
+			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle5.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle5;
 			this.col_FileBrowse.HeaderText = "";
 			this.col_FileBrowse.Name = "col_FileBrowse";
 			this.col_FileBrowse.ReadOnly = true;
@@ -528,9 +528,9 @@
 			// 
 			// col_StagingBrowse
 			// 
-			dataGridViewCellStyle42.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle42.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-			this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle42;
+			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle6.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+			this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle6;
 			this.col_StagingBrowse.HeaderText = "";
 			this.col_StagingBrowse.Name = "col_StagingBrowse";
 			this.col_StagingBrowse.ReadOnly = true;
@@ -549,8 +549,8 @@
 			// 
 			// col_MungedFiles
 			// 
-			dataGridViewCellStyle43.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle43;
+			dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle7;
 			this.col_MungedFiles.HeaderText = "Munged Files";
 			this.col_MungedFiles.MinimumWidth = 100;
 			this.col_MungedFiles.Name = "col_MungedFiles";
@@ -561,9 +561,9 @@
 			// 
 			// col_MungedFilesEdit
 			// 
-			dataGridViewCellStyle44.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle44.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-			this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle44;
+			dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle8.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+			this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle8;
 			this.col_MungedFilesEdit.HeaderText = "";
 			this.col_MungedFilesEdit.Name = "col_MungedFilesEdit";
 			this.col_MungedFilesEdit.ReadOnly = true;
@@ -811,21 +811,21 @@
 			// menu_copyLogToolStripMenuItem
 			// 
 			this.menu_copyLogToolStripMenuItem.Name = "menu_copyLogToolStripMenuItem";
-			this.menu_copyLogToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+			this.menu_copyLogToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.menu_copyLogToolStripMenuItem.Text = "Copy Log";
 			this.menu_copyLogToolStripMenuItem.Click += new System.EventHandler(this.btn_CopyLog_Click);
 			// 
 			// menu_saveLogAsToolStripMenuItem
 			// 
 			this.menu_saveLogAsToolStripMenuItem.Name = "menu_saveLogAsToolStripMenuItem";
-			this.menu_saveLogAsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+			this.menu_saveLogAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.menu_saveLogAsToolStripMenuItem.Text = "Save Log As...";
 			this.menu_saveLogAsToolStripMenuItem.Click += new System.EventHandler(this.btn_SaveLog_Click);
 			// 
 			// menu_clearLogToolStripMenuItem
 			// 
 			this.menu_clearLogToolStripMenuItem.Name = "menu_clearLogToolStripMenuItem";
-			this.menu_clearLogToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+			this.menu_clearLogToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.menu_clearLogToolStripMenuItem.Text = "Clear Log";
 			this.menu_clearLogToolStripMenuItem.Click += new System.EventHandler(this.btn_ClearLog_Click);
 			// 

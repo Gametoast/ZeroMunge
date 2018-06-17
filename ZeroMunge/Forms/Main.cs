@@ -259,7 +259,7 @@ namespace ZeroMunge
 					Log(string.Format("Auto-load is enabled. Loading save file: \"{0}\"", prefs.LastSaveFilePath), LogType.Info);
 
 					DataFilesContainer data = DeserializeData(prefs.LastSaveFilePath);
-					LoadDataIntoFileList(data);
+					LoadDataIntoFileList(data, prefs.LastSaveFilePath);
 				}
 			}
 		}
@@ -485,6 +485,8 @@ namespace ZeroMunge
 
 			lastCellChangeMethod = CellChangeMethod.Button;
 			ClearFileList(true);
+
+			ResetCurFileListInfo();
 		}
 
 
@@ -1831,8 +1833,10 @@ namespace ZeroMunge
 		/// </summary>
 		/// <param name="data">DataFilesContainer object containing the data to load into the file list.</param>
 		/// <param name="replaceCurrentContents">Whether or not to clear the contents of the file list before loading the new data into it. Default = true</param>
-		public void LoadDataIntoFileList(DataFilesContainer data, bool replaceCurrentContents = true)
+		public void LoadDataIntoFileList(DataFilesContainer data, string filePath, bool replaceCurrentContents = true)
 		{
+			//int numRowsAdded = 0;	// shouldn't be needed
+
 			// Clear the contents of the file list if specified
 			if (replaceCurrentContents)
 			{
@@ -1859,6 +1863,8 @@ namespace ZeroMunge
 					newRow.Cells[STR_DATA_FILES_TXT_MUNGED_FILES].Value = row.MungedFiles;
 					newRow.Cells[STR_DATA_FILES_CHK_IS_MUNGE_SCRIPT].Value = row.IsMungeScript;
 					newRow.Cells[STR_DATA_FILES_CHK_IS_VALID].Value = row.IsValid;
+
+					//numRowsAdded++;
 				}
 				catch (NullReferenceException e)
 				{
@@ -1878,6 +1884,12 @@ namespace ZeroMunge
 					throw;
 				}
 			}
+
+
+			// Update the current file list and window title
+			UpdateCurFileListInfo(filePath);
+			FileListIsDirty(false);
+			UpdateWindowTitle();
 		}
 
 
@@ -1898,12 +1910,8 @@ namespace ZeroMunge
 			prefs.LastSaveFilePath = filePath;
 			Utilities.SavePrefs(prefs);
 
-			// Update the current file list's save file path and name
-			curFileListPath = filePath;
-			DirectoryInfo dir = new DirectoryInfo(curFileListPath);
-			curFileListName = dir.Name;
-
-			// Flag the file list as no longer being dirty
+			// Update the current file list and window title
+			UpdateCurFileListInfo(filePath);
 			FileListIsDirty(false);
 			UpdateWindowTitle();
 		}
@@ -1949,6 +1957,28 @@ namespace ZeroMunge
 			return true;
 		}
 
+		
+		/// <summary>
+		/// Update the current file list's save file path and name.
+		/// </summary>
+		/// <param name="filePath"></param>
+		private void UpdateCurFileListInfo(string filePath)
+		{
+			curFileListPath = filePath;
+			DirectoryInfo dir = new DirectoryInfo(curFileListPath);
+			curFileListName = dir.Name;
+		}
+
+
+		private void ResetCurFileListInfo()
+		{
+			curFileListPath = "null";
+			curFileListName = "null";
+
+			prefs.LastSaveFilePath = "UNSET";
+			Utilities.SavePrefs(prefs);
+		}
+
 
 		/// <summary>
 		/// Updates the form's title with the file list's dirty state and the name of the file list's current save file.
@@ -1966,11 +1996,11 @@ namespace ZeroMunge
 			{
 				if (isFileListDirty)
 				{
-					fullName = baseName + " - " + "* " + curFileListName;
+					fullName = string.Format("{0} - * {1}", baseName, curFileListName);
 				}
 				else
 				{
-					fullName = baseName + " - " + curFileListName;
+					fullName = string.Format("{0} - {1}", baseName, curFileListName);
 				}
 			}
 
@@ -2936,7 +2966,6 @@ namespace ZeroMunge
 			if (Directory.Exists(Utilities.GetFileDirectory(file)))
 			{
 				prefs.GameDirectory = Utilities.GetFileDirectory(file);
-
 				Utilities.SavePrefs(prefs);
 
 				Thread outputThread = new Thread(() => {
@@ -3237,7 +3266,7 @@ namespace ZeroMunge
 				openFileListLastDir = Utilities.GetFileDirectory(openDlg_OpenFileListPrompt.FileName);
 				
 				DataFilesContainer data = DeserializeData(openDlg_OpenFileListPrompt.FileName);
-				LoadDataIntoFileList(data);
+				LoadDataIntoFileList(data, openDlg_OpenFileListPrompt.FileName);
 			}
 		}
 
@@ -3406,10 +3435,10 @@ namespace ZeroMunge
 
 		private void button3_Click(object sender, EventArgs e)
 		{
-			DataFilesContainer data = DeserializeData(@"data.zmd");
-			data.PrintAllRows();
+			//DataFilesContainer data = DeserializeData(@"data.zmd");
+			//data.PrintAllRows();
 
-			LoadDataIntoFileList(data);
+			//LoadDataIntoFileList(data);
 		}
 	}
 
