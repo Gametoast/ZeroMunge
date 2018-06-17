@@ -393,6 +393,7 @@
 			this.Controls.Add(this.cont_Prefs);
 			this.Controls.Add(this.btn_Accept);
 			this.Controls.Add(this.btn_Cancel);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
 			this.MaximizeBox = false;
