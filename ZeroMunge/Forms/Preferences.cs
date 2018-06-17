@@ -23,6 +23,8 @@ namespace ZeroMunge
 
 		private void Preferences_Load(object sender, EventArgs e)
 		{
+			SetToolTips();
+
 			// Load the saved user settings into our prefs object
 			prefs = Utilities.LoadPrefs();
 
@@ -39,6 +41,25 @@ namespace ZeroMunge
 			chk_LogPrintTimestamps.Checked = prefs.LogPrintTimestamps;
 			chk_ShowUpdatePromptOnStartup.Checked = prefs.ShowUpdatePromptOnStartup;
 			chk_CheckForUpdatesOnStartup.Checked = prefs.CheckForUpdatesOnStartup;
+		}
+
+
+		private void SetToolTips()
+		{
+			// Settings
+			FormTooltips.SetToolTip(chk_ShowTrayIcon, Tooltips.Settings.ShowTrayIcon);
+			FormTooltips.SetToolTip(chk_ShowNotificationPopups, Tooltips.Settings.ShowNotificationPopups);
+			FormTooltips.SetToolTip(chk_PlayNotificationSounds, Tooltips.Settings.PlayNotificationSounds);
+			FormTooltips.SetToolTip(chk_AutoDetectStagingDir, Tooltips.Settings.AutoDetectStagingDirectory);
+			FormTooltips.SetToolTip(chk_AutoDetectMungedFiles, Tooltips.Settings.AutoDetectMungedFiles);
+			FormTooltips.SetToolTip(chk_AutoSaveEnabled, Tooltips.Settings.AutoSaveFileList);
+			FormTooltips.SetToolTip(chk_AutoLoadEnabled, Tooltips.Settings.AutoLoadLastSaveFile);
+			FormTooltips.SetToolTip(lbl_LogPollingRate, Tooltips.Settings.LogPollingRate);
+			FormTooltips.SetToolTip(txt_LogPollingRate, Tooltips.Settings.LogPollingRate);
+			FormTooltips.SetToolTip(chk_OutputLogToFile, Tooltips.Settings.OutputLogToFile);
+			FormTooltips.SetToolTip(chk_LogPrintTimestamps, Tooltips.Settings.LogPrintTimestamps);
+			FormTooltips.SetToolTip(chk_CheckForUpdatesOnStartup, Tooltips.Settings.CheckForUpdatesOnStartup);
+			FormTooltips.SetToolTip(chk_ShowUpdatePromptOnStartup, Tooltips.Settings.ShowUpdatePromptOnStartup);
 		}
 
 

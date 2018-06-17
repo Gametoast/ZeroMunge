@@ -20,6 +20,8 @@ namespace ZeroMunge
 
 		private void About_Load(object sender, EventArgs e)
 		{
+			SetToolTips();
+
 			// Initialize build info text
 			string buildNum = Properties.Settings.Default.Info_BuildNum.ToString();
 			string buildDate = Properties.Settings.Default.Info_BuildDate.ToString("yyyy-MM-dd");
@@ -38,6 +40,16 @@ namespace ZeroMunge
 
 			text_License.SelectedText = "\n" + "THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE." + "\n\n";
 			text_License.SelectedText = ZeroMunge.LINK_LICENSE;
+		}
+
+
+		private void SetToolTips()
+		{
+			// Help Menu
+			FormTooltips.SetToolTip(img_Logo, Tooltips.HelpMenu.ApplicationBanner);
+			FormTooltips.SetToolTip(link_Updates, Tooltips.HelpMenu.CheckForUpdates);
+			FormTooltips.SetToolTip(link_Contact, Tooltips.HelpMenu.Contact);
+			FormTooltips.SetToolTip(link_FrayedWires, Tooltips.HelpMenu.FrayedWiresStudios);
 		}
 
 

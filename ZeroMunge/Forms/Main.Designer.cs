@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle27 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle28 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle41 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle42 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle43 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle44 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ZeroMunge));
 			this.btn_Run = new System.Windows.Forms.Button();
 			this.btn_AddFiles = new System.Windows.Forms.Button();
@@ -149,7 +149,6 @@
 			this.btn_Run.Size = new System.Drawing.Size(102, 23);
 			this.btn_Run.TabIndex = 0;
 			this.btn_Run.Text = "Run";
-			this.FormTooltips.SetToolTip(this.btn_Run, "Sequentially executes each file in the file list.");
 			this.btn_Run.UseVisualStyleBackColor = true;
 			this.btn_Run.Click += new System.EventHandler(this.btn_Run_Click);
 			// 
@@ -165,7 +164,6 @@
 			this.btn_AddFiles.TabIndex = 2;
 			this.btn_AddFiles.Tag = "";
 			this.btn_AddFiles.Text = "Add Files...";
-			this.FormTooltips.SetToolTip(this.btn_AddFiles, "Opens a prompt to add files to the file list.");
 			this.btn_AddFiles.UseVisualStyleBackColor = true;
 			this.btn_AddFiles.Click += new System.EventHandler(this.btn_AddFiles_Click);
 			// 
@@ -185,7 +183,6 @@
 			this.btn_RemoveFile.Size = new System.Drawing.Size(102, 23);
 			this.btn_RemoveFile.TabIndex = 5;
 			this.btn_RemoveFile.Text = "Remove";
-			this.FormTooltips.SetToolTip(this.btn_RemoveFile, "Removes the selected file from the file list.");
 			this.btn_RemoveFile.UseVisualStyleBackColor = true;
 			this.btn_RemoveFile.Click += new System.EventHandler(this.btn_RemoveFile_Click);
 			// 
@@ -198,7 +195,6 @@
 			this.btn_ClearLog.Size = new System.Drawing.Size(102, 23);
 			this.btn_ClearLog.TabIndex = 10;
 			this.btn_ClearLog.Text = "Clear Log";
-			this.FormTooltips.SetToolTip(this.btn_ClearLog, "Clears the contents of the output log.");
 			this.btn_ClearLog.UseVisualStyleBackColor = true;
 			this.btn_ClearLog.Click += new System.EventHandler(this.btn_ClearLog_Click);
 			// 
@@ -211,7 +207,6 @@
 			this.btn_CopyLog.Size = new System.Drawing.Size(102, 23);
 			this.btn_CopyLog.TabIndex = 8;
 			this.btn_CopyLog.Text = "Copy Log";
-			this.FormTooltips.SetToolTip(this.btn_CopyLog, "Copies the contents of the output log window to the clipboard.");
 			this.btn_CopyLog.UseVisualStyleBackColor = true;
 			this.btn_CopyLog.Click += new System.EventHandler(this.btn_CopyLog_Click);
 			// 
@@ -225,7 +220,6 @@
 			this.btn_SaveLog.TabIndex = 9;
 			this.btn_SaveLog.Text = "Save Log As...";
 			this.btn_SaveLog.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			this.FormTooltips.SetToolTip(this.btn_SaveLog, "Opens a prompt to save the contents of the output log to a new file.");
 			this.btn_SaveLog.UseVisualStyleBackColor = true;
 			this.btn_SaveLog.Click += new System.EventHandler(this.btn_SaveLog_Click);
 			// 
@@ -238,8 +232,6 @@
 			this.btn_AddFolders.Size = new System.Drawing.Size(102, 23);
 			this.btn_AddFolders.TabIndex = 3;
 			this.btn_AddFolders.Text = "Add Folders...";
-			this.FormTooltips.SetToolTip(this.btn_AddFolders, "Opens a prompt to select folders containing munge.bat files to add to the file li" +
-        "st.");
 			this.btn_AddFolders.UseVisualStyleBackColor = true;
 			this.btn_AddFolders.Click += new System.EventHandler(this.btn_AddFolders_Click);
 			// 
@@ -252,8 +244,6 @@
 			this.btn_AddProject.Size = new System.Drawing.Size(102, 23);
 			this.btn_AddProject.TabIndex = 4;
 			this.btn_AddProject.Text = "Add Project...";
-			this.FormTooltips.SetToolTip(this.btn_AddProject, "Opens a prompt to select a project folder whose common munge.bat files will be ad" +
-        "ded to the file list.");
 			this.btn_AddProject.UseVisualStyleBackColor = true;
 			this.btn_AddProject.Click += new System.EventHandler(this.btn_AddProject_Click);
 			// 
@@ -267,7 +257,6 @@
 			this.btn_RemoveAllFiles.TabIndex = 6;
 			this.btn_RemoveAllFiles.Text = "Remove All";
 			this.btn_RemoveAllFiles.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-			this.FormTooltips.SetToolTip(this.btn_RemoveAllFiles, "Removes all files from the file list.");
 			this.btn_RemoveAllFiles.UseVisualStyleBackColor = true;
 			this.btn_RemoveAllFiles.Click += new System.EventHandler(this.btn_RemoveAllFiles_Click);
 			// 
@@ -283,8 +272,6 @@
 			this.btn_Cancel.TabIndex = 1;
 			this.btn_Cancel.TabStop = false;
 			this.btn_Cancel.Text = "Cancel";
-			this.FormTooltips.SetToolTip(this.btn_Cancel, "Stops processing files. \r\n\r\nWARNING: Canceling a munge is strongly NOT recommende" +
-        "d.");
 			this.btn_Cancel.UseVisualStyleBackColor = true;
 			this.btn_Cancel.Click += new System.EventHandler(this.btn_Cancel_Click);
 			// 
@@ -297,8 +284,6 @@
 			this.btn_SetGamePath.Size = new System.Drawing.Size(102, 23);
 			this.btn_SetGamePath.TabIndex = 7;
 			this.btn_SetGamePath.Text = "Set Game Path...";
-			this.FormTooltips.SetToolTip(this.btn_SetGamePath, "Opens a prompt to point Zero Munge to Star Wars Battlefront II\'s GameData directo" +
-        "ry.");
 			this.btn_SetGamePath.UseVisualStyleBackColor = true;
 			this.btn_SetGamePath.Click += new System.EventHandler(this.btn_SetGamePath_Click);
 			// 
@@ -520,9 +505,9 @@
 			// 
 			// col_FileBrowse
 			// 
-			dataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle25.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle25;
+			dataGridViewCellStyle41.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle41.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle41;
 			this.col_FileBrowse.HeaderText = "";
 			this.col_FileBrowse.Name = "col_FileBrowse";
 			this.col_FileBrowse.ReadOnly = true;
@@ -543,9 +528,9 @@
 			// 
 			// col_StagingBrowse
 			// 
-			dataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle26.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-			this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle26;
+			dataGridViewCellStyle42.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle42.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+			this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle42;
 			this.col_StagingBrowse.HeaderText = "";
 			this.col_StagingBrowse.Name = "col_StagingBrowse";
 			this.col_StagingBrowse.ReadOnly = true;
@@ -564,8 +549,8 @@
 			// 
 			// col_MungedFiles
 			// 
-			dataGridViewCellStyle27.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle27;
+			dataGridViewCellStyle43.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle43;
 			this.col_MungedFiles.HeaderText = "Munged Files";
 			this.col_MungedFiles.MinimumWidth = 100;
 			this.col_MungedFiles.Name = "col_MungedFiles";
@@ -576,9 +561,9 @@
 			// 
 			// col_MungedFilesEdit
 			// 
-			dataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle28.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-			this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle28;
+			dataGridViewCellStyle44.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle44.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+			this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle44;
 			this.col_MungedFilesEdit.HeaderText = "";
 			this.col_MungedFilesEdit.Name = "col_MungedFilesEdit";
 			this.col_MungedFilesEdit.ReadOnly = true;
@@ -755,7 +740,7 @@
 			// 
 			this.menu_runToolStripMenuItem.Name = "menu_runToolStripMenuItem";
 			this.menu_runToolStripMenuItem.ShortcutKeyDisplayString = "F5";
-			this.menu_runToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.menu_runToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
 			this.menu_runToolStripMenuItem.Text = "Run";
 			this.menu_runToolStripMenuItem.Click += new System.EventHandler(this.btn_Run_Click);
 			// 

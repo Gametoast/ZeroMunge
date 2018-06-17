@@ -147,7 +147,7 @@ namespace ZeroMunge
 			col_MungedFilesEdit.UseColumnTextForButtonValue = true;
 
 			// Set the menu strip tooltip text
-			SetMenuStripToolTips();
+			SetToolTips();
 
 			// Start a new log file
 			if (prefs.OutputLogToFile)
@@ -322,9 +322,25 @@ namespace ZeroMunge
 		}
 
 
-		public void SetMenuStripToolTips()
+		private void SetToolTips()
 		{
-			// Actions
+			// File Menu
+			menu_newToolStripMenuItem.ToolTipText = Tooltips.FileMenu.New;
+			menu_openToolStripMenuItem.ToolTipText = Tooltips.FileMenu.Open;
+			menu_saveToolStripMenuItem.ToolTipText = Tooltips.FileMenu.Save;
+			menu_saveAsToolStripMenuItem.ToolTipText = Tooltips.FileMenu.SaveAs;
+			menu_exitToolStripMenuItem.ToolTipText = Tooltips.FileMenu.Exit;
+
+
+			// File List
+			FormTooltips.SetToolTip(btn_Run, Tooltips.FileList.Run);
+			FormTooltips.SetToolTip(btn_Cancel, Tooltips.FileList.Cancel);
+			FormTooltips.SetToolTip(btn_AddFiles, Tooltips.FileList.AddFiles);
+			FormTooltips.SetToolTip(btn_AddFolders, Tooltips.FileList.AddFolders);
+			FormTooltips.SetToolTip(btn_AddProject, Tooltips.FileList.AddProject);
+			FormTooltips.SetToolTip(btn_RemoveFile, Tooltips.FileList.RemoveFile);
+			FormTooltips.SetToolTip(btn_RemoveAllFiles, Tooltips.FileList.RemoveAllFiles);
+
 			menu_runToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_Run);
 			menu_cancelToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_Cancel);
 			menu_addFilesToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_AddFiles);
@@ -333,13 +349,34 @@ namespace ZeroMunge
 			menu_removeToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_RemoveFile);
 			menu_removeAllToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_RemoveAllFiles);
 
-			// Log
+
+			// Output Log
+			FormTooltips.SetToolTip(btn_CopyLog, Tooltips.OutputLog.CopyLog);
+			FormTooltips.SetToolTip(btn_SaveLog, Tooltips.OutputLog.SaveLogAs);
+			FormTooltips.SetToolTip(btn_ClearLog, Tooltips.OutputLog.ClearLog);
+
 			menu_copyLogToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_CopyLog);
 			menu_saveLogAsToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_SaveLog);
 			menu_clearLogToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_ClearLog);
 
+
 			// Settings
+			FormTooltips.SetToolTip(btn_SetGamePath, Tooltips.Settings.SetGamePath);
+
 			menu_setGamePathToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_SetGamePath);
+			menu_prefsToolStripMenuItem.ToolTipText = Tooltips.Settings.OpenPreferences;
+
+
+			// Help Menu
+			menu_viewHelpToolStripMenuItem.ToolTipText = Tooltips.HelpMenu.ViewHelp;
+			menu_viewChangelogToolStripMenuItem.ToolTipText = Tooltips.HelpMenu.ViewChangelog;
+			menu_viewLicenseToolStripMenuItem.ToolTipText = Tooltips.HelpMenu.ViewLicense;
+			menu_viewReadmeToolStripMenuItem.ToolTipText = Tooltips.HelpMenu.ViewReadme;
+			menu_reportBugToolStripMenuItem.ToolTipText = Tooltips.HelpMenu.ReportBug;
+			menu_provideSuggestionToolStripMenuItem.ToolTipText = Tooltips.HelpMenu.ProvideSuggestion;
+			menu_viewOpenIssuesToolStripMenuItem.ToolTipText = Tooltips.HelpMenu.ViewOpenIssues;
+			menu_checkForUpdatesToolStripMenuItem.ToolTipText = Tooltips.HelpMenu.CheckForUpdates;
+			menu_aboutToolStripMenuItem.ToolTipText = Tooltips.HelpMenu.OpenAbout;
 		}
 
 
@@ -3433,6 +3470,71 @@ namespace ZeroMunge
 					Debug.WriteLine("PrintAllRows(): ");
 				}
 			}
+		}
+	}
+
+	// Global tooltips
+	public static class Tooltips
+	{
+		public static class FileMenu
+		{
+			public const string New			= "Start a new file.";
+			public const string Open		= "Open a saved file list.";
+			public const string Save		= "Save the current file list.";
+			public const string SaveAs		= "Save the current file list to a new file.";
+			public const string Exit		= "Quit the application.";
+		}
+
+		public static class FileList
+		{
+			public const string Run				= "Sequentially execute each file in the file list.";
+			public const string Cancel			= "Stop processing files.  \n\nWARNING: Canceling a munge is strongly NOT recommended.";
+			public const string AddFiles		= "Open a prompt to add files to the file list.";
+			public const string AddFolders		= "Open a prompt to select folders containing munge.bat files to add to the file list.";
+			public const string AddProject		= "Open a prompt to select a project folder whose common munge.bat files will be added to the file list.";
+			public const string RemoveFile		= "Remove the selected files from the file list.";
+			public const string RemoveAllFiles	= "Remove all files from the file list.";
+		}
+
+		public static class OutputLog
+		{
+			public const string CopyLog		= "Copy the contents of the output log window to the clipboard.";
+			public const string SaveLogAs	= "Save the contents of the output log to a new file.";
+			public const string ClearLog	= "Clear the contents of the output log.";
+		}
+
+		public static class Settings
+		{
+			public const string OpenPreferences				= "Change various application settings such as checking for updates or showing the update prompt on startup, file list auto-save and auto-load, etc.";
+			public const string SetGamePath					= "Open a prompt to point Zero Munge to Star Wars Battlefront II's GameData directory.";	// TODO: change this - no longer has to point to SWBF2 specifically
+			public const string ShowTrayIcon				= "Whether or not to show the application's icon in the system tray.  \n\nNOTE: The application must be restarted in order for changes to this setting to take effect.";
+			public const string ShowNotificationPopups		= "Whether or not to show notification popups for events such as when a job is completed or aborted.  \n\nNOTE: 'Show Tray Icon' must be checked in order for this setting to work.";
+			public const string PlayNotificationSounds		= "Whether or not to play unique sounds for events such as when a job is started, completed, or aborted.";
+			public const string AutoDetectStagingDirectory	= "Whether or not to automatically detect and fill the 'Staging Directory' field when a file is added to the file list.";
+			public const string AutoDetectMungedFiles		= "Whether or not to automatically detect and fill the 'Munged Files' field when a file is added to the file list.";
+			public const string AutoSaveFileList			= "Whether or not to automatically save the file list's contents to file when the application exits.";
+			public const string AutoLoadLastSaveFile		= "Whether or not to automatically load the most recent save file when the application starts up.";
+			public const string LogPollingRate				= "The rate (in milliseconds) at which the contents of the output log are updated.";
+			public const string OutputLogToFile				= "Whether or not to write the output log to a file as it is updated.  \n\nNOTE: The entire log file can be monitored in real-time via an external application such as Glogg or Tail if this setting is enabled.";
+			public const string LogPrintTimestamps			= "Whether or not to prepend timestamps to output log messages.";
+			public const string CheckForUpdatesOnStartup	= "Whether or not to check for updates on application startup.";
+			public const string ShowUpdatePromptOnStartup	= "Whether or not to show an update prompt on application startup if an update is available.  \n\nNOTE: 'Check For Updates On Startup' must be checked in order for this setting to work. If an update is available, a relevant message will always be printed to the output log regardless of whether or not this setting is enabled.";
+		}
+
+		public static class HelpMenu
+		{
+			public const string ViewHelp				= "Open the help viewer.";		// TODO: change this wtf are you thinking this dosent' help anyonne
+			public const string ViewChangelog			= "View the changes for the current and past releases of Zero Munge.";
+			public const string ViewLicense				= "View the licensing information for Zero Munge.";
+			public const string ViewReadme				= "View the readme file for Zero Munge.";
+			public const string ReportBug				= "File a bug report.";
+			public const string ProvideSuggestion		= "Submit a suggestion.";		// TODO: expand
+			public const string ViewOpenIssues			= "View a list of bugs that have been reported but are not yet fixed, as well as upcoming features and improvements.";
+			public const string OpenAbout				= "Open the About window to view application information.";
+			public const string ApplicationBanner		= "Open Zero Munge's project page on GitHub in a new web browser window.";
+			public const string CheckForUpdates			= "Check to see if a new release of Zero Munge is available.  \n\nNOTE: This requires an Internet connection.";
+			public const string Contact					= "Send me an e-mail at marth8880@gmail.com  \n\nNOTE: If a default e-mail program isn't set up, this link probably won't do anything.";
+			public const string FrayedWiresStudios		= "Open a link to the official web site for Frayed Wires Studios.";
 		}
 	}
 }

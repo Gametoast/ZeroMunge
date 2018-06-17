@@ -72,7 +72,7 @@
 			this.flow_AppInfo.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.flow_AppInfo.Location = new System.Drawing.Point(12, 131);
 			this.flow_AppInfo.Name = "flow_AppInfo";
-			this.flow_AppInfo.Size = new System.Drawing.Size(314, 70);
+			this.flow_AppInfo.Size = new System.Drawing.Size(299, 70);
 			this.flow_AppInfo.TabIndex = 2;
 			// 
 			// label1
@@ -155,49 +155,46 @@
 			this.flow_Links.Controls.Add(this.link_Contact);
 			this.flow_Links.Controls.Add(this.link_FrayedWires);
 			this.flow_Links.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flow_Links.Location = new System.Drawing.Point(332, 131);
+			this.flow_Links.Location = new System.Drawing.Point(317, 131);
 			this.flow_Links.Name = "flow_Links";
 			this.flow_Links.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-			this.flow_Links.Size = new System.Drawing.Size(120, 70);
+			this.flow_Links.Size = new System.Drawing.Size(135, 70);
 			this.flow_Links.TabIndex = 5;
 			// 
 			// link_Updates
 			// 
 			this.link_Updates.AutoSize = true;
-			this.link_Updates.Location = new System.Drawing.Point(21, 0);
+			this.link_Updates.Location = new System.Drawing.Point(36, 0);
 			this.link_Updates.Name = "link_Updates";
 			this.link_Updates.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this.link_Updates.Size = new System.Drawing.Size(96, 19);
 			this.link_Updates.TabIndex = 0;
 			this.link_Updates.TabStop = true;
 			this.link_Updates.Text = "Check for Updates";
-			this.FormTooltips.SetToolTip(this.link_Updates, "Check to see if a new release of Zero Munge is available.");
 			this.link_Updates.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.link_Updates_LinkClicked);
 			// 
 			// link_Contact
 			// 
 			this.link_Contact.AutoSize = true;
-			this.link_Contact.Location = new System.Drawing.Point(73, 19);
+			this.link_Contact.Location = new System.Drawing.Point(88, 19);
 			this.link_Contact.Name = "link_Contact";
 			this.link_Contact.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this.link_Contact.Size = new System.Drawing.Size(44, 19);
 			this.link_Contact.TabIndex = 1;
 			this.link_Contact.TabStop = true;
 			this.link_Contact.Text = "Contact";
-			this.FormTooltips.SetToolTip(this.link_Contact, "Send me an e-mail message.");
 			this.link_Contact.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.link_Contact_LinkClicked);
 			// 
 			// link_FrayedWires
 			// 
 			this.link_FrayedWires.AutoSize = true;
-			this.link_FrayedWires.Location = new System.Drawing.Point(10, 38);
+			this.link_FrayedWires.Location = new System.Drawing.Point(25, 38);
 			this.link_FrayedWires.Name = "link_FrayedWires";
 			this.link_FrayedWires.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this.link_FrayedWires.Size = new System.Drawing.Size(107, 19);
 			this.link_FrayedWires.TabIndex = 2;
 			this.link_FrayedWires.TabStop = true;
 			this.link_FrayedWires.Text = "Frayed Wires Studios";
-			this.FormTooltips.SetToolTip(this.link_FrayedWires, "Open a link to the official web site for Frayed Wires Studios.");
 			this.link_FrayedWires.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.link_FrayedWires_LinkClicked);
 			// 
 			// img_Logo

@@ -120,22 +120,6 @@
   <metadata name="FormTooltips.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <metadata name="FormTooltips.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <metadata name="FormTooltips.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <data name="chk_ShowUpdatePromptOnStartup.ToolTip" xml:space="preserve">
-    <value>Whether or not to show an update prompt on application startup if an update is available.
-
-NOTE: 'Check For Updates On Startup' must be checked in order for this setting to work. If an update is available, a relevant message will always be printed to the output log regardless of whether or not this setting is enabled.</value>
-  </data>
-  <data name="chk_OutputLogToFile.ToolTip" xml:space="preserve">
-    <value>Whether or not to write the output log to a file as it is updated.
-
-NOTE: The entire log file can be monitored in real-time via an external application such as Glogg or Tail if this setting is enabled.</value>
-  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>48</value>
   </metadata>

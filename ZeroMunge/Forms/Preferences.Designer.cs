@@ -46,14 +46,14 @@
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
 			this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.label1 = new System.Windows.Forms.Label();
+			this.lbl_LogPollingRate = new System.Windows.Forms.Label();
 			this.txt_LogPollingRate = new System.Windows.Forms.TextBox();
 			this.chk_OutputLogToFile = new System.Windows.Forms.CheckBox();
 			this.chk_LogPrintTimestamps = new System.Windows.Forms.CheckBox();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
-			this.chk_ShowUpdatePromptOnStartup = new System.Windows.Forms.CheckBox();
 			this.chk_CheckForUpdatesOnStartup = new System.Windows.Forms.CheckBox();
+			this.chk_ShowUpdatePromptOnStartup = new System.Windows.Forms.CheckBox();
 			this.FormTooltips = new System.Windows.Forms.ToolTip(this.components);
 			this.chk_AutoLoadEnabled = new System.Windows.Forms.CheckBox();
 			this.cont_Prefs.SuspendLayout();
@@ -141,9 +141,6 @@
 			this.chk_ShowTrayIcon.Size = new System.Drawing.Size(179, 17);
 			this.chk_ShowTrayIcon.TabIndex = 0;
 			this.chk_ShowTrayIcon.Text = "Show Tray Icon (requires restart)";
-			this.FormTooltips.SetToolTip(this.chk_ShowTrayIcon, "Whether or not to show the application\'s icon in the system tray. \r\n\r\nNOTE: The a" +
-        "pplication must be restarted in order for changes to this setting to take effect" +
-        ".");
 			this.chk_ShowTrayIcon.UseVisualStyleBackColor = true;
 			this.chk_ShowTrayIcon.CheckedChanged += new System.EventHandler(this.chk_ShowTrayIcon_CheckedChanged);
 			// 
@@ -157,9 +154,6 @@
 			this.chk_ShowNotificationPopups.Size = new System.Drawing.Size(148, 17);
 			this.chk_ShowNotificationPopups.TabIndex = 1;
 			this.chk_ShowNotificationPopups.Text = "Show Notification Popups";
-			this.FormTooltips.SetToolTip(this.chk_ShowNotificationPopups, "Whether or not to show notification popups for events such as when a job is compl" +
-        "eted or aborted. \r\n\r\nNOTE: \'Show Tray Icon\' must be checked in order for this se" +
-        "tting to work.");
 			this.chk_ShowNotificationPopups.UseVisualStyleBackColor = true;
 			this.chk_ShowNotificationPopups.CheckedChanged += new System.EventHandler(this.chk_ShowNotificationPopups_CheckedChanged);
 			// 
@@ -173,8 +167,6 @@
 			this.chk_PlayNotificationSounds.Size = new System.Drawing.Size(141, 17);
 			this.chk_PlayNotificationSounds.TabIndex = 2;
 			this.chk_PlayNotificationSounds.Text = "Play Notification Sounds";
-			this.FormTooltips.SetToolTip(this.chk_PlayNotificationSounds, "Whether or not to play unique sounds for events such as when a job is started, co" +
-        "mpleted, or aborted.");
 			this.chk_PlayNotificationSounds.UseVisualStyleBackColor = true;
 			this.chk_PlayNotificationSounds.CheckedChanged += new System.EventHandler(this.chk_PlayNotificationSounds_CheckedChanged);
 			// 
@@ -214,8 +206,6 @@
 			this.chk_AutoDetectStagingDir.Size = new System.Drawing.Size(167, 17);
 			this.chk_AutoDetectStagingDir.TabIndex = 3;
 			this.chk_AutoDetectStagingDir.Text = "Auto-Detect Staging Directory";
-			this.FormTooltips.SetToolTip(this.chk_AutoDetectStagingDir, "Whether or not to automatically detect and fill the \'Staging Directory\' field whe" +
-        "n a file is added to the file list.");
 			this.chk_AutoDetectStagingDir.UseVisualStyleBackColor = true;
 			this.chk_AutoDetectStagingDir.CheckedChanged += new System.EventHandler(this.chk_AutoDetectStagingDir_CheckedChanged);
 			// 
@@ -229,8 +219,6 @@
 			this.chk_AutoDetectMungedFiles.Size = new System.Drawing.Size(149, 17);
 			this.chk_AutoDetectMungedFiles.TabIndex = 4;
 			this.chk_AutoDetectMungedFiles.Text = "Auto-Detect Munged Files";
-			this.FormTooltips.SetToolTip(this.chk_AutoDetectMungedFiles, "Whether or not to automatically detect and fill the \'Munged Files\' field when a f" +
-        "ile is added to the file list.");
 			this.chk_AutoDetectMungedFiles.UseVisualStyleBackColor = true;
 			this.chk_AutoDetectMungedFiles.CheckedChanged += new System.EventHandler(this.chk_AutoDetectMungedFiles_CheckedChanged);
 			// 
@@ -244,8 +232,6 @@
 			this.chk_AutoSaveEnabled.Size = new System.Drawing.Size(114, 17);
 			this.chk_AutoSaveEnabled.TabIndex = 5;
 			this.chk_AutoSaveEnabled.Text = "Auto-Save File List";
-			this.FormTooltips.SetToolTip(this.chk_AutoSaveEnabled, "Whether or not to automatically save the file list\'s contents to file when the ap" +
-        "plication exits.");
 			this.chk_AutoSaveEnabled.UseVisualStyleBackColor = true;
 			this.chk_AutoSaveEnabled.CheckedChanged += new System.EventHandler(this.chk_AutoSaveEnabled_CheckedChanged);
 			// 
@@ -279,7 +265,7 @@
 			this.tableLayoutPanel1.ColumnCount = 2;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.lbl_LogPollingRate, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.txt_LogPollingRate, 1, 0);
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 3);
 			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
@@ -289,16 +275,15 @@
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(248, 20);
 			this.tableLayoutPanel1.TabIndex = 5;
 			// 
-			// label1
+			// lbl_LogPollingRate
 			// 
-			this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(3, 3);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(89, 13);
-			this.label1.TabIndex = 0;
-			this.label1.Text = "Polling Rate (ms):";
-			this.FormTooltips.SetToolTip(this.label1, "The rate (in milliseconds) at which the contents of the output log are updated.");
+			this.lbl_LogPollingRate.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lbl_LogPollingRate.AutoSize = true;
+			this.lbl_LogPollingRate.Location = new System.Drawing.Point(3, 3);
+			this.lbl_LogPollingRate.Name = "lbl_LogPollingRate";
+			this.lbl_LogPollingRate.Size = new System.Drawing.Size(89, 13);
+			this.lbl_LogPollingRate.TabIndex = 0;
+			this.lbl_LogPollingRate.Text = "Polling Rate (ms):";
 			// 
 			// txt_LogPollingRate
 			// 
@@ -308,7 +293,6 @@
 			this.txt_LogPollingRate.Name = "txt_LogPollingRate";
 			this.txt_LogPollingRate.Size = new System.Drawing.Size(124, 20);
 			this.txt_LogPollingRate.TabIndex = 1;
-			this.FormTooltips.SetToolTip(this.txt_LogPollingRate, "The rate (in milliseconds) at which the contents of the Output Log are updated.");
 			// 
 			// chk_OutputLogToFile
 			// 
@@ -320,7 +304,6 @@
 			this.chk_OutputLogToFile.Size = new System.Drawing.Size(93, 17);
 			this.chk_OutputLogToFile.TabIndex = 4;
 			this.chk_OutputLogToFile.Text = "Output To File";
-			this.FormTooltips.SetToolTip(this.chk_OutputLogToFile, resources.GetString("chk_OutputLogToFile.ToolTip"));
 			this.chk_OutputLogToFile.UseVisualStyleBackColor = true;
 			this.chk_OutputLogToFile.CheckedChanged += new System.EventHandler(this.chk_OutputLogToFile_CheckedChanged);
 			// 
@@ -334,7 +317,6 @@
 			this.chk_LogPrintTimestamps.Size = new System.Drawing.Size(106, 17);
 			this.chk_LogPrintTimestamps.TabIndex = 3;
 			this.chk_LogPrintTimestamps.Text = "Print Timestamps";
-			this.FormTooltips.SetToolTip(this.chk_LogPrintTimestamps, "Whether or not to prepend timestamps to output log messages.");
 			this.chk_LogPrintTimestamps.UseVisualStyleBackColor = true;
 			this.chk_LogPrintTimestamps.CheckedChanged += new System.EventHandler(this.chk_LogPrintTimestamps_CheckedChanged);
 			// 
@@ -362,20 +344,6 @@
 			this.flowLayoutPanel3.Size = new System.Drawing.Size(248, 46);
 			this.flowLayoutPanel3.TabIndex = 0;
 			// 
-			// chk_ShowUpdatePromptOnStartup
-			// 
-			this.chk_ShowUpdatePromptOnStartup.AutoSize = true;
-			this.chk_ShowUpdatePromptOnStartup.Checked = true;
-			this.chk_ShowUpdatePromptOnStartup.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chk_ShowUpdatePromptOnStartup.Location = new System.Drawing.Point(3, 26);
-			this.chk_ShowUpdatePromptOnStartup.Name = "chk_ShowUpdatePromptOnStartup";
-			this.chk_ShowUpdatePromptOnStartup.Size = new System.Drawing.Size(181, 17);
-			this.chk_ShowUpdatePromptOnStartup.TabIndex = 3;
-			this.chk_ShowUpdatePromptOnStartup.Text = "Show Update Prompt On Startup";
-			this.FormTooltips.SetToolTip(this.chk_ShowUpdatePromptOnStartup, resources.GetString("chk_ShowUpdatePromptOnStartup.ToolTip"));
-			this.chk_ShowUpdatePromptOnStartup.UseVisualStyleBackColor = true;
-			this.chk_ShowUpdatePromptOnStartup.CheckedChanged += new System.EventHandler(this.chk_ShowUpdatePromptOnStartup_CheckedChanged);
-			// 
 			// chk_CheckForUpdatesOnStartup
 			// 
 			this.chk_CheckForUpdatesOnStartup.AutoSize = true;
@@ -386,24 +354,21 @@
 			this.chk_CheckForUpdatesOnStartup.Size = new System.Drawing.Size(172, 17);
 			this.chk_CheckForUpdatesOnStartup.TabIndex = 4;
 			this.chk_CheckForUpdatesOnStartup.Text = "Check For Updates On Startup";
-			this.FormTooltips.SetToolTip(this.chk_CheckForUpdatesOnStartup, "Whether or not to check for updates on application startup.");
 			this.chk_CheckForUpdatesOnStartup.UseVisualStyleBackColor = true;
 			this.chk_CheckForUpdatesOnStartup.CheckedChanged += new System.EventHandler(this.chk_CheckForUpdatesOnStartup_CheckedChanged);
 			// 
-			// chk_AutoLoadEnabled
+			// chk_ShowUpdatePromptOnStartup
 			// 
-			this.chk_AutoLoadEnabled.AutoSize = true;
-			this.chk_AutoLoadEnabled.Checked = true;
-			this.chk_AutoLoadEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chk_AutoLoadEnabled.Location = new System.Drawing.Point(3, 72);
-			this.chk_AutoLoadEnabled.Name = "chk_AutoLoadEnabled";
-			this.chk_AutoLoadEnabled.Size = new System.Drawing.Size(145, 17);
-			this.chk_AutoLoadEnabled.TabIndex = 6;
-			this.chk_AutoLoadEnabled.Text = "Auto-Load Last Save File";
-			this.FormTooltips.SetToolTip(this.chk_AutoLoadEnabled, "Whether or not to automatically load the most recent save file when the applicati" +
-        "on starts up.");
-			this.chk_AutoLoadEnabled.UseVisualStyleBackColor = true;
-			this.chk_AutoLoadEnabled.CheckedChanged += new System.EventHandler(this.chk_AutoLoadEnabled_CheckedChanged);
+			this.chk_ShowUpdatePromptOnStartup.AutoSize = true;
+			this.chk_ShowUpdatePromptOnStartup.Checked = true;
+			this.chk_ShowUpdatePromptOnStartup.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chk_ShowUpdatePromptOnStartup.Location = new System.Drawing.Point(3, 26);
+			this.chk_ShowUpdatePromptOnStartup.Name = "chk_ShowUpdatePromptOnStartup";
+			this.chk_ShowUpdatePromptOnStartup.Size = new System.Drawing.Size(181, 17);
+			this.chk_ShowUpdatePromptOnStartup.TabIndex = 3;
+			this.chk_ShowUpdatePromptOnStartup.Text = "Show Update Prompt On Startup";
+			this.chk_ShowUpdatePromptOnStartup.UseVisualStyleBackColor = true;
+			this.chk_ShowUpdatePromptOnStartup.CheckedChanged += new System.EventHandler(this.chk_ShowUpdatePromptOnStartup_CheckedChanged);
 			// 
 			// Preferences
 			// 
@@ -472,7 +437,7 @@
 		private System.Windows.Forms.GroupBox groupBox4;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel4;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label lbl_LogPollingRate;
 		private System.Windows.Forms.TextBox txt_LogPollingRate;
 		private System.Windows.Forms.CheckBox chk_OutputLogToFile;
 		private System.Windows.Forms.CheckBox chk_LogPrintTimestamps;
