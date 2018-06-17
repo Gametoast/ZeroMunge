@@ -955,26 +955,26 @@ namespace ZeroMunge
 			try
 			{
 				Process.Start(file);
-				result = "Opening " + file;
+				result = string.Format("Opening file list: \"{0}\"", file);
 			}
 			catch (UnauthorizedAccessException ex)
 			{
-				result = "Could not open " + file + ". Reason: " + ex.Message;
+				result = string.Format("Could not open \"{0}\". Reason: {1}", file, ex.Message);
 				Trace.WriteLine(result);
 			}
 			catch (FileNotFoundException ex)
 			{
-				result = "Could not open " + file + ". Reason: " + ex.Message;
+				result = string.Format("Could not open \"{0}\". Reason: {1}", file, ex.Message);
 				Trace.WriteLine(result);
 			}
 			catch (ObjectDisposedException ex)
 			{
-				result = "Could not open " + file + ". Reason: " + ex.Message;
+				result = string.Format("Could not open \"{0}\". Reason: {1}", file, ex.Message);
 				Trace.WriteLine(result);
 			}
 			catch (System.ComponentModel.Win32Exception ex)
 			{
-				result = "Could not open " + file + ". Reason: " + ex.Message;
+				result = string.Format("Could not open \"{0}\". Reason: {1}", file, ex.Message);
 				Trace.WriteLine(result);
 			}
 

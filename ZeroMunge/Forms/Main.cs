@@ -239,11 +239,12 @@ namespace ZeroMunge
 				updateCheckThread.Start();
 			}
 
-			Log("Checking GameDirectory...", LogType.Info);
+			Log("Checking game path...", LogType.Info);
 			if (prefs.GameDirectory != "")
 			{
-				Debug.WriteLine("Loading GameDirectory: " + prefs.GameDirectory);
-				Log("Loading GameDirectory: " + prefs.GameDirectory, LogType.Info);
+				var msg = string.Format("Setting game path: \"{0}\"", prefs.GameDirectory);
+				Debug.WriteLine(msg);
+				Log(msg, LogType.Info);
 			}
 			else
 			{
@@ -255,7 +256,7 @@ namespace ZeroMunge
 			{
 				if (prefs.LastSaveFilePath != "" && File.Exists(prefs.LastSaveFilePath))
 				{
-					Log("Auto-load is enabled. Loading save file " + prefs.LastSaveFilePath, LogType.Info);
+					Log(string.Format("Auto-load is enabled. Loading save file: \"{0}\"", prefs.LastSaveFilePath), LogType.Info);
 
 					DataFilesContainer data = DeserializeData(prefs.LastSaveFilePath);
 					LoadDataIntoFileList(data);
@@ -449,7 +450,7 @@ namespace ZeroMunge
 			}
 			else
 			{
-				var message = "Help file does not exist at path " + helpPath;
+				var message = string.Format("Help file does not exist at path: \"{0}\"", helpPath);
 				Trace.WriteLine(message);
 				Log(message, LogType.Error);
 			}
@@ -691,7 +692,7 @@ namespace ZeroMunge
 							// Make sure the source file exists before attempting to copy it
 							if (!File.Exists(fullSourceFilePath))
 							{
-								var message = "Source file does not exist at path " + fullSourceFilePath;
+								var message = string.Format("Source file does not exist at path: \"{0}\"", fullSourceFilePath);
 								Trace.WriteLine(message);
 								Log(message, LogType.Error);
 							}
@@ -727,7 +728,7 @@ namespace ZeroMunge
 									{
 										File.Copy(fullSourceFilePath, fullTargetFilePath, true);
 
-										var message = "Successfully copied " + fullSourceFilePath + " to " + fullTargetFilePath;
+										var message = string.Format("Successfully copied \"{0}\" to \"{1}\"", fullSourceFilePath, fullTargetFilePath);
 										Debug.WriteLine(message);
 										Log(message, LogType.Info);
 									}
@@ -744,7 +745,7 @@ namespace ZeroMunge
 								}
 								else
 								{
-									var message = "File does not exist at path " + fullSourceFilePath;
+									var message = string.Format("File does not exist at path: \"{0}\"", fullSourceFilePath);
 									Trace.WriteLine(message);
 									Log(message, LogType.Error);
 								}
@@ -753,7 +754,7 @@ namespace ZeroMunge
 					}
 					else
 					{
-						var message = "Copy is unchecked, skipping copy operation for " + ProcManager_fileList.ElementAt(whichFile).FileDir;
+						var message = string.Format("Copy is unchecked, skipping copy operation for \"{0}\"", ProcManager_fileList.ElementAt(whichFile).FileDir);
 						Debug.WriteLine(message);
 						Log(message, LogType.Warning);
 					}
@@ -856,7 +857,7 @@ namespace ZeroMunge
 			// Print the file path before starting
 			Thread initOutputThread = new Thread(() =>
 			{
-				Log("Executing file " + @filePath, LogType.Info);
+				Log(string.Format("Executing file: \"{0}\"", @filePath), LogType.Info);
 				Log("");
 			});
 			initOutputThread.Start();
@@ -865,7 +866,7 @@ namespace ZeroMunge
 			// Notify the manager that the process is done
 			proc.Exited += ((sender, e) =>
 			{
-				// Don't send out exited messages if we've aborted
+				// Don't send out 'exited' messages if we've aborted
 				if (!ProcManager_procAborted)
 				{
 					Thread procExitThread = new Thread(() => {
@@ -1553,7 +1554,7 @@ namespace ZeroMunge
 							stagingDirectory = "nil";
 
 							Thread infoThread = new Thread(() => {
-								var message = "Not setting Staging Directory in accordance with preferences";
+								var message = "Not setting Staging Directory in accordance with user preferences";
 								Debug.WriteLine(message);
 								Log(message, LogType.Info);
 							});
@@ -1566,7 +1567,7 @@ namespace ZeroMunge
 							compiledFiles = "nil";
 
 							Thread infoThread = new Thread(() => {
-								var message = "Not setting Munged Files in accordance with preferences";
+								var message = "Not setting Munged Files in accordance with user preferences";
 								Debug.WriteLine(message);
 								Log(message, LogType.Info);
 							});
@@ -1613,9 +1614,9 @@ namespace ZeroMunge
 						
 						Thread logThread = new Thread(() => {
 							Log("");
-							Log("Adding file: " + file, LogType.Info);
-							Log("Staging directory: " + stagingDirectory, LogType.Info);
-							Log("Munge output directory: " + mungeOutputDirectory, LogType.Info);
+							Log(string.Format("Adding file: \"{0}\"", file), LogType.Info);
+							Log(string.Format("Staging directory: \"{0}\"", stagingDirectory), LogType.Info);
+							Log(string.Format("Munge output directory: \"{0}\"", mungeOutputDirectory), LogType.Info);
 						});
 						logThread.Start();
 
@@ -1626,7 +1627,7 @@ namespace ZeroMunge
 					else
 					{
 						Thread errorThread = new Thread(() => {
-							var message = "Game directory not set";
+							var message = "Game path not set";
 							Debug.WriteLine(message);
 							Log(message, LogType.Error);
 						});
@@ -1641,7 +1642,7 @@ namespace ZeroMunge
 			else
 			{
 				Thread errorThread = new Thread(() => {
-					var message = "File does not exist at " + file;
+					var message = string.Format("Could not find file at path: \"{0}\"", file);
 					Debug.WriteLine(message);
 					Log(message, LogType.Error);
 				});
@@ -1705,14 +1706,12 @@ namespace ZeroMunge
 				}
 			}
 
-			// A FileStream is needed to save the binary file
+			// Attempt to save the binary file
 			FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None);
 			try
 			{
-				// Create an instance of the BinaryFormatter
-				IFormatter formatter = new BinaryFormatter();
-
 				// Serialize and save the data
+				IFormatter formatter = new BinaryFormatter();
 				formatter.Serialize(fs, saveData);
 			}
 			catch (SerializationException e)
@@ -1723,8 +1722,9 @@ namespace ZeroMunge
 			}
 			catch (IOException e)
 			{
-				Console.WriteLine("Failed to write to file path. Reason: " + e.Message);
-				Log("Failed to write to file path. Reason: " + e.Message, LogType.Error);
+				var msg = string.Format("Failed to write to file path: \"{0}\". Reason: {1}", filePath, e.Message);
+				Console.WriteLine(msg);
+				Log(msg, LogType.Error);
 				throw;
 			}
 			finally
@@ -1744,7 +1744,7 @@ namespace ZeroMunge
 			// Declare an object variable of the type to be deserialized
 			DataFilesContainer data;
 
-			// A FileStream is needed to read the binary file
+			// Attempt to read the binary file
 			FileStream fs = new FileStream(filePath, FileMode.Open);
 			try
 			{
@@ -1762,8 +1762,9 @@ namespace ZeroMunge
 			}
 			catch (IOException e)
 			{
-				Console.WriteLine("Failed to read from file path. Reason: " + e.Message);
-				Log("Failed to read from file path. Reason: " + e.Message, LogType.Error);
+				var msg = string.Format("Failed to read from file path: \"{0}\". Reason: {1}", filePath, e.Message);
+				Console.WriteLine(msg);
+				Log(msg, LogType.Error);
 				throw;
 			}
 			finally
@@ -1892,7 +1893,7 @@ namespace ZeroMunge
 
 			string autoSaveMsg = "";
 			if (isAutoSave) autoSaveMsg = "Auto-save is enabled. ";
-			Log(autoSaveMsg + "Saving file list as " + filePath, LogType.Info);
+			Log(string.Format("{0}Saving file list to path: \"{1}\"", autoSaveMsg, filePath), LogType.Info);
 
 			prefs.LastSaveFilePath = filePath;
 			Utilities.SavePrefs(prefs);
@@ -2344,7 +2345,7 @@ namespace ZeroMunge
 						data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_CHK_IS_VALID].Value = false;
 
 						Thread errorThread = new Thread(() => {
-							var message = "File Path doesn't exist at " + data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value.ToString();
+							var message = string.Format("Could not find file at path: \"{0}\"", data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value.ToString());
 							Debug.WriteLine(message);
 							Log(message, LogType.Error);
 						});
@@ -2702,7 +2703,7 @@ namespace ZeroMunge
 					else
 					{
 						Thread errorThread = new Thread(() => {
-							var message = "File does not exist at " + file;
+							var message = string.Format("Could not find file at path: \"{0}\"", file);
 							Debug.WriteLine(message);
 							Log(message, LogType.Error);
 						});
@@ -2921,7 +2922,7 @@ namespace ZeroMunge
 
 		public void Flow_SetGameDirectory_WarnQuit()
 		{
-			Log("GameDirectory is not set!", LogType.Warning);
+			Log("Game path is not set!", LogType.Warning);
 		}
 
 
@@ -2939,8 +2940,9 @@ namespace ZeroMunge
 				Utilities.SavePrefs(prefs);
 
 				Thread outputThread = new Thread(() => {
-					Debug.WriteLine("Saving GameDirectory: " + Properties.Settings.Default.GameDirectory);
-					Log("Saving GameDirectory: " + Properties.Settings.Default.GameDirectory, LogType.Info);
+					var msg = string.Format("Saving game path: \"{0}\"", Properties.Settings.Default.GameDirectory);
+					Debug.WriteLine(msg);
+					Log(msg, LogType.Info);
 				});
 				outputThread.Start();
 			}
@@ -2976,7 +2978,7 @@ namespace ZeroMunge
 				// Get the file name
 				string name = saveDlg_SaveLogPrompt.FileName;
 
-				Log("Saved logfile as " + name, LogType.Info);
+				Log(string.Format("Saved log file to path: \"{0}\"", name), LogType.Info);
 
 				// Write the output log's contents to the file
 				File.WriteAllLines(name, text_OutputLog.Lines);
