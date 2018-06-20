@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ZeroMunge));
 			this.btn_Run = new System.Windows.Forms.Button();
 			this.btn_AddFiles = new System.Windows.Forms.Button();
@@ -76,6 +76,9 @@
 			this.lbl_OutputLogChars = new System.Windows.Forms.Label();
 			this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
 			this.cmenu_TrayIcon = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.cmenu_TrayIcon_Run = new System.Windows.Forms.ToolStripMenuItem();
+			this.cmenu_TrayIcon_Cancel = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
 			this.cmenu_TrayIcon_Open = new System.Windows.Forms.ToolStripMenuItem();
 			this.cmenu_TrayIcon_Quit = new System.Windows.Forms.ToolStripMenuItem();
 			this.button2 = new System.Windows.Forms.Button();
@@ -505,9 +508,9 @@
 			// 
 			// col_FileBrowse
 			// 
-			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle5.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle5;
+			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle1;
 			this.col_FileBrowse.HeaderText = "";
 			this.col_FileBrowse.Name = "col_FileBrowse";
 			this.col_FileBrowse.ReadOnly = true;
@@ -528,9 +531,9 @@
 			// 
 			// col_StagingBrowse
 			// 
-			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle6.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-			this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle6;
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle2.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+			this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle2;
 			this.col_StagingBrowse.HeaderText = "";
 			this.col_StagingBrowse.Name = "col_StagingBrowse";
 			this.col_StagingBrowse.ReadOnly = true;
@@ -549,8 +552,8 @@
 			// 
 			// col_MungedFiles
 			// 
-			dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle7;
+			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle3;
 			this.col_MungedFiles.HeaderText = "Munged Files";
 			this.col_MungedFiles.MinimumWidth = 100;
 			this.col_MungedFiles.Name = "col_MungedFiles";
@@ -561,9 +564,9 @@
 			// 
 			// col_MungedFilesEdit
 			// 
-			dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle8.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-			this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle8;
+			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle4.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+			this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle4;
 			this.col_MungedFilesEdit.HeaderText = "";
 			this.col_MungedFilesEdit.Name = "col_MungedFilesEdit";
 			this.col_MungedFilesEdit.ReadOnly = true;
@@ -609,22 +612,45 @@
 			// cmenu_TrayIcon
 			// 
 			this.cmenu_TrayIcon.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmenu_TrayIcon_Run,
+            this.cmenu_TrayIcon_Cancel,
+            this.toolStripSeparator10,
             this.cmenu_TrayIcon_Open,
             this.cmenu_TrayIcon_Quit});
 			this.cmenu_TrayIcon.Name = "cmenu_TrayIcon";
-			this.cmenu_TrayIcon.Size = new System.Drawing.Size(104, 48);
+			this.cmenu_TrayIcon.Size = new System.Drawing.Size(111, 98);
+			// 
+			// cmenu_TrayIcon_Run
+			// 
+			this.cmenu_TrayIcon_Run.Name = "cmenu_TrayIcon_Run";
+			this.cmenu_TrayIcon_Run.Size = new System.Drawing.Size(110, 22);
+			this.cmenu_TrayIcon_Run.Text = "Run";
+			this.cmenu_TrayIcon_Run.Click += new System.EventHandler(this.cmenu_TrayIcon_Run_Click);
+			// 
+			// cmenu_TrayIcon_Cancel
+			// 
+			this.cmenu_TrayIcon_Cancel.Enabled = false;
+			this.cmenu_TrayIcon_Cancel.Name = "cmenu_TrayIcon_Cancel";
+			this.cmenu_TrayIcon_Cancel.Size = new System.Drawing.Size(110, 22);
+			this.cmenu_TrayIcon_Cancel.Text = "Cancel";
+			this.cmenu_TrayIcon_Cancel.Click += new System.EventHandler(this.cmenu_TrayIcon_Cancel_Click);
+			// 
+			// toolStripSeparator10
+			// 
+			this.toolStripSeparator10.Name = "toolStripSeparator10";
+			this.toolStripSeparator10.Size = new System.Drawing.Size(107, 6);
 			// 
 			// cmenu_TrayIcon_Open
 			// 
 			this.cmenu_TrayIcon_Open.Name = "cmenu_TrayIcon_Open";
-			this.cmenu_TrayIcon_Open.Size = new System.Drawing.Size(103, 22);
+			this.cmenu_TrayIcon_Open.Size = new System.Drawing.Size(110, 22);
 			this.cmenu_TrayIcon_Open.Text = "Open";
 			this.cmenu_TrayIcon_Open.Click += new System.EventHandler(this.cmenu_TrayIcon_Open_Click);
 			// 
 			// cmenu_TrayIcon_Quit
 			// 
 			this.cmenu_TrayIcon_Quit.Name = "cmenu_TrayIcon_Quit";
-			this.cmenu_TrayIcon_Quit.Size = new System.Drawing.Size(103, 22);
+			this.cmenu_TrayIcon_Quit.Size = new System.Drawing.Size(110, 22);
 			this.cmenu_TrayIcon_Quit.Text = "Quit";
 			this.cmenu_TrayIcon_Quit.Click += new System.EventHandler(this.cmenu_TrayIcon_Quit_Click);
 			// 
@@ -811,21 +837,21 @@
 			// menu_copyLogToolStripMenuItem
 			// 
 			this.menu_copyLogToolStripMenuItem.Name = "menu_copyLogToolStripMenuItem";
-			this.menu_copyLogToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.menu_copyLogToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
 			this.menu_copyLogToolStripMenuItem.Text = "Copy Log";
 			this.menu_copyLogToolStripMenuItem.Click += new System.EventHandler(this.btn_CopyLog_Click);
 			// 
 			// menu_saveLogAsToolStripMenuItem
 			// 
 			this.menu_saveLogAsToolStripMenuItem.Name = "menu_saveLogAsToolStripMenuItem";
-			this.menu_saveLogAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.menu_saveLogAsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
 			this.menu_saveLogAsToolStripMenuItem.Text = "Save Log As...";
 			this.menu_saveLogAsToolStripMenuItem.Click += new System.EventHandler(this.btn_SaveLog_Click);
 			// 
 			// menu_clearLogToolStripMenuItem
 			// 
 			this.menu_clearLogToolStripMenuItem.Name = "menu_clearLogToolStripMenuItem";
-			this.menu_clearLogToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.menu_clearLogToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
 			this.menu_clearLogToolStripMenuItem.Text = "Clear Log";
 			this.menu_clearLogToolStripMenuItem.Click += new System.EventHandler(this.btn_ClearLog_Click);
 			// 
@@ -1170,6 +1196,9 @@
 		private System.Windows.Forms.ToolStripMenuItem menu_viewChangelogToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem menu_viewLicenseToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem menu_viewReadmeToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem cmenu_TrayIcon_Run;
+		private System.Windows.Forms.ToolStripMenuItem cmenu_TrayIcon_Cancel;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
 	}
 }
 

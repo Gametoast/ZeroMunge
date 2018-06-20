@@ -1162,6 +1162,8 @@ namespace ZeroMunge
 		// ** TOGGLE UI
 		// ***************************
 
+		public bool UIEnabled = true;
+
 		// This method is executed on the worker thread and makes a thread-safe call on the UI controls.
 		/// <summary>
 		/// Sets the enabled state of the application's UI controls.
@@ -1194,6 +1196,8 @@ namespace ZeroMunge
 			}
 			else
 			{
+				UIEnabled = enabled;
+
 				// Buttons
 				btn_Run.Enabled = enabled;
 				btn_Cancel.Enabled = !enabled;
@@ -1214,6 +1218,8 @@ namespace ZeroMunge
 
 
 				// Tray icon context menu
+				cmenu_TrayIcon_Run.Enabled = enabled;
+				cmenu_TrayIcon_Cancel.Enabled = !enabled;
 				cmenu_TrayIcon_Quit.Enabled = enabled;
 
 
@@ -3083,6 +3089,22 @@ namespace ZeroMunge
 		}
 
 
+		// When the user clicks the "Run" item in the tray icon context menu:
+		// Begin processing the list of files as a playlist.
+		private void cmenu_TrayIcon_Run_Click(object sender, EventArgs e)
+		{
+			ProcManager_Start();
+		}
+
+
+		// When the user clicks the "Cancel" item in the tray icon context menu:
+		// Abort the active process and stop processing files.
+		private void cmenu_TrayIcon_Cancel_Click(object sender, EventArgs e)
+		{
+			ProcManager_Abort();
+		}
+
+
 		// When the user clicks the "Open" item in the tray icon context menu:
 		// Restore the form to its previous WindowState.
 		private void cmenu_TrayIcon_Open_Click(object sender, EventArgs e)
@@ -3439,6 +3461,8 @@ namespace ZeroMunge
 			//data.PrintAllRows();
 
 			//LoadDataIntoFileList(data);
+
+			EnableUI(!UIEnabled);
 		}
 	}
 
