@@ -49,7 +49,7 @@ namespace ZeroMunge
 			FormTooltips.SetToolTip(img_Logo, Tooltips.HelpMenu.ApplicationBanner);
 			FormTooltips.SetToolTip(link_Updates, Tooltips.HelpMenu.CheckForUpdates);
 			FormTooltips.SetToolTip(link_Contact, Tooltips.HelpMenu.Contact);
-			FormTooltips.SetToolTip(link_FrayedWires, Tooltips.HelpMenu.FrayedWiresStudios);
+			FormTooltips.SetToolTip(link_ThirdPartySoftware, Tooltips.HelpMenu.ThirdPartySoftware);
 		}
 
 
@@ -85,11 +85,12 @@ namespace ZeroMunge
 		}
 
 
-		// When the user clicks the "Frayed Wires Studios" link:
-		// Open a link to the FWS web site in the default web browser.
+		// When the user clicks the "Third-party Software" link:
+		// Open a new instance of the ThirdPartySoftware window as a dialog.
 		private void link_FrayedWires_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			Process.Start(ZeroMunge.LINK_WEBSITE);
+			ThirdPartySoftware thirdPtyForm = new ThirdPartySoftware();
+			thirdPtyForm.ShowDialog();
 		}
 
 		private void img_Logo_Click(object sender, EventArgs e)

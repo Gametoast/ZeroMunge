@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Media;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -48,6 +49,50 @@ namespace ZeroMunge
 			Available,
 			NetConnectionError
 		};
+
+
+		/// <summary>
+		/// Extracts the attributes from an HTML node. 
+		/// 
+		/// Source: http://omegacoder.com/?p=512
+		/// </summary>
+		/// <param name="node">HTML node to extract attributes from.</param>
+		/// <returns>Dictionary storing the attributes and their values as key-value string pairs.</returns>
+		public static Dictionary<string, string> ExtractHtmlAttributes(string node)
+		{
+			string pattern = @"
+(?:<)(?<Tag>[^\s/>]+)       # Extract the tag name.
+(?![/>])                    # Stop if /> is found
+                     # -- Extract Attributes Key Value Pairs  --
+ 
+((?:\s+)             # One to many spaces start the attribute
+ (?<Key>[^=]+)       # Name/key of the attribute
+ (?:=)               # Equals sign needs to be matched, but not captured.
+ 
+(?([\x22\x27])              # If quotes are found
+  (?:[\x22\x27])
+  (?<Value>[^\x22\x27]+)    # Place the value into named Capture
+  (?:[\x22\x27])
+ |                          # Else no quotes
+   (?<Value>[^\s/>]*)       # Place the value into named Capture
+ )
+)+                  # -- One to many attributes found!";
+
+			var attributes = (from Match mt in Regex.Matches(@node, pattern, RegexOptions.IgnorePatternWhitespace)
+							  select new
+							  {
+								  Name = mt.Groups["Tag"],
+								  Attrs = (from cpKey in mt.Groups["Key"].Captures.Cast<Capture>().Select((a, i) => new { a.Value, i })
+										   join cpValue in mt.Groups["Value"].Captures.Cast<Capture>().Select((b, i) => new { b.Value, i }) on cpKey.i equals cpValue.i
+										   select new KeyValuePair<string, string>(cpKey.Value, cpValue.Value)).ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
+							  }).First().Attrs;
+
+
+			//foreach (KeyValuePair<string, string> kvp in attributes)
+			//	Console.WriteLine("Key {0,15}    Value: {1}", kvp.Key, kvp.Value);
+
+			return attributes;
+		}
 
 
 		/// <summary>

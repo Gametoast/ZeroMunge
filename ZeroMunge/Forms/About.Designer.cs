@@ -42,7 +42,7 @@
 			this.flow_Links = new System.Windows.Forms.FlowLayoutPanel();
 			this.link_Updates = new System.Windows.Forms.LinkLabel();
 			this.link_Contact = new System.Windows.Forms.LinkLabel();
-			this.link_FrayedWires = new System.Windows.Forms.LinkLabel();
+			this.link_ThirdPartySoftware = new System.Windows.Forms.LinkLabel();
 			this.FormTooltips = new System.Windows.Forms.ToolTip(this.components);
 			this.img_Logo = new System.Windows.Forms.PictureBox();
 			this.flow_AppInfo.SuspendLayout();
@@ -153,7 +153,7 @@
 			this.flow_Links.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.flow_Links.Controls.Add(this.link_Updates);
 			this.flow_Links.Controls.Add(this.link_Contact);
-			this.flow_Links.Controls.Add(this.link_FrayedWires);
+			this.flow_Links.Controls.Add(this.link_ThirdPartySoftware);
 			this.flow_Links.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.flow_Links.Location = new System.Drawing.Point(317, 131);
 			this.flow_Links.Name = "flow_Links";
@@ -185,17 +185,17 @@
 			this.link_Contact.Text = "Contact";
 			this.link_Contact.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.link_Contact_LinkClicked);
 			// 
-			// link_FrayedWires
+			// link_ThirdPartySoftware
 			// 
-			this.link_FrayedWires.AutoSize = true;
-			this.link_FrayedWires.Location = new System.Drawing.Point(25, 38);
-			this.link_FrayedWires.Name = "link_FrayedWires";
-			this.link_FrayedWires.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
-			this.link_FrayedWires.Size = new System.Drawing.Size(107, 19);
-			this.link_FrayedWires.TabIndex = 2;
-			this.link_FrayedWires.TabStop = true;
-			this.link_FrayedWires.Text = "Frayed Wires Studios";
-			this.link_FrayedWires.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.link_FrayedWires_LinkClicked);
+			this.link_ThirdPartySoftware.AutoSize = true;
+			this.link_ThirdPartySoftware.Location = new System.Drawing.Point(30, 38);
+			this.link_ThirdPartySoftware.Name = "link_ThirdPartySoftware";
+			this.link_ThirdPartySoftware.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
+			this.link_ThirdPartySoftware.Size = new System.Drawing.Size(102, 19);
+			this.link_ThirdPartySoftware.TabIndex = 2;
+			this.link_ThirdPartySoftware.TabStop = true;
+			this.link_ThirdPartySoftware.Text = "Third-party Software";
+			this.link_ThirdPartySoftware.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.link_FrayedWires_LinkClicked);
 			// 
 			// img_Logo
 			// 
@@ -263,7 +263,7 @@
         private System.Windows.Forms.FlowLayoutPanel flow_Links;
         private System.Windows.Forms.LinkLabel link_Updates;
         private System.Windows.Forms.LinkLabel link_Contact;
-        private System.Windows.Forms.LinkLabel link_FrayedWires;
+        private System.Windows.Forms.LinkLabel link_ThirdPartySoftware;
         private System.Windows.Forms.ToolTip FormTooltips;
     }
 }
