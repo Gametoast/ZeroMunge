@@ -61,18 +61,14 @@ namespace ZeroMunge {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copyright (c) 2016, Alexandre Mutel
+        ///   Looks up a localized string similar to Copyright (c) 2016, Alexandre Mutel  
         ///All rights reserved.
         ///
-        ///Redistribution and use in source and binary forms, with or without modification
-        ///, are permitted provided that the following conditions are met:
+        ///Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
         ///
-        ///1. Redistributions of source code must retain the above copyright notice, this 
-        ///   list of conditions and the following disclaimer.
+        ///1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
         ///
-        ///2. Redistributions in binary form must reproduce the above copyright notice, 
-        ///   this list of conditions and the following disclaimer in the documentation 
-        ///   and/or other mate [rest of string was truncated]&quot;;.
+        ///2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provi [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string license_markdig {
             get {
@@ -104,12 +100,13 @@ namespace ZeroMunge {
         ///   Looks up a localized string similar to License: Custom License  
         ///MICROSOFT SOFTWARE LICENSE TERMS  
         ///MICROSOFT WINDOWS API CODE PACK FOR MICROSOFT .NET FRAMEWORK
-        ///___________________________________________________
+        ///________________________________
         ///These license terms are an agreement between Microsoft Corporation (or based on where you live, one of its affiliates) and you. Please read them. They apply to the software named above, which includes the media on which you received it, if any. The terms also apply to any Microsoft
         ///
         ///- updates,
         ///- supplements,
-        ///- Internet-based services, a [rest of string was truncated]&quot;;.
+        ///- Internet-based services, and 
+        ///- support servi [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string license_WindowsAPICodePack {
             get {
@@ -118,7 +115,8 @@ namespace ZeroMunge {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Several fantastic pieces of [free](http://www.gnu.org/philosophy/free-sw.html) and [open-source](https://opensource.org/) have helped extend the functionality of Zero Munge in many useful ways.
+        ///   Looks up a localized string similar to Several fantastic pieces of [free](http://www.gnu.org/philosophy/free-sw.html) and [open-source](https://opensource.org/) software 
+        ///have helped extend the functionality of Zero Munge in many useful ways.
         ///
         ///Third-party software that is part of Zero Munge:.
         /// </summary>
@@ -142,15 +140,6 @@ namespace ZeroMunge {
         internal static string stylesheet {
             get {
                 return ResourceManager.GetString("stylesheet", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Test string value.
-        /// </summary>
-        internal static string TestString {
-            get {
-                return ResourceManager.GetString("TestString", resourceCulture);
             }
         }
     }

@@ -239,6 +239,7 @@ namespace ZeroMunge
 				updateCheckThread.Start();
 			}
 
+			// Set game path
 			Log("Checking game path...", LogType.Info);
 			if (prefs.GameDirectory != "")
 			{
@@ -252,6 +253,7 @@ namespace ZeroMunge
 				prompt.Show();
 			}
 
+			// Auto-load the last save file
 			if (prefs.AutoLoadEnabled && prefs.LastSaveFilePath != "UNSET")
 			{
 				if (prefs.LastSaveFilePath != "" && File.Exists(prefs.LastSaveFilePath))
@@ -478,6 +480,9 @@ namespace ZeroMunge
 		}
 
 		
+		/// <summary>
+		/// Clear the file list and start a new save file
+		/// </summary>
 		private void Command_New()
 		{
 			curFileListName = "Untitled";
@@ -568,6 +573,7 @@ namespace ZeroMunge
 			});
 			logPollThread.Start();
 
+			// Update tray icon text and play start sound
 			Thread soundThread = new Thread(() => {
 				if (prefs.ShowTrayIcon)
 				{
@@ -3150,6 +3156,7 @@ namespace ZeroMunge
 			rightClickedControl = null;
 		}
 
+
 		// When the user clicks the Copy button in the text context menu:
 		// Copy the selected text in the textbox.
 		private void copyToolStripMenuItem_Click(object sender, EventArgs e)
@@ -3264,6 +3271,7 @@ namespace ZeroMunge
 			}
 		}
 
+
 		// When the user clicks the New button in the File menu:
 		// Exit the application.
 		private void menu_newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -3279,6 +3287,9 @@ namespace ZeroMunge
 			Command_Open();
 		}
 
+
+		// When the user clicks the OK button in the Open File List prompt:
+		// Attempt to deserialize the data in the specified file and load it into the file list.
 		private void openDlg_OpenFileListPrompt_FileOk(object sender, CancelEventArgs e)
 		{
 			// Has a file name been entered?
@@ -3325,7 +3336,10 @@ namespace ZeroMunge
 				Log(message, LogType.Error);
 			}
 		}
-
+		
+		
+		// When the user clicks the OK button in the Save File List prompt:
+		// Attempt to save the file list contents to the specified file path.
 		private void saveDlg_SaveFileListPrompt_FileOk(object sender, CancelEventArgs e)
 		{
 			// Has a file name been entered?
