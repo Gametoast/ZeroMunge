@@ -49,6 +49,9 @@
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.lbl_LogPollingRate = new System.Windows.Forms.Label();
 			this.txt_LogPollingRate = new System.Windows.Forms.TextBox();
+			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.lbl_LogMaxLineCount = new System.Windows.Forms.Label();
+			this.num_LogMaxLineCount = new System.Windows.Forms.NumericUpDown();
 			this.chk_OutputLogToFile = new System.Windows.Forms.CheckBox();
 			this.chk_LogPrintTimestamps = new System.Windows.Forms.CheckBox();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -64,6 +67,8 @@
 			this.groupBox4.SuspendLayout();
 			this.flowLayoutPanel4.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
+			this.tableLayoutPanel2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.num_LogMaxLineCount)).BeginInit();
 			this.groupBox3.SuspendLayout();
 			this.flowLayoutPanel3.SuspendLayout();
 			this.SuspendLayout();
@@ -72,7 +77,7 @@
 			// 
 			this.btn_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btn_Cancel.Location = new System.Drawing.Point(197, 397);
+			this.btn_Cancel.Location = new System.Drawing.Point(197, 423);
 			this.btn_Cancel.Name = "btn_Cancel";
 			this.btn_Cancel.Size = new System.Drawing.Size(75, 23);
 			this.btn_Cancel.TabIndex = 6;
@@ -83,7 +88,7 @@
 			// btn_Accept
 			// 
 			this.btn_Accept.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_Accept.Location = new System.Drawing.Point(116, 397);
+			this.btn_Accept.Location = new System.Drawing.Point(116, 423);
 			this.btn_Accept.Name = "btn_Accept";
 			this.btn_Accept.Size = new System.Drawing.Size(75, 23);
 			this.btn_Accept.TabIndex = 5;
@@ -103,7 +108,7 @@
 			this.cont_Prefs.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.cont_Prefs.Location = new System.Drawing.Point(12, 12);
 			this.cont_Prefs.Name = "cont_Prefs";
-			this.cont_Prefs.Size = new System.Drawing.Size(260, 379);
+			this.cont_Prefs.Size = new System.Drawing.Size(260, 405);
 			this.cont_Prefs.TabIndex = 4;
 			// 
 			// groupBox1
@@ -254,8 +259,8 @@
 			this.groupBox4.Controls.Add(this.flowLayoutPanel4);
 			this.groupBox4.Location = new System.Drawing.Point(3, 214);
 			this.groupBox4.Name = "groupBox4";
-			this.groupBox4.Size = new System.Drawing.Size(254, 91);
-			this.groupBox4.TabIndex = 7;
+			this.groupBox4.Size = new System.Drawing.Size(254, 117);
+			this.groupBox4.TabIndex = 6;
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "Output Log";
 			// 
@@ -264,13 +269,14 @@
 			this.flowLayoutPanel4.AutoSize = true;
 			this.flowLayoutPanel4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.flowLayoutPanel4.Controls.Add(this.tableLayoutPanel1);
+			this.flowLayoutPanel4.Controls.Add(this.tableLayoutPanel2);
 			this.flowLayoutPanel4.Controls.Add(this.chk_OutputLogToFile);
 			this.flowLayoutPanel4.Controls.Add(this.chk_LogPrintTimestamps);
 			this.flowLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel4.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.flowLayoutPanel4.Location = new System.Drawing.Point(3, 16);
 			this.flowLayoutPanel4.Name = "flowLayoutPanel4";
-			this.flowLayoutPanel4.Size = new System.Drawing.Size(248, 72);
+			this.flowLayoutPanel4.Size = new System.Drawing.Size(248, 98);
 			this.flowLayoutPanel4.TabIndex = 0;
 			// 
 			// tableLayoutPanel1
@@ -306,16 +312,54 @@
 			this.txt_LogPollingRate.Name = "txt_LogPollingRate";
 			this.txt_LogPollingRate.Size = new System.Drawing.Size(124, 20);
 			this.txt_LogPollingRate.TabIndex = 1;
+			// tableLayoutPanel2
+			// 
+			this.tableLayoutPanel2.ColumnCount = 2;
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel2.Controls.Add(this.lbl_LogMaxLineCount, 0, 0);
+			this.tableLayoutPanel2.Controls.Add(this.num_LogMaxLineCount, 1, 0);
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 29);
+			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+			this.tableLayoutPanel2.RowCount = 1;
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(248, 20);
+			this.tableLayoutPanel2.TabIndex = 6;
+			// 
+			// lbl_LogMaxLineCount
+			// 
+			this.lbl_LogMaxLineCount.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lbl_LogMaxLineCount.AutoSize = true;
+			this.lbl_LogMaxLineCount.Location = new System.Drawing.Point(3, 3);
+			this.lbl_LogMaxLineCount.Name = "lbl_LogMaxLineCount";
+			this.lbl_LogMaxLineCount.Size = new System.Drawing.Size(84, 13);
+			this.lbl_LogMaxLineCount.TabIndex = 0;
+			this.lbl_LogMaxLineCount.Text = "Max Line Count:";
+			// 
+			// num_LogMaxLineCount
+			// 
+			this.num_LogMaxLineCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.num_LogMaxLineCount.Increment = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
+			this.num_LogMaxLineCount.Location = new System.Drawing.Point(124, 0);
+			this.num_LogMaxLineCount.Margin = new System.Windows.Forms.Padding(0);
+			this.num_LogMaxLineCount.Name = "num_LogMaxLineCount";
+			this.num_LogMaxLineCount.Size = new System.Drawing.Size(124, 20);
+			this.num_LogMaxLineCount.TabIndex = 8;
 			// 
 			// chk_OutputLogToFile
 			// 
 			this.chk_OutputLogToFile.AutoSize = true;
 			this.chk_OutputLogToFile.Checked = true;
 			this.chk_OutputLogToFile.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chk_OutputLogToFile.Location = new System.Drawing.Point(3, 29);
+			this.chk_OutputLogToFile.Location = new System.Drawing.Point(3, 55);
 			this.chk_OutputLogToFile.Name = "chk_OutputLogToFile";
 			this.chk_OutputLogToFile.Size = new System.Drawing.Size(93, 17);
-			this.chk_OutputLogToFile.TabIndex = 4;
+			this.chk_OutputLogToFile.TabIndex = 9;
 			this.chk_OutputLogToFile.Text = "Output To File";
 			this.chk_OutputLogToFile.UseVisualStyleBackColor = true;
 			this.chk_OutputLogToFile.CheckedChanged += new System.EventHandler(this.chk_OutputLogToFile_CheckedChanged);
@@ -325,10 +369,10 @@
 			this.chk_LogPrintTimestamps.AutoSize = true;
 			this.chk_LogPrintTimestamps.Checked = true;
 			this.chk_LogPrintTimestamps.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chk_LogPrintTimestamps.Location = new System.Drawing.Point(3, 52);
+			this.chk_LogPrintTimestamps.Location = new System.Drawing.Point(3, 78);
 			this.chk_LogPrintTimestamps.Name = "chk_LogPrintTimestamps";
 			this.chk_LogPrintTimestamps.Size = new System.Drawing.Size(106, 17);
-			this.chk_LogPrintTimestamps.TabIndex = 3;
+			this.chk_LogPrintTimestamps.TabIndex = 10;
 			this.chk_LogPrintTimestamps.Text = "Print Timestamps";
 			this.chk_LogPrintTimestamps.UseVisualStyleBackColor = true;
 			this.chk_LogPrintTimestamps.CheckedChanged += new System.EventHandler(this.chk_LogPrintTimestamps_CheckedChanged);
@@ -337,10 +381,10 @@
 			// 
 			this.groupBox3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.groupBox3.Controls.Add(this.flowLayoutPanel3);
-			this.groupBox3.Location = new System.Drawing.Point(3, 311);
+			this.groupBox3.Location = new System.Drawing.Point(3, 337);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Size = new System.Drawing.Size(254, 65);
-			this.groupBox3.TabIndex = 6;
+			this.groupBox3.TabIndex = 7;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Updates";
 			// 
@@ -365,7 +409,7 @@
 			this.chk_CheckForUpdatesOnStartup.Location = new System.Drawing.Point(3, 3);
 			this.chk_CheckForUpdatesOnStartup.Name = "chk_CheckForUpdatesOnStartup";
 			this.chk_CheckForUpdatesOnStartup.Size = new System.Drawing.Size(172, 17);
-			this.chk_CheckForUpdatesOnStartup.TabIndex = 4;
+			this.chk_CheckForUpdatesOnStartup.TabIndex = 11;
 			this.chk_CheckForUpdatesOnStartup.Text = "Check For Updates On Startup";
 			this.chk_CheckForUpdatesOnStartup.UseVisualStyleBackColor = true;
 			this.chk_CheckForUpdatesOnStartup.CheckedChanged += new System.EventHandler(this.chk_CheckForUpdatesOnStartup_CheckedChanged);
@@ -378,7 +422,7 @@
 			this.chk_ShowUpdatePromptOnStartup.Location = new System.Drawing.Point(3, 26);
 			this.chk_ShowUpdatePromptOnStartup.Name = "chk_ShowUpdatePromptOnStartup";
 			this.chk_ShowUpdatePromptOnStartup.Size = new System.Drawing.Size(181, 17);
-			this.chk_ShowUpdatePromptOnStartup.TabIndex = 3;
+			this.chk_ShowUpdatePromptOnStartup.TabIndex = 12;
 			this.chk_ShowUpdatePromptOnStartup.Text = "Show Update Prompt On Startup";
 			this.chk_ShowUpdatePromptOnStartup.UseVisualStyleBackColor = true;
 			this.chk_ShowUpdatePromptOnStartup.CheckedChanged += new System.EventHandler(this.chk_ShowUpdatePromptOnStartup_CheckedChanged);
@@ -389,7 +433,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btn_Cancel;
-			this.ClientSize = new System.Drawing.Size(284, 432);
+			this.ClientSize = new System.Drawing.Size(284, 458);
 			this.Controls.Add(this.cont_Prefs);
 			this.Controls.Add(this.btn_Accept);
 			this.Controls.Add(this.btn_Cancel);
@@ -397,9 +441,9 @@
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
 			this.MaximizeBox = false;
-			this.MaximumSize = new System.Drawing.Size(300, 471);
+			this.MaximumSize = new System.Drawing.Size(300, 497);
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(300, 471);
+			this.MinimumSize = new System.Drawing.Size(300, 497);
 			this.Name = "Preferences";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
@@ -422,6 +466,9 @@
 			this.flowLayoutPanel4.PerformLayout();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
+			this.tableLayoutPanel2.ResumeLayout(false);
+			this.tableLayoutPanel2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.num_LogMaxLineCount)).EndInit();
 			this.groupBox3.ResumeLayout(false);
 			this.groupBox3.PerformLayout();
 			this.flowLayoutPanel3.ResumeLayout(false);
@@ -458,5 +505,8 @@
 		private System.Windows.Forms.CheckBox chk_CheckForUpdatesOnStartup;
 		private System.Windows.Forms.CheckBox chk_AutoSaveEnabled;
 		private System.Windows.Forms.CheckBox chk_AutoLoadEnabled;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+		private System.Windows.Forms.Label lbl_LogMaxLineCount;
+		private System.Windows.Forms.NumericUpDown num_LogMaxLineCount;
 	}
 }

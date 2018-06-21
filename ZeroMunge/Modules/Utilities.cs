@@ -1073,6 +1073,7 @@ namespace ZeroMunge
 				AutoDetectStagingDir = Properties.Settings.Default.AutoDetectStagingDir,
 				AutoDetectMungedFiles = Properties.Settings.Default.AutoDetectMungedFiles,
 				LogPollingRate = Properties.Settings.Default.LogPollingRate,
+				LogMaxLineCount = Properties.Settings.Default.LogMaxLineCount,
 				OutputLogToFile = Properties.Settings.Default.OutputLogToFile,
 				LogPrintTimestamps = Properties.Settings.Default.LogPrintTimestamps,
 				ShowUpdatePromptOnStartup = Properties.Settings.Default.ShowUpdatePromptOnStartup,
@@ -1099,6 +1100,7 @@ namespace ZeroMunge
 			Properties.Settings.Default.AutoDetectStagingDir = prefs.AutoDetectStagingDir;
 			Properties.Settings.Default.AutoDetectMungedFiles = prefs.AutoDetectMungedFiles;
 			Properties.Settings.Default.LogPollingRate = prefs.LogPollingRate;
+			Properties.Settings.Default.LogMaxLineCount = prefs.LogMaxLineCount;
 			Properties.Settings.Default.OutputLogToFile = prefs.OutputLogToFile;
 			Properties.Settings.Default.LogPrintTimestamps = prefs.LogPrintTimestamps;
 			Properties.Settings.Default.ShowUpdatePromptOnStartup = prefs.ShowUpdatePromptOnStartup;
@@ -1140,6 +1142,7 @@ namespace ZeroMunge
 		public bool AutoDetectStagingDir { get; set; }
 		public bool AutoDetectMungedFiles { get; set; }
 		public int LogPollingRate { get; set; }
+		public int LogMaxLineCount { get; set; }
 		public bool OutputLogToFile { get; set; }
 		public bool LogPrintTimestamps { get; set; }
 		public bool ShowUpdatePromptOnStartup { get; set; }

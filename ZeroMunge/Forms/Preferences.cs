@@ -13,6 +13,9 @@ namespace ZeroMunge
 	public partial class Preferences : Form
 	{
 		public const int PREFS_POLLING_RATE_MAX = 50;
+		public const int PREFS_MAX_LINE_COUNT_MIN = 1;
+		public const int PREFS_MAX_LINE_COUNT_MAX = 2000;
+		public const int PREFS_MAX_LINE_COUNT_INC = 10;
 
 		public Preferences()
 		{
@@ -24,6 +27,10 @@ namespace ZeroMunge
 		private void Preferences_Load(object sender, EventArgs e)
 		{
 			SetToolTips();
+
+			num_LogMaxLineCount.Minimum = PREFS_MAX_LINE_COUNT_MIN;
+			num_LogMaxLineCount.Maximum = PREFS_MAX_LINE_COUNT_MAX;
+			num_LogMaxLineCount.Increment = PREFS_MAX_LINE_COUNT_INC;
 
 			// Load the saved user settings into our prefs object
 			prefs = Utilities.LoadPrefs();
@@ -37,6 +44,7 @@ namespace ZeroMunge
 			chk_AutoSaveEnabled.Checked = prefs.AutoSaveEnabled;
 			chk_AutoLoadEnabled.Checked = prefs.AutoLoadEnabled;
 			txt_LogPollingRate.Text = prefs.LogPollingRate.ToString();
+			num_LogMaxLineCount.Value = prefs.LogMaxLineCount;
 			chk_OutputLogToFile.Checked = prefs.OutputLogToFile;
 			chk_LogPrintTimestamps.Checked = prefs.LogPrintTimestamps;
 			chk_ShowUpdatePromptOnStartup.Checked = prefs.ShowUpdatePromptOnStartup;
@@ -46,6 +54,9 @@ namespace ZeroMunge
 
 		private void SetToolTips()
 		{
+			string maxValueMsg = "\n\nPossible value range: ";
+			string maxValueSeparator = " - ";
+
 			// Settings
 			FormTooltips.SetToolTip(chk_ShowTrayIcon, Tooltips.Settings.ShowTrayIcon);
 			FormTooltips.SetToolTip(chk_ShowNotificationPopups, Tooltips.Settings.ShowNotificationPopups);
@@ -56,6 +67,8 @@ namespace ZeroMunge
 			FormTooltips.SetToolTip(chk_AutoLoadEnabled, Tooltips.Settings.AutoLoadLastSaveFile);
 			FormTooltips.SetToolTip(lbl_LogPollingRate, Tooltips.Settings.LogPollingRate);
 			FormTooltips.SetToolTip(txt_LogPollingRate, Tooltips.Settings.LogPollingRate);
+			FormTooltips.SetToolTip(lbl_LogMaxLineCount, string.Format(Tooltips.Settings.LogMaxLineCount + "{0}{1}{2}{3}", maxValueMsg, PREFS_MAX_LINE_COUNT_MIN, maxValueSeparator, PREFS_MAX_LINE_COUNT_MAX.ToString()));
+			FormTooltips.SetToolTip(num_LogMaxLineCount, string.Format(Tooltips.Settings.LogMaxLineCount + "{0}{1}{2}{3}", maxValueMsg, PREFS_MAX_LINE_COUNT_MIN, maxValueSeparator, PREFS_MAX_LINE_COUNT_MAX.ToString()));
 			FormTooltips.SetToolTip(chk_OutputLogToFile, Tooltips.Settings.OutputLogToFile);
 			FormTooltips.SetToolTip(chk_LogPrintTimestamps, Tooltips.Settings.LogPrintTimestamps);
 			FormTooltips.SetToolTip(chk_CheckForUpdatesOnStartup, Tooltips.Settings.CheckForUpdatesOnStartup);
@@ -94,6 +107,7 @@ namespace ZeroMunge
 			{
 				Console.WriteLine("ERROR: Could not convert LogPollingRate input value '" + logPollingRateStr + "' to int");
 			}
+			prefs.LogMaxLineCount = (int)num_LogMaxLineCount.Value;
 
 			Utilities.SavePrefs(prefs);
 			CloseForm();

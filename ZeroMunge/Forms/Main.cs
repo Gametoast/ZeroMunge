@@ -1081,7 +1081,7 @@ namespace ZeroMunge
 
 
 				// Remove the first line if the output log is full
-				if (logLineCollection.Count >= 100)
+				if (logLineCollection.Count > prefs.LogMaxLineCount)
 				{
 					logLineCollection.RemoveAt(0);
 				}

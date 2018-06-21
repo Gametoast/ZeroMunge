@@ -394,7 +394,6 @@
 			this.text_OutputLog.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.text_OutputLog.ForeColor = System.Drawing.Color.Black;
 			this.text_OutputLog.Location = new System.Drawing.Point(0, 0);
-			this.text_OutputLog.MaxLength = 20000;
 			this.text_OutputLog.Name = "text_OutputLog";
 			this.text_OutputLog.ReadOnly = true;
 			this.text_OutputLog.Size = new System.Drawing.Size(651, 296);
