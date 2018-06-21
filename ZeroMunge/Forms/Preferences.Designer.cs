@@ -48,7 +48,6 @@
 			this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.lbl_LogPollingRate = new System.Windows.Forms.Label();
-			this.txt_LogPollingRate = new System.Windows.Forms.TextBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.lbl_LogMaxLineCount = new System.Windows.Forms.Label();
 			this.num_LogMaxLineCount = new System.Windows.Forms.NumericUpDown();
@@ -59,6 +58,7 @@
 			this.chk_CheckForUpdatesOnStartup = new System.Windows.Forms.CheckBox();
 			this.chk_ShowUpdatePromptOnStartup = new System.Windows.Forms.CheckBox();
 			this.FormTooltips = new System.Windows.Forms.ToolTip(this.components);
+			this.num_LogPollingRate = new System.Windows.Forms.NumericUpDown();
 			this.cont_Prefs.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
@@ -71,6 +71,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.num_LogMaxLineCount)).BeginInit();
 			this.groupBox3.SuspendLayout();
 			this.flowLayoutPanel3.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.num_LogPollingRate)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// btn_Cancel
@@ -284,13 +285,14 @@
 			this.tableLayoutPanel1.ColumnCount = 2;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel1.Controls.Add(this.num_LogPollingRate, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.lbl_LogPollingRate, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.txt_LogPollingRate, 1, 0);
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 3);
 			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 1;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(248, 20);
 			this.tableLayoutPanel1.TabIndex = 5;
 			// 
@@ -304,14 +306,6 @@
 			this.lbl_LogPollingRate.TabIndex = 0;
 			this.lbl_LogPollingRate.Text = "Polling Rate (ms):";
 			// 
-			// txt_LogPollingRate
-			// 
-			this.txt_LogPollingRate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.txt_LogPollingRate.Location = new System.Drawing.Point(124, 0);
-			this.txt_LogPollingRate.Margin = new System.Windows.Forms.Padding(0);
-			this.txt_LogPollingRate.Name = "txt_LogPollingRate";
-			this.txt_LogPollingRate.Size = new System.Drawing.Size(124, 20);
-			this.txt_LogPollingRate.TabIndex = 1;
 			// tableLayoutPanel2
 			// 
 			this.tableLayoutPanel2.ColumnCount = 2;
@@ -427,6 +421,20 @@
 			this.chk_ShowUpdatePromptOnStartup.UseVisualStyleBackColor = true;
 			this.chk_ShowUpdatePromptOnStartup.CheckedChanged += new System.EventHandler(this.chk_ShowUpdatePromptOnStartup_CheckedChanged);
 			// 
+			// num_LogPollingRate
+			// 
+			this.num_LogPollingRate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.num_LogPollingRate.Increment = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
+			this.num_LogPollingRate.Location = new System.Drawing.Point(124, 0);
+			this.num_LogPollingRate.Margin = new System.Windows.Forms.Padding(0);
+			this.num_LogPollingRate.Name = "num_LogPollingRate";
+			this.num_LogPollingRate.Size = new System.Drawing.Size(124, 20);
+			this.num_LogPollingRate.TabIndex = 7;
+			// 
 			// Preferences
 			// 
 			this.AcceptButton = this.btn_Accept;
@@ -473,6 +481,7 @@
 			this.groupBox3.PerformLayout();
 			this.flowLayoutPanel3.ResumeLayout(false);
 			this.flowLayoutPanel3.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.num_LogPollingRate)).EndInit();
 			this.ResumeLayout(false);
 
         }
@@ -499,7 +508,6 @@
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel4;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.Label lbl_LogPollingRate;
-		private System.Windows.Forms.TextBox txt_LogPollingRate;
 		private System.Windows.Forms.CheckBox chk_OutputLogToFile;
 		private System.Windows.Forms.CheckBox chk_LogPrintTimestamps;
 		private System.Windows.Forms.CheckBox chk_CheckForUpdatesOnStartup;
@@ -508,5 +516,6 @@
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private System.Windows.Forms.Label lbl_LogMaxLineCount;
 		private System.Windows.Forms.NumericUpDown num_LogMaxLineCount;
+		private System.Windows.Forms.NumericUpDown num_LogPollingRate;
 	}
 }

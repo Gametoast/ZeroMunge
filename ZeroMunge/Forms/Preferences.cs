@@ -12,7 +12,10 @@ namespace ZeroMunge
 {
 	public partial class Preferences : Form
 	{
-		public const int PREFS_POLLING_RATE_MAX = 50;
+		public const int PREFS_POLLING_RATE_MIN = 10;
+		public const int PREFS_POLLING_RATE_MAX = 999999;
+		public const int PREFS_POLLING_RATE_INC = 10;
+
 		public const int PREFS_MAX_LINE_COUNT_MIN = 1;
 		public const int PREFS_MAX_LINE_COUNT_MAX = 2000;
 		public const int PREFS_MAX_LINE_COUNT_INC = 10;
@@ -28,6 +31,10 @@ namespace ZeroMunge
 		{
 			SetToolTips();
 
+			// Set the minimum, maximum, and increment values for the numeric input boxes
+			num_LogPollingRate.Minimum = PREFS_POLLING_RATE_MIN;
+			num_LogPollingRate.Maximum = PREFS_POLLING_RATE_MAX;
+			num_LogPollingRate.Increment = PREFS_POLLING_RATE_INC;
 			num_LogMaxLineCount.Minimum = PREFS_MAX_LINE_COUNT_MIN;
 			num_LogMaxLineCount.Maximum = PREFS_MAX_LINE_COUNT_MAX;
 			num_LogMaxLineCount.Increment = PREFS_MAX_LINE_COUNT_INC;
@@ -43,7 +50,7 @@ namespace ZeroMunge
 			chk_AutoDetectMungedFiles.Checked = prefs.AutoDetectMungedFiles;
 			chk_AutoSaveEnabled.Checked = prefs.AutoSaveEnabled;
 			chk_AutoLoadEnabled.Checked = prefs.AutoLoadEnabled;
-			txt_LogPollingRate.Text = prefs.LogPollingRate.ToString();
+			num_LogPollingRate.Value = prefs.LogPollingRate;
 			num_LogMaxLineCount.Value = prefs.LogMaxLineCount;
 			chk_OutputLogToFile.Checked = prefs.OutputLogToFile;
 			chk_LogPrintTimestamps.Checked = prefs.LogPrintTimestamps;
@@ -65,8 +72,8 @@ namespace ZeroMunge
 			FormTooltips.SetToolTip(chk_AutoDetectMungedFiles, Tooltips.Settings.AutoDetectMungedFiles);
 			FormTooltips.SetToolTip(chk_AutoSaveEnabled, Tooltips.Settings.AutoSaveFileList);
 			FormTooltips.SetToolTip(chk_AutoLoadEnabled, Tooltips.Settings.AutoLoadLastSaveFile);
-			FormTooltips.SetToolTip(lbl_LogPollingRate, Tooltips.Settings.LogPollingRate);
-			FormTooltips.SetToolTip(txt_LogPollingRate, Tooltips.Settings.LogPollingRate);
+			FormTooltips.SetToolTip(lbl_LogPollingRate, string.Format(Tooltips.Settings.LogPollingRate + "{0}{1}{2}{3}", maxValueMsg, PREFS_POLLING_RATE_MIN, maxValueSeparator, PREFS_POLLING_RATE_MAX.ToString()));
+			FormTooltips.SetToolTip(num_LogPollingRate, string.Format(Tooltips.Settings.LogPollingRate + "{0}{1}{2}{3}", maxValueMsg, PREFS_POLLING_RATE_MIN, maxValueSeparator, PREFS_POLLING_RATE_MAX.ToString()));
 			FormTooltips.SetToolTip(lbl_LogMaxLineCount, string.Format(Tooltips.Settings.LogMaxLineCount + "{0}{1}{2}{3}", maxValueMsg, PREFS_MAX_LINE_COUNT_MIN, maxValueSeparator, PREFS_MAX_LINE_COUNT_MAX.ToString()));
 			FormTooltips.SetToolTip(num_LogMaxLineCount, string.Format(Tooltips.Settings.LogMaxLineCount + "{0}{1}{2}{3}", maxValueMsg, PREFS_MAX_LINE_COUNT_MIN, maxValueSeparator, PREFS_MAX_LINE_COUNT_MAX.ToString()));
 			FormTooltips.SetToolTip(chk_OutputLogToFile, Tooltips.Settings.OutputLogToFile);
@@ -90,23 +97,8 @@ namespace ZeroMunge
 		// Commit their set preferences by saving them to the application settings, then close the form.
 		private void btn_Accept_Click(object sender, EventArgs e)
 		{
-			// Save the LogPollingRate value
-			string logPollingRateStr = txt_LogPollingRate.Text;
-			if (int.TryParse(logPollingRateStr, out int logPollingRate))
-			{
-				if (logPollingRate >= PREFS_POLLING_RATE_MAX)
-				{
-					prefs.LogPollingRate = logPollingRate;
-				}
-				else
-				{
-					Console.WriteLine("ERROR: Value of LogPollingRate must be >= " + PREFS_POLLING_RATE_MAX);
-				}
-			}
-			else
-			{
-				Console.WriteLine("ERROR: Could not convert LogPollingRate input value '" + logPollingRateStr + "' to int");
-			}
+			// Save the numeric input values
+			prefs.LogPollingRate = (int)num_LogPollingRate.Value;
 			prefs.LogMaxLineCount = (int)num_LogMaxLineCount.Value;
 
 			Utilities.SavePrefs(prefs);

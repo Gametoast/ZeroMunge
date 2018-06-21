@@ -45,7 +45,7 @@ namespace ZeroMunge
 			public const string AutoDetectMungedFiles = "Whether or not to automatically detect and fill the 'Munged Files' field when a file is added to the file list.";
 			public const string AutoSaveFileList = "Whether or not to automatically save the file list's contents to file when the application exits.";
 			public const string AutoLoadLastSaveFile = "Whether or not to automatically load the most recent save file when the application starts up.";
-			public const string LogPollingRate = "The rate (in milliseconds) at which the contents of the output log are updated.";
+			public const string LogPollingRate = "The rate (in milliseconds) at which the contents of the output log are updated. A higher value may improve performance.";
 			public const string LogMaxLineCount = "The maximum number of lines that the output log can display. A lower value may improve performance. \n\nNOTE: This does not affect the contents of the log file.";
 			public const string OutputLogToFile = "Whether or not to write the output log to a file as it is updated.  \n\nNOTE: The entire log file can be monitored in real-time via an external application such as Glogg or Tail if this setting is enabled.";
 			public const string LogPrintTimestamps = "Whether or not to prepend timestamps to output log messages.";
