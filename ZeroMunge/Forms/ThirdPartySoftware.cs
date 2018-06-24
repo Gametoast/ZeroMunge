@@ -28,6 +28,13 @@ namespace ZeroMunge
 				Url = "https://github.com/lunet-io/markdig"
 			},
 
+			new Software("license_prettybin")
+			{
+				Name = "PrettyBin",
+				Author = "Andrey Ershov",
+				Url = "https://github.com/slmjy/PrettyBin"
+			},
+
 			new Software("license_WindowsAPICodePack")
 			{
 				Name = "Windows API Code Pack for Microsoft .NET Framework",

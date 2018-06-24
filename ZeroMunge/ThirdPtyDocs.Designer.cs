@@ -97,6 +97,19 @@ namespace ZeroMunge {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copyright (c) 2014, Ershov Andrey
+        ///
+        ///Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+        ///
+        ///The above copyright notice and this permiss [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string license_prettybin {
+            get {
+                return ResourceManager.GetString("license_prettybin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to License: Custom License  
         ///MICROSOFT SOFTWARE LICENSE TERMS  
         ///MICROSOFT WINDOWS API CODE PACK FOR MICROSOFT .NET FRAMEWORK

@@ -217,6 +217,7 @@
     </Compile>
     <None Include="Resources\license-markdig.md" />
     <None Include="Resources\license-Newtonsoft.Json.md" />
+    <None Include="Resources\license-prettybin.md" />
     <None Include="Resources\license-Windows-API-Code-Pack-1.1.md" />
     <None Include="Resources\preamble.md" />
     <None Include="ZeroMungeNameKey.pfx" />

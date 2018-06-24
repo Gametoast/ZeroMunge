@@ -133,4 +133,7 @@
   <data name="stylesheet" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\styles.css;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="license_prettybin" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\license-prettybin.md;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
 </root>
