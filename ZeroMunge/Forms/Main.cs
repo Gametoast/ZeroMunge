@@ -83,6 +83,9 @@ namespace ZeroMunge
 		public static VersionInfo latestAppVersion = new VersionInfo();
 		public static bool updateAvailable = false;
 
+		// User exit flow
+		public bool inExitFlow = false;
+
 		public enum CellChangeMethod
 		{
 			Button,     // Buttons outside the DataGridView
@@ -283,12 +286,19 @@ namespace ZeroMunge
 		{
 			Debug.WriteLine("ZeroMunge_Deactivate() entered");
 		}
-
+		
 
 		// When the form is in the process of closing:
 		// Auto-save the file list (if enabled).
 		private void ZeroMunge_FormClosing(object sender, FormClosingEventArgs e)
 		{
+			inExitFlow = true;
+
+			if (ProcManager_isRunning)
+			{
+				ProcManager_Abort();
+			}
+
 			if (prefs.AutoSaveEnabled)
 			{
 				if (!IsFileListEmpty())
@@ -301,7 +311,7 @@ namespace ZeroMunge
 						filePath = Directory.GetCurrentDirectory() + @"\ZeroMunge-auto.zmd";
 					}
 
-					SaveFileListToFile(filePath, false);
+					SaveFileListToFile(filePath, true);
 				}
 				else
 				{
@@ -310,18 +320,55 @@ namespace ZeroMunge
 					Log(message, LogType.Error);
 				}
 			}
-
-			if (updateCheckThread.ThreadState == System.Threading.ThreadState.Running)
+			else
 			{
-				try
+				if (isFileListDirty && !IsFileListEmpty())
 				{
-					updateCheckThread.Abort();
-				}
-				catch (ThreadStateException ex)
-				{
-					Trace.WriteLine(ex);
+					string promptTitle = "Save File List";
+					string promptCaption = "There are unsaved changes to the file list. Would you like to save before closing?";
+
+					DialogResult result = MessageBox.Show(promptCaption, promptTitle, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+
+					switch (result)
+					{
+						case DialogResult.Yes:
+							e.Cancel = true;
+							Command_Save();
+							break;
+
+						case DialogResult.No:
+								
+							break;
+
+						case DialogResult.Cancel:
+							e.Cancel = true;
+							inExitFlow = false;
+							break;
+					}
 				}
 			}
+
+			if (!e.Cancel)
+			{
+				if (prefs.ShowTrayIcon)
+				{
+					trayIcon.Visible = false;
+					trayIcon.Dispose();
+				}
+
+				if (updateCheckThread.ThreadState == System.Threading.ThreadState.Running)
+				{
+					try
+					{
+						updateCheckThread.Abort();
+					}
+					catch (ThreadStateException ex)
+					{
+						Trace.WriteLine(ex);
+					}
+				}
+			}
+			
 		}
 
 
@@ -483,7 +530,7 @@ namespace ZeroMunge
 		/// <summary>
 		/// Clear the file list and start a new save file
 		/// </summary>
-		private void Command_New()
+		public void Command_New()
 		{
 			curFileListName = "Untitled";
 			UpdateWindowTitle();
@@ -498,7 +545,7 @@ namespace ZeroMunge
 		/// <summary>
 		/// Open a prompt to load a new data container file's contents into the file list.
 		/// </summary>
-		private void Command_Open()
+		public void Command_Open()
 		{
 			openDlg_OpenFileListPrompt.InitialDirectory = openFileListLastDir;
 			openDlg_OpenFileListPrompt.ShowDialog();
@@ -508,7 +555,7 @@ namespace ZeroMunge
 		/// <summary>
 		/// Immediately save the contents of the file list to the current file.
 		/// </summary>
-		private void Command_Save()
+		public void Command_Save()
 		{
 			if (!IsFileListEmpty())
 			{
@@ -533,10 +580,48 @@ namespace ZeroMunge
 		/// <summary>
 		/// Open a prompt to save the contents of the file list to a new file.
 		/// </summary>
-		private void Command_SaveAs()
+		public void Command_SaveAs()
 		{
 			saveDlg_SaveFileListPrompt.InitialDirectory = saveFileListLastDir;
-			saveDlg_SaveFileListPrompt.ShowDialog();
+
+			DialogResult dialogResult = saveDlg_SaveFileListPrompt.ShowDialog();
+
+			if (inExitFlow)
+			{
+				switch (dialogResult)
+				{
+					case DialogResult.OK:
+						inExitFlow = false;
+						Application.Exit();
+						break;
+
+					default:
+						inExitFlow = false;
+						//Application.Exit();
+						break;
+				}
+			}
+		}
+
+
+		/// <summary>
+		/// Exit the application.
+		/// </summary>
+		public void Command_Quit()
+		{
+			//Flow_ExitApplication_Start();
+
+			try
+			{
+				Application.Exit();
+			}
+			catch (InvalidOperationException ex)
+			{
+				var msg = "Invalid operation while starting process. Reason: " + ex.Message;
+				Console.WriteLine(msg);
+				Log(msg, LogType.Error);
+				throw;
+			}
 		}
 
 
@@ -1951,7 +2036,9 @@ namespace ZeroMunge
 		/// <returns>True, file list contains one or more filled rows. False, it's empty.</returns>
 		public bool IsFileListEmpty()
 		{
-			foreach (DataGridViewRow row in data_Files.Rows)
+			var rows = data_Files.Rows;
+
+			foreach (DataGridViewRow row in rows)
 			{
 				// Are all of the string cells null?
 				foreach (DataGridViewCell cell in row.Cells)
@@ -2104,7 +2191,7 @@ namespace ZeroMunge
 
 					if (!ProcManager_isRunning)
 					{
-						Application.Exit();
+						Command_Quit();
 					}
 
 					e.Handled = true;
@@ -2309,8 +2396,8 @@ namespace ZeroMunge
 		private void data_Files_CellValueChanged(object sender, DataGridViewCellEventArgs e)
 		{
 			//Debug.WriteLine("Cell value changed");
-			FileListIsDirty(true);
-			UpdateWindowTitle();
+			//FileListIsDirty(true);
+			//UpdateWindowTitle();
 
 			var senderGrid = (DataGridView)sender;
 
@@ -2343,6 +2430,9 @@ namespace ZeroMunge
 			//}
 
 			if (e.RowIndex < 0 || data_Files.Rows[e.RowIndex].IsNewRow) { return; }
+
+			FileListIsDirty(true);
+			UpdateWindowTitle();
 
 			// Does the File Path cell contain actual data?
 			if (data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value == null)
@@ -3123,7 +3213,7 @@ namespace ZeroMunge
 		// Exit the application.
 		private void cmenu_TrayIcon_Quit_Click(object sender, EventArgs e)
 		{
-			Application.Exit();
+			Command_Quit();
 		}
 
 
@@ -3349,7 +3439,7 @@ namespace ZeroMunge
 				saveFileListLastDir = Utilities.GetFileDirectory(saveDlg_SaveFileListPrompt.FileName);
 
 				// Write the file list's contents to the file
-				SaveFileListToFile(saveDlg_SaveFileListPrompt.FileName, true);
+				SaveFileListToFile(saveDlg_SaveFileListPrompt.FileName, false);
 			}
 		}
 
@@ -3358,7 +3448,7 @@ namespace ZeroMunge
 		// Exit the application.
 		private void menu_exitToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			Application.Exit();
+			Command_Quit();
 		}
 
 
@@ -3417,7 +3507,10 @@ namespace ZeroMunge
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			Debug.WriteLine(IsFileListEmpty().ToString());
+			SaveFileListPrompt prompt = new SaveFileListPrompt();
+			prompt.ShowDialog();
+			
+			//Debug.WriteLine(IsFileListEmpty().ToString());
 
 			//var parsedJson = Utilities.ParseJsonStrings(this, "https://raw.githubusercontent.com/marth8880/ZeroMunge/master/test.json");
 			//if (parsedJson == null) return;

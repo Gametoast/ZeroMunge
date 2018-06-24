@@ -129,6 +129,12 @@
     <Compile Include="Forms\Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SaveFileListPrompt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SaveFileListPrompt.Designer.cs">
+      <DependentUpon>SaveFileListPrompt.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SetGameDirectoryPrompt.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -172,6 +178,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Preferences.resx">
       <DependentUpon>Preferences.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SaveFileListPrompt.resx">
+      <DependentUpon>SaveFileListPrompt.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SetGameDirectoryPrompt.resx">
       <DependentUpon>SetGameDirectoryPrompt.cs</DependentUpon>
