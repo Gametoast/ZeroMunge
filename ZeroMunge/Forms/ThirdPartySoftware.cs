@@ -5,52 +5,34 @@ using System.Resources;
 using System.Windows.Forms;
 using Markdig;
 using mshtml;
+using Newtonsoft.Json;
 
 namespace ZeroMunge
 {
 	public partial class ThirdPartySoftware : Form
 	{
 		static string resourceLibName = "ZeroMunge.ThirdPtyDocs";
+		SoftwareList softwareList = new SoftwareList();
 
-		List<Software> software = new List<Software>()
-		{
-			new Software("license_NewtonsoftJson")
-			{
-				Name = "Json.NET",
-				Author = "James Newton-King",
-				Url = "https://www.newtonsoft.com/json"
-			},
-
-			new Software("license_markdig")
-			{
-				Name = "Markdig",
-				Author = "Alexandre Mutel",
-				Url = "https://github.com/lunet-io/markdig"
-			},
-
-			new Software("license_prettybin")
-			{
-				Name = "PrettyBin",
-				Author = "Andrey Ershov",
-				Url = "https://github.com/slmjy/PrettyBin"
-			},
-
-			new Software("license_WindowsAPICodePack")
-			{
-				Name = "Windows API Code Pack for Microsoft .NET Framework",
-				Author = "Microsoft",
-				Url = "https://github.com/aybe/Windows-API-Code-Pack-1.1"
-			}
-		};
 
 		public ThirdPartySoftware()
 		{
 			InitializeComponent();
+
+			// Get the list of software from our software.json resource file
+			ResourceManager res = new ResourceManager(resourceLibName, typeof(ZeroMunge).Assembly);
+			string jsonStr = (string)res.GetObject("software");
+
+			// Deserialize the json into our SoftwareList class, set the license for each software, and sort the list alphabetically
+			softwareList = JsonConvert.DeserializeObject<SoftwareList>(jsonStr);
+			softwareList.SetLicenses();
+			softwareList.Software.Sort();
 		}
 
+		// When the Form has finished loading:
+		// Generate the HTML for the web page. (It'll be styled in wb_Licenses_DocumentCompleted)
 		private void ThirdPartySoftware_Load(object sender, EventArgs e)
 		{
-			// Generate the HTML for the web page - it'll be styled in wb_Licenses_DocumentCompleted
 			wb_Licenses.DocumentText = GenerateWebPage();
 		}
 
@@ -69,26 +51,26 @@ namespace ZeroMunge
 
 			// Generate list of software
 			string list = "";
-			foreach (Software s in software)
+			foreach (SoftwareInfo software in softwareList.Software)
 			{
 				// TODO: look into linking to the anchored headings on the page instead of the software urls
-				list += string.Format("- [{0}]({1}) by {2}\n", s.Name, s.Url, s.Author);
+				list += string.Format("- [{0}]({1}) by {2}\n", software.Name, software.Url, software.Author);
 			}
 
 			html += Markdown.ToHtml(list);
 
 
 			// Generate list of licenses
-			foreach (Software s in software)
+			foreach (SoftwareInfo software in softwareList.Software)
 			{
 				// Software name
-				html += Markdown.ToHtml("# " + s.Name);
+				html += Markdown.ToHtml("# " + software.Name);
 
 				// Hyperlink to the software's web page
-				html += Markdown.ToHtml(string.Format("[{0}]({0})", s.Url));
+				html += Markdown.ToHtml(string.Format("[{0}]({0})", software.Url));
 
 				// Licensing information for the software
-				html += Markdown.ToHtml(s.License);
+				html += Markdown.ToHtml(software.License);
 			}
 
 			//Console.WriteLine(html);
@@ -142,20 +124,43 @@ namespace ZeroMunge
 
 
 		// Representation of a single piece of software.
-		class Software
+		class SoftwareInfo : IComparable<SoftwareInfo>
 		{
+			public string Id { get; set; }
 			public string Name { get; set; }
 			public string Author { get; set; }
 			public string Url { get; set; }
-			public string License { get; }
-			public string LicenseResource { get; }
+			public string License { get; set; }
+			public string LicenseResource { get; set; }
 
-			public Software(string licenseResourceName)
+			public int CompareTo(SoftwareInfo other)
 			{
-				LicenseResource = licenseResourceName;
+				return Name.CompareTo(other.Name);
+			}
 
+			/// <summary>
+			/// Gets and sets the License based on the associated license resource file.
+			/// </summary>
+			public void SetLicense()
+			{
 				ResourceManager res = new ResourceManager(resourceLibName, typeof(ZeroMunge).Assembly);
 				License = (string)res.GetObject(LicenseResource);
+			}
+		}
+
+		class SoftwareList
+		{
+			public List<SoftwareInfo> Software { get; set; }
+
+			/// <summary>
+			/// Go through and call each Software's SetLicense method.
+			/// </summary>
+			public void SetLicenses()
+			{
+				foreach (SoftwareInfo s in Software)
+				{
+					s.SetLicense();
+				}
 			}
 		}
 	}

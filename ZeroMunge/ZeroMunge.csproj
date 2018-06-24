@@ -220,6 +220,7 @@
     <None Include="Resources\license-prettybin.md" />
     <None Include="Resources\license-Windows-API-Code-Pack-1.1.md" />
     <None Include="Resources\preamble.md" />
+    <None Include="Resources\software.json" />
     <None Include="ZeroMungeNameKey.pfx" />
   </ItemGroup>
   <ItemGroup>

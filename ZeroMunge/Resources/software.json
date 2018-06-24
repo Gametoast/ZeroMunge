@@ -1,0 +1,35 @@
+{
+	"Software": [
+		{
+			"Id": "NewtonsoftJson",
+			"Name": "Json.NET",
+			"Author": "James Newton-King",
+			"Url": "https://www.newtonsoft.com/json",
+			"LicenseResource": "license_NewtonsoftJson"
+		},
+		
+		{
+			"Id": "Markdig",
+			"Name": "Markdig",
+			"Author": "Alexandre Mutel",
+			"Url": "https://github.com/lunet-io/markdig",
+			"LicenseResource": "license_markdig"
+		},
+		
+		{
+			"Id": "PrettyBin",
+			"Name": "PrettyBin",
+			"Author": "Andrey Ershov",
+			"Url": "https://github.com/slmjy/PrettyBin",
+			"LicenseResource": "license_prettybin"
+		},
+		
+		{
+			"Id": "WindowsAPICodePack",
+			"Name": "Windows API Code Pack for Microsoft .NET Framework",
+			"Author": "Microsoft",
+			"Url": "https://github.com/aybe/Windows-API-Code-Pack-1.1",
+			"LicenseResource": "license_WindowsAPICodePack"
+		}
+	]
+}

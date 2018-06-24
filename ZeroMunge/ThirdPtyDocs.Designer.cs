@@ -140,6 +140,17 @@ namespace ZeroMunge {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {
+        ///	
+        ///}.
+        /// </summary>
+        internal static string software {
+            get {
+                return ResourceManager.GetString("software", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to /* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
         ////* Author: Nicolas Hery - http://nicolashery.com */
         ////* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
