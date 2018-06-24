@@ -476,6 +476,8 @@
 			this.data_Files.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.data_Files_CellClick);
 			this.data_Files.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.data_Files_CellContentClick);
 			this.data_Files.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.data_Files_CellValueChanged);
+			this.data_Files.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.data_Files_RowsAdded);
+			this.data_Files.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.data_Files_RowsRemoved);
 			this.data_Files.KeyDown += new System.Windows.Forms.KeyEventHandler(this.data_Files_KeyDown);
 			// 
 			// col_Enabled

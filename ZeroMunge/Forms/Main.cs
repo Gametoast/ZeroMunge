@@ -3478,6 +3478,18 @@ namespace ZeroMunge
 
 			EnableUI(!UIEnabled);
 		}
+
+		private void data_Files_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+		{
+			FileListIsDirty(true);
+			UpdateWindowTitle();
+		}
+
+		private void data_Files_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
+		{
+			FileListIsDirty(true);
+			UpdateWindowTitle();
+		}
 	}
 
 	public class MungeFactory
