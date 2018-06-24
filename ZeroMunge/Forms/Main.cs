@@ -35,8 +35,8 @@ namespace ZeroMunge
 
 		// Web links
 		public const string LINK_GH_OPENISSUES = "https://github.com/marth8880/ZeroMunge/issues";
-		public const string LINK_GH_BUGS = "https://github.com/marth8880/ZeroMunge/issues?q=is%3Aopen+is%3Aissue+label%3Abug";
-		public const string LINK_GH_SUGGESTIONS = "https://github.com/marth8880/ZeroMunge/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement";
+		public const string LINK_GH_BUGS = "https://github.com/marth8880/ZeroMunge/issues/new?template=bug_report.md";
+		public const string LINK_GH_SUGGESTIONS = "https://github.com/marth8880/ZeroMunge/issues/new?template=feature_request.md";
 		public const string LINK_LICENSE = "https://www.w3.org/Consortium/Legal/2008/03-bsd-license.html";
 		public const string LINK_EMAIL = "mailto:marth8880@gmail.com";
 		public const string LINK_WEBSITE = "https://www.frayedwiresstudios.com/";
