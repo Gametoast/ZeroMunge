@@ -73,7 +73,7 @@ namespace ZeroMunge
 				html += Markdown.ToHtml(software.License);
 			}
 
-			//Console.WriteLine(html);
+			//Trace.WriteLine(html);
 			return html;
 		}
 
@@ -104,7 +104,7 @@ namespace ZeroMunge
 		// Open the link in the user's default web browser.
 		private void wb_Licenses_LinkClicked(object sender, HtmlElementEventArgs e)
 		{
-			//Console.WriteLine("wb_Licenses_LinkClicked");
+			//Trace.WriteLine("wb_Licenses_LinkClicked");
 			HtmlElement link = sender as HtmlElement;
 
 			if (link.OuterHtml.ToLower().StartsWith("<a "))

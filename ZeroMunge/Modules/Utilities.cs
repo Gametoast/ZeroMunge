@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -89,7 +90,7 @@ namespace ZeroMunge
 
 
 			//foreach (KeyValuePair<string, string> kvp in attributes)
-			//	Console.WriteLine("Key {0,15}    Value: {1}", kvp.Key, kvp.Value);
+			//	Trace.WriteLine("Key {0,15}    Value: {1}", kvp.Key, kvp.Value);
 
 			return attributes;
 		}
@@ -739,7 +740,7 @@ namespace ZeroMunge
 		}
 
 
-		public static List<JsonPair> ParseJsonStrings(Form sender, string url)
+		public static List<JsonPair> ParseJsonStringsFromUrl(Form sender, string url)
 		{
 			string json;
 
@@ -761,11 +762,17 @@ namespace ZeroMunge
 				return null;
 			}
 
+			return ParseJsonStrings(json);
+		}
+
+
+		public static List<JsonPair> ParseJsonStrings(string unparsedJson)
+		{
 			List<JsonPair> parsedJson = new List<JsonPair>();
 			JsonPair curPair = new JsonPair();
 			int curStep = 0;
 
-			JsonTextReader reader = new JsonTextReader(new StringReader(json));
+			JsonTextReader reader = new JsonTextReader(new StringReader(unparsedJson));
 			while (reader.Read())
 			{
 				if (reader.Value != null)
@@ -859,7 +866,7 @@ namespace ZeroMunge
 		public static VersionInfo GetLatestVersion(Form sender)
 		{
 			List<JsonPair> parsedJson = new List<JsonPair>();
-			parsedJson = ParseJsonStrings(sender, UPDATES_URL);
+			parsedJson = ParseJsonStringsFromUrl(sender, UPDATES_URL);
 			if (parsedJson == null) return null;
 			VersionInfo info = new VersionInfo
 			{
@@ -1080,7 +1087,8 @@ namespace ZeroMunge
 				CheckForUpdatesOnStartup = Properties.Settings.Default.CheckForUpdatesOnStartup,
 				AutoSaveEnabled = Properties.Settings.Default.AutoSaveEnabled,
 				LastSaveFilePath = Properties.Settings.Default.LastSaveFilePath,
-				AutoLoadEnabled = Properties.Settings.Default.AutoLoadEnabled
+				AutoLoadEnabled = Properties.Settings.Default.AutoLoadEnabled,
+				RecentFiles = Properties.Settings.Default.RecentFiles
 			};
 
 			return prefs;
@@ -1108,6 +1116,7 @@ namespace ZeroMunge
 			Properties.Settings.Default.AutoSaveEnabled = prefs.AutoSaveEnabled;
 			Properties.Settings.Default.LastSaveFilePath = prefs.LastSaveFilePath;
 			Properties.Settings.Default.AutoLoadEnabled = prefs.AutoLoadEnabled;
+			Properties.Settings.Default.RecentFiles = prefs.RecentFiles;
 
 			Properties.Settings.Default.Save();
 		}
@@ -1150,6 +1159,7 @@ namespace ZeroMunge
 		public bool AutoSaveEnabled { get; set; }
 		public bool AutoLoadEnabled { get; set; }
 		public string LastSaveFilePath { get; set; }
+		public StringCollection RecentFiles { get; set; }
 	}
 
 	public class ReqChunk

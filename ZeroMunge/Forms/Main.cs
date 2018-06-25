@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -30,8 +32,10 @@ namespace ZeroMunge
 			DebugClearSettings,
 			Release
 		};
+
 		// Is this a debug build?
 		public BuildType BUILD_TYPE;
+
 
 		// Web links
 		public const string LINK_GH_OPENISSUES = "https://github.com/marth8880/ZeroMunge/issues";
@@ -42,6 +46,7 @@ namespace ZeroMunge
 		public const string LINK_WEBSITE = "https://www.frayedwiresstudios.com/";
 		public const string LINK_PROJECT = "https://github.com/marth8880/ZeroMunge";
 
+
 		// Message requesting the user to report a problem, if found
 		public string MSG_REPORT_PROBLEM = string.Concat("\n\n\t", "Please report this problem here: ", LINK_GH_OPENISSUES, "\n\n",
 						"\t", "Be sure to include:", "\n",
@@ -49,6 +54,7 @@ namespace ZeroMunge
 						"\t\t", "2. A short summary of what you were doing when this problem occurred.", "\n",
 						"\t\t", "3. Steps to reproduce this issue, if possible.", "\n\n",
 						"Thanks!", "\n\n");
+
 
 		// data_Files : Column names
 		public const string STR_DATA_FILES_CHK_ENABLED = "col_Enabled";
@@ -79,18 +85,26 @@ namespace ZeroMunge
 		// data_Files : Cell error color
 		public Color errorRed = Color.FromArgb(251, 99, 99);
 
-		// Updates
-		public static VersionInfo latestAppVersion = new VersionInfo();
-		public static bool updateAvailable = false;
-
-		// User exit flow
-		public bool inExitFlow = false;
-
+		// data_Files : Different methods with which cell contents are changed
 		public enum CellChangeMethod
 		{
 			Button,     // Buttons outside the DataGridView
 			Cell        // Cells inside the DataGridView
 		};
+
+
+		// Updates
+		public static VersionInfo latestAppVersion = new VersionInfo();
+		public static bool updateAvailable = false;
+
+
+		// User exit flow
+		public bool inExitFlow = false;
+
+
+		// Recent files list
+		public const int RECENT_FILES_MAX = 10;
+		public List<string> recentFiles = new List<string>(RECENT_FILES_MAX);
 
 
 		// This is the very first method called by the application. It initializes the UI controls and loads user settings.
@@ -149,7 +163,7 @@ namespace ZeroMunge
 			col_StagingBrowse.UseColumnTextForButtonValue = true;
 			col_MungedFilesEdit.UseColumnTextForButtonValue = true;
 
-			// Set the menu strip tooltip text
+			// Set the UI tooltip text
 			SetToolTips();
 
 			// Start a new log file
@@ -170,6 +184,26 @@ namespace ZeroMunge
 					Trace.WriteLine(ex.Message);
 					Log(ex.Message, LogType.Error);
 				}
+			}
+
+			// Populate the Recent Files list
+			if (!IsRecentFilesPrefsListEmpty())
+			{
+				try
+				{
+					recentFiles = prefs.RecentFiles.Cast<string>().ToList();
+					RecentFiles_RepopulateMenu();
+				}
+				catch (InvalidCastException ex)
+				{
+					var msg = "Failed to load Recent Files list. Reason: " + ex.Message;
+					Trace.WriteLine(msg);
+					Log(msg, LogType.Error);
+				}
+			}
+			else
+			{
+				prefs.RecentFiles = new StringCollection();
 			}
 
 			Log(string.Format("Starting Zero Munge  r{0}--{1}", Properties.Settings.Default.Info_BuildNum.ToString(), Properties.Settings.Default.Info_BuildDate.ToString("yyyy-MM-dd")), LogType.Info);
@@ -263,8 +297,10 @@ namespace ZeroMunge
 				{
 					Log(string.Format("Auto-load is enabled. Loading save file: \"{0}\"", prefs.LastSaveFilePath), LogType.Info);
 
-					DataFilesContainer data = DeserializeData(prefs.LastSaveFilePath);
-					LoadDataIntoFileList(data, prefs.LastSaveFilePath);
+					//DataFilesContainer data = DeserializeData(prefs.LastSaveFilePath);
+					//LoadDataIntoFileList(data, prefs.LastSaveFilePath);
+
+					OpenFileListFile(prefs.LastSaveFilePath);
 				}
 			}
 		}
@@ -377,6 +413,8 @@ namespace ZeroMunge
 			// File Menu
 			menu_newToolStripMenuItem.ToolTipText = Tooltips.FileMenu.New;
 			menu_openToolStripMenuItem.ToolTipText = Tooltips.FileMenu.Open;
+			//menu_openRecentToolStripMenuItem.ToolTipText = Tooltips.FileMenu.OpenRecent;
+			// NOTE: The tooltip text for the Clear Recent File List button is set when the control is generated in RecentFiles_RepopulateMenu
 			menu_saveToolStripMenuItem.ToolTipText = Tooltips.FileMenu.Save;
 			menu_saveAsToolStripMenuItem.ToolTipText = Tooltips.FileMenu.SaveAs;
 			menu_exitToolStripMenuItem.ToolTipText = Tooltips.FileMenu.Exit;
@@ -555,7 +593,7 @@ namespace ZeroMunge
 		/// <summary>
 		/// Immediately save the contents of the file list to the current file.
 		/// </summary>
-		public void Command_Save()
+		public void Command_Save(bool isAutoSave = false)
 		{
 			if (!IsFileListEmpty())
 			{
@@ -565,7 +603,7 @@ namespace ZeroMunge
 				}
 				else
 				{
-					SaveFileListToFile(curFileListPath, true);
+					SaveFileListToFile(curFileListPath, isAutoSave);
 				}
 			}
 			else
@@ -618,7 +656,7 @@ namespace ZeroMunge
 			catch (InvalidOperationException ex)
 			{
 				var msg = "Invalid operation while starting process. Reason: " + ex.Message;
-				Console.WriteLine(msg);
+				Trace.WriteLine(msg);
 				Log(msg, LogType.Error);
 				throw;
 			}
@@ -856,7 +894,7 @@ namespace ZeroMunge
 			catch (ArgumentOutOfRangeException e)
 			{
 				var message = "ArgumentOutOfRangeException! Reason: " + e.Message;
-				Console.WriteLine(message);
+				Trace.WriteLine(message);
 				Log(message, LogType.Error);
 			}
 			
@@ -982,12 +1020,12 @@ namespace ZeroMunge
 			}
 			catch (InvalidOperationException e)
 			{
-				Console.WriteLine("Invalid operation while starting process. Reason: " + e.Message);
+				Trace.WriteLine("Invalid operation while starting process. Reason: " + e.Message);
 				throw;
 			}
 			catch (Win32Exception e)
 			{
-				Console.WriteLine("Win32 exception while starting process. Reason: " + e.Message);
+				Trace.WriteLine("Win32 exception while starting process. Reason: " + e.Message);
 				throw;
 			}
 
@@ -1815,14 +1853,14 @@ namespace ZeroMunge
 			}
 			catch (SerializationException e)
 			{
-				Console.WriteLine("Failed to serialize. Reason: " + e.Message);
+				Trace.WriteLine("Failed to serialize. Reason: " + e.Message);
 				Log("Failed to serialize. Reason: " + e.Message, LogType.Error);
 				throw;
 			}
 			catch (IOException e)
 			{
 				var msg = string.Format("Failed to write to file path: \"{0}\". Reason: {1}", filePath, e.Message);
-				Console.WriteLine(msg);
+				Trace.WriteLine(msg);
 				Log(msg, LogType.Error);
 				throw;
 			}
@@ -1855,14 +1893,14 @@ namespace ZeroMunge
 			}
 			catch (SerializationException e)
 			{
-				Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
+				Trace.WriteLine("Failed to deserialize. Reason: " + e.Message);
 				Log("Failed to deserialize. Reason: " + e.Message, LogType.Error);
 				throw;
 			}
 			catch (IOException e)
 			{
 				var msg = string.Format("Failed to read from file path: \"{0}\". Reason: {1}", filePath, e.Message);
-				Console.WriteLine(msg);
+				Trace.WriteLine(msg);
 				Log(msg, LogType.Error);
 				throw;
 			}
@@ -1896,13 +1934,13 @@ namespace ZeroMunge
 					}
 					catch (ArgumentOutOfRangeException e)
 					{
-						Console.WriteLine("Argument out of range while removing row. Reason: " + e.Message);
+						Trace.WriteLine("Argument out of range while removing row. Reason: " + e.Message);
 						Log("Argument out of range while removing row. Reason: " + e.Message, LogType.Error);
 						throw;
 					}
 					catch (InvalidOperationException e)
 					{
-						Console.WriteLine("Invalid operation while removing row. Reason: " + e.Message);
+						Trace.WriteLine("Invalid operation while removing row. Reason: " + e.Message);
 						Log("Invalid operation while removing row. Reason: " + e.Message, LogType.Error);
 						throw;
 					}
@@ -1967,7 +2005,7 @@ namespace ZeroMunge
 				{
 					Thread errorThread = new Thread(() =>
 					{
-						Console.WriteLine("Failed to load data into file list. Reason: " + e.Message);
+						Trace.WriteLine("Failed to load data into file list. Reason: " + e.Message);
 						Log("File does not contain any data to load", LogType.Error);
 					});
 					errorThread.Start();
@@ -1976,7 +2014,7 @@ namespace ZeroMunge
 				}
 				catch (InvalidOperationException e)
 				{
-					Console.WriteLine("Invalid operation while adding row. Reason: " + e.Message);
+					Trace.WriteLine("Invalid operation while adding row. Reason: " + e.Message);
 					Log("Invalid operation while adding row. Reason: " + e.Message, LogType.Error);
 					throw;
 				}
@@ -2306,7 +2344,25 @@ namespace ZeroMunge
 			}
 		}
 
-		
+
+		// When a row is added to the File List:
+		// Mark the File List as dirty and update the window title.
+		private void data_Files_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+		{
+			FileListIsDirty(true);
+			UpdateWindowTitle();
+		}
+
+
+		// When a row is removed from the File List:
+		// Mark the File List as dirty and update the window title.
+		private void data_Files_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
+		{
+			FileListIsDirty(true);
+			UpdateWindowTitle();
+		}
+
+
 		// When the user clicks on a cell in the file list:
 		// Do something depending on the cell that was clicked on.
 		private void data_Files_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -2612,7 +2668,7 @@ namespace ZeroMunge
 			data_Files.MouseClick += text_MungedFilesEdit_MouseClickOutside;
 			menu_MainForm.MouseClick += text_MungedFilesEdit_MouseClickOutside;
 			text_OutputLog.MouseClick += text_MungedFilesEdit_MouseClickOutside;
-			cont_FileButtons.MouseClick += text_MungedFilesEdit_MouseClickOutside;
+			flp_FileButtons.MouseClick += text_MungedFilesEdit_MouseClickOutside;
 			this.MouseClick += text_MungedFilesEdit_MouseClickOutside;
 
 
@@ -2742,7 +2798,7 @@ namespace ZeroMunge
 			data_Files.MouseClick -= text_MungedFilesEdit_MouseClickOutside;
 			menu_MainForm.MouseClick -= text_MungedFilesEdit_MouseClickOutside;
 			text_OutputLog.MouseClick -= text_MungedFilesEdit_MouseClickOutside;
-			cont_FileButtons.MouseClick -= text_MungedFilesEdit_MouseClickOutside;
+			flp_FileButtons.MouseClick -= text_MungedFilesEdit_MouseClickOutside;
 			this.MouseClick -= text_MungedFilesEdit_MouseClickOutside;
 		}
 
@@ -3377,20 +3433,215 @@ namespace ZeroMunge
 			Command_Open();
 		}
 
+		// When the user clicks the Clear Recent File List button in the Open Recent submenu:
+		// Clear all of the recent files from the recent files list.
+		private void menu_clearRecentFileListToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			RecentFiles_Clear();
+		}
+
+
+		// When the user clicks a file in the Open Recent submenu:
+		// Attempt to open the file.
+		private void menu_recentFileToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			ToolStripItem menuItem = (ToolStripItem)sender;
+
+			// Determine which menu item that was clicked
+			int menuItemIdx = menu_openRecentToolStripMenuItem.DropDownItems.IndexOf(menuItem);
+			string recentFilePath = recentFiles[menuItemIdx];
+
+			// Attempt to open the file
+			bool openSucceeded = OpenFileListFile(recentFilePath);
+
+			if (!openSucceeded)
+			{
+				string promptTitle = "File Not Found";
+				string promptCaption = string.Format("Failed to find the file at the specified path: \n\n\"{0}\"\n\nWould you like to remove it from the list?", recentFilePath);
+				DialogResult result = MessageBox.Show(promptCaption, promptTitle, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+				if (result == DialogResult.Yes)
+				{
+					RecentFiles_RemoveFile(menuItemIdx);
+				}
+			}
+		}
+
+
+		public bool IsRecentFilesPrefsListEmpty()
+		{
+			return prefs.RecentFiles == null || prefs.RecentFiles.Count <= 0;
+		}
+		
+
+		/// <summary>
+		/// Adds the specified file path to the Recent Files list.
+		/// </summary>
+		/// <param name="filePath">File path to add to the list.</param>
+		public void RecentFiles_AddFile(string filePath)
+		{
+			string newItem = filePath;
+
+			Debug.Assert(File.Exists(newItem), "UpdateRecentFilesList: Could not find file at path \"" + newItem + "\"");
+
+			// Does the list already contain the file?
+			if (recentFiles.Contains(newItem))
+			{
+				// If so, move the file to the beginning of the list
+				ObservableCollection<string> newList = new ObservableCollection<string>(recentFiles);
+				newList.Move(newList.IndexOf(newItem), 0);
+				recentFiles = newList.ToList();
+			}
+			else
+			{
+				// If not, insert the file at the beginning of the list
+				recentFiles.Insert(0, newItem);
+			}
+
+			RecentFiles_RepopulateMenu();
+		}
+
+
+		/// <summary>
+		/// Removes the file of the specified file index from the Recent Files list.
+		/// </summary>
+		/// <param name="fileIndex">Index of the file to remove.</param>
+		public void RecentFiles_RemoveFile(int fileIndex)
+		{
+			try
+			{
+				menu_openRecentToolStripMenuItem.DropDownItems.RemoveAt(fileIndex);
+				recentFiles.RemoveAt(fileIndex);
+				prefs.RecentFiles.RemoveAt(fileIndex);
+
+				Utilities.SavePrefs(prefs);
+			}
+			catch (ArgumentOutOfRangeException ex)
+			{
+				string msg = "ArgumentOutOfRangeException while attempting to remove fileIndex " + fileIndex.ToString() + " from Recent Files list. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+
+				throw;
+			}
+		}
+		
+
+		/// <summary>
+		/// Repopulate the Recent Files menu with the contents of the recentFiles collection.
+		/// </summary>
+		public void RecentFiles_RepopulateMenu()
+		{
+			// Reload the submenu with the modified file list
+			menu_openRecentToolStripMenuItem.DropDownItems.Clear();
+			for (int fileIdx = 0; fileIdx < recentFiles.Count; fileIdx++)
+			{
+				if (fileIdx >= RECENT_FILES_MAX) { break; }
+
+				// Construct the dropdown item
+				ToolStripItem subItem = new ToolStripMenuItem(recentFiles[fileIdx]);
+				subItem.AutoToolTip = true;
+				subItem.Click += menu_recentFileToolStripMenuItem_Click;
+
+				// Add it to the dropdown menu
+				menu_openRecentToolStripMenuItem.DropDownItems.Insert(fileIdx, subItem);
+			}
+
+			// Add the separator and Clear Recent File List menu items
+			menu_openRecentToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
+			ToolStripItem clearRecentFileListToolStripMenuItem = new ToolStripMenuItem("Clear Recent File List");
+			clearRecentFileListToolStripMenuItem.ToolTipText = Tooltips.FileMenu.ClearRecentFileList;
+			clearRecentFileListToolStripMenuItem.Click += menu_clearRecentFileListToolStripMenuItem_Click;
+			menu_openRecentToolStripMenuItem.DropDownItems.Add(clearRecentFileListToolStripMenuItem);
+
+			menu_openRecentToolStripMenuItem.Enabled = true;
+			menu_openRecentToolStripMenuItem.Visible = true;
+
+			// Save the list in the user's settings
+			if (IsRecentFilesPrefsListEmpty())
+			{
+				prefs.RecentFiles = new StringCollection();
+			}
+			prefs.RecentFiles.Clear();
+			prefs.RecentFiles.AddRange(recentFiles.ToArray());
+
+			Utilities.SavePrefs(prefs);
+		}
+
+
+		/// <summary>
+		/// Clear all recent file menu items from the Recent Files menu.
+		/// </summary>
+		public void RecentFiles_ClearMenu()
+		{
+			if (recentFiles.Count > 0)
+			{
+				for (int i = 0; i < recentFiles.Count; i++)
+				{
+					if (menu_openRecentToolStripMenuItem.DropDownItems.Count > 2)
+					{
+						menu_openRecentToolStripMenuItem.DropDownItems.RemoveAt(0);
+					}
+				}
+			}
+		}
+
+
+		/// <summary>
+		/// Clear all recent files from the menu and disable it.
+		/// </summary>
+		public void RecentFiles_Clear()
+		{
+			// Remove the dropdown items from the menu
+			RecentFiles_ClearMenu();
+			menu_openRecentToolStripMenuItem.Enabled = false;
+			menu_openRecentToolStripMenuItem.Visible = false;
+
+			// Clear collections and save changes
+			recentFiles.Clear();
+			prefs.RecentFiles.Clear();
+
+			Utilities.SavePrefs(prefs);
+		}
+
+
+		public bool OpenFileListFile(string filePath)
+		{
+			// Has a file name been entered?
+			if (filePath != "")
+			{
+				if (File.Exists(filePath))
+				{
+					// Store the current directory
+					openFileListLastDir = Utilities.GetFileDirectory(filePath);
+
+					DataFilesContainer data = DeserializeData(filePath);
+					LoadDataIntoFileList(data, filePath);
+
+					prefs.LastSaveFilePath = filePath;
+					Utilities.SavePrefs(prefs);
+
+					RecentFiles_AddFile(filePath);
+
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return false;
+			}
+		}
+
 
 		// When the user clicks the OK button in the Open File List prompt:
 		// Attempt to deserialize the data in the specified file and load it into the file list.
 		private void openDlg_OpenFileListPrompt_FileOk(object sender, CancelEventArgs e)
 		{
-			// Has a file name been entered?
-			if (openDlg_OpenFileListPrompt.FileName != "")
-			{
-				// Store the current directory
-				openFileListLastDir = Utilities.GetFileDirectory(openDlg_OpenFileListPrompt.FileName);
-				
-				DataFilesContainer data = DeserializeData(openDlg_OpenFileListPrompt.FileName);
-				LoadDataIntoFileList(data, openDlg_OpenFileListPrompt.FileName);
-			}
+			OpenFileListFile(openDlg_OpenFileListPrompt.FileName);
 		}
 
 
@@ -3503,12 +3754,18 @@ namespace ZeroMunge
 		{
 			Process.Start(LINK_GH_OPENISSUES);
 		}
-
+		
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			SaveFileListPrompt prompt = new SaveFileListPrompt();
-			prompt.ShowDialog();
+			string newItem = "TestFile" + recentFiles.Count;
+			recentFiles.Insert(0, newItem);
+
+			ToolStripItem subItem = new ToolStripMenuItem(newItem);
+			menu_openRecentToolStripMenuItem.DropDownItems.Insert(0, subItem);
+			
+			//SaveFileListPrompt prompt = new SaveFileListPrompt();
+			//prompt.ShowDialog();
 			
 			//Debug.WriteLine(IsFileListEmpty().ToString());
 
@@ -3570,18 +3827,6 @@ namespace ZeroMunge
 			//LoadDataIntoFileList(data);
 
 			EnableUI(!UIEnabled);
-		}
-
-		private void data_Files_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
-		{
-			FileListIsDirty(true);
-			UpdateWindowTitle();
-		}
-
-		private void data_Files_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
-		{
-			FileListIsDirty(true);
-			UpdateWindowTitle();
 		}
 	}
 

@@ -87,6 +87,7 @@
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.menu_openRecentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
@@ -124,11 +125,12 @@
 			this.menu_checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
 			this.menu_aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.cont_FileButtons = new System.Windows.Forms.FlowLayoutPanel();
+			this.flp_FileButtons = new System.Windows.Forms.FlowLayoutPanel();
 			this.button3 = new System.Windows.Forms.Button();
-			this.cont_LogButtons = new System.Windows.Forms.FlowLayoutPanel();
+			this.flp_LogButtons = new System.Windows.Forms.FlowLayoutPanel();
 			this.saveDlg_SaveFileListPrompt = new System.Windows.Forms.SaveFileDialog();
 			this.openDlg_OpenFileListPrompt = new System.Windows.Forms.OpenFileDialog();
+			this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
 			this.pan_MungedFilesEdit.SuspendLayout();
 			this.status_MungedFilesEdit.SuspendLayout();
 			this.cmenu_Text.SuspendLayout();
@@ -139,8 +141,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.data_Files)).BeginInit();
 			this.cmenu_TrayIcon.SuspendLayout();
 			this.menu_MainForm.SuspendLayout();
-			this.cont_FileButtons.SuspendLayout();
-			this.cont_LogButtons.SuspendLayout();
+			this.flp_FileButtons.SuspendLayout();
+			this.flp_LogButtons.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btn_Run
@@ -693,6 +695,7 @@
 			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menu_newToolStripMenuItem,
             this.menu_openToolStripMenuItem,
+            this.menu_openRecentToolStripMenuItem,
             this.menu_saveToolStripMenuItem,
             this.menu_saveAsToolStripMenuItem,
             this.toolStripSeparator4,
@@ -717,6 +720,15 @@
 			this.menu_openToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
 			this.menu_openToolStripMenuItem.Text = "Open...";
 			this.menu_openToolStripMenuItem.Click += new System.EventHandler(this.menu_openToolStripMenuItem_Click);
+			// 
+			// menu_openRecentToolStripMenuItem
+			// 
+			this.menu_openRecentToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripSeparator11});
+			this.menu_openRecentToolStripMenuItem.Enabled = false;
+			this.menu_openRecentToolStripMenuItem.Name = "menu_openRecentToolStripMenuItem";
+			this.menu_openRecentToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+			this.menu_openRecentToolStripMenuItem.Text = "Open Recent";
 			// 
 			// menu_saveToolStripMenuItem
 			// 
@@ -999,24 +1011,24 @@
 			this.menu_aboutToolStripMenuItem.Text = "About";
 			this.menu_aboutToolStripMenuItem.Click += new System.EventHandler(this.menu_aboutToolStripMenuItem_Click);
 			// 
-			// cont_FileButtons
+			// flp_FileButtons
 			// 
-			this.cont_FileButtons.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.cont_FileButtons.Controls.Add(this.btn_Run);
-			this.cont_FileButtons.Controls.Add(this.btn_Cancel);
-			this.cont_FileButtons.Controls.Add(this.btn_AddFiles);
-			this.cont_FileButtons.Controls.Add(this.btn_AddFolders);
-			this.cont_FileButtons.Controls.Add(this.btn_AddProject);
-			this.cont_FileButtons.Controls.Add(this.btn_RemoveFile);
-			this.cont_FileButtons.Controls.Add(this.btn_RemoveAllFiles);
-			this.cont_FileButtons.Controls.Add(this.btn_SetGamePath);
-			this.cont_FileButtons.Controls.Add(this.button2);
-			this.cont_FileButtons.Controls.Add(this.button3);
-			this.cont_FileButtons.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.cont_FileButtons.Location = new System.Drawing.Point(673, 27);
-			this.cont_FileButtons.Name = "cont_FileButtons";
-			this.cont_FileButtons.Size = new System.Drawing.Size(102, 315);
-			this.cont_FileButtons.TabIndex = 19;
+			this.flp_FileButtons.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.flp_FileButtons.Controls.Add(this.btn_Run);
+			this.flp_FileButtons.Controls.Add(this.btn_Cancel);
+			this.flp_FileButtons.Controls.Add(this.btn_AddFiles);
+			this.flp_FileButtons.Controls.Add(this.btn_AddFolders);
+			this.flp_FileButtons.Controls.Add(this.btn_AddProject);
+			this.flp_FileButtons.Controls.Add(this.btn_RemoveFile);
+			this.flp_FileButtons.Controls.Add(this.btn_RemoveAllFiles);
+			this.flp_FileButtons.Controls.Add(this.btn_SetGamePath);
+			this.flp_FileButtons.Controls.Add(this.button2);
+			this.flp_FileButtons.Controls.Add(this.button3);
+			this.flp_FileButtons.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+			this.flp_FileButtons.Location = new System.Drawing.Point(673, 27);
+			this.flp_FileButtons.Name = "flp_FileButtons";
+			this.flp_FileButtons.Size = new System.Drawing.Size(102, 315);
+			this.flp_FileButtons.TabIndex = 19;
 			// 
 			// button3
 			// 
@@ -1029,17 +1041,17 @@
 			this.button3.UseVisualStyleBackColor = true;
 			this.button3.Click += new System.EventHandler(this.button3_Click);
 			// 
-			// cont_LogButtons
+			// flp_LogButtons
 			// 
-			this.cont_LogButtons.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.cont_LogButtons.Controls.Add(this.btn_ClearLog);
-			this.cont_LogButtons.Controls.Add(this.btn_SaveLog);
-			this.cont_LogButtons.Controls.Add(this.btn_CopyLog);
-			this.cont_LogButtons.FlowDirection = System.Windows.Forms.FlowDirection.BottomUp;
-			this.cont_LogButtons.Location = new System.Drawing.Point(673, 461);
-			this.cont_LogButtons.Name = "cont_LogButtons";
-			this.cont_LogButtons.Size = new System.Drawing.Size(102, 88);
-			this.cont_LogButtons.TabIndex = 20;
+			this.flp_LogButtons.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.flp_LogButtons.Controls.Add(this.btn_ClearLog);
+			this.flp_LogButtons.Controls.Add(this.btn_SaveLog);
+			this.flp_LogButtons.Controls.Add(this.btn_CopyLog);
+			this.flp_LogButtons.FlowDirection = System.Windows.Forms.FlowDirection.BottomUp;
+			this.flp_LogButtons.Location = new System.Drawing.Point(673, 461);
+			this.flp_LogButtons.Name = "flp_LogButtons";
+			this.flp_LogButtons.Size = new System.Drawing.Size(102, 88);
+			this.flp_LogButtons.TabIndex = 20;
 			// 
 			// saveDlg_SaveFileListPrompt
 			// 
@@ -1055,6 +1067,11 @@
 			this.openDlg_OpenFileListPrompt.Title = "Open File List";
 			this.openDlg_OpenFileListPrompt.FileOk += new System.ComponentModel.CancelEventHandler(this.openDlg_OpenFileListPrompt_FileOk);
 			// 
+			// toolStripSeparator11
+			// 
+			this.toolStripSeparator11.Name = "toolStripSeparator11";
+			this.toolStripSeparator11.Size = new System.Drawing.Size(149, 6);
+			// 
 			// ZeroMunge
 			// 
 			this.AcceptButton = this.btn_Run;
@@ -1062,13 +1079,13 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btn_Cancel;
 			this.ClientSize = new System.Drawing.Size(784, 561);
-			this.Controls.Add(this.cont_LogButtons);
+			this.Controls.Add(this.flp_LogButtons);
 			this.Controls.Add(this.lbl_OutputLogLines);
 			this.Controls.Add(this.menu_MainForm);
 			this.Controls.Add(this.lbl_OutputLogChars);
 			this.Controls.Add(this.pan_MungedFilesEdit);
 			this.Controls.Add(this.cont_Panels);
-			this.Controls.Add(this.cont_FileButtons);
+			this.Controls.Add(this.flp_FileButtons);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
 			this.MainMenuStrip = this.menu_MainForm;
@@ -1095,8 +1112,8 @@
 			this.cmenu_TrayIcon.ResumeLayout(false);
 			this.menu_MainForm.ResumeLayout(false);
 			this.menu_MainForm.PerformLayout();
-			this.cont_FileButtons.ResumeLayout(false);
-			this.cont_LogButtons.ResumeLayout(false);
+			this.flp_FileButtons.ResumeLayout(false);
+			this.flp_LogButtons.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -1162,8 +1179,8 @@
         private System.Windows.Forms.ToolStripMenuItem menu_copyLogToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem menu_saveLogAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem menu_clearLogToolStripMenuItem;
-        private System.Windows.Forms.FlowLayoutPanel cont_FileButtons;
-        private System.Windows.Forms.FlowLayoutPanel cont_LogButtons;
+        private System.Windows.Forms.FlowLayoutPanel flp_FileButtons;
+        private System.Windows.Forms.FlowLayoutPanel flp_LogButtons;
         private System.Windows.Forms.ToolStripMenuItem menu_newToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem menu_openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem menu_saveToolStripMenuItem;
@@ -1200,6 +1217,8 @@
 		private System.Windows.Forms.ToolStripMenuItem cmenu_TrayIcon_Run;
 		private System.Windows.Forms.ToolStripMenuItem cmenu_TrayIcon_Cancel;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
+		private System.Windows.Forms.ToolStripMenuItem menu_openRecentToolStripMenuItem;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
 	}
 }
 

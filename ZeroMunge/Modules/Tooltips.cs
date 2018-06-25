@@ -11,6 +11,8 @@ namespace ZeroMunge
 		{
 			public const string New = "Start a new file.";
 			public const string Open = "Open a saved file list.";
+			public const string OpenRecent = "Select a recent file list to open.";
+			public const string ClearRecentFileList = "Clear the list of recent files.";
 			public const string Save = "Save the current file list.";
 			public const string SaveAs = "Save the current file list to a new file.";
 			public const string Exit = "Quit the application.";
