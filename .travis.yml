@@ -1,3 +1,5 @@
 language: csharp
 solution: ZeroMunge.sln
 dotnet: 2.1.4
+script:
+ - dotnet restore
