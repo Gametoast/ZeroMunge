@@ -1,8 +1,16 @@
 ![Zero Munge](app_banner.jpg)
 
+[![Build Status](https://travis-ci.org/marth8880/ZeroMunge.svg?branch=master&maxAge=300)](https://travis-ci.org/marth8880/ZeroMunge)
+[![Issues](https://img.shields.io/github/issues/marth8880/ZeroMunge.svg?maxAge=60)](https://github.com/marth8880/ZeroMunge/issues)
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?label=license)](https://opensource.org/licenses/BSD-3-Clause)  
+[![Release](https://img.shields.io/github/release/marth8880/ZeroMunge.svg?label=latest%20release&maxAge=300)](https://github.com/marth8880/ZeroMunge/releases/latest)
+![Downloads](https://img.shields.io/github/downloads/marth8880/ZeroMunge/latest/total.svg?maxAge=60)
+
+
+
 ## What it is
 
-The goal of Zero Munge is to act as a robust replacement for VisualMunge (the automation tool provided with the SWBF2 mod tools).  
+The goal of Zero Munge is to act as a robust replacement for VisualMunge, the automated build tool provided with the SWBF2 mod tools.  
 
 It is written in Visual C# for [.NET Framework 4](https://www.microsoft.com/en-us/download/details.aspx?id=17718).
 
@@ -10,23 +18,30 @@ It is written in Visual C# for [.NET Framework 4](https://www.microsoft.com/en-u
 
 At its core, Zero Munge goes through a user-specified list of munge.bat files and executes each one at a time and copies the associated LVL files to the appropriate staging directory.  
 
-Zero Munge includes the following features. Completed features are checked off.
+Zero Munge includes the following features.
 
-- [x] Execute a list of batch files in order
-- [x] Toggle whether or not certain files will be executed
-- [x] Log each file's output in real-time (with timestamps) to a log window and log file
-- [x] Auto-detect the munge.bat file inside a selected folder and add it to the file list
-- [x] Add typical munge.bat files (common, sides, world, etc.) for an entire project to the file list
-- [x] For each file, copy the associated LVL file(s) to another directory
-- [x] Save and load different "presets" of the file list's contents
-- [x] Ability to check for updates and point user to latest release's download page
+- Execute a list of batch files in order
+- Toggle whether or not certain files will be executed
+- Log each file's output in real-time (with timestamps) to a log window and log file
+- Auto-detect the munge.bat file inside a selected folder and add it to the file list
+- Add typical munge.bat files (common, sides, world, etc.) for an entire project to the file list
+- For each file, copy the associated LVL file(s) to another directory
+- Save and load different "presets" of the file list's contents
+- Ability to check for updates and point user to latest release's download page
 
 ## Downloads
 
-* [**ZeroMunge-r146 (latest)**](http://bit.ly/ZeroMunge-r146-DL)
-* [ZeroMunge-r113](http://bit.ly/ZeroMunge-r113-DL)
-* [ZeroMunge-r89](http://bit.ly/ZeroMunge-r89-DL)
-* [ZeroMunge-r78](http://bit.ly/ZeroMunge-r78-DL)
-* [ZeroMunge-r42](http://bit.ly/ZeroMunge-r42-DL)
-* [ZeroMunge-r35](http://bit.ly/ZeroMunge-r35-DL-new)
-* [ZeroMunge-r31](http://bit.ly/ZeroMunge-r31-DL)
+[![ZeroMunge-latest-release](https://img.shields.io/github/release/marth8880/ZeroMunge.svg?label=latest%20release&maxAge=300)](https://github.com/marth8880/ZeroMunge/releases/latest)
+[![ZeroMunge-latest-downloads](https://img.shields.io/github/downloads/marth8880/ZeroMunge/latest/total.svg?maxAge=60)](https://github.com/marth8880/ZeroMunge/releases/latest)  
+[![ZeroMunge-r113-release](https://img.shields.io/badge/old%20release-r113-lightgrey.svg)](https://github.com/marth8880/ZeroMunge/releases/r113)
+![ZeroMunge-r113-downloads](https://img.shields.io/github/downloads/marth8880/ZeroMunge/r113/total.svg?maxAge=300)  
+[![ZeroMunge-r89-release](https://img.shields.io/badge/old%20release-r89-lightgrey.svg)](https://github.com/marth8880/ZeroMunge/releases/r89)
+![ZeroMunge-r89-downloads](https://img.shields.io/github/downloads/marth8880/ZeroMunge/r89/total.svg?maxAge=300)  
+[![ZeroMunge-r78-release](https://img.shields.io/badge/old%20release-r78-lightgrey.svg)](https://github.com/marth8880/ZeroMunge/releases/r78)
+![ZeroMunge-r78-downloads](https://img.shields.io/github/downloads/marth8880/ZeroMunge/r78/total.svg?maxAge=300)  
+[![ZeroMunge-r42-release](https://img.shields.io/badge/old%20release-r42-lightgrey.svg)](https://github.com/marth8880/ZeroMunge/releases/r42)
+![ZeroMunge-r42-downloads](https://img.shields.io/github/downloads/marth8880/ZeroMunge/r42/total.svg?maxAge=300)  
+[![ZeroMunge-r35-release](https://img.shields.io/badge/old%20release-r35-lightgrey.svg)](https://github.com/marth8880/ZeroMunge/releases/r35)
+![ZeroMunge-r35-downloads](https://img.shields.io/github/downloads/marth8880/ZeroMunge/r35/total.svg?maxAge=300)  
+[![ZeroMunge-r31-release](https://img.shields.io/badge/old%20release-r31-lightgrey.svg)](https://github.com/marth8880/ZeroMunge/releases/r31)
+![ZeroMunge-r31-downloads](https://img.shields.io/github/downloads/marth8880/ZeroMunge/r31/total.svg?maxAge=300)  
