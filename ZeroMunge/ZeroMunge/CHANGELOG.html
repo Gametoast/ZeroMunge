@@ -294,6 +294,34 @@ img {
 <h1>Changelog</h1>
 <p>All notable changes to Zero Munge will be documented in this file. Numbers enclosed in parentheses (#1) refer to <a href="https://github.com/marth8880/ZeroMunge/issues">GitHub issues</a>.</p>
 <p>The format is based on <a href="http://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>.</p>
+<h2>[v1.0.0-beta] - 2018-06-27</h2>
+<h3>Added</h3>
+<ul>
+<li>On application exit, the file list is automatically saved; with this functionality comes a user preference to disable it (#19)</li>
+<li>On application startup, the last-loaded file list is automatically loaded; with this functionality comes a user preference to disable it (#14)</li>
+<li>Buttons in the tray icon context menu to start and abort execution of the file list (#28)</li>
+<li>User preference to specify the Output Log's maximum line count (#26)</li>
+<li>Pre-exit prompt to save dirty file list if auto-save is disabled (#29)</li>
+<li>&quot;Open Recent&quot; sub-menu that lists the last 10 recently-opened files (#24)</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Vastly improved Output Log performance by having it only update once every N milliseconds, and added a user preference to specify N</li>
+<li>When a (checkbox) setting that is a dependent of other settings is unticked, those dependent settings are also unticked</li>
+<li>All log messages that refer to file paths and directories now wrap the paths in quotes</li>
+<li>In the About window, replaced the &quot;Frayed Wires Studios&quot; link with a link to open a dialog listing all of the third-party software that is used in Zero Munge (#30)</li>
+<li>Application DLLs are now stored in and loaded from <code>ZeroMunge\lib</code></li>
+<li>&quot;Report a Bug&quot; and &quot;Provide a Suggestion&quot; menu links now take the user to the correct issue template form for each </li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Exception thrown when application checks for updates while minimized</li>
+<li>When user starts a new file list out of the File menu, the file list's current contents aren't cleared (#20)</li>
+<li>Exception thrown when loading save file that contains empty file list (#22)</li>
+<li>Main window's title doesn't reflect the current file when a save file is opened (#27)</li>
+<li>File List isn't marked as dirty when rows are removed</li>
+<li>Various logic issues with save flow</li>
+</ul>
 <h2>[r146] - 2018-03-26</h2>
 <h3>Added</h3>
 <ul>

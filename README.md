@@ -26,13 +26,17 @@ Zero Munge includes the following features.
 - Auto-detect the munge.bat file inside a selected folder and add it to the file list
 - Add typical munge.bat files (common, sides, world, etc.) for an entire project to the file list
 - For each file, copy the associated LVL file(s) to another directory
-- Save and load different "presets" of the file list's contents
 - Ability to check for updates and point user to latest release's download page
+- Save and load different "presets" of the file list's contents
+- Automatically saves the file list on application exit
+- Automatically loads the last-saved file list on application startup
 
 ## Downloads
 
 [![ZeroMunge-latest-release](https://img.shields.io/github/release/marth8880/ZeroMunge.svg?label=latest%20release&maxAge=300)](https://github.com/marth8880/ZeroMunge/releases/latest)
 [![ZeroMunge-latest-downloads](https://img.shields.io/github/downloads/marth8880/ZeroMunge/latest/total.svg?maxAge=60)](https://github.com/marth8880/ZeroMunge/releases/latest)  
+[![ZeroMunge-r146-release](https://img.shields.io/badge/old%20release-r146-lightgrey.svg)](https://github.com/marth8880/ZeroMunge/releases/r146)
+![ZeroMunge-r146-downloads](https://img.shields.io/github/downloads/marth8880/ZeroMunge/r146/total.svg?maxAge=300)  
 [![ZeroMunge-r113-release](https://img.shields.io/badge/old%20release-r113-lightgrey.svg)](https://github.com/marth8880/ZeroMunge/releases/r113)
 ![ZeroMunge-r113-downloads](https://img.shields.io/github/downloads/marth8880/ZeroMunge/r113/total.svg?maxAge=300)  
 [![ZeroMunge-r89-release](https://img.shields.io/badge/old%20release-r89-lightgrey.svg)](https://github.com/marth8880/ZeroMunge/releases/r89)

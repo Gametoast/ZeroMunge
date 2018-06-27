@@ -4,6 +4,35 @@ All notable changes to Zero Munge will be documented in this file. Numbers enclo
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [v1.0.0-beta] - 2018-06-27
+
+### Added
+
+- On application exit, the file list is automatically saved; with this functionality comes a user preference to disable it (#19)
+- On application startup, the last-loaded file list is automatically loaded; with this functionality comes a user preference to disable it (#14)
+- Buttons in the tray icon context menu to start and abort execution of the file list (#28)
+- User preference to specify the Output Log's maximum line count (#26)
+- Pre-exit prompt to save dirty file list if auto-save is disabled (#29)
+- "Open Recent" sub-menu that lists the last 10 recently-opened files (#24)
+
+### Changed
+
+- Vastly improved Output Log performance by having it only update once every N milliseconds, and added a user preference to specify N
+- When a (checkbox) setting that is a dependent of other settings is unticked, those dependent settings are also unticked
+- All log messages that refer to file paths and directories now wrap the paths in quotes
+- In the About window, replaced the "Frayed Wires Studios" link with a link to open a dialog listing all of the third-party software that is used in Zero Munge (#30)
+- Application DLLs are now stored in and loaded from `ZeroMunge\lib`
+- "Report a Bug" and "Provide a Suggestion" menu links now take the user to the correct issue template form for each 
+
+### Fixed
+
+- Exception thrown when application checks for updates while minimized
+- When user starts a new file list out of the File menu, the file list's current contents aren't cleared (#20)
+- Exception thrown when loading save file that contains empty file list (#22)
+- Main window's title doesn't reflect the current file when a save file is opened (#27)
+- File List isn't marked as dirty when rows are removed
+- Various logic issues with save flow
+
 ## [r146] - 2018-03-26
 
 ### Added
