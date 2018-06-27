@@ -56,5 +56,8 @@
     <Setting Name="RecentFiles" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="Info_Version" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1.0.0-beta</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

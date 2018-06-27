@@ -23,9 +23,10 @@ namespace ZeroMunge
 			SetToolTips();
 
 			// Initialize build info text
+			string version = Properties.Settings.Default.Info_Version;
 			string buildNum = Properties.Settings.Default.Info_BuildNum.ToString();
 			string buildDate = Properties.Settings.Default.Info_BuildDate.ToString("yyyy-MM-dd");
-			lbl_BuildInfo.Text = "Revision " + buildNum + " — " + buildDate;
+			lbl_BuildInfo.Text = string.Format("Version {0}, revision {1} — {2}", version, buildNum, buildDate);
 
 			// Initialize license text
 			text_License.SelectedText = "BSD 3-Clause License" + "\n\n";

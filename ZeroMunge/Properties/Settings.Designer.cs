@@ -231,5 +231,17 @@ namespace ZeroMunge.Properties {
                 this["RecentFiles"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.0.0-beta")]
+        public string Info_Version {
+            get {
+                return ((string)(this["Info_Version"]));
+            }
+            set {
+                this["Info_Version"] = value;
+            }
+        }
     }
 }

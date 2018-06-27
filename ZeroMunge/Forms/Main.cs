@@ -206,7 +206,7 @@ namespace ZeroMunge
 				prefs.RecentFiles = new StringCollection();
 			}
 
-			Log(string.Format("Starting Zero Munge  r{0}--{1}", Properties.Settings.Default.Info_BuildNum.ToString(), Properties.Settings.Default.Info_BuildDate.ToString("yyyy-MM-dd")), LogType.Info);
+			Log(string.Format("Starting Zero Munge  v{0}, r{1} — {2}", Properties.Settings.Default.Info_Version, Properties.Settings.Default.Info_BuildNum.ToString(), Properties.Settings.Default.Info_BuildDate.ToString("yyyy-MM-dd")), LogType.Info);
 		}
 
 
@@ -230,8 +230,8 @@ namespace ZeroMunge
 						switch (updateInfo.CheckResult)
 						{
 							case Utilities.UpdateResult.Available:
-								string latestVer = string.Format("r{0}--{1}", updateInfo.LatestVersionInfo.BuildNum.ToString(), updateInfo.LatestVersionInfo.BuildDate);
-								string currentVer = string.Format("r{0}--{1}", Properties.Settings.Default.Info_BuildNum.ToString(), Properties.Settings.Default.Info_BuildDate.ToString("yyyy-MM-dd"));
+								string latestVer = string.Format("v{0}, r{1} — {2}", updateInfo.LatestVersionInfo.Version, updateInfo.LatestVersionInfo.BuildNum.ToString(), updateInfo.LatestVersionInfo.BuildDate);
+								string currentVer = string.Format("v{0}, r{1} — {2}", Properties.Settings.Default.Info_Version, Properties.Settings.Default.Info_BuildNum.ToString(), Properties.Settings.Default.Info_BuildDate.ToString("yyyy-MM-dd"));
 								string releaseNotes = updateInfo.LatestVersionInfo.ReleaseNotes.Replace("\n", "\n\t\t");
 
 								string logMessage = string.Concat("Application update is available!", "\n\t",

@@ -877,6 +877,10 @@ namespace ZeroMunge
 			{
 				Debug.WriteLine("Key, Value:    {0}, {1}", pair.Key, pair.Value);
 
+				if ((string)pair.Key == "Version")
+				{
+					info.Version = pair.Value.ToString();
+				}
 				if ((string)pair.Key == "BuildNum")
 				{
 					info.BuildNum = Convert.ToInt32(pair.Value);
@@ -1130,6 +1134,7 @@ namespace ZeroMunge
 
 	public class VersionInfo
 	{
+		public string Version { get; set; }
 		public int BuildNum { get; set; }
 		public string BuildDate { get; set; }
 		public string DownloadUrl { get; set; }
