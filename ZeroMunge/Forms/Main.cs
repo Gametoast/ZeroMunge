@@ -31,7 +31,7 @@ namespace ZeroMunge
 			Debug,
 			DebugClearSettings,
 			Release
-		};
+		}
 
 		// Is this a debug build?
 		public BuildType BUILD_TYPE;
@@ -90,7 +90,7 @@ namespace ZeroMunge
 		{
 			Button,     // Buttons outside the DataGridView
 			Cell        // Cells inside the DataGridView
-		};
+		}
 
 
 		// Updates
@@ -404,7 +404,6 @@ namespace ZeroMunge
 					}
 				}
 			}
-			
 		}
 
 
@@ -1114,7 +1113,7 @@ namespace ZeroMunge
 			Update,
 			Warning,
 			Error
-		};
+		}
 
 		// This method is executed on the worker thread and makes a thread-safe call on the RichTextBox control.
 		/// <summary>
@@ -1909,6 +1908,8 @@ namespace ZeroMunge
 				fs.Close();
 			}
 
+			Trace.WriteLineIf(data.DataRows == null, string.Format("WARNING: No data was found in the file: \"{0}\"", filePath));
+
 			return data;
 		}
 
@@ -1968,9 +1969,18 @@ namespace ZeroMunge
 		/// </summary>
 		/// <param name="data">DataFilesContainer object containing the data to load into the file list.</param>
 		/// <param name="replaceCurrentContents">Whether or not to clear the contents of the file list before loading the new data into it. Default = true</param>
-		public void LoadDataIntoFileList(DataFilesContainer data, string filePath, bool replaceCurrentContents = true)
+		public bool LoadDataIntoFileList(DataFilesContainer data, string filePath, bool replaceCurrentContents = true)
 		{
 			//int numRowsAdded = 0;	// shouldn't be needed
+
+			if (data.DataRows == null)
+			{
+				var msg = string.Format("No data was found in the file: \"{0}\"", filePath);
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+
+				return false;
+			}
 
 			// Clear the contents of the file list if specified
 			if (replaceCurrentContents)
@@ -2025,6 +2035,8 @@ namespace ZeroMunge
 			UpdateCurFileListInfo(filePath);
 			FileListIsDirty(false);
 			UpdateWindowTitle();
+
+			return true;
 		}
 
 
@@ -2059,10 +2071,6 @@ namespace ZeroMunge
 		private void FileListIsDirty(bool dirty)
 		{
 			Debug.WriteLine("File list is dirty: " + dirty);
-			if (dirty)
-			{
-
-			}
 
 			isFileListDirty = dirty;
 		}
@@ -2098,7 +2106,7 @@ namespace ZeroMunge
 		/// <summary>
 		/// Update the current file list's save file path and name.
 		/// </summary>
-		/// <param name="filePath"></param>
+		/// <param name="filePath">New file path to save.</param>
 		private void UpdateCurFileListInfo(string filePath)
 		{
 			curFileListPath = filePath;
@@ -2107,6 +2115,9 @@ namespace ZeroMunge
 		}
 
 
+		/// <summary>
+		/// Resets the current file list path and name.
+		/// </summary>
 		private void ResetCurFileListInfo()
 		{
 			curFileListPath = "null";
@@ -2150,176 +2161,167 @@ namespace ZeroMunge
 		// 
 		private void ZeroMunge_KeyDown(object sender, KeyEventArgs e)
 		{
-			// When the key combination is Shift + F5:
-			// Stop processing files in the file list.
+			// When the modifier key is Shift:
 			if ((ModifierKeys & Keys.Shift) == Keys.Shift)
 			{
-				if (e.KeyCode == Keys.F5)
+				switch (e.KeyCode)
 				{
-					Debug.WriteLine("Shift + F5 was pressed");
+					// Stop processing files in the file list.
+					case Keys.F5:
+						Debug.WriteLine("Shift + F5 was pressed");
 
-					if (ProcManager_isRunning)
-					{
-						ProcManager_Abort();
-					}
+						if (ProcManager_isRunning)
+						{
+							ProcManager_Abort();
+						}
 
-					e.Handled = true;
+						e.Handled = true;
+						break;
 				}
 			}
 
 			// When the modifier key is Ctrl:
 			if ((ModifierKeys & Keys.Control) == Keys.Control)
 			{
-				// And the action key is N:
-				// Run the New command.
-				if (e.KeyCode == Keys.N)
+				switch (e.KeyCode)
 				{
-					Debug.WriteLine("Ctrl + N was pressed");
+					// Run the New command.
+					case Keys.N:
+						Debug.WriteLine("Ctrl + N was pressed");
 
-					if (!ProcManager_isRunning)
-					{
-						Command_New();
-					}
-
-					e.Handled = true;
-				}
-
-				// And the action key is O:
-				// Run the Open command.
-				if (e.KeyCode == Keys.O)
-				{
-					Debug.WriteLine("Ctrl + O was pressed");
-
-					if (!ProcManager_isRunning)
-					{
-						Command_Open();
-					}
-
-					e.Handled = true;
-				}
-
-				// And the action key is S:
-				// Run the Save command.
-				if (e.KeyCode == Keys.S)
-				{
-					Debug.WriteLine("Ctrl + S was pressed");
-
-					if (!ProcManager_isRunning)
-					{
-						if (!IsFileListEmpty())
+						if (!ProcManager_isRunning)
 						{
-							Command_Save();
+							Command_New();
 						}
-						else
+
+						e.Handled = true;
+						break;
+
+					// Run the Open command.
+					case Keys.O:
+						Debug.WriteLine("Ctrl + O was pressed");
+
+						if (!ProcManager_isRunning)
 						{
-							var message = "Cannot save empty file list!";
-							Trace.WriteLine(message);
-							Log(message, LogType.Error);
+							Command_Open();
 						}
-					}
 
-					e.Handled = true;
-				}
+						e.Handled = true;
+						break;
 
-				// And the action key is Q:
-				// Exit the application.
-				if (e.KeyCode == Keys.Q)
-				{
-					Debug.WriteLine("Ctrl + Q was pressed");
+					// Run the Save command.
+					case Keys.S:
+						Debug.WriteLine("Ctrl + S was pressed");
 
-					if (!ProcManager_isRunning)
-					{
-						Command_Quit();
-					}
-
-					e.Handled = true;
-				}
-
-				// And the action key is P:
-				// Open the Preferences window.
-				if (e.KeyCode == Keys.P)
-				{
-					Debug.WriteLine("Ctrl + P was pressed");
-
-					if (!ProcManager_isRunning)
-					{
-						OpenWindow_Preferences();
-					}
-
-					e.Handled = true;
-				}
-			}
-
-			// When the key combination is F1:
-			// Open the Help window.
-			if (e.KeyCode == Keys.F1)
-			{
-				if ((ModifierKeys & Keys.Shift) == Keys.Shift) { return; }
-
-				Debug.WriteLine("F1 was pressed");
-
-				if (!ProcManager_isRunning)
-				{
-					OpenWindow_Help();
-				}
-
-				e.Handled = true;
-			}
-
-			// When the key combination is F5:
-			// Start processing files in the file list.
-			if (e.KeyCode == Keys.F5)
-			{
-				if ((ModifierKeys & Keys.Shift) == Keys.Shift) { return; }
-
-				Debug.WriteLine("F5 was pressed");
-
-				if (!ProcManager_isRunning)
-				{
-					ProcManager_Start();
-				}
-
-				e.Handled = true;
-			}
-
-			// When the key combination is F12:
-			// Open the About window.
-			if (e.KeyCode == Keys.F12)
-			{
-				if ((ModifierKeys & Keys.Shift) == Keys.Shift) { return; }
-
-				Debug.WriteLine("F12 was pressed");
-
-				if (!ProcManager_isRunning)
-				{
-					OpenWindow_About();
-				}
-
-				e.Handled = true;
-			}
-
-			// When the key combination is Delete:
-			// Clear the contents of the currently selected cell in the file list.
-			if (e.KeyCode == Keys.Delete)
-			{
-				Debug.WriteLine("Delete was pressed");
-
-				if (!ProcManager_isRunning)
-				{
-					foreach (DataGridViewCell cell in data_Files.SelectedCells)
-					{
-						// Determine the cell type
-						if (cell is DataGridViewTextBoxCell)
+						if (!ProcManager_isRunning)
 						{
-							if (cell.Value != null)
+							if (!IsFileListEmpty())
 							{
-								cell.Value = "";
+								Command_Save();
+							}
+							else
+							{
+								var message = "Cannot save empty file list!";
+								Trace.WriteLine(message);
+								Log(message, LogType.Error);
+							}
+						}
+
+						e.Handled = true;
+						break;
+
+					// Exit the application.
+					case Keys.Q:
+						Debug.WriteLine("Ctrl + Q was pressed");
+
+						if (!ProcManager_isRunning)
+						{
+							Command_Quit();
+						}
+
+						e.Handled = true;
+						break;
+
+					// Open the Preferences window.
+					case Keys.P:
+						Debug.WriteLine("Ctrl + P was pressed");
+
+						if (!ProcManager_isRunning)
+						{
+							OpenWindow_Preferences();
+						}
+
+						e.Handled = true;
+						break;
+				}
+			}
+
+			// If no modifier keys were pressed:
+			switch (e.KeyCode)
+			{
+				// Open the Help window.
+				case Keys.F1:
+					if ((ModifierKeys & Keys.Shift) == Keys.Shift) { return; }
+
+					Debug.WriteLine("F1 was pressed");
+
+					if (!ProcManager_isRunning)
+					{
+						OpenWindow_Help();
+					}
+
+					e.Handled = true;
+					break;
+
+				// Start processing files in the file list.
+				case Keys.F5:
+					if ((ModifierKeys & Keys.Shift) == Keys.Shift) { return; }
+
+					Debug.WriteLine("F5 was pressed");
+
+					if (!ProcManager_isRunning)
+					{
+						ProcManager_Start();
+					}
+
+					e.Handled = true;
+					break;
+
+				// Open the About window.
+				case Keys.F12:
+					if ((ModifierKeys & Keys.Shift) == Keys.Shift) { return; }
+
+					Debug.WriteLine("F12 was pressed");
+
+					if (!ProcManager_isRunning)
+					{
+						OpenWindow_About();
+					}
+
+					e.Handled = true;
+					break;
+
+				// Clear the contents of the currently selected cells in the file list.
+				case Keys.Delete:
+					Debug.WriteLine("Delete was pressed");
+
+					if (!ProcManager_isRunning)
+					{
+						foreach (DataGridViewCell cell in data_Files.SelectedCells)
+						{
+							// Determine the cell type
+							if (cell is DataGridViewTextBoxCell)
+							{
+								if (cell.Value != null)
+								{
+									cell.Value = "";
+								}
 							}
 						}
 					}
-				}
 
-				e.Handled = true;
+					e.Handled = true;
+					break;
 			}
 		}
 
@@ -2415,7 +2417,10 @@ namespace ZeroMunge
 					}
 				}
 			}
-			catch (ArgumentOutOfRangeException) { }
+			catch (ArgumentOutOfRangeException ex)
+			{
+				Trace.WriteLine(ex.Message);
+			}
 
 			// Do stuff if the clicked cell's type was Button
 			if (cellType == "Button" && e.RowIndex != -1)
@@ -3605,6 +3610,11 @@ namespace ZeroMunge
 		}
 
 
+		/// <summary>
+		/// Open the save file at the specified path.
+		/// </summary>
+		/// <param name="filePath">Path of file to open.</param>
+		/// <returns>True, successfully opened file; false, failed to open file.</returns>
 		public bool OpenFileListFile(string filePath)
 		{
 			// Has a file name been entered?
@@ -3616,6 +3626,14 @@ namespace ZeroMunge
 					openFileListLastDir = Utilities.GetFileDirectory(filePath);
 
 					DataFilesContainer data = DeserializeData(filePath);
+					if (data.DataRows == null)
+					{
+						var msg = string.Format("No data was found; failed to load the file: \"{0}\"", filePath);
+						Trace.WriteLine(msg);
+						Log(msg, LogType.Error, true);
+
+						return false;
+					}
 					LoadDataIntoFileList(data, filePath);
 
 					prefs.LastSaveFilePath = filePath;
