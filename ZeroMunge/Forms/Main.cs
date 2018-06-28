@@ -392,7 +392,7 @@ namespace ZeroMunge
 					trayIcon.Dispose();
 				}
 
-				if (updateCheckThread.ThreadState == System.Threading.ThreadState.Running)
+				if (updateCheckThread != null && updateCheckThread.ThreadState == System.Threading.ThreadState.Running)
 				{
 					try
 					{
@@ -400,7 +400,7 @@ namespace ZeroMunge
 					}
 					catch (ThreadStateException ex)
 					{
-						Trace.WriteLine(ex);
+						Trace.WriteLine(ex.Message);
 					}
 				}
 			}
