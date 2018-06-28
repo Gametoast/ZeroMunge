@@ -744,6 +744,8 @@ namespace ZeroMunge
 		{
 			string json;
 
+			ZeroMunge mainForm = sender as ZeroMunge;
+
 			try
 			{
 				json = new WebClient().DownloadString(url);
@@ -752,8 +754,6 @@ namespace ZeroMunge
 			{
 				var message = "Failed to retrieve update payload. Reason: " + e.Message;
 				Trace.WriteLine(message);
-
-				ZeroMunge mainForm = sender as ZeroMunge;
 				if (mainForm != null)
 				{
 					mainForm.Log(message, ZeroMunge.LogType.Error);
@@ -762,55 +762,87 @@ namespace ZeroMunge
 				return null;
 			}
 
-			return ParseJsonStrings(json);
+			return ParseJsonStrings(mainForm, json);
 		}
 
 
-		public static List<JsonPair> ParseJsonStrings(string unparsedJson)
+		public static List<JsonPair> ParseJsonStrings(Form sender, string unparsedJson)
 		{
 			List<JsonPair> parsedJson = new List<JsonPair>();
 			JsonPair curPair = new JsonPair();
 			int curStep = 0;
 
-			JsonTextReader reader = new JsonTextReader(new StringReader(unparsedJson));
-			while (reader.Read())
+			ZeroMunge mainForm = sender as ZeroMunge;
+
+			try
 			{
-				if (reader.Value != null)
+				JsonTextReader reader = new JsonTextReader(new StringReader(unparsedJson));
+				while (reader.Read())
 				{
-					Debug.WriteLine("ParseJsonStrings - Value: " + reader.Value);
-
-					// Determine if this is a key or value
-					switch (reader.TokenType)
+					if (reader.Value != null)
 					{
-						case JsonToken.PropertyName:
-							curStep = 0;
-							break;
-						case JsonToken.String:
-							curStep = 1;
-							break;
-						case JsonToken.Integer:
-							curStep = 1;
-							break;
-					}
+						Debug.WriteLine("ParseJsonStrings - Value: " + reader.Value);
 
-					// Create a new JsonPair if this is a key
-					if (curStep == 0)
-					{
-						curPair = new JsonPair();
-					}
+						// Determine if this is a key or value
+						switch (reader.TokenType)
+						{
+							case JsonToken.PropertyName:
+								curStep = 0;
+								break;
+							case JsonToken.String:
+								curStep = 1;
+								break;
+							case JsonToken.Integer:
+								curStep = 1;
+								break;
+						}
 
-					// Store the key or value in the current JsonPair
-					switch (curStep)
-					{
-						case 0:
-							curPair.Key = reader.Value;
-							break;
-						case 1:
-							curPair.Value = reader.Value;
-							if (curPair.Key != null)
-								parsedJson.Add(curPair);
-							break;
+						// Create a new JsonPair if this is a key
+						if (curStep == 0)
+						{
+							curPair = new JsonPair();
+						}
+
+						// Store the key or value in the current JsonPair
+						switch (curStep)
+						{
+							case 0:
+								curPair.Key = reader.Value;
+								break;
+							case 1:
+								curPair.Value = reader.Value;
+								if (curPair.Key != null)
+									parsedJson.Add(curPair);
+								break;
+						}
 					}
+				}
+			}
+			catch (ArgumentNullException ex)
+			{
+				var msg = "ArgumentNullException when trying to parse json. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				if (mainForm != null)
+				{
+					mainForm.Log(msg, ZeroMunge.LogType.Error);
+				}
+			}
+			catch (NullReferenceException ex)
+			{
+				var msg = "NullReferenceException when trying to parse json. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				if (mainForm != null)
+				{
+					mainForm.Log(msg, ZeroMunge.LogType.Error);
+				}
+			}
+			catch (JsonReaderException ex)
+			{
+				var msg = "JsonReaderException when trying to parse json. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				if (mainForm != null)
+				{
+					mainForm.Log(msg, ZeroMunge.LogType.Error);
 				}
 			}
 
