@@ -55,14 +55,14 @@ Alternatively, you can click the 'Add Folders' button to select folders containi
 Examples of munge.bat scripts:
 
 - REP side: `data_***\_BUILD\Sides\REP\munge.bat`
-- * Your world: `data_***\_BUILD\Worlds\***\munge.bat` (see note below)
+- ** Your world: `data_***\_BUILD\Worlds\***\munge.bat` (see note below)
 - Common: `data_***\_BUILD\Common\munge.bat`
 - Addme script: `data_***\addme\mungeAddme.bat`
-- ** Sounds: `data_***\_BUILD\Sound\munge.bat` (see note below)
+- *** Sounds: `data_***\_BUILD\Sound\munge.bat` (see note below)
 
-* Note: You will probably have to manually edit your world's munge.bat script in order to munge it. All you have to do is open the script in a text editor like Notepad and change `YAV` to your world's map ID (e.g. `ABC`).
+** Note: You will probably have to manually edit your world's munge.bat script in order to munge it. All you have to do is open the script in a text editor like Notepad and change `YAV` to your world's map ID (e.g. `ABC`).
 
-** Note: By default, the sound munge.bat script munges all sound folders specified in `data_***\soundmunge.bat`. Also by default, Zero Munge doesn't automatically detect the outputted LVL files for sound munging, but optionally you can manually edit the Munged Files field for the sound munge.bat file to list the sound LVLs.
+*** Note: By default, the sound munge.bat script munges all sound folders specified in `data_***\soundmunge.bat`. Also by default, Zero Munge doesn't automatically detect the outputted LVL files for sound munging, but optionally you can manually edit the Munged Files field for the sound munge.bat file to list the sound LVLs.
 
 ### Quickly adding typical munge.bat scripts to the File List
 
