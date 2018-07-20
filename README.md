@@ -41,7 +41,7 @@ The first thing you need to understand is that VisualMunge does not munge things
 2. VisualMunge sequentially executes the munge.bat scripts for each item that the user selected.
 3. Each munge.bat script calls the appropriate compiler executables out of `BF2_ModTools\ToolsFL` (like `scriptmunge.exe` for Lua scripts or `texturemunge.exe` for TGA textures) to convert the raw assets into compiled files, which are put in the appropriate munge directory (like `data_***\_BUILD\Sides\REP\Munged\PC`). In most cases, the munge.bat script then calls `levelpack.exe`, which packs those compiled files into a single LVL file that is able to be read by the game.
 
-At its core, Zero Munge essentially does the same thing that VisualMunge does - except you're given far more control over what they want to munge. How so? You're able to specify all the individual munge.bat scripts to execute, and optionally Zero Munge will also copy over the LVL file(s) associated with each munge.bat script to the correct folder in your project's addon directory.
+At its core, Zero Munge essentially does the same thing that VisualMunge does - except you're given far more control over what you want to munge. How so? You're able to specify all the individual munge.bat scripts to execute, and optionally Zero Munge will also copy over the LVL file(s) associated with each munge.bat script to the correct folder in your project's addon directory.
 
 ### Alright, so how do I use it?
 
