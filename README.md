@@ -31,6 +31,57 @@ Zero Munge includes the following features.
 - Automatically saves the file list on application exit
 - Automatically loads the last-saved file list on application startup
 
+## How to use it
+
+### Preamble: Understanding the munge process
+
+The first thing you need to understand is that VisualMunge does not munge things, it executes batch scripts that execute the necessary logic to turn raw assets into LVL files. The flow of how it works is this: 
+
+1. In VisualMunge, the user selects what should be munged (sides/worlds/etc.). The user then clicks 'Munge'.
+2. VisualMunge sequentially executes the munge.bat scripts for each item that the user selected.
+3. Each munge.bat script calls the appropriate compiler executables out of `BF2_ModTools\ToolsFL` (like `scriptmunge.exe` for Lua scripts or `texturemunge.exe` for TGA textures) to convert the raw assets into compiled files, which are put in the appropriate munge directory (like `data_***\_BUILD\Sides\REP\Munged\PC`). In most cases, the munge.bat script then calls `levelpack.exe`, which packs those compiled files into a single LVL file that is able to be read by the game.
+
+At its core, Zero Munge essentially does the same thing that VisualMunge does - except you're given far more control over what they want to munge. How so? You're able to specify all the individual munge.bat scripts to execute, and optionally Zero Munge will also copy over the LVL file(s) associated with each munge.bat script to the correct folder in your project's addon directory.
+
+### Alright, so how do I use it?
+
+Using Zero Munge is fairly easy - to munge something, all you do is add the desired munge.bat scripts to the File List and press 'Run':
+
+1. Click 'Add Files' button to browse for and add munge.bat scripts to the File List.
+2. Click 'Run' button to have Zero Munge sequentially execute each file in the File List and optionally copy the associated LVL files to your project's addon directory.
+
+Alternatively, you can click the 'Add Folders' button to select folders containing munge.bat scripts to add. For example, if you wanted to add the munge.bat scripts for the CIS and REP sides in one action, you'd click 'Add Folders', browse to `data_***\_BUILD\Sides`, select the CIS and REP folders, and click 'Open' - the munge.bat scripts for the CIS and REP sides would then be added to the File List.
+
+Examples of munge.bat scripts:
+
+- REP side: `data_***\_BUILD\Sides\REP\munge.bat`
+- * Your world: `data_***\_BUILD\Worlds\***\munge.bat` (see note below)
+- Common: `data_***\_BUILD\Common\munge.bat`
+- Addme script: `data_***\addme\mungeAddme.bat`
+- ** Sounds: `data_***\_BUILD\Sound\munge.bat` (see note below)
+
+* Note: You will probably have to manually edit your world's munge.bat script in order to munge it. All you have to do is open the script in a text editor like Notepad and change `YAV` to your world's map ID (e.g. `ABC`).
+
+** Note: By default, the sound munge.bat script munges all sound folders specified in `data_***\soundmunge.bat`. Also by default, Zero Munge doesn't automatically detect the outputted LVL files for sound munging, but optionally you can manually edit the Munged Files field for the sound munge.bat file to list the sound LVLs.
+
+### Quickly adding typical munge.bat scripts to the File List
+
+Yes there is! You can click the 'Add Project' button, which will prompt you to select a project directory (e.g. `BF2_ModTools\data_***`) whose typical munge.bat files should be added to the File List. The following files, if found, will be added:
+
+- Common: `data_***\_BUILD\Common\munge.bat`  
+- ALL side: `data_***\_BUILD\Sides\ALL\munge.bat`
+- CIS side: `data_***\_BUILD\Sides\CIS\munge.bat`
+- IMP side: `data_***\_BUILD\Sides\IMP\munge.bat`
+- REP side: `data_***\_BUILD\Sides\REP\munge.bat`
+- TUR side: `data_***\_BUILD\Sides\TUR\munge.bat`
+- Your world (based on `***` in `data_***`): `data_***\_BUILD\World\***\munge.bat`
+- Addme: `data_***\addme\mungeAddme.bat`
+
+### Further notes
+
+- If you don't want a file to be executed when you click 'Run', uncheck the 'Process' field in that file's row.
+- If you don't want a file's LVL file(s) to be automatically copied over after the file is executed, uncheck the 'Copy' field in that file's row.
+
 ## Downloads
 
 [![ZeroMunge-latest-release](https://img.shields.io/github/release/marth8880/ZeroMunge.svg?label=latest%20release&maxAge=300)](https://github.com/marth8880/ZeroMunge/releases/latest)
