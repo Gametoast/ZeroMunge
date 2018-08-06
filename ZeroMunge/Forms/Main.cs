@@ -37,6 +37,8 @@ namespace ZeroMunge
 		public BuildType BUILD_TYPE;
 
 
+		#region Constants
+		
 		// Web links
 		public const string LINK_GH_OPENISSUES = "https://github.com/marth8880/ZeroMunge/issues";
 		public const string LINK_GH_BUGS = "https://github.com/marth8880/ZeroMunge/issues/new?template=bug_report.md";
@@ -45,16 +47,11 @@ namespace ZeroMunge
 		public const string LINK_EMAIL = "mailto:marth8880@gmail.com";
 		public const string LINK_WEBSITE = "https://www.frayedwiresstudios.com/";
 		public const string LINK_PROJECT = "https://github.com/marth8880/ZeroMunge";
-
-
-		// Message requesting the user to report a problem, if found
-		public string MSG_REPORT_PROBLEM = string.Concat("\n\n\t", "Please report this problem here: ", LINK_GH_OPENISSUES, "\n\n",
-						"\t", "Be sure to include:", "\n",
-						"\t\t", "1. The log file, which can be saved with the 'Save Log As...' button.", "\n",
-						"\t\t", "2. A short summary of what you were doing when this problem occurred.", "\n",
-						"\t\t", "3. Steps to reproduce this issue, if possible.", "\n\n",
-						"Thanks!", "\n\n");
-
+		
+		// Recent files list
+		public const int RECENT_FILES_MAX = 10;
+		
+		#region Constants : data_Files
 
 		// data_Files : Column names
 		public const string STR_DATA_FILES_CHK_ENABLED = "col_Enabled";
@@ -81,7 +78,14 @@ namespace ZeroMunge
 		public const int INT_DATA_FILES_BTN_MUNGED_FILES_EDIT = 8;
 		public const int INT_DATA_FILES_CHK_IS_MUNGE_SCRIPT = 9;
 		public const int INT_DATA_FILES_CHK_IS_VALID = 10;
-		
+
+		#endregion Constants : data_Files
+
+		#endregion Constants
+
+
+		#region Fields
+
 		// data_Files : Cell error color
 		public Color errorRed = Color.FromArgb(251, 99, 99);
 
@@ -93,18 +97,30 @@ namespace ZeroMunge
 		}
 
 
+		// Message requesting the user to report a problem, if found
+		public string MSG_REPORT_PROBLEM = string.Concat("\n\n\t", "Please report this problem here: ", LINK_GH_OPENISSUES, "\n\n",
+						"\t", "Be sure to include:", "\n",
+						"\t\t", "1. The log file, which can be saved with the 'Save Log As...' button.", "\n",
+						"\t\t", "2. A short summary of what you were doing when this problem occurred.", "\n",
+						"\t\t", "3. Steps to reproduce this issue, if possible.", "\n\n",
+						"Thanks!", "\n\n");
+
+
 		// Updates
 		public static VersionInfo latestAppVersion = new VersionInfo();
 		public static bool updateAvailable = false;
-
+		public Thread updateCheckThread;
 
 		// User exit flow
 		public bool inExitFlow = false;
-
-
+		
 		// Recent files list
-		public const int RECENT_FILES_MAX = 10;
 		public List<string> recentFiles = new List<string>(RECENT_FILES_MAX);
+
+		// User preferences
+		public Prefs prefs = new Prefs();
+
+		#endregion Fields
 
 
 		// This is the very first method called by the application. It initializes the UI controls and loads user settings.
@@ -133,8 +149,8 @@ namespace ZeroMunge
 			LoadSettings();
 		}
 
-		public Prefs prefs = new Prefs();
 
+		#region Main Window
 
 		// When the ZeroMunge form is finished loading:
 		// Create the tray icon, initialize some stuff with the file list, and start a new output log.
@@ -210,8 +226,8 @@ namespace ZeroMunge
 		}
 
 
-		public Thread updateCheckThread;
-
+		// When the form is first shown: 
+		// Check for updates, set the game path, and auto-load the last save file.
 		private void ZeroMunge_Shown(object sender, EventArgs e)
 		{
 			// Check for application updates
@@ -302,6 +318,30 @@ namespace ZeroMunge
 
 					OpenFileListFile(prefs.LastSaveFilePath);
 				}
+			}
+		}
+
+
+		// Set the initial state of the window
+		FormWindowState lastWindowState = FormWindowState.Minimized;
+		FormWindowState lastWindowSize = FormWindowState.Normal;
+
+		// When the user resizes the window by dragging the handles, maximizing, restoring, or minimizing:
+		// Store the WindowState for future reference when the user double-clicks the trayIcon.
+		private void ZeroMunge_Resize(object sender, EventArgs e)
+		{
+			Debug.WriteLine("WindowState changed");
+			lastWindowState = WindowState;
+
+			if (WindowState == FormWindowState.Maximized)
+			{
+				Debug.WriteLine("WindowState: Maximized");
+				lastWindowSize = FormWindowState.Maximized;
+			}
+			if (WindowState == FormWindowState.Normal)
+			{
+				Debug.WriteLine("WindowState: Normal");
+				lastWindowSize = FormWindowState.Normal;
 			}
 		}
 
@@ -407,6 +447,178 @@ namespace ZeroMunge
 		}
 
 
+		// When the user presses a key:
+		// Execute conditional logic based on the key combination that was pressed.
+		private void ZeroMunge_KeyDown(object sender, KeyEventArgs e)
+		{
+			// When the modifier key is Shift:
+			if ((ModifierKeys & Keys.Shift) == Keys.Shift)
+			{
+				switch (e.KeyCode)
+				{
+					// Stop processing files in the file list.
+					case Keys.F5:
+						Debug.WriteLine("Shift + F5 was pressed");
+
+						if (ProcManager_isRunning)
+						{
+							ProcManager_Abort();
+						}
+
+						e.Handled = true;
+						break;
+				}
+			}
+
+			// When the modifier key is Ctrl:
+			if ((ModifierKeys & Keys.Control) == Keys.Control)
+			{
+				switch (e.KeyCode)
+				{
+					// Run the New command.
+					case Keys.N:
+						Debug.WriteLine("Ctrl + N was pressed");
+
+						if (!ProcManager_isRunning)
+						{
+							Command_New();
+						}
+
+						e.Handled = true;
+						break;
+
+					// Run the Open command.
+					case Keys.O:
+						Debug.WriteLine("Ctrl + O was pressed");
+
+						if (!ProcManager_isRunning)
+						{
+							Command_Open();
+						}
+
+						e.Handled = true;
+						break;
+
+					// Run the Save command.
+					case Keys.S:
+						Debug.WriteLine("Ctrl + S was pressed");
+
+						if (!ProcManager_isRunning)
+						{
+							if (!IsFileListEmpty())
+							{
+								Command_Save();
+							}
+							else
+							{
+								var message = "Cannot save empty file list!";
+								Trace.WriteLine(message);
+								Log(message, LogType.Error);
+							}
+						}
+
+						e.Handled = true;
+						break;
+
+					// Exit the application.
+					case Keys.Q:
+						Debug.WriteLine("Ctrl + Q was pressed");
+
+						if (!ProcManager_isRunning)
+						{
+							Command_Quit();
+						}
+
+						e.Handled = true;
+						break;
+
+					// Open the Preferences window.
+					case Keys.P:
+						Debug.WriteLine("Ctrl + P was pressed");
+
+						if (!ProcManager_isRunning)
+						{
+							OpenWindow_Preferences();
+						}
+
+						e.Handled = true;
+						break;
+				}
+			}
+
+			// If no modifier keys were pressed:
+			switch (e.KeyCode)
+			{
+				// Open the Help window.
+				case Keys.F1:
+					if ((ModifierKeys & Keys.Shift) == Keys.Shift) { return; }
+
+					Debug.WriteLine("F1 was pressed");
+
+					if (!ProcManager_isRunning)
+					{
+						OpenWindow_Help();
+					}
+
+					e.Handled = true;
+					break;
+
+				// Start processing files in the file list.
+				case Keys.F5:
+					if ((ModifierKeys & Keys.Shift) == Keys.Shift) { return; }
+
+					Debug.WriteLine("F5 was pressed");
+
+					if (!ProcManager_isRunning)
+					{
+						ProcManager_Start();
+					}
+
+					e.Handled = true;
+					break;
+
+				// Open the About window.
+				case Keys.F12:
+					if ((ModifierKeys & Keys.Shift) == Keys.Shift) { return; }
+
+					Debug.WriteLine("F12 was pressed");
+
+					if (!ProcManager_isRunning)
+					{
+						OpenWindow_About();
+					}
+
+					e.Handled = true;
+					break;
+
+				// Clear the contents of the currently selected cells in the file list.
+				case Keys.Delete:
+					Debug.WriteLine("Delete was pressed");
+
+					if (!ProcManager_isRunning)
+					{
+						foreach (DataGridViewCell cell in data_Files.SelectedCells)
+						{
+							// Determine the cell type
+							if (cell is DataGridViewTextBoxCell)
+							{
+								if (cell.Value != null)
+								{
+									cell.Value = "";
+								}
+							}
+						}
+					}
+
+					e.Handled = true;
+					break;
+			}
+		}
+
+
+		/// <summary>
+		/// Sets tooltips for all form controls
+		/// </summary>
 		private void SetToolTips()
 		{
 			// File Menu
@@ -467,13 +679,32 @@ namespace ZeroMunge
 		}
 
 
-		public void SetUpdateStatusBar(bool available)
+		/// <summary>
+		/// Updates the form's title with the file list's dirty state and the name of the file list's current save file.
+		/// </summary>
+		private void UpdateWindowTitle()
 		{
-			this.SetUpdateStatusBar(available, null);
-		}
-		public void SetUpdateStatusBar(bool available, string downloadUrl)
-		{
-			// do stuff
+			string baseName = "Zero Munge";
+			string fullName;
+
+			if (curFileListName == "null")
+			{
+				fullName = baseName;
+			}
+			else
+			{
+				if (isFileListDirty)
+				{
+					fullName = string.Format("{0} - * {1}", baseName, curFileListName);
+				}
+				else
+				{
+					fullName = string.Format("{0} - {1}", baseName, curFileListName);
+				}
+			}
+
+			this.Text = fullName;
+			this.Update();
 		}
 
 
@@ -504,6 +735,24 @@ namespace ZeroMunge
 			Log(result, logType);
 		}
 
+
+		/// <summary>
+		/// TODO
+		/// </summary>
+		/// <param name="available"></param>
+		public void SetUpdateStatusBar(bool available)
+		{
+			this.SetUpdateStatusBar(available, null);
+		}
+		public void SetUpdateStatusBar(bool available, string downloadUrl)
+		{
+			// do stuff
+		}
+
+		#endregion Main Window
+
+
+		#region OpenWindow
 
 		/// <summary>
 		/// Starts the update flow (duh).
@@ -563,7 +812,11 @@ namespace ZeroMunge
 			aboutForm.ShowDialog();
 		}
 
-		
+		#endregion OpenWindow
+
+
+		#region Commands
+
 		/// <summary>
 		/// Clear the file list and start a new save file
 		/// </summary>
@@ -661,7 +914,10 @@ namespace ZeroMunge
 			}
 		}
 
+		#endregion Commands
 
+
+		#region Process Manager
 
 		// ***************************
 		// ** PROCESS MANAGER
@@ -1100,10 +1356,16 @@ namespace ZeroMunge
 			soundThread.Start();
 		}
 
+		#endregion Process Manager
+
+
+		#region Output Log
 
 		// ***************************
 		// ** OUTPUT LOG
 		// ***************************
+
+		#region Output Log : Fields
 
 		public enum LogType
 		{
@@ -1113,11 +1375,20 @@ namespace ZeroMunge
 			Update,
 			Warning,
 			Error
-		}
+		};
 
-		// This method is executed on the worker thread and makes a thread-safe call on the RichTextBox control.
+		List<string> logLineCollection = new List<string>();
+		bool notifyLogThread = false;
+		bool logThreadReady = true;
+
+		#endregion Output Log : Fields
+
+
+		#region Output Log : Logic
+
 		/// <summary>
 		/// Prints the specified text to the output log.
+		/// This method is executed on the worker thread and makes a thread-safe call on the RichTextBox control.
 		/// </summary>
 		/// <param name="message">Text to print.</param>
 		/// <param name="logType">Log type. See enum 'LogType'.</param>
@@ -1126,21 +1397,11 @@ namespace ZeroMunge
 		{
 			Log_Proc(message, logType, newLine);
 		}
-
-
+		
 		// This delegate enables asynchronous calls for setting the text property on the output log.
 		delegate void LogCallback(string message, LogType logType = LogType.None, bool newLine = false);
 
-
-		private List<string> logLineCollection = new List<string>();
-
-		/// <summary>
-		/// Prints the specified text to the output log.  
-		/// WARNING: Don't call this directly, please call `Log` instead.
-		/// </summary>
-		/// <param name="message">Text to print.</param>
-		/// <param name="logType">Log type. See enum 'LogType'.</param>
-		/// <param name="newLine">Optional: True to append a new line to the end of the message.</param>
+		// WARNING: Don't call this directly, please call `Log` instead.
 		private void Log_Proc(string message, LogType logType = LogType.None, bool newLine = false)
 		{
 			// InvokeRequired required compares the thread ID of the 
@@ -1226,11 +1487,11 @@ namespace ZeroMunge
 				}
 			}
 		}
-
-
-		private bool notifyLogThread = false;
-		private bool logThreadReady = true;
 		
+		
+		/// <summary>
+		/// Update the output log if the thread is ready.
+		/// </summary>
 		public void NotifyOutputLog()
 		{
 			if (logThreadReady)
@@ -1241,20 +1502,20 @@ namespace ZeroMunge
 		}
 
 
-		// This method is executed on the worker thread and makes a thread-safe call on the RichTextBox control.
 		/// <summary>
 		/// Updates the Output Log with the text in the logLineCollection.
+		/// This method is executed on the worker thread and makes a thread-safe call on the RichTextBox control.
 		/// </summary>
 		public void UpdateOutputLog()
 		{
 			Debug.WriteLine(string.Concat(Utilities.GetTimestamp(), " : ", "UpdateOutputLog: Entered"));
 			UpdateOutputLog_Proc();
 		}
-
-
+		
 		// This delegate enables asynchronous calls for setting the text property on the output log.
 		delegate void UpdateOutputLogCallback();
 
+		// WARNING: Don't call this directly, please call `UpdateOutputLog` instead.
 		public void UpdateOutputLog_Proc()
 		{
 			// InvokeRequired required compares the thread ID of the 
@@ -1284,7 +1545,81 @@ namespace ZeroMunge
 			}
 		}
 
+		#endregion Output Log : Logic
 
+
+		#region Output Log : Form Controls
+
+		// When the user clicks the "Copy Log" button:
+		// Copy the contents of the output log window to the clipboard.
+		private void btn_CopyLog_Click(object sender, EventArgs e)
+		{
+			text_OutputLog.SelectAll();
+			text_OutputLog.Copy();
+			text_OutputLog.DeselectAll();
+		}
+
+
+		// When the user clicks the "Save Log As..." button:
+		// Prompt the user to save the output log to a new file.
+		private void btn_SaveLog_Click(object sender, EventArgs e)
+		{
+			saveDlg_SaveLogPrompt.FileName = "ZeroMunge_OutputLog_" + DateTime.Now.ToString("yyyyMMdd") + "_" + DateTime.Now.ToString("HHmmss");
+			saveDlg_SaveLogPrompt.ShowDialog();
+		}
+
+
+		// When the user clicks the "OK" button in the "Save Log As" prompt:
+		// Save the contents of the entire output log to a new file.
+		private void saveDlg_SaveLogPrompt_FileOk(object sender, CancelEventArgs e)
+		{
+			// Has a file name been entered?
+			if (saveDlg_SaveLogPrompt.FileName != "")
+			{
+				// Get the file name
+				string name = saveDlg_SaveLogPrompt.FileName;
+
+				Log(string.Format("Saved log file to path: \"{0}\"", name), LogType.Info);
+
+				// Write the output log's contents to the file
+				File.WriteAllLines(name, text_OutputLog.Lines);
+			}
+		}
+
+
+		// When the user clicks the "Clear Log" button:
+		// Clear the entire contents of the output log.
+		private void btn_ClearLog_Click(object sender, EventArgs e)
+		{
+			text_OutputLog.Clear();
+		}
+
+
+		// When the Output Log's text is changed:
+		// Scroll to the bottom of the output log, deal with the log being full, and update the line count.
+		private void text_OutputLog_TextChanged(object sender, EventArgs e)
+		{
+			// Update character count
+			lbl_OutputLogChars.Text = string.Concat("Length: ", text_OutputLog.Text.Count().ToString());
+
+			// Update line count
+			lbl_OutputLogLines.Text = string.Concat("Lines: ", text_OutputLog.Lines.Count().ToString());
+		}
+
+
+		// When a link in the Output Log is clicked:
+		// Open the link in a web browser.
+		private void text_OutputLog_LinkClicked(object sender, LinkClickedEventArgs e)
+		{
+			Process.Start(e.LinkText);
+		}
+
+		#endregion Output Log : Form Controls
+
+		#endregion Output Log
+
+
+		#region Toggle UI
 
 		// ***************************
 		// ** TOGGLE UI
@@ -1292,9 +1627,10 @@ namespace ZeroMunge
 
 		public bool UIEnabled = true;
 
-		// This method is executed on the worker thread and makes a thread-safe call on the UI controls.
+
 		/// <summary>
 		/// Sets the enabled state of the application's UI controls.
+		/// This method is executed on the worker thread and makes a thread-safe call on the UI controls.
 		/// </summary>
 		/// <param name="enabled">True to enable UI interactivity, false to disable.</param>
 		public void EnableUI(bool enabled)
@@ -1302,16 +1638,10 @@ namespace ZeroMunge
 			EnableUI_Proc(enabled);
 		}
 		
-
 		// This delegate enables asynchronous calls for setting the enabled property on the UI control.
 		delegate void EnableUICallback(bool enabled);
-		
 
-		/// <summary>
-		/// Sets the enabled state of the application's UI controls.  
-		/// WARNING: Don't call this directly, please call `EnableUI` instead.
-		/// </summary>
-		/// <param name="enabled">True to enable UI interactivity, false to disable.</param>
+		// WARNING: Don't call this directly, please call `EnableUI` instead.
 		private void EnableUI_Proc(bool enabled)
 		{
 			// InvokeRequired required compares the thread ID of the 
@@ -1388,11 +1718,19 @@ namespace ZeroMunge
 			}
 		}
 
+		#endregion Toggle UI
 
+
+		#region Windows Form Controls
 
 		// ***************************
 		// ** WINDOWS FORMS CONTROLS
 		// ***************************
+
+		#region File List : DataGridView
+
+
+		#region File List : Fields
 
 		/// <summary>
 		/// Index of currently selected row in data_Files.
@@ -1483,8 +1821,15 @@ namespace ZeroMunge
 		/// </summary>
 		public bool isFileListDirty = false;
 
+		/// <summary>
+		/// Last method that was used to change the contents of a cell.
+		/// </summary>
 		public CellChangeMethod lastCellChangeMethod = CellChangeMethod.Button;
 
+		#endregion File List : Fields
+
+
+		#region File List : Logic Methods
 
 		/// <summary>
 		/// Returns a list of files that are currently checkmarked in the file list.
@@ -1913,6 +2258,7 @@ namespace ZeroMunge
 			return data;
 		}
 
+
 		/// <summary>
 		/// Removes all committed rows from the file list.
 		/// </summary>
@@ -1963,6 +2309,7 @@ namespace ZeroMunge
 				errorThread.Start();
 			}*/
 		}
+
 
 		/// <summary>
 		/// Loads data from the specified DataFilesContainer into the file list.
@@ -2127,204 +2474,10 @@ namespace ZeroMunge
 			Utilities.SavePrefs(prefs);
 		}
 
-
-		/// <summary>
-		/// Updates the form's title with the file list's dirty state and the name of the file list's current save file.
-		/// </summary>
-		private void UpdateWindowTitle()
-		{
-			string baseName = "Zero Munge";
-			string fullName;
-
-			if (curFileListName == "null")
-			{
-				fullName = baseName;
-			}
-			else
-			{
-				if (isFileListDirty)
-				{
-					fullName = string.Format("{0} - * {1}", baseName, curFileListName);
-				}
-				else
-				{
-					fullName = string.Format("{0} - {1}", baseName, curFileListName);
-				}
-			}
-
-			this.Text = fullName;
-			this.Update();
-		}
+		#endregion File List : Logic Methods
 
 
-		// When the user presses a key:
-		// 
-		private void ZeroMunge_KeyDown(object sender, KeyEventArgs e)
-		{
-			// When the modifier key is Shift:
-			if ((ModifierKeys & Keys.Shift) == Keys.Shift)
-			{
-				switch (e.KeyCode)
-				{
-					// Stop processing files in the file list.
-					case Keys.F5:
-						Debug.WriteLine("Shift + F5 was pressed");
-
-						if (ProcManager_isRunning)
-						{
-							ProcManager_Abort();
-						}
-
-						e.Handled = true;
-						break;
-				}
-			}
-
-			// When the modifier key is Ctrl:
-			if ((ModifierKeys & Keys.Control) == Keys.Control)
-			{
-				switch (e.KeyCode)
-				{
-					// Run the New command.
-					case Keys.N:
-						Debug.WriteLine("Ctrl + N was pressed");
-
-						if (!ProcManager_isRunning)
-						{
-							Command_New();
-						}
-
-						e.Handled = true;
-						break;
-
-					// Run the Open command.
-					case Keys.O:
-						Debug.WriteLine("Ctrl + O was pressed");
-
-						if (!ProcManager_isRunning)
-						{
-							Command_Open();
-						}
-
-						e.Handled = true;
-						break;
-
-					// Run the Save command.
-					case Keys.S:
-						Debug.WriteLine("Ctrl + S was pressed");
-
-						if (!ProcManager_isRunning)
-						{
-							if (!IsFileListEmpty())
-							{
-								Command_Save();
-							}
-							else
-							{
-								var message = "Cannot save empty file list!";
-								Trace.WriteLine(message);
-								Log(message, LogType.Error);
-							}
-						}
-
-						e.Handled = true;
-						break;
-
-					// Exit the application.
-					case Keys.Q:
-						Debug.WriteLine("Ctrl + Q was pressed");
-
-						if (!ProcManager_isRunning)
-						{
-							Command_Quit();
-						}
-
-						e.Handled = true;
-						break;
-
-					// Open the Preferences window.
-					case Keys.P:
-						Debug.WriteLine("Ctrl + P was pressed");
-
-						if (!ProcManager_isRunning)
-						{
-							OpenWindow_Preferences();
-						}
-
-						e.Handled = true;
-						break;
-				}
-			}
-
-			// If no modifier keys were pressed:
-			switch (e.KeyCode)
-			{
-				// Open the Help window.
-				case Keys.F1:
-					if ((ModifierKeys & Keys.Shift) == Keys.Shift) { return; }
-
-					Debug.WriteLine("F1 was pressed");
-
-					if (!ProcManager_isRunning)
-					{
-						OpenWindow_Help();
-					}
-
-					e.Handled = true;
-					break;
-
-				// Start processing files in the file list.
-				case Keys.F5:
-					if ((ModifierKeys & Keys.Shift) == Keys.Shift) { return; }
-
-					Debug.WriteLine("F5 was pressed");
-
-					if (!ProcManager_isRunning)
-					{
-						ProcManager_Start();
-					}
-
-					e.Handled = true;
-					break;
-
-				// Open the About window.
-				case Keys.F12:
-					if ((ModifierKeys & Keys.Shift) == Keys.Shift) { return; }
-
-					Debug.WriteLine("F12 was pressed");
-
-					if (!ProcManager_isRunning)
-					{
-						OpenWindow_About();
-					}
-
-					e.Handled = true;
-					break;
-
-				// Clear the contents of the currently selected cells in the file list.
-				case Keys.Delete:
-					Debug.WriteLine("Delete was pressed");
-
-					if (!ProcManager_isRunning)
-					{
-						foreach (DataGridViewCell cell in data_Files.SelectedCells)
-						{
-							// Determine the cell type
-							if (cell is DataGridViewTextBoxCell)
-							{
-								if (cell.Value != null)
-								{
-									cell.Value = "";
-								}
-							}
-						}
-					}
-
-					e.Handled = true;
-					break;
-			}
-		}
-
+		#region File List : data_Files
 
 		// When the user clicks on a cell:
 		// Reset the currently selected row header index.
@@ -2607,6 +2760,10 @@ namespace ZeroMunge
 			}
 		}
 
+		#endregion File List : data_Files
+
+
+		#region File List : data_Files Custom Controls
 
 		// This is called when the user clicks the Browse button to select a new staging directory for a file.
 		// Prompt the user to select a new staging directory for the currently selected file.
@@ -2635,7 +2792,7 @@ namespace ZeroMunge
 				}
 			}
 		}
-		
+
 
 		// This is called when the user clicks the dropdown button to edit the list of compiled files.
 		// Show a multi-line textbox containing the contents of the compiled files list.
@@ -2692,7 +2849,7 @@ namespace ZeroMunge
 				if (e.KeyCode == Keys.Enter)
 				{
 					Debug.WriteLine("Ctrl + Enter was pressed");
-					
+
 					text_MungedFilesEdit_Commit();
 
 					ActiveForm.AcceptButton = btn_Run;
@@ -2729,7 +2886,7 @@ namespace ZeroMunge
 					e.Handled = true;
 				}*/
 			}
-			
+
 			if (e.KeyCode == Keys.Escape)
 			{
 				Debug.WriteLine("Escape was pressed");
@@ -2756,7 +2913,7 @@ namespace ZeroMunge
 			text_MungedFilesEdit_Dispose();
 		}
 
-		
+
 		/// <summary>
 		/// Commit text in the Munged Files Edit popup to the corresponding cell.
 		/// </summary>
@@ -2807,6 +2964,12 @@ namespace ZeroMunge
 			this.MouseClick -= text_MungedFilesEdit_MouseClickOutside;
 		}
 
+		#endregion File List : data_Files Custom Controls
+
+		#endregion File List : DataGridView
+
+
+		#region File List : Sidebar Buttons
 
 		// When the user clicks the "Run" button:
 		// Begin processing the list of files as a playlist.
@@ -3061,6 +3224,10 @@ namespace ZeroMunge
 			Flow_SetGameDirectory_Start();
 		}
 
+		#endregion File List : Sidebar Buttons
+
+
+		#region Flow : Set Game Directory
 
 		/// <summary>
 		/// Starts the flow for setting the GameDirectory.
@@ -3089,7 +3256,7 @@ namespace ZeroMunge
 
 
 		/// <summary>
-		/// 
+		/// Shows the dialog to set the game directory.
 		/// </summary>
 		/// <returns>True, the user completed the flow successfully. False, the user cancelled out of the flow at some point.</returns>
 		public bool Flow_SetGameDirectory_ShowDialog()
@@ -3113,6 +3280,9 @@ namespace ZeroMunge
 		}
 
 
+		/// <summary>
+		/// Log a warning to the output log that the game directory isn't set.
+		/// </summary>
 		public void Flow_SetGameDirectory_WarnQuit()
 		{
 			Log("Game path is not set!", LogType.Warning);
@@ -3140,95 +3310,10 @@ namespace ZeroMunge
 			}
 		}
 
-
-		// When the user clicks the "Copy Log" button:
-		// Copy the contents of the output log window to the clipboard.
-		private void btn_CopyLog_Click(object sender, EventArgs e)
-		{
-			text_OutputLog.SelectAll();
-			text_OutputLog.Copy();
-			text_OutputLog.DeselectAll();
-		}
+		#endregion Flow : Set Game Directory
 
 
-		// When the user clicks the "Save Log As..." button:
-		// Prompt the user to save the output log to a new file.
-		private void btn_SaveLog_Click(object sender, EventArgs e)
-		{
-			saveDlg_SaveLogPrompt.FileName = "ZeroMunge_OutputLog_" + DateTime.Now.ToString("yyyyMMdd") + "_" + DateTime.Now.ToString("HHmmss");
-			saveDlg_SaveLogPrompt.ShowDialog();
-		}
-
-		
-		// When the user clicks the "OK" button in the "Save Log As" prompt:
-		// Save the contents of the entire output log to a new file.
-		private void saveDlg_SaveLogPrompt_FileOk(object sender, CancelEventArgs e)
-		{
-			// Has a file name been entered?
-			if (saveDlg_SaveLogPrompt.FileName != "")
-			{
-				// Get the file name
-				string name = saveDlg_SaveLogPrompt.FileName;
-
-				Log(string.Format("Saved log file to path: \"{0}\"", name), LogType.Info);
-
-				// Write the output log's contents to the file
-				File.WriteAllLines(name, text_OutputLog.Lines);
-			}
-		}
-
-
-		// When the user clicks the "Clear Log" button:
-		// Clear the entire contents of the output log.
-		private void btn_ClearLog_Click(object sender, EventArgs e)
-		{
-			text_OutputLog.Clear();
-		}
-
-
-		// When the Output Log's text is changed:
-		// Scroll to the bottom of the output log, deal with the log being full, and update the line count.
-		private void text_OutputLog_TextChanged(object sender, EventArgs e)
-		{
-			// Update character count
-			lbl_OutputLogChars.Text = string.Concat("Length: ", text_OutputLog.Text.Count().ToString());
-
-			// Update line count
-			lbl_OutputLogLines.Text = string.Concat("Lines: ", text_OutputLog.Lines.Count().ToString());
-		}
-
-
-		// When a link in the Output Log is clicked:
-		// Open the link in a web browser.
-		private void text_OutputLog_LinkClicked(object sender, LinkClickedEventArgs e)
-		{
-			Process.Start(e.LinkText);
-		}
-
-
-		// Set the initial state of the window
-		FormWindowState lastWindowState = FormWindowState.Minimized;
-		FormWindowState lastWindowSize = FormWindowState.Normal;
-
-		// When the user resizes the window by dragging the handles, maximizing, restoring, or minimizing:
-		// Store the WindowState for future reference when the user double-clicks the trayIcon.
-		private void ZeroMunge_Resize(object sender, EventArgs e)
-		{
-			Debug.WriteLine("WindowState changed");
-			lastWindowState = WindowState;
-			
-			if (WindowState == FormWindowState.Maximized)
-			{
-				Debug.WriteLine("WindowState: Maximized");
-				lastWindowSize = FormWindowState.Maximized;
-			}
-			if (WindowState == FormWindowState.Normal)
-			{
-				Debug.WriteLine("WindowState: Normal");
-				lastWindowSize = FormWindowState.Normal;
-			}
-		}
-
+		#region Tray Icon
 
 		// When the user double-clicks the tray icon:
 		// Restore the form to its previous WindowState.
@@ -3277,6 +3362,10 @@ namespace ZeroMunge
 			Command_Quit();
 		}
 
+		#endregion Tray Icon
+
+
+		#region Text Context Menu
 
 		Control rightClickedControl = null;
 
@@ -3422,6 +3511,10 @@ namespace ZeroMunge
 			}
 		}
 
+		#endregion Text Context Menu
+
+
+		#region File Menu
 
 		// When the user clicks the New button in the File menu:
 		// Exit the application.
@@ -3437,6 +3530,9 @@ namespace ZeroMunge
 		{
 			Command_Open();
 		}
+
+
+		#region File Menu : Recent Files List
 
 		// When the user clicks the Clear Recent File List button in the Open Recent submenu:
 		// Clear all of the recent files from the recent files list.
@@ -3473,6 +3569,10 @@ namespace ZeroMunge
 		}
 
 
+		/// <summary>
+		/// Checks if the recent files list (in the user preferences) is empty or not.
+		/// </summary>
+		/// <returns>True, list is empty; false if not.</returns>
 		public bool IsRecentFilesPrefsListEmpty()
 		{
 			return prefs.RecentFiles == null || prefs.RecentFiles.Count <= 0;
@@ -3654,6 +3754,8 @@ namespace ZeroMunge
 			}
 		}
 
+		#endregion File Menu : Recent Files List
+		
 
 		// When the user clicks the OK button in the Open File List prompt:
 		// Attempt to deserialize the data in the specified file and load it into the file list.
@@ -3720,6 +3822,10 @@ namespace ZeroMunge
 			Command_Quit();
 		}
 
+		#endregion File Menu
+
+
+		#region Settings Menu
 
 		// When the user clicks the Preferences button in the Settings menu:
 		// Open the Preferences window.
@@ -3728,51 +3834,74 @@ namespace ZeroMunge
 			OpenWindow_Preferences();
 		}
 
+		#endregion Settings Menu
+
+
+		#region Help Menu
+
 		private void menu_aboutToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			OpenWindow_About();
 		}
+
 
 		private void menu_viewHelpToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			OpenWindow_Help();
 		}
 
+
 		private void menu_viewChangelogToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			OpenFile("CHANGELOG.html");
 		}
+
 
 		private void menu_viewLicenseToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			OpenFile("LICENSE.html");
 		}
 
+
 		private void menu_viewReadmeToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			OpenFile("README.html");
 		}
+
 
 		private void menu_checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			Utilities.StartFlow_CheckForUpdates(this, true);
 		}
 
+
+		#region Help Menu : Feedback Menu
+
 		private void menu_reportBugToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			Process.Start(LINK_GH_BUGS);
 		}
+
 
 		private void menu_provideSuggestionToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			Process.Start(LINK_GH_SUGGESTIONS);
 		}
 
+
 		private void menu_viewOpenIssuesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			Process.Start(LINK_GH_OPENISSUES);
 		}
-		
+
+		#endregion Help Menu : Feedback Menu
+
+		#endregion Help Menu
+
+		#endregion Windows Form Controls
+
+
+		#region Debug Buttons
 
 		private void button2_Click(object sender, EventArgs e)
 		{
@@ -3846,6 +3975,8 @@ namespace ZeroMunge
 
 			EnableUI(!UIEnabled);
 		}
+
+		#endregion Debug Buttons
 	}
 
 	public class MungeFactory
