@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Resources;
 using System.Windows.Forms;
 using Markdig;
-using mshtml;
+using MSHTML;
 using Newtonsoft.Json;
 
 namespace ZeroMunge
