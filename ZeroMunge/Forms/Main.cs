@@ -755,6 +755,15 @@ namespace ZeroMunge
 		#region OpenWindow
 
 		/// <summary>
+		/// Call this to open a new instance of the Easy File Picker window.
+		/// </summary>
+		private void OpenWindow_EasyFilePicker()
+		{
+			EasyFilePicker easyFilePickerForm = new EasyFilePicker();
+			easyFilePickerForm.ShowDialog();
+		}
+
+		/// <summary>
 		/// Starts the update flow (duh).
 		/// </summary>
 		public static void Flow_Updates_Start() => OpenWindow_Updates();
@@ -2970,6 +2979,13 @@ namespace ZeroMunge
 
 
 		#region File List : Sidebar Buttons
+
+		// When the user clicks the "Easy File Picker" button:
+		// Open the Easy File Picker.
+		private void btn_EasyFilePicker_Click(object sender, EventArgs e)
+		{
+			OpenWindow_EasyFilePicker();
+		}
 
 		// When the user clicks the "Run" button:
 		// Begin processing the list of files as a playlist.

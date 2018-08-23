@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ZeroMunge));
 			this.btn_Run = new System.Windows.Forms.Button();
 			this.btn_AddFiles = new System.Windows.Forms.Button();
@@ -88,6 +88,7 @@
 			this.menu_newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_openRecentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
 			this.menu_saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
@@ -130,7 +131,7 @@
 			this.flp_LogButtons = new System.Windows.Forms.FlowLayoutPanel();
 			this.saveDlg_SaveFileListPrompt = new System.Windows.Forms.SaveFileDialog();
 			this.openDlg_OpenFileListPrompt = new System.Windows.Forms.OpenFileDialog();
-			this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
+			this.btn_EasyFilePicker = new System.Windows.Forms.Button();
 			this.pan_MungedFilesEdit.SuspendLayout();
 			this.status_MungedFilesEdit.SuspendLayout();
 			this.cmenu_Text.SuspendLayout();
@@ -148,7 +149,7 @@
 			// btn_Run
 			// 
 			this.btn_Run.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_Run.Location = new System.Drawing.Point(0, 3);
+			this.btn_Run.Location = new System.Drawing.Point(0, 32);
 			this.btn_Run.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this.btn_Run.Name = "btn_Run";
 			this.btn_Run.Size = new System.Drawing.Size(102, 23);
@@ -162,7 +163,7 @@
 			this.btn_AddFiles.AccessibleDescription = "";
 			this.btn_AddFiles.AllowDrop = true;
 			this.btn_AddFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_AddFiles.Location = new System.Drawing.Point(0, 61);
+			this.btn_AddFiles.Location = new System.Drawing.Point(0, 90);
 			this.btn_AddFiles.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this.btn_AddFiles.Name = "btn_AddFiles";
 			this.btn_AddFiles.Size = new System.Drawing.Size(102, 23);
@@ -182,7 +183,7 @@
 			// btn_RemoveFile
 			// 
 			this.btn_RemoveFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_RemoveFile.Location = new System.Drawing.Point(0, 148);
+			this.btn_RemoveFile.Location = new System.Drawing.Point(0, 177);
 			this.btn_RemoveFile.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this.btn_RemoveFile.Name = "btn_RemoveFile";
 			this.btn_RemoveFile.Size = new System.Drawing.Size(102, 23);
@@ -329,7 +330,7 @@
 			// btn_AddFolders
 			// 
 			this.btn_AddFolders.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_AddFolders.Location = new System.Drawing.Point(0, 90);
+			this.btn_AddFolders.Location = new System.Drawing.Point(0, 119);
 			this.btn_AddFolders.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this.btn_AddFolders.Name = "btn_AddFolders";
 			this.btn_AddFolders.Size = new System.Drawing.Size(102, 23);
@@ -341,7 +342,7 @@
 			// btn_AddProject
 			// 
 			this.btn_AddProject.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_AddProject.Location = new System.Drawing.Point(0, 119);
+			this.btn_AddProject.Location = new System.Drawing.Point(0, 148);
 			this.btn_AddProject.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this.btn_AddProject.Name = "btn_AddProject";
 			this.btn_AddProject.Size = new System.Drawing.Size(102, 23);
@@ -353,7 +354,7 @@
 			// btn_RemoveAllFiles
 			// 
 			this.btn_RemoveAllFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_RemoveAllFiles.Location = new System.Drawing.Point(0, 177);
+			this.btn_RemoveAllFiles.Location = new System.Drawing.Point(0, 206);
 			this.btn_RemoveAllFiles.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this.btn_RemoveAllFiles.Name = "btn_RemoveAllFiles";
 			this.btn_RemoveAllFiles.Size = new System.Drawing.Size(102, 23);
@@ -368,7 +369,7 @@
 			this.btn_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.btn_Cancel.Enabled = false;
-			this.btn_Cancel.Location = new System.Drawing.Point(0, 32);
+			this.btn_Cancel.Location = new System.Drawing.Point(0, 61);
 			this.btn_Cancel.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this.btn_Cancel.Name = "btn_Cancel";
 			this.btn_Cancel.Size = new System.Drawing.Size(102, 23);
@@ -381,7 +382,7 @@
 			// btn_SetGamePath
 			// 
 			this.btn_SetGamePath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_SetGamePath.Location = new System.Drawing.Point(0, 206);
+			this.btn_SetGamePath.Location = new System.Drawing.Point(0, 235);
 			this.btn_SetGamePath.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this.btn_SetGamePath.Name = "btn_SetGamePath";
 			this.btn_SetGamePath.Size = new System.Drawing.Size(102, 23);
@@ -511,9 +512,9 @@
 			// 
 			// col_FileBrowse
 			// 
-			dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle9.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle9;
+			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle5.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle5;
 			this.col_FileBrowse.HeaderText = "";
 			this.col_FileBrowse.Name = "col_FileBrowse";
 			this.col_FileBrowse.ReadOnly = true;
@@ -534,9 +535,9 @@
 			// 
 			// col_StagingBrowse
 			// 
-			dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle10.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-			this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle10;
+			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle6.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+			this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle6;
 			this.col_StagingBrowse.HeaderText = "";
 			this.col_StagingBrowse.Name = "col_StagingBrowse";
 			this.col_StagingBrowse.ReadOnly = true;
@@ -555,8 +556,8 @@
 			// 
 			// col_MungedFiles
 			// 
-			dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle11;
+			dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle7;
 			this.col_MungedFiles.HeaderText = "Munged Files";
 			this.col_MungedFiles.MinimumWidth = 100;
 			this.col_MungedFiles.Name = "col_MungedFiles";
@@ -567,9 +568,9 @@
 			// 
 			// col_MungedFilesEdit
 			// 
-			dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle12.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-			this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle12;
+			dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle8.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+			this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle8;
 			this.col_MungedFilesEdit.HeaderText = "";
 			this.col_MungedFilesEdit.Name = "col_MungedFilesEdit";
 			this.col_MungedFilesEdit.ReadOnly = true;
@@ -660,7 +661,7 @@
 			// button2
 			// 
 			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button2.Location = new System.Drawing.Point(27, 235);
+			this.button2.Location = new System.Drawing.Point(27, 264);
 			this.button2.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(75, 23);
@@ -730,6 +731,11 @@
 			this.menu_openRecentToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
 			this.menu_openRecentToolStripMenuItem.Text = "Open Recent";
 			this.menu_openRecentToolStripMenuItem.Visible = false;
+			// 
+			// toolStripSeparator11
+			// 
+			this.toolStripSeparator11.Name = "toolStripSeparator11";
+			this.toolStripSeparator11.Size = new System.Drawing.Size(57, 6);
 			// 
 			// menu_saveToolStripMenuItem
 			// 
@@ -1015,6 +1021,7 @@
 			// flp_FileButtons
 			// 
 			this.flp_FileButtons.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.flp_FileButtons.Controls.Add(this.btn_EasyFilePicker);
 			this.flp_FileButtons.Controls.Add(this.btn_Run);
 			this.flp_FileButtons.Controls.Add(this.btn_Cancel);
 			this.flp_FileButtons.Controls.Add(this.btn_AddFiles);
@@ -1028,12 +1035,12 @@
 			this.flp_FileButtons.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.flp_FileButtons.Location = new System.Drawing.Point(673, 27);
 			this.flp_FileButtons.Name = "flp_FileButtons";
-			this.flp_FileButtons.Size = new System.Drawing.Size(102, 315);
+			this.flp_FileButtons.Size = new System.Drawing.Size(102, 352);
 			this.flp_FileButtons.TabIndex = 19;
 			// 
 			// button3
 			// 
-			this.button3.Location = new System.Drawing.Point(3, 264);
+			this.button3.Location = new System.Drawing.Point(3, 293);
 			this.button3.Name = "button3";
 			this.button3.Size = new System.Drawing.Size(75, 23);
 			this.button3.TabIndex = 17;
@@ -1068,10 +1075,17 @@
 			this.openDlg_OpenFileListPrompt.Title = "Open File List";
 			this.openDlg_OpenFileListPrompt.FileOk += new System.ComponentModel.CancelEventHandler(this.openDlg_OpenFileListPrompt_FileOk);
 			// 
-			// toolStripSeparator11
+			// btn_EasyFilePicker
 			// 
-			this.toolStripSeparator11.Name = "toolStripSeparator11";
-			this.toolStripSeparator11.Size = new System.Drawing.Size(149, 6);
+			this.btn_EasyFilePicker.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btn_EasyFilePicker.Location = new System.Drawing.Point(0, 3);
+			this.btn_EasyFilePicker.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+			this.btn_EasyFilePicker.Name = "btn_EasyFilePicker";
+			this.btn_EasyFilePicker.Size = new System.Drawing.Size(102, 23);
+			this.btn_EasyFilePicker.TabIndex = 18;
+			this.btn_EasyFilePicker.Text = "Easy File Picker";
+			this.btn_EasyFilePicker.UseVisualStyleBackColor = true;
+			this.btn_EasyFilePicker.Click += new System.EventHandler(this.btn_EasyFilePicker_Click);
 			// 
 			// ZeroMunge
 			// 
@@ -1220,6 +1234,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
 		private System.Windows.Forms.ToolStripMenuItem menu_openRecentToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
+		public System.Windows.Forms.Button btn_EasyFilePicker;
 	}
 }
 
