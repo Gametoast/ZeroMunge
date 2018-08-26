@@ -24,7 +24,7 @@ namespace ZeroMunge
 		public List<string> mungeFilePaths = new List<string>();
 
 		// When the Form is loaded:
-		// Open a prompt to select a project folder to add to the TreeView.s
+		// Open a prompt to select a project folder to add to the TreeView.
 		private void EasyFilePicker_Load(object sender, EventArgs e)
 		{
 			Prompt_AddProject();
@@ -37,7 +37,7 @@ namespace ZeroMunge
 
 		}
 
-		// When the OK button is clicked:
+		// When the 'OK' button is clicked:
 		// Add all the checked nodes to the public mungeFilePaths property.
 		private void btn_Accept_Click(object sender, EventArgs e)
 		{
@@ -74,18 +74,22 @@ namespace ZeroMunge
 			Close();
 		}
 
-		// When the Cancel button is clicked:
+		// When the 'Cancel' button is clicked:
 		// Close the form.
 		private void btn_Cancel_Click(object sender, EventArgs e)
 		{
 			Close();
 		}
 
+		// When the 'Add Project...' button is clicked:
+		// Open a prompt to select a project folder to add to the TreeView.
 		private void btn_AddProject_Click(object sender, EventArgs e)
 		{
 			Prompt_AddProject();
 		}
 
+		// After a node has been checked in the TreeView:
+		// Check/uncheck all child nodes.
 		private void tv_Files_AfterCheck(object sender, TreeViewEventArgs e)
 		{
 			// Check/uncheck child nodes
@@ -99,6 +103,9 @@ namespace ZeroMunge
 			}
 		}
 
+		/// <summary>
+		/// Open a prompt to select a project folder to add to the TreeView.
+		/// </summary>
 		private void Prompt_AddProject()
 		{
 			CommonOpenFileDialog openDlg_AddProjectPrompt = new CommonOpenFileDialog
@@ -157,7 +164,14 @@ namespace ZeroMunge
 			}
 		}
 
-		// Adapted from https://stackoverflow.com/a/19332770/3639133
+		/// <summary>
+		/// Populates a TreeView based on a list of file paths.
+		/// 
+		/// Adapted from https://stackoverflow.com/a/19332770/3639133
+		/// </summary>
+		/// <param name="treeView">TreeView control to populate.</param>
+		/// <param name="paths">List of paths.</param>
+		/// <param name="pathSeparator">Character to split the path.</param>
 		private void PopulateTreeView(TreeView treeView, List<string> paths, char pathSeparator)
 		{
 			TreeNode lastNode = null;
@@ -181,8 +195,12 @@ namespace ZeroMunge
 
 			}
 		}
-
-		// Gets the root node of the specified TreeNode.
+		
+		/// <summary>
+		/// Gets the root node of the specified TreeNode.
+		/// </summary>
+		/// <param name="node">TreeNode to get the root node from.</param>
+		/// <returns>Root node of the specified TreeNode.</returns>
 		private TreeNode GetRootNode(TreeNode node)
 		{
 			TreeNode parentNode = new TreeNode();
@@ -190,15 +208,12 @@ namespace ZeroMunge
 			void CheckNode(TreeNode childNode)
 			{
 				if (childNode.Level > 1)
-				{
 					CheckNode(childNode.Parent);
-				}
-				else if (childNode.Level == 1 || childNode.Level == 0)
-				{
+				else
 					parentNode = childNode.Parent;
-				}
 			}
 
+			// Recursively go through the node's child nodes until we reach the root node
 			CheckNode(node);
 
 			return parentNode;
