@@ -79,7 +79,15 @@ namespace ZeroMunge
 
 		private void tv_Files_AfterCheck(object sender, TreeViewEventArgs e)
 		{
-			// TODO: check/uncheck all children (and subchildren etc.)
+			// Check/uncheck child nodes
+			TreeNode node = e.Node;
+			if (node.Nodes.Count > 0)
+			{
+				foreach (TreeNode childNode in node.Nodes)
+				{
+					childNode.Checked = e.Node.Checked;
+				}
+			}
 		}
 
 		private void Prompt_AddProject()
