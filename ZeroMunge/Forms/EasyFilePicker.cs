@@ -23,23 +23,30 @@ namespace ZeroMunge
 		private int curRoot = 0;
 		public List<string> mungeFilePaths = new List<string>();
 
-
+		// When the Form is loaded:
+		// Open a prompt to select a project folder to add to the TreeView.s
 		private void EasyFilePicker_Load(object sender, EventArgs e)
 		{
 			Prompt_AddProject();
 		}
 
+		// When the Form is closed:
+		// 
 		private void EasyFilePicker_FormClosed(object sender, FormClosedEventArgs e)
 		{
 
 		}
 
+		// When the OK button is clicked:
+		// Add all the checked nodes to the public mungeFilePaths property.
 		private void btn_Accept_Click(object sender, EventArgs e)
 		{
+			// Get all checked nodes
 			List<TreeNode> selectedNodes = tv_Files.Nodes.Descendants()
 				.Where(n => n.Checked)
 				.ToList();
 
+			// Resolve the file path for each node's munge file
 			foreach (TreeNode node in selectedNodes)
 			{
 				string nodePath = node.FullPath;
@@ -67,6 +74,8 @@ namespace ZeroMunge
 			Close();
 		}
 
+		// When the Cancel button is clicked:
+		// Close the form.
 		private void btn_Cancel_Click(object sender, EventArgs e)
 		{
 			Close();
@@ -110,14 +119,17 @@ namespace ZeroMunge
 				string projectID = Utilities.GetProjectID(path);
 				string projectRoot = new DirectoryInfo(path).Name;
 
+				// Get all the munge files in the project directory
 				List<string> mungeFiles = Directory.GetFiles(path + "\\_BUILD", "munge.bat", SearchOption.AllDirectories).ToList();
 				mungeFiles.Remove(path + "\\_BUILD\\munge.bat");
 				mungeFiles.Remove(path + "\\_BUILD\\Sides\\munge.bat");
 				mungeFiles.Remove(path + "\\_BUILD\\Worlds\\munge.bat");
 
 
+				// Create a list of the munge file directory paths starting at the project folder
 				List<string> mungeFileDirs = new List<string>();
 
+				// Addme munge file exists outside of the _BUILD directory
 				if (File.Exists(path + "\\addme\\mungeAddme.bat"))
 				{
 					mungeFileDirs.Add(projectRoot + "\\addme");
@@ -132,6 +144,7 @@ namespace ZeroMunge
 					mungeFileDirs.Add(pathToAdd);
 				}
 
+				// Populate the TreeView with the munge file directories
 				tv_Files.BeginUpdate();
 
 				PopulateTreeView(tv_Files, mungeFileDirs, '\\');
@@ -139,6 +152,7 @@ namespace ZeroMunge
 				tv_Files.EndUpdate();
 				tv_Files.ExpandAll();
 
+				// Increment the current root index in case the user adds another project
 				curRoot++;
 			}
 		}
@@ -168,6 +182,7 @@ namespace ZeroMunge
 			}
 		}
 
+		// Gets the root node of the specified TreeNode.
 		private TreeNode GetRootNode(TreeNode node)
 		{
 			TreeNode parentNode = new TreeNode();
