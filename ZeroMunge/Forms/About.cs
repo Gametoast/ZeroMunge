@@ -46,7 +46,10 @@ namespace ZeroMunge
 
 		private void SetToolTips()
 		{
+			FormTooltips.AutoPopDelay = Properties.Settings.Default.TooltipPopDelay;
+
 			// Help Menu
+			FormTooltips.SetToolTip(btn_Accept, Tooltips.HelpMenu.OK);
 			FormTooltips.SetToolTip(img_Logo, Tooltips.HelpMenu.ApplicationBanner);
 			FormTooltips.SetToolTip(link_Updates, Tooltips.HelpMenu.CheckForUpdates);
 			FormTooltips.SetToolTip(link_Contact, Tooltips.HelpMenu.Contact);

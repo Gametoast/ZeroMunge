@@ -24,9 +24,25 @@ namespace ZeroMunge
 		// Load the prefs.
 		private void Updates_Load(object sender, EventArgs e)
 		{
+			SetToolTips();
+
 			prefs = Utilities.LoadPrefs();
 
 			chk_ShowUpdatePrompt.Checked = prefs.ShowUpdatePromptOnStartup;
+		}
+
+
+		/// <summary>
+		/// Sets the form's tooltips.
+		/// </summary>
+		private void SetToolTips()
+		{
+			FormTooltips.AutoPopDelay = Properties.Settings.Default.TooltipPopDelay;
+
+			// Updates
+			FormTooltips.SetToolTip(btn_Yes, Tooltips.Updates.Yes);
+			FormTooltips.SetToolTip(btn_No, Tooltips.Updates.No);
+			FormTooltips.SetToolTip(chk_ShowUpdatePrompt, Tooltips.Updates.ShowUpdatePrompt);
 		}
 
 

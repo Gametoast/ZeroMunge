@@ -33,7 +33,20 @@ namespace ZeroMunge
 		// Generate the HTML for the web page. (It'll be styled in wb_Licenses_DocumentCompleted)
 		private void ThirdPartySoftware_Load(object sender, EventArgs e)
 		{
+			SetToolTips();
+
 			wb_Licenses.DocumentText = GenerateWebPage();
+		}
+
+		/// <summary>
+		/// Sets the form's tooltips.
+		/// </summary>
+		private void SetToolTips()
+		{
+			FormTooltips.AutoPopDelay = Properties.Settings.Default.TooltipPopDelay;
+
+			// Third Party Software
+			FormTooltips.SetToolTip(btn_Accept, Tooltips.ThirdPartySoftware.OK);
 		}
 
 

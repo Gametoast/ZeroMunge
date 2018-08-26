@@ -26,7 +26,20 @@ namespace ZeroMunge
 		// 
 		private void SetGameDirectoryPrompt_Load(object sender, EventArgs e)
 		{
+			SetToolTips();
+		}
 
+
+		/// <summary>
+		/// Sets the form's tooltips.
+		/// </summary>
+		private void SetToolTips()
+		{
+			FormTooltips.AutoPopDelay = Properties.Settings.Default.TooltipPopDelay;
+
+			// Set Game Directory Prompt
+			FormTooltips.SetToolTip(btn_Yes, Tooltips.SetGameDirectoryPrompt.Yes);
+			FormTooltips.SetToolTip(btn_No, Tooltips.SetGameDirectoryPrompt.No);
 		}
 
 

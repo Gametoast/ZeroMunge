@@ -21,11 +21,26 @@ namespace ZeroMunge
 
 		private void SaveFileListPrompt_Load(object sender, EventArgs e)
 		{
+			SetToolTips();
+
 			// Set warning icon
 			img_WarningIcon.Image = SystemIcons.Warning.ToBitmap();
 
 			// Center button container
 			flp_Buttons.Location = CenterControlLocationX(flp_Buttons);
+		}
+
+		/// <summary>
+		/// Sets the form's tooltips.
+		/// </summary>
+		private void SetToolTips()
+		{
+			FormTooltips.AutoPopDelay = Properties.Settings.Default.TooltipPopDelay;
+
+			// Save File List Prompt
+			FormTooltips.SetToolTip(btn_Yes, Tooltips.SaveFileListPrompt.Yes);
+			FormTooltips.SetToolTip(btn_No, Tooltips.SaveFileListPrompt.No);
+			FormTooltips.SetToolTip(btn_Cancel, Tooltips.SaveFileListPrompt.Cancel);
 		}
 
 		// Returns a Point that positions the specified control in the center of the parent form.

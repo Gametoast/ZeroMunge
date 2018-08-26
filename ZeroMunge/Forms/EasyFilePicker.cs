@@ -28,7 +28,21 @@ namespace ZeroMunge
 		// Open a prompt to select a project folder to add to the TreeView.
 		private void EasyFilePicker_Load(object sender, EventArgs e)
 		{
+			SetToolTips();
 			Prompt_AddProject();
+		}
+
+		/// <summary>
+		/// Sets the form's tooltips.
+		/// </summary>
+		private void SetToolTips()
+		{
+			FormTooltips.AutoPopDelay = Properties.Settings.Default.TooltipPopDelay;
+
+			// Easy File Picker
+			FormTooltips.SetToolTip(btn_Accept, Tooltips.EasyFilePicker.OK);
+			FormTooltips.SetToolTip(btn_Cancel, Tooltips.EasyFilePicker.Cancel);
+			FormTooltips.SetToolTip(btn_AddProject, Tooltips.EasyFilePicker.AddProject);
 		}
 
 		// When the Form is closed:

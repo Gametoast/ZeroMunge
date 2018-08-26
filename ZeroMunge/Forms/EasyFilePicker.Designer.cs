@@ -28,11 +28,13 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.tv_Files = new System.Windows.Forms.TreeView();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.btn_Accept = new System.Windows.Forms.Button();
 			this.btn_Cancel = new System.Windows.Forms.Button();
 			this.btn_AddProject = new System.Windows.Forms.Button();
+			this.FormTooltips = new System.Windows.Forms.ToolTip(this.components);
 			this.flowLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -45,7 +47,7 @@
 			this.tv_Files.Location = new System.Drawing.Point(12, 12);
 			this.tv_Files.Name = "tv_Files";
 			this.tv_Files.Size = new System.Drawing.Size(840, 661);
-			this.tv_Files.TabIndex = 0;
+			this.tv_Files.TabIndex = 3;
 			this.tv_Files.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tv_Files_AfterCheck);
 			// 
 			// flowLayoutPanel1
@@ -66,7 +68,7 @@
 			this.btn_Accept.Margin = new System.Windows.Forms.Padding(0, 4, 0, 4);
 			this.btn_Accept.Name = "btn_Accept";
 			this.btn_Accept.Size = new System.Drawing.Size(136, 28);
-			this.btn_Accept.TabIndex = 19;
+			this.btn_Accept.TabIndex = 0;
 			this.btn_Accept.Text = "OK";
 			this.btn_Accept.UseVisualStyleBackColor = true;
 			this.btn_Accept.Click += new System.EventHandler(this.btn_Accept_Click);
@@ -79,19 +81,19 @@
 			this.btn_Cancel.Margin = new System.Windows.Forms.Padding(0, 4, 0, 4);
 			this.btn_Cancel.Name = "btn_Cancel";
 			this.btn_Cancel.Size = new System.Drawing.Size(136, 28);
-			this.btn_Cancel.TabIndex = 20;
+			this.btn_Cancel.TabIndex = 1;
 			this.btn_Cancel.Text = "Cancel";
 			this.btn_Cancel.UseVisualStyleBackColor = true;
 			this.btn_Cancel.Click += new System.EventHandler(this.btn_Cancel_Click);
 			// 
 			// btn_AddProject
 			// 
-			this.btn_AddProject.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btn_AddProject.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.btn_AddProject.Location = new System.Drawing.Point(9, 680);
 			this.btn_AddProject.Margin = new System.Windows.Forms.Padding(0, 4, 0, 4);
 			this.btn_AddProject.Name = "btn_AddProject";
 			this.btn_AddProject.Size = new System.Drawing.Size(136, 28);
-			this.btn_AddProject.TabIndex = 21;
+			this.btn_AddProject.TabIndex = 2;
 			this.btn_AddProject.Text = "Add Project...";
 			this.btn_AddProject.UseVisualStyleBackColor = true;
 			this.btn_AddProject.Click += new System.EventHandler(this.btn_AddProject_Click);
@@ -107,8 +109,10 @@
 			this.Controls.Add(this.flowLayoutPanel1);
 			this.Controls.Add(this.tv_Files);
 			this.Margin = new System.Windows.Forms.Padding(4);
+			this.MinimumSize = new System.Drawing.Size(640, 480);
 			this.Name = "EasyFilePicker";
 			this.ShowIcon = false;
+			this.ShowInTaskbar = false;
 			this.Text = "Easy File Picker";
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.EasyFilePicker_FormClosed);
 			this.Load += new System.EventHandler(this.EasyFilePicker_Load);
@@ -124,5 +128,6 @@
 		public System.Windows.Forms.Button btn_Accept;
 		public System.Windows.Forms.Button btn_Cancel;
 		public System.Windows.Forms.Button btn_AddProject;
+		private System.Windows.Forms.ToolTip FormTooltips;
 	}
 }

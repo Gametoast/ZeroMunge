@@ -28,11 +28,13 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.lbl_Description = new System.Windows.Forms.Label();
 			this.btn_Yes = new System.Windows.Forms.Button();
 			this.btn_No = new System.Windows.Forms.Button();
 			this.cont_Btns = new System.Windows.Forms.Panel();
 			this.chk_ShowUpdatePrompt = new System.Windows.Forms.CheckBox();
+			this.FormTooltips = new System.Windows.Forms.ToolTip(this.components);
 			this.cont_Btns.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -41,9 +43,10 @@
 			this.lbl_Description.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.lbl_Description.AutoSize = true;
-			this.lbl_Description.Location = new System.Drawing.Point(12, 9);
+			this.lbl_Description.Location = new System.Drawing.Point(16, 11);
+			this.lbl_Description.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.lbl_Description.Name = "lbl_Description";
-			this.lbl_Description.Size = new System.Drawing.Size(273, 13);
+			this.lbl_Description.Size = new System.Drawing.Size(359, 17);
 			this.lbl_Description.TabIndex = 0;
 			this.lbl_Description.Text = "An update is available. Do you wish to download it now?";
 			// 
@@ -51,8 +54,9 @@
 			// 
 			this.btn_Yes.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
 			this.btn_Yes.Location = new System.Drawing.Point(0, 0);
+			this.btn_Yes.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.btn_Yes.Name = "btn_Yes";
-			this.btn_Yes.Size = new System.Drawing.Size(75, 23);
+			this.btn_Yes.Size = new System.Drawing.Size(100, 28);
 			this.btn_Yes.TabIndex = 1;
 			this.btn_Yes.Text = "Yes";
 			this.btn_Yes.UseVisualStyleBackColor = true;
@@ -62,9 +66,10 @@
 			// 
 			this.btn_No.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
 			this.btn_No.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btn_No.Location = new System.Drawing.Point(82, 0);
+			this.btn_No.Location = new System.Drawing.Point(109, 0);
+			this.btn_No.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.btn_No.Name = "btn_No";
-			this.btn_No.Size = new System.Drawing.Size(75, 23);
+			this.btn_No.Size = new System.Drawing.Size(100, 28);
 			this.btn_No.TabIndex = 2;
 			this.btn_No.Text = "No";
 			this.btn_No.UseVisualStyleBackColor = true;
@@ -76,9 +81,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.cont_Btns.Controls.Add(this.btn_Yes);
 			this.cont_Btns.Controls.Add(this.btn_No);
-			this.cont_Btns.Location = new System.Drawing.Point(70, 63);
+			this.cont_Btns.Location = new System.Drawing.Point(93, 78);
+			this.cont_Btns.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.cont_Btns.Name = "cont_Btns";
-			this.cont_Btns.Size = new System.Drawing.Size(157, 23);
+			this.cont_Btns.Size = new System.Drawing.Size(209, 28);
 			this.cont_Btns.TabIndex = 3;
 			// 
 			// chk_ShowUpdatePrompt
@@ -86,9 +92,10 @@
 			this.chk_ShowUpdatePrompt.AutoSize = true;
 			this.chk_ShowUpdatePrompt.Checked = true;
 			this.chk_ShowUpdatePrompt.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chk_ShowUpdatePrompt.Location = new System.Drawing.Point(15, 33);
+			this.chk_ShowUpdatePrompt.Location = new System.Drawing.Point(20, 41);
+			this.chk_ShowUpdatePrompt.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.chk_ShowUpdatePrompt.Name = "chk_ShowUpdatePrompt";
-			this.chk_ShowUpdatePrompt.Size = new System.Drawing.Size(240, 17);
+			this.chk_ShowUpdatePrompt.Size = new System.Drawing.Size(315, 21);
 			this.chk_ShowUpdatePrompt.TabIndex = 4;
 			this.chk_ShowUpdatePrompt.Text = "Show this prompt when updates are available";
 			this.chk_ShowUpdatePrompt.UseVisualStyleBackColor = true;
@@ -97,18 +104,19 @@
 			// Updates
 			// 
 			this.AcceptButton = this.btn_Yes;
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btn_No;
-			this.ClientSize = new System.Drawing.Size(297, 98);
+			this.ClientSize = new System.Drawing.Size(393, 111);
 			this.Controls.Add(this.chk_ShowUpdatePrompt);
 			this.Controls.Add(this.cont_Btns);
 			this.Controls.Add(this.lbl_Description);
 			this.KeyPreview = true;
+			this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.MaximizeBox = false;
-			this.MaximumSize = new System.Drawing.Size(313, 137);
+			this.MaximumSize = new System.Drawing.Size(411, 158);
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(313, 137);
+			this.MinimumSize = new System.Drawing.Size(411, 158);
 			this.Name = "Updates";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
@@ -130,5 +138,6 @@
 		private System.Windows.Forms.Button btn_No;
 		private System.Windows.Forms.Panel cont_Btns;
 		private System.Windows.Forms.CheckBox chk_ShowUpdatePrompt;
+		private System.Windows.Forms.ToolTip FormTooltips;
 	}
 }

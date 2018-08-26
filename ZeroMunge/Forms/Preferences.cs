@@ -61,10 +61,14 @@ namespace ZeroMunge
 
 		private void SetToolTips()
 		{
+			FormTooltips.AutoPopDelay = Properties.Settings.Default.TooltipPopDelay;
+
 			string maxValueMsg = "\n\nPossible value range: ";
 			string maxValueSeparator = " - ";
 
 			// Settings
+			FormTooltips.SetToolTip(btn_Accept, Tooltips.Settings.OK);
+			FormTooltips.SetToolTip(btn_Cancel, Tooltips.Settings.Cancel);
 			FormTooltips.SetToolTip(chk_ShowTrayIcon, Tooltips.Settings.ShowTrayIcon);
 			FormTooltips.SetToolTip(chk_ShowNotificationPopups, Tooltips.Settings.ShowNotificationPopups);
 			FormTooltips.SetToolTip(chk_PlayNotificationSounds, Tooltips.Settings.PlayNotificationSounds);

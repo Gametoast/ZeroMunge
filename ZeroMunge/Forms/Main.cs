@@ -621,6 +621,8 @@ namespace ZeroMunge
 		/// </summary>
 		private void SetToolTips()
 		{
+			FormTooltips.AutoPopDelay = Properties.Settings.Default.TooltipPopDelay;
+
 			// File Menu
 			menu_newToolStripMenuItem.ToolTipText = Tooltips.FileMenu.New;
 			menu_openToolStripMenuItem.ToolTipText = Tooltips.FileMenu.Open;
@@ -634,6 +636,7 @@ namespace ZeroMunge
 			// File List
 			FormTooltips.SetToolTip(btn_Run, Tooltips.FileList.Run);
 			FormTooltips.SetToolTip(btn_Cancel, Tooltips.FileList.Cancel);
+			FormTooltips.SetToolTip(btn_EasyFilePicker, Tooltips.FileList.EasyFilePicker);
 			FormTooltips.SetToolTip(btn_AddFiles, Tooltips.FileList.AddFiles);
 			FormTooltips.SetToolTip(btn_AddFolders, Tooltips.FileList.AddFolders);
 			FormTooltips.SetToolTip(btn_AddProject, Tooltips.FileList.AddProject);

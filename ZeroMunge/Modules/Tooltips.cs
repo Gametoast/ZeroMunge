@@ -22,6 +22,7 @@ namespace ZeroMunge
 		{
 			public const string Run = "Sequentially execute each file in the file list.";
 			public const string Cancel = "Stop processing files.  \n\nWARNING: Canceling a munge is strongly NOT recommended.";
+			public const string EasyFilePicker = "Open the Easy File Picker, which greatly simplifies the process of adding files to the file list.";
 			public const string AddFiles = "Open a prompt to add files to the file list.";
 			public const string AddFolders = "Open a prompt to select folders containing munge.bat files to add to the file list.";
 			public const string AddProject = "Open a prompt to select a project folder whose common munge.bat files will be added to the file list.";
@@ -36,8 +37,29 @@ namespace ZeroMunge
 			public const string ClearLog = "Clear the contents of the output log.";
 		}
 
+		public static class EasyFilePicker
+		{
+			public const string OK = "Close this dialog and add the munge files for the selected items to the file list.";
+			public const string Cancel = "Close this dialog.";
+			public const string AddProject = "Open a prompt to select a mod project folder to add to the treeview.";
+		}
+
+		public static class Updates
+		{
+			public const string Yes = "Open a web page to download the update in the default browser.";
+			public const string No = "Close this prompt without downloading the update.";
+			public const string ShowUpdatePrompt = "If checked, this prompt will be shown whenever an update is available.";
+		}
+
+		public static class ThirdPartySoftware
+		{
+			public const string OK = "Close this dialog and return to the application.";
+		}
+
 		public static class Settings
 		{
+			public const string OK = "Save any changes made and close this dialog.";
+			public const string Cancel = "Close this dialog without saving changes made.";
 			public const string OpenPreferences = "Change various application settings such as checking for updates or showing the update prompt on startup, file list auto-save and auto-load, etc.";
 			public const string SetGamePath = "Open a prompt to point Zero Munge to Battlefront's GameData directory.";
 			public const string ShowTrayIcon = "Whether or not to show the application's icon in the system tray.  \n\nNOTE: The application must be restarted in order for changes to this setting to take effect.";
@@ -64,11 +86,25 @@ namespace ZeroMunge
 			public const string ReportBug = "File a bug report.";
 			public const string ProvideSuggestion = "Submit a suggestion.";     // TODO: expand
 			public const string ViewOpenIssues = "View a list of bugs that have been reported but are not yet fixed, as well as upcoming features and improvements.";
+			public const string OK = "Close this dialog.";
 			public const string OpenAbout = "Open the About window to view application information.";
 			public const string ApplicationBanner = "Open Zero Munge's project page on GitHub in a new web browser window.";
 			public const string CheckForUpdates = "Check to see if a new release of Zero Munge is available.  \n\nNOTE: This requires an Internet connection.";
 			public const string Contact = "Send me an e-mail at marth8880@gmail.com  \n\nNOTE: If a default e-mail program isn't set up, this link probably won't do anything.";
 			public const string ThirdPartySoftware = "View a list of the third-party software used in Zero Munge.";
+		}
+
+		public static class SaveFileListPrompt
+		{
+			public const string Yes = "Save the file list and quit the application.";
+			public const string No = "Quit the application without saving the file list.";
+			public const string Cancel = "Close this dialog and return to the application.";
+		}
+
+		public static class SetGameDirectoryPrompt
+		{
+			public const string Yes = "Open a prompt to browse for the game's executable.";
+			public const string No = "Close this dialog without setting the game path.";
 		}
 	}
 }
