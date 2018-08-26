@@ -274,6 +274,7 @@ namespace ZeroMunge
 
 	internal static class TreeViewExt
 	{
+		// Adapted from https://stackoverflow.com/a/26543212/3639133
 		internal static IEnumerable<TreeNode> Descendants(this TreeNodeCollection c)
 		{
 			foreach (var node in c.OfType<TreeNode>())
