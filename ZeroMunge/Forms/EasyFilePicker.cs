@@ -20,20 +20,5 @@ namespace ZeroMunge
 		{
 
 		}
-
-		private void btn_Accept_Click(object sender, EventArgs e)
-		{
-
-		}
-
-		private void btn_Cancel_Click(object sender, EventArgs e)
-		{
-
-		}
-
-		private void btn_AddProject_Click(object sender, EventArgs e)
-		{
-
-		}
 	}
 }
