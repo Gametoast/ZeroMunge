@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -41,33 +42,48 @@ namespace ZeroMunge
 		// Add all the checked nodes to the public mungeFilePaths property.
 		private void btn_Accept_Click(object sender, EventArgs e)
 		{
-			// Get all checked nodes
-			List<TreeNode> selectedNodes = tv_Files.Nodes.Descendants()
-				.Where(n => n.Checked)
-				.ToList();
-
-			// Resolve the file path for each node's munge file
-			foreach (TreeNode node in selectedNodes)
+			try
 			{
-				string nodePath = node.FullPath;
-				string buildPath = "\\_BUILD";
-				string fileName = "\\munge.bat";
-				if (nodePath.EndsWith("addme", StringComparison.CurrentCultureIgnoreCase))
-				{
-					buildPath = "";
-					fileName = "mungeAddme.bat";
-				}
-				string partialPath = nodePath.Substring(nodePath.IndexOf('\\'), nodePath.Length - nodePath.IndexOf('\\'));
-				string filePath = rootPaths[GetRootNode(node).Index] + buildPath + partialPath + fileName;
+				// Get all checked nodes
+				List<TreeNode> selectedNodes = tv_Files.Nodes.Descendants()
+					.Where(n => n.Checked)
+					.ToList();
 
-				// Add the file to the file list if it exists and is not a template munge script
-				if (File.Exists(filePath) 
-					&& !filePath.EndsWith("\\_BUILD\\munge.bat") 
-					&& !filePath.EndsWith("\\_BUILD\\Sides\\munge.bat") 
-					&& !filePath.EndsWith("\\_BUILD\\Worlds\\munge.bat"))
+				// Resolve the file path for each node's munge file
+				foreach (TreeNode node in selectedNodes)
 				{
-					mungeFilePaths.Add(filePath);
+					string nodePath = node.FullPath;
+					string buildPath = "\\_BUILD";
+					string fileName = "\\munge.bat";
+					if (nodePath.EndsWith("addme", StringComparison.CurrentCultureIgnoreCase))
+					{
+						buildPath = "";
+						fileName = "mungeAddme.bat";
+					}
+					string partialPath = nodePath.Substring(nodePath.IndexOf('\\'), nodePath.Length - nodePath.IndexOf('\\'));
+					string filePath = rootPaths[GetRootNode(node).Index] + buildPath + partialPath + fileName;
+
+					// Add the file to the file list if it exists and is not a template munge script
+					if (File.Exists(filePath)
+						&& !filePath.EndsWith("\\_BUILD\\munge.bat")
+						&& !filePath.EndsWith("\\_BUILD\\Sides\\munge.bat")
+						&& !filePath.EndsWith("\\_BUILD\\Worlds\\munge.bat"))
+					{
+						mungeFilePaths.Add(filePath);
+					}
 				}
+			}
+			catch (ArgumentOutOfRangeException ex)
+			{
+				Trace.WriteLine(ex.Message);
+			}
+			catch (ArgumentNullException ex)
+			{
+				Trace.WriteLine(ex.Message);
+			}
+			catch (ArgumentException ex)
+			{
+				Trace.WriteLine(ex.Message);
 			}
 
 			// Close the form
@@ -119,48 +135,83 @@ namespace ZeroMunge
 			// Auto-detect the munge.bat file inside each selected folder and add it to the file list
 			if (openDlg_AddProjectPrompt.ShowDialog() == CommonFileDialogResult.Ok)
 			{
-				string path = openDlg_AddProjectPrompt.FileName;
-				rootPaths.Add(curRoot, path);
-
-				// Get the project ID
-				string projectID = Utilities.GetProjectID(path);
-				string projectRoot = new DirectoryInfo(path).Name;
-
-				// Get all the munge files in the project directory
-				List<string> mungeFiles = Directory.GetFiles(path + "\\_BUILD", "munge.bat", SearchOption.AllDirectories).ToList();
-				mungeFiles.Remove(path + "\\_BUILD\\munge.bat");
-				mungeFiles.Remove(path + "\\_BUILD\\Sides\\munge.bat");
-				mungeFiles.Remove(path + "\\_BUILD\\Worlds\\munge.bat");
-
-
-				// Create a list of the munge file directory paths starting at the project folder
-				List<string> mungeFileDirs = new List<string>();
-
-				// Addme munge file exists outside of the _BUILD directory
-				if (File.Exists(path + "\\addme\\mungeAddme.bat"))
+				try
 				{
-					mungeFileDirs.Add(projectRoot + "\\addme");
-				}
+					string path = openDlg_AddProjectPrompt.FileName;
+					rootPaths.Add(curRoot, path);
 
-				int pathStartIndex = path.Length - projectRoot.Length;
-				foreach (string file in mungeFiles)
+					// Get the project ID
+					string projectID = Utilities.GetProjectID(path);
+					string projectRoot = new DirectoryInfo(path).Name;
+
+					// Get all the munge files in the project directory
+					List<string> mungeFiles = Directory.GetFiles(path + "\\_BUILD", "munge.bat", SearchOption.AllDirectories).ToList();
+					mungeFiles.Remove(path + "\\_BUILD\\munge.bat");
+					mungeFiles.Remove(path + "\\_BUILD\\Sides\\munge.bat");
+					mungeFiles.Remove(path + "\\_BUILD\\Worlds\\munge.bat");
+
+
+					// Create a list of the munge file directory paths starting at the project folder
+					List<string> mungeFileDirs = new List<string>();
+
+					// Addme munge file exists outside of the _BUILD directory
+					if (File.Exists(path + "\\addme\\mungeAddme.bat"))
+					{
+						mungeFileDirs.Add(projectRoot + "\\addme");
+					}
+
+					int pathStartIndex = path.Length - projectRoot.Length;
+					foreach (string file in mungeFiles)
+					{
+						string pathToAdd = file
+							.Substring(pathStartIndex, file.Length - "\\munge.bat".Length - pathStartIndex)
+							.Replace("_BUILD\\", "");
+						mungeFileDirs.Add(pathToAdd);
+					}
+
+					// Populate the TreeView with the munge file directories
+					tv_Files.BeginUpdate();
+
+					PopulateTreeView(tv_Files, mungeFileDirs, '\\');
+
+					tv_Files.EndUpdate();
+					tv_Files.ExpandAll();
+
+					// Increment the current root index in case the user adds another project
+					curRoot++;
+				}
+				catch (System.Security.SecurityException ex)
 				{
-					string pathToAdd = file
-						.Substring(pathStartIndex, file.Length - "\\munge.bat".Length - pathStartIndex)
-						.Replace("_BUILD\\", "");
-					mungeFileDirs.Add(pathToAdd);
+					Trace.WriteLine(ex.Message);
 				}
-
-				// Populate the TreeView with the munge file directories
-				tv_Files.BeginUpdate();
-
-				PopulateTreeView(tv_Files, mungeFileDirs, '\\');
-
-				tv_Files.EndUpdate();
-				tv_Files.ExpandAll();
-
-				// Increment the current root index in case the user adds another project
-				curRoot++;
+				catch (PathTooLongException ex)
+				{
+					Trace.WriteLine(ex.Message);
+				}
+				catch (UnauthorizedAccessException ex)
+				{
+					Trace.WriteLine(ex.Message);
+				}
+				catch (DirectoryNotFoundException ex)
+				{
+					Trace.WriteLine(ex.Message);
+				}
+				catch (IOException ex)
+				{
+					Trace.WriteLine(ex.Message);
+				}
+				catch (ArgumentOutOfRangeException ex)
+				{
+					Trace.WriteLine(ex.Message);
+				}
+				catch (ArgumentNullException ex)
+				{
+					Trace.WriteLine(ex.Message);
+				}
+				catch (ArgumentException ex)
+				{
+					Trace.WriteLine(ex.Message);
+				}
 			}
 		}
 
@@ -207,6 +258,7 @@ namespace ZeroMunge
 
 			void CheckNode(TreeNode childNode)
 			{
+				// Are there more child nodes to go through?
 				if (childNode.Level > 1)
 					CheckNode(childNode.Parent);
 				else
