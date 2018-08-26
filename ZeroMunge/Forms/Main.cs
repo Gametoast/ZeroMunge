@@ -760,7 +760,13 @@ namespace ZeroMunge
 		private void OpenWindow_EasyFilePicker()
 		{
 			EasyFilePicker easyFilePickerForm = new EasyFilePicker();
-			easyFilePickerForm.ShowDialog();
+			if (easyFilePickerForm.ShowDialog() == DialogResult.OK)
+			{
+				foreach (string file in easyFilePickerForm.mungeFilePaths)
+				{
+					AddFile(file);
+				}
+			}
 		}
 
 		/// <summary>
@@ -1957,7 +1963,7 @@ namespace ZeroMunge
 		/// <param name="file">Full path of file to add.</param>
 		/// <param name="isMungeScript">Whether or not the specified file is a munge script.</param>
 		/// <returns>True if the file was successfully added, false if not.</returns>
-		private bool AddFile(string file, bool isMungeScript = true)
+		public bool AddFile(string file, bool isMungeScript = true)
 		{
 			// Does the file path exist?
 			if (File.Exists(file))

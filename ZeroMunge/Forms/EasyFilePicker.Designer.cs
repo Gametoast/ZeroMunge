@@ -61,6 +61,7 @@
 			// btn_Accept
 			// 
 			this.btn_Accept.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btn_Accept.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.btn_Accept.Location = new System.Drawing.Point(0, 4);
 			this.btn_Accept.Margin = new System.Windows.Forms.Padding(0, 4, 0, 4);
 			this.btn_Accept.Name = "btn_Accept";
@@ -86,7 +87,6 @@
 			// btn_AddProject
 			// 
 			this.btn_AddProject.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_AddProject.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.btn_AddProject.Location = new System.Drawing.Point(9, 680);
 			this.btn_AddProject.Margin = new System.Windows.Forms.Padding(0, 4, 0, 4);
 			this.btn_AddProject.Name = "btn_AddProject";
@@ -110,6 +110,7 @@
 			this.Name = "EasyFilePicker";
 			this.ShowIcon = false;
 			this.Text = "Easy File Picker";
+			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.EasyFilePicker_FormClosed);
 			this.Load += new System.EventHandler(this.EasyFilePicker_Load);
 			this.flowLayoutPanel1.ResumeLayout(false);
 			this.ResumeLayout(false);
