@@ -28,31 +28,6 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Windows.Forms.TreeNode treeNode27 = new System.Windows.Forms.TreeNode("Node2");
-			System.Windows.Forms.TreeNode treeNode28 = new System.Windows.Forms.TreeNode("Node3");
-			System.Windows.Forms.TreeNode treeNode29 = new System.Windows.Forms.TreeNode("Node4");
-			System.Windows.Forms.TreeNode treeNode30 = new System.Windows.Forms.TreeNode("Node5");
-			System.Windows.Forms.TreeNode treeNode31 = new System.Windows.Forms.TreeNode("Node6");
-			System.Windows.Forms.TreeNode treeNode32 = new System.Windows.Forms.TreeNode("Node1", new System.Windows.Forms.TreeNode[] {
-            treeNode27,
-            treeNode28,
-            treeNode29,
-            treeNode30,
-            treeNode31});
-			System.Windows.Forms.TreeNode treeNode33 = new System.Windows.Forms.TreeNode("Node10");
-			System.Windows.Forms.TreeNode treeNode34 = new System.Windows.Forms.TreeNode("Node11");
-			System.Windows.Forms.TreeNode treeNode35 = new System.Windows.Forms.TreeNode("Node7", new System.Windows.Forms.TreeNode[] {
-            treeNode33,
-            treeNode34});
-			System.Windows.Forms.TreeNode treeNode36 = new System.Windows.Forms.TreeNode("Node12");
-			System.Windows.Forms.TreeNode treeNode37 = new System.Windows.Forms.TreeNode("Node8", new System.Windows.Forms.TreeNode[] {
-            treeNode36});
-			System.Windows.Forms.TreeNode treeNode38 = new System.Windows.Forms.TreeNode("Node9");
-			System.Windows.Forms.TreeNode treeNode39 = new System.Windows.Forms.TreeNode("Node0", new System.Windows.Forms.TreeNode[] {
-            treeNode32,
-            treeNode35,
-            treeNode37,
-            treeNode38});
 			this.tv_Files = new System.Windows.Forms.TreeView();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.btn_Accept = new System.Windows.Forms.Button();
@@ -69,37 +44,9 @@
 			this.tv_Files.CheckBoxes = true;
 			this.tv_Files.Location = new System.Drawing.Point(12, 12);
 			this.tv_Files.Name = "tv_Files";
-			treeNode27.Checked = true;
-			treeNode27.Name = "Node2";
-			treeNode27.Text = "Node2";
-			treeNode28.Name = "Node3";
-			treeNode28.Text = "Node3";
-			treeNode29.Name = "Node4";
-			treeNode29.Text = "Node4";
-			treeNode30.Name = "Node5";
-			treeNode30.Text = "Node5";
-			treeNode31.Name = "Node6";
-			treeNode31.Text = "Node6";
-			treeNode32.Name = "Node1";
-			treeNode32.Text = "Node1";
-			treeNode33.Name = "Node10";
-			treeNode33.Text = "Node10";
-			treeNode34.Name = "Node11";
-			treeNode34.Text = "Node11";
-			treeNode35.Name = "Node7";
-			treeNode35.Text = "Node7";
-			treeNode36.Name = "Node12";
-			treeNode36.Text = "Node12";
-			treeNode37.Name = "Node8";
-			treeNode37.Text = "Node8";
-			treeNode38.Name = "Node9";
-			treeNode38.Text = "Node9";
-			treeNode39.Name = "Node0";
-			treeNode39.Text = "Node0";
-			this.tv_Files.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode39});
 			this.tv_Files.Size = new System.Drawing.Size(840, 661);
 			this.tv_Files.TabIndex = 0;
+			this.tv_Files.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tv_Files_AfterCheck);
 			// 
 			// flowLayoutPanel1
 			// 
@@ -108,7 +55,7 @@
 			this.flowLayoutPanel1.Controls.Add(this.btn_Cancel);
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(858, 12);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(136, 661);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(136, 236);
 			this.flowLayoutPanel1.TabIndex = 1;
 			// 
 			// btn_Accept
@@ -159,7 +106,7 @@
 			this.Controls.Add(this.btn_AddProject);
 			this.Controls.Add(this.flowLayoutPanel1);
 			this.Controls.Add(this.tv_Files);
-			this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.Margin = new System.Windows.Forms.Padding(4);
 			this.Name = "EasyFilePicker";
 			this.ShowIcon = false;
 			this.Text = "Easy File Picker";
