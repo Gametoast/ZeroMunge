@@ -105,7 +105,6 @@ namespace ZeroMunge
 			{
 				string path = openDlg_AddProjectPrompt.FileName;
 				rootPaths.Add(curRoot, path);
-				curRoot++;
 
 				// Get the project ID
 				string projectID = Utilities.GetProjectID(path);
@@ -139,6 +138,8 @@ namespace ZeroMunge
 
 				tv_Files.EndUpdate();
 				tv_Files.ExpandAll();
+
+				curRoot++;
 			}
 		}
 
