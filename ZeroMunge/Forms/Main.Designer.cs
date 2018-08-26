@@ -198,7 +198,7 @@
 			this.pan_MungedFilesEdit.Controls.Add(this.status_MungedFilesEdit);
 			this.pan_MungedFilesEdit.Controls.Add(this.text_MungedFilesEdit);
 			this.pan_MungedFilesEdit.Location = new System.Drawing.Point(1033, 369);
-			this.pan_MungedFilesEdit.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.pan_MungedFilesEdit.Margin = new System.Windows.Forms.Padding(4);
 			this.pan_MungedFilesEdit.Name = "pan_MungedFilesEdit";
 			this.pan_MungedFilesEdit.Size = new System.Drawing.Size(479, 209);
 			this.pan_MungedFilesEdit.TabIndex = 17;
@@ -232,7 +232,7 @@
 			this.text_MungedFilesEdit.BackColor = System.Drawing.SystemColors.Info;
 			this.text_MungedFilesEdit.ContextMenuStrip = this.cmenu_Text;
 			this.text_MungedFilesEdit.Location = new System.Drawing.Point(0, 0);
-			this.text_MungedFilesEdit.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.text_MungedFilesEdit.Margin = new System.Windows.Forms.Padding(4);
 			this.text_MungedFilesEdit.Name = "text_MungedFilesEdit";
 			this.text_MungedFilesEdit.Size = new System.Drawing.Size(476, 175);
 			this.text_MungedFilesEdit.TabIndex = 5;
@@ -402,7 +402,7 @@
 			this.text_OutputLog.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.text_OutputLog.ForeColor = System.Drawing.Color.Black;
 			this.text_OutputLog.Location = new System.Drawing.Point(0, 0);
-			this.text_OutputLog.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.text_OutputLog.Margin = new System.Windows.Forms.Padding(4);
 			this.text_OutputLog.Name = "text_OutputLog";
 			this.text_OutputLog.ReadOnly = true;
 			this.text_OutputLog.Size = new System.Drawing.Size(868, 364);
@@ -439,7 +439,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.cont_Panels.Cursor = System.Windows.Forms.Cursors.SizeNS;
 			this.cont_Panels.Location = new System.Drawing.Point(16, 33);
-			this.cont_Panels.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.cont_Panels.Margin = new System.Windows.Forms.Padding(4);
 			this.cont_Panels.Name = "cont_Panels";
 			this.cont_Panels.Orientation = System.Windows.Forms.Orientation.Horizontal;
 			// 
@@ -478,7 +478,7 @@
             this.col_IsValid});
 			this.data_Files.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.data_Files.Location = new System.Drawing.Point(0, 0);
-			this.data_Files.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.data_Files.Margin = new System.Windows.Forms.Padding(4);
 			this.data_Files.Name = "data_Files";
 			this.data_Files.RowHeadersWidth = 31;
 			this.data_Files.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
@@ -1047,7 +1047,7 @@
 			this.flp_FileButtons.Controls.Add(this.button3);
 			this.flp_FileButtons.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.flp_FileButtons.Location = new System.Drawing.Point(897, 33);
-			this.flp_FileButtons.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.flp_FileButtons.Margin = new System.Windows.Forms.Padding(4);
 			this.flp_FileButtons.Name = "flp_FileButtons";
 			this.flp_FileButtons.Size = new System.Drawing.Size(136, 433);
 			this.flp_FileButtons.TabIndex = 19;
@@ -1059,7 +1059,7 @@
 			this.btn_EasyFilePicker.Margin = new System.Windows.Forms.Padding(0, 4, 0, 4);
 			this.btn_EasyFilePicker.Name = "btn_EasyFilePicker";
 			this.btn_EasyFilePicker.Size = new System.Drawing.Size(136, 28);
-			this.btn_EasyFilePicker.TabIndex = 18;
+			this.btn_EasyFilePicker.TabIndex = 1;
 			this.btn_EasyFilePicker.Text = "Easy File Picker";
 			this.btn_EasyFilePicker.UseVisualStyleBackColor = true;
 			this.btn_EasyFilePicker.Click += new System.EventHandler(this.btn_EasyFilePicker_Click);
@@ -1067,7 +1067,7 @@
 			// button3
 			// 
 			this.button3.Location = new System.Drawing.Point(4, 364);
-			this.button3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.button3.Margin = new System.Windows.Forms.Padding(4);
 			this.button3.Name = "button3";
 			this.button3.Size = new System.Drawing.Size(100, 28);
 			this.button3.TabIndex = 17;
@@ -1084,7 +1084,7 @@
 			this.flp_LogButtons.Controls.Add(this.btn_CopyLog);
 			this.flp_LogButtons.FlowDirection = System.Windows.Forms.FlowDirection.BottomUp;
 			this.flp_LogButtons.Location = new System.Drawing.Point(897, 567);
-			this.flp_LogButtons.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.flp_LogButtons.Margin = new System.Windows.Forms.Padding(4);
 			this.flp_LogButtons.Name = "flp_LogButtons";
 			this.flp_LogButtons.Size = new System.Drawing.Size(136, 108);
 			this.flp_LogButtons.TabIndex = 20;
@@ -1120,7 +1120,7 @@
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
 			this.MainMenuStrip = this.menu_MainForm;
-			this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.Margin = new System.Windows.Forms.Padding(4);
 			this.MinimumSize = new System.Drawing.Size(1061, 728);
 			this.Name = "ZeroMunge";
 			this.Text = "Zero Munge";
