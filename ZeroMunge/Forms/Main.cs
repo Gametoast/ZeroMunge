@@ -377,8 +377,8 @@ namespace ZeroMunge
 
 			if (prefs.AutoSaveEnabled)
 			{
-				if (!IsFileListEmpty())
-				{
+				//if (!IsFileListEmpty())
+				//{
 					string filePath = prefs.LastSaveFilePath;
 
 					// Use the default autosave file path if LastSaveFilePath is unset
@@ -388,13 +388,13 @@ namespace ZeroMunge
 					}
 
 					SaveFileListToFile(filePath, true);
-				}
-				else
-				{
-					var message = "Cannot save empty file list!";
-					Trace.WriteLine(message);
-					Log(message, LogType.Error);
-				}
+				//}
+				//else
+				//{
+				//	var message = "Cannot save empty file list!";
+				//	Trace.WriteLine(message);
+				//	Log(message, LogType.Error);
+				//}
 			}
 			else
 			{
@@ -1677,6 +1677,7 @@ namespace ZeroMunge
 				// Buttons
 				btn_Run.Enabled = enabled;
 				btn_Cancel.Enabled = !enabled;
+				btn_EasyFilePicker.Enabled = enabled;
 				btn_AddFiles.Enabled = enabled;
 				btn_AddFolders.Enabled = enabled;
 				btn_AddProject.Enabled = enabled;
@@ -2338,25 +2339,25 @@ namespace ZeroMunge
 		{
 			//int numRowsAdded = 0;	// shouldn't be needed
 
-			if (data.DataRows == null)
+			try
 			{
-				var msg = string.Format("No data was found in the file: \"{0}\"", filePath);
-				Trace.WriteLine(msg);
-				Log(msg, LogType.Error);
+				if (data.DataRows == null)
+				{
+					var msg = string.Format("No data was found in the file: \"{0}\"", filePath);
+					Trace.WriteLine(msg);
+					Log(msg, LogType.Error);
 
-				return false;
-			}
+					return false;
+				}
 
-			// Clear the contents of the file list if specified
-			if (replaceCurrentContents)
-			{
-				ClearFileList();
-			}
+				// Clear the contents of the file list if specified
+				if (replaceCurrentContents)
+				{
+					ClearFileList();
+				}
 
-			// Fill the file list with the data from the provided container
-			foreach (DataFilesRow row in data.DataRows)
-			{
-				try
+				// Fill the file list with the data from the provided container
+				foreach (DataFilesRow row in data.DataRows)
 				{
 					// Create a new row first
 					int rowId = data_Files.Rows.Add();
@@ -2376,23 +2377,23 @@ namespace ZeroMunge
 
 					//numRowsAdded++;
 				}
-				catch (NullReferenceException e)
+			}
+			catch (NullReferenceException e)
+			{
+				Thread errorThread = new Thread(() =>
 				{
-					Thread errorThread = new Thread(() =>
-					{
-						Trace.WriteLine("Failed to load data into file list. Reason: " + e.Message);
-						Log("File does not contain any data to load", LogType.Error);
-					});
-					errorThread.Start();
+					Trace.WriteLine("Failed to load data into file list. Reason: " + e.Message);
+					Log("File does not contain any data to load", LogType.Error);
+				});
+				errorThread.Start();
 
-					//throw;
-				}
-				catch (InvalidOperationException e)
-				{
-					Trace.WriteLine("Invalid operation while adding row. Reason: " + e.Message);
-					Log("Invalid operation while adding row. Reason: " + e.Message, LogType.Error);
-					throw;
-				}
+				//throw;
+			}
+			catch (InvalidOperationException e)
+			{
+				Trace.WriteLine("Invalid operation while adding row. Reason: " + e.Message);
+				Log("Invalid operation while adding row. Reason: " + e.Message, LogType.Error);
+				throw;
 			}
 
 
@@ -3755,7 +3756,7 @@ namespace ZeroMunge
 					{
 						var msg = string.Format("No data was found; failed to load the file: \"{0}\"", filePath);
 						Trace.WriteLine(msg);
-						Log(msg, LogType.Error, true);
+						Log(msg, LogType.Warning, true);
 
 						return false;
 					}
