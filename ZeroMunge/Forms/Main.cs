@@ -645,6 +645,7 @@ namespace ZeroMunge
 
 			menu_runToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_Run);
 			menu_cancelToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_Cancel);
+			menu_easyFilePickerToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_EasyFilePicker);
 			menu_addFilesToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_AddFiles);
 			menu_addFoldersToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_AddFolders);
 			menu_addProjectToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_AddProject);
@@ -1711,11 +1712,15 @@ namespace ZeroMunge
 				// Edit menu
 				menu_runToolStripMenuItem.Enabled = enabled;
 				menu_cancelToolStripMenuItem.Enabled = !enabled;
+				menu_easyFilePickerToolStripMenuItem.Enabled = enabled;
 				menu_addFilesToolStripMenuItem.Enabled = enabled;
 				menu_addFoldersToolStripMenuItem.Enabled = enabled;
 				menu_addProjectToolStripMenuItem.Enabled = enabled;
 				menu_removeToolStripMenuItem.Enabled = enabled;
 				menu_removeAllToolStripMenuItem.Enabled = enabled;
+
+				// Tools menu
+				menu_createSideMungeFolderToolStripMenuItem.Enabled = enabled;
 
 				// Log menu
 				menu_copyLogToolStripMenuItem.Enabled = enabled;
@@ -4003,6 +4008,36 @@ namespace ZeroMunge
 		}
 
 		#endregion Debug Buttons
+
+		private void menu_createSideMungeFolderToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (openDlg_CreateSideMungeFolderPrompt.ShowDialog() == DialogResult.OK)
+			{
+				string filePath = openDlg_CreateSideMungeFolderPrompt.FileName;
+
+				DirectoryInfo projectDir = new DirectoryInfo(filePath).Parent.Parent.Parent;
+
+				string fileName = new FileInfo(filePath).Name;
+				string sideName = StringExt.SubstringIdx(fileName, 0, fileName.LastIndexOf('.')).ToUpper();
+
+				CreateSideMungeFolder(projectDir.FullName, sideName);
+			}
+		}
+
+		private void CreateSideMungeFolder(string projectDirectory, string sideName)
+		{
+			string destDir = projectDirectory + "\\_BUILD\\Sides\\" + sideName;
+			string cleanFile = Directory.GetCurrentDirectory() + "\\ZeroMunge\\templates\\SideMungeFolder\\clean.bat";
+			string mungeFile = Directory.GetCurrentDirectory() + "\\ZeroMunge\\templates\\SideMungeFolder\\munge.bat";
+
+			Directory.CreateDirectory(destDir);
+			File.Copy(cleanFile, destDir + "\\clean.bat");
+			File.Copy(mungeFile, destDir + "\\munge.bat");
+
+			List<string> mungeFileContents = File.ReadAllLines(destDir + "\\munge.bat").ToList();
+			mungeFileContents[0].Replace("@#$", sideName.ToUpper());
+			// TODO: finish this
+		}
 	}
 
 	public class MungeFactory

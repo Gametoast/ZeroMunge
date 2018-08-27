@@ -160,6 +160,7 @@
       <DependentUpon>Updates.cs</DependentUpon>
     </Compile>
     <Compile Include="Modules\ReadWriteCsv.cs" />
+    <Compile Include="Modules\StringExt.cs" />
     <Compile Include="Modules\Tooltips.cs" />
     <Compile Include="Modules\Utilities.cs" />
     <Compile Include="Forms\Preferences.cs">
@@ -231,6 +232,12 @@
     <None Include="Resources\preamble.md" />
     <None Include="Resources\software.json" />
     <None Include="ZeroMungeNameKey.pfx" />
+    <None Include="ZeroMunge\templates\SideMungeFolder\clean.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ZeroMunge\templates\SideMungeFolder\munge.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
