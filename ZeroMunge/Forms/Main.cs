@@ -11,8 +11,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
@@ -20,6 +20,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Newtonsoft.Json;
+using ZeroMunge.Modules;
 
 namespace ZeroMunge
 {
@@ -350,7 +351,7 @@ namespace ZeroMunge
 		// Reload the application settings.
 		private void ZeroMunge_Activated(object sender, EventArgs e)
 		{
-			Debug.WriteLine("ZeroMunge_Activated() entered");
+			//Debug.WriteLine("ZeroMunge_Activated() entered");
 
 			prefs = Utilities.LoadPrefs();
 		}
@@ -360,7 +361,7 @@ namespace ZeroMunge
 		// 
 		private void ZeroMunge_Deactivate(object sender, EventArgs e)
 		{
-			Debug.WriteLine("ZeroMunge_Deactivate() entered");
+			//Debug.WriteLine("ZeroMunge_Deactivate() entered");
 		}
 		
 
@@ -370,9 +371,9 @@ namespace ZeroMunge
 		{
 			inExitFlow = true;
 
-			if (ProcManager_isRunning)
+			if (ProcessManager.IsRunning())
 			{
-				ProcManager_Abort();
+				ProcessManager.Abort(this);
 			}
 
 			if (prefs.AutoSaveEnabled)
@@ -387,7 +388,7 @@ namespace ZeroMunge
 						filePath = Directory.GetCurrentDirectory() + @"\ZeroMunge-auto.zmd";
 					}
 
-					SaveFileListToFile(filePath, true);
+					SaveFileListToFile(filePath, true, false);
 				//}
 				//else
 				//{
@@ -398,7 +399,7 @@ namespace ZeroMunge
 			}
 			else
 			{
-				if (isFileListDirty && !IsFileListEmpty())
+				if (isFileListDirty)
 				{
 					string promptTitle = "Save File List";
 					string promptCaption = "There are unsaved changes to the file list. Would you like to save before closing?";
@@ -408,7 +409,7 @@ namespace ZeroMunge
 					switch (result)
 					{
 						case DialogResult.Yes:
-							e.Cancel = true;
+							//e.Cancel = true;
 							Command_Save();
 							break;
 
@@ -460,9 +461,9 @@ namespace ZeroMunge
 					case Keys.F5:
 						Debug.WriteLine("Shift + F5 was pressed");
 
-						if (ProcManager_isRunning)
+						if (ProcessManager.IsRunning())
 						{
-							ProcManager_Abort();
+							ProcessManager.Abort(this);
 						}
 
 						e.Handled = true;
@@ -479,7 +480,7 @@ namespace ZeroMunge
 					case Keys.N:
 						Debug.WriteLine("Ctrl + N was pressed");
 
-						if (!ProcManager_isRunning)
+						if (!ProcessManager.IsRunning())
 						{
 							Command_New();
 						}
@@ -491,7 +492,7 @@ namespace ZeroMunge
 					case Keys.O:
 						Debug.WriteLine("Ctrl + O was pressed");
 
-						if (!ProcManager_isRunning)
+						if (!ProcessManager.IsRunning())
 						{
 							Command_Open();
 						}
@@ -503,7 +504,7 @@ namespace ZeroMunge
 					case Keys.S:
 						Debug.WriteLine("Ctrl + S was pressed");
 
-						if (!ProcManager_isRunning)
+						if (!ProcessManager.IsRunning())
 						{
 							if (!IsFileListEmpty())
 							{
@@ -524,7 +525,7 @@ namespace ZeroMunge
 					case Keys.Q:
 						Debug.WriteLine("Ctrl + Q was pressed");
 
-						if (!ProcManager_isRunning)
+						if (!ProcessManager.IsRunning())
 						{
 							Command_Quit();
 						}
@@ -536,7 +537,7 @@ namespace ZeroMunge
 					case Keys.P:
 						Debug.WriteLine("Ctrl + P was pressed");
 
-						if (!ProcManager_isRunning)
+						if (!ProcessManager.IsRunning())
 						{
 							OpenWindow_Preferences();
 						}
@@ -555,7 +556,7 @@ namespace ZeroMunge
 
 					Debug.WriteLine("F1 was pressed");
 
-					if (!ProcManager_isRunning)
+					if (!ProcessManager.IsRunning())
 					{
 						OpenWindow_Help();
 					}
@@ -569,9 +570,9 @@ namespace ZeroMunge
 
 					Debug.WriteLine("F5 was pressed");
 
-					if (!ProcManager_isRunning)
+					if (!ProcessManager.IsRunning())
 					{
-						ProcManager_Start();
+						ProcessManager.Start(this, GetCheckedFiles(), data_Files);
 					}
 
 					e.Handled = true;
@@ -583,7 +584,7 @@ namespace ZeroMunge
 
 					Debug.WriteLine("F12 was pressed");
 
-					if (!ProcManager_isRunning)
+					if (!ProcessManager.IsRunning())
 					{
 						OpenWindow_About();
 					}
@@ -595,7 +596,7 @@ namespace ZeroMunge
 				case Keys.Delete:
 					Debug.WriteLine("Delete was pressed");
 
-					if (!ProcManager_isRunning)
+					if (!ProcessManager.IsRunning())
 					{
 						foreach (DataGridViewCell cell in data_Files.SelectedCells)
 						{
@@ -730,9 +731,9 @@ namespace ZeroMunge
 		/// Shortcut method to call Utilities.OpenFile and log the result.
 		/// </summary>
 		/// <param name="fileName">Name of the file to open.</param>
-		private void OpenFile(string fileName)
+		private void OpenApplicationResourceFile(string fileName)
 		{
-			var result = Utilities.OpenFile(fileName);
+			var result = Utilities.OpenApplicationResourceFile(fileName);
 			LogType logType = LogType.Info;
 
 			if (result.Contains("Could not open"))
@@ -849,7 +850,7 @@ namespace ZeroMunge
 			UpdateWindowTitle();
 
 			lastCellChangeMethod = CellChangeMethod.Button;
-			ClearFileList(true);
+			ClearFileList();
 
 			ResetCurFileListInfo();
 		}
@@ -868,25 +869,25 @@ namespace ZeroMunge
 		/// <summary>
 		/// Immediately save the contents of the file list to the current file.
 		/// </summary>
-		public void Command_Save(bool isAutoSave = false)
+		public void Command_Save(bool isAutoSave = false, bool inExitFlow = false)
 		{
-			if (!IsFileListEmpty())
-			{
+			//if (!IsFileListEmpty())
+			//{
 				if (curFileListPath == "null" || curFileListName == "null")
 				{
 					Command_SaveAs();
 				}
 				else
 				{
-					SaveFileListToFile(curFileListPath, isAutoSave);
+					SaveFileListToFile(curFileListPath, isAutoSave, inExitFlow);
 				}
-			}
-			else
-			{
-				var message = "Cannot save empty file list!";
-				Trace.WriteLine(message);
-				Log(message, LogType.Error);
-			}
+			//}
+			//else
+			//{
+			//	var message = "Cannot save empty file list!";
+			//	Trace.WriteLine(message);
+			//	Log(message, LogType.Error);
+			//}
 		}
 
 
@@ -940,448 +941,6 @@ namespace ZeroMunge
 		#endregion Commands
 
 
-		#region Process Manager
-
-		// ***************************
-		// ** PROCESS MANAGER
-		// ***************************
-
-		public bool ProcManager_isRunning = false;
-		private int ProcManager_activeFile;
-		private Process ProcManager_curProc;
-		private bool ProcManager_procAborted;
-		private List<MungeFactory> ProcManager_fileList;
-
-		/// <summary>
-		/// Goes through the specified list of files and executes the ones that are checked.
-		/// </summary>
-		public void ProcManager_Start()
-		{
-			// Disable the UI
-			EnableUI(false);
-
-			ProcManager_isRunning = true;
-			
-			Thread logPollThread = new Thread(() => {
-				while (ProcManager_isRunning)
-				{
-					if (notifyLogThread)
-					{
-						notifyLogThread = false;
-						NotifyOutputLog();
-					}
-				}
-			});
-			logPollThread.Start();
-
-			// Update tray icon text and play start sound
-			Thread soundThread = new Thread(() => {
-				if (prefs.ShowTrayIcon)
-				{
-					trayIcon.Text = "Zero Munge: Running";
-				}
-				Utilities.PlaySound("start");
-			});
-			soundThread.Start();
-
-			// Grab the list of checked files
-			ProcManager_fileList = new List<MungeFactory>();
-			ProcManager_fileList = GetCheckedFiles();
-
-
-			// BEGIN CHECKING FOR ROW ERRORS
-
-			int procError = 0;
-
-			// Are there no items in the list?
-			if (data_Files.Rows[0].IsNewRow)
-			{
-				if (data_Files.Rows[0].Cells[STR_DATA_FILES_TXT_FILE].Value == null ||
-					data_Files.Rows[0].Cells[STR_DATA_FILES_TXT_STAGING].Value == null ||
-					data_Files.Rows[0].Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value == null)
-				{
-					Debug.WriteLine("First row is new row");
-					procError = 1;
-				}
-			}
-			else
-			{
-				// Are none of the items checked?
-				if (ProcManager_fileList.Count <= 0)
-				{
-					procError = 2;
-				}
-			}
-
-			// Report the error if one is present
-			if (procError > 0)
-			{
-				Thread errorThread = new Thread(() => {
-					string errorMessage = "";
-
-					switch (procError)
-					{
-						case 1:
-							errorMessage = "File list must contain at least one file";
-							break;
-						case 2:
-							errorMessage = "At least one item must be checked";
-							break;
-					}
-
-					Log(errorMessage, LogType.Error);
-
-					// Re-enable the UI
-					EnableUI(true);
-				});
-				errorThread.Start();
-
-				ProcManager_isRunning = false;
-
-				return;
-			}
-
-			if (ProcManager_fileList.Count == 0) { return; }
-
-			// FINISH CHECKING FOR ROW ERRORS
-
-
-			ProcManager_activeFile = 0;
-			ProcManager_procAborted = false;
-
-			Thread enterThread = new Thread(() => {
-				Log("");
-				Log("**************************************************************");
-				Log("******** STARTED JOB");
-				Log("**************************************************************");
-				Log("");
-			});
-			enterThread.Start();
-
-			// Activate the first file
-			ProcManager_ActivateProcess(0);
-		}
-
-
-		/// <summary>
-		/// Use this to tell the manager when the active file has finished.
-		/// </summary>
-		/// <param name="whichFile"></param>
-		/// <param name="singleFile"></param>
-		private void ProcManager_NotifyProcessComplete(int whichFile, bool singleFile)
-		{
-			try
-			{
-				if (ProcManager_fileList.ElementAt(whichFile).MungedFiles.Count() > 0 &&
-				ProcManager_fileList.ElementAt(whichFile).MungedFiles != null &&
-				ProcManager_fileList.ElementAt(whichFile).MungedFiles[0] != "nil" &&
-				ProcManager_fileList.ElementAt(whichFile).StagingDir != null &&
-				ProcManager_fileList.ElementAt(whichFile).CopyToStaging != null)
-				{
-					if (ProcManager_fileList.ElementAt(whichFile).CopyToStaging == "True")
-					{
-						// Copy the compiled files to the staging directory
-						List<string> filesToCopy = ProcManager_fileList.ElementAt(whichFile).MungedFiles;
-
-						string sourceDir = ProcManager_fileList.ElementAt(whichFile).MungeDir;
-						string targetDir = ProcManager_fileList.ElementAt(whichFile).StagingDir;
-
-						// Copy each file to the staging directory
-						foreach (string file in filesToCopy)
-						{
-							// Assemble the full file paths
-							var fullSourceFilePath = string.Concat(sourceDir, "\\", file);
-							var fullTargetFilePath = string.Concat(targetDir, "\\", file);
-
-							// Remove any duplicate backslashes
-							fullSourceFilePath = fullSourceFilePath.Replace(@"\\", @"\");
-							fullTargetFilePath = fullTargetFilePath.Replace(@"\\", @"\");
-
-
-							// Make sure the source file exists before attempting to copy it
-							if (!File.Exists(fullSourceFilePath))
-							{
-								var message = string.Format("Source file does not exist at path: \"{0}\"", fullSourceFilePath);
-								Trace.WriteLine(message);
-								Log(message, LogType.Error);
-							}
-							else
-							{
-								// Create the target directory if it doesn't already exist
-								if (!Directory.Exists(targetDir))
-								{
-									try
-									{
-										Directory.CreateDirectory(targetDir);
-									}
-									catch (IOException e)
-									{
-										Trace.WriteLine(e.Message);
-										Log(e.Message, LogType.Error);
-									}
-									catch (UnauthorizedAccessException e)
-									{
-										Trace.WriteLine(e.Message);
-										Log(e.Message, LogType.Error);
-
-										var message = "Try running the application with administrative privileges";
-										Trace.WriteLine(message);
-										Log(message, LogType.Error);
-									}
-								}
-
-								// Copy the file
-								if (File.Exists(fullSourceFilePath))
-								{
-									try
-									{
-										File.Copy(fullSourceFilePath, fullTargetFilePath, true);
-
-										var message = string.Format("Successfully copied \"{0}\" to \"{1}\"", fullSourceFilePath, fullTargetFilePath);
-										Debug.WriteLine(message);
-										Log(message, LogType.Info);
-									}
-									catch (IOException e)
-									{
-										Trace.WriteLine(e.Message);
-										Log(e.Message, LogType.Error);
-									}
-									catch (UnauthorizedAccessException e)
-									{
-										Trace.WriteLine(e.Message);
-										Log(e.Message, LogType.Error);
-									}
-								}
-								else
-								{
-									var message = string.Format("File does not exist at path: \"{0}\"", fullSourceFilePath);
-									Trace.WriteLine(message);
-									Log(message, LogType.Error);
-								}
-							}
-						}
-					}
-					else
-					{
-						var message = string.Format("Copy is unchecked, skipping copy operation for \"{0}\"", ProcManager_fileList.ElementAt(whichFile).FileDir);
-						Debug.WriteLine(message);
-						Log(message, LogType.Warning);
-					}
-				}
-			}
-			catch (ArgumentOutOfRangeException e)
-			{
-				var message = "ArgumentOutOfRangeException! Reason: " + e.Message;
-				Trace.WriteLine(message);
-				Log(message, LogType.Error);
-			}
-			
-
-
-			// Are we processing multiple files?
-			if (!singleFile)
-			{
-				// If we've reached here, then all the processes are complete
-				if (ProcManager_activeFile >= (ProcManager_fileList.Count - 1))
-				{
-					// We have no more files, so finish up
-					ProcManager_Complete();
-				}
-				else
-				{
-					// Move on to the next file
-					ProcManager_ActivateProcess(ProcManager_activeFile + 1);
-				}
-			}
-			else
-			{
-				// We have no more files, so finish up
-				ProcManager_Complete();
-			}
-		}
-
-
-		/// <summary>
-		/// Updates the current file number and starts its process.
-		/// </summary>
-		/// <param name="whichFile"></param>
-		private void ProcManager_ActivateProcess(int whichFile)
-		{
-			// Don't advance to the next file if this is the last one
-			if (whichFile > ProcManager_fileList.Count)
-			{
-				return;
-			}
-
-			ProcManager_activeFile = whichFile;
-
-			ProcManager_curProc = ProcManager_StartProcess(ProcManager_fileList.ElementAt(ProcManager_activeFile).FileDir);
-
-			//if (clist_Files.GetItemChecked(ProcManager_activeFile) == true)
-			//{
-			//    ProcManager_curProc = ProcManager_StartProcess(clist_Files.GetItemText(clist_Files.Items[ProcManager_activeFile]));
-			//}
-			//else
-			//{
-			//    ProcManager_NotifyProcessComplete(ProcManager_activeFile, false);
-			//}
-		}
-
-
-		/// <summary>
-		/// Executes the specified file in a new process.
-		/// </summary>
-		/// <param name="filePath">Full path of the file to execute.</param>
-		/// <param name="singleFile">True to only execute a single file, false to notify the manager to execute the next file after this one is finished.</param>
-		/// <returns>Process that was executed.</returns>
-		private Process ProcManager_StartProcess(string filePath, bool singleFile = false)
-		{
-
-			// Initilialize process start info
-			ProcessStartInfo startInfo = new ProcessStartInfo(@filePath)
-			{
-				WorkingDirectory = Utilities.GetFileDirectory(@filePath),
-				WindowStyle = ProcessWindowStyle.Hidden,
-				UseShellExecute = false,
-				RedirectStandardOutput = true,
-				CreateNoWindow = true
-			};
-
-			// Initialize the process
-			Process proc = new Process();
-			proc.StartInfo = startInfo;
-			proc.EnableRaisingEvents = true;
-
-			// Log any output data that's received
-			proc.OutputDataReceived += ((sender, e) =>
-			{
-				if (!ProcManager_procAborted)
-				{
-					Thread outputThread = new Thread(() => Log(e.Data, LogType.Munge));
-					outputThread.Start();
-				}
-			});
-
-
-			// Print the file path before starting
-			Thread initOutputThread = new Thread(() =>
-			{
-				Log(string.Format("Executing file: \"{0}\"", @filePath), LogType.Info);
-				Log("");
-			});
-			initOutputThread.Start();
-
-
-			// Notify the manager that the process is done
-			proc.Exited += ((sender, e) =>
-			{
-				// Don't send out 'exited' messages if we've aborted
-				if (!ProcManager_procAborted)
-				{
-					Thread procExitThread = new Thread(() => {
-						Log("File done", LogType.Info);
-					});
-					procExitThread.Start();
-
-					ProcManager_NotifyProcessComplete(ProcManager_activeFile, singleFile);
-				}
-			});
-
-
-			try
-			{
-				// Start the process
-				proc.Start();
-				proc.BeginOutputReadLine();
-				//proc.WaitForExit();
-				//Thread.Sleep(5000);
-			}
-			catch (InvalidOperationException e)
-			{
-				Trace.WriteLine("Invalid operation while starting process. Reason: " + e.Message);
-				throw;
-			}
-			catch (Win32Exception e)
-			{
-				Trace.WriteLine("Win32 exception while starting process. Reason: " + e.Message);
-				throw;
-			}
-
-			return proc;
-		}
-
-
-		/// <summary>
-		/// Aborts the active process.
-		/// </summary>
-		public void ProcManager_Abort()
-		{
-			ProcManager_isRunning = false;
-
-			Thread soundThread = new Thread(() => {
-				if (prefs.ShowTrayIcon)
-				{
-					trayIcon.Text = "Zero Munge: Idle";
-				}
-				Utilities.PlaySound("abort");
-			});
-			soundThread.Start();
-
-			ProcManager_procAborted = true;
-
-			// Kill the process
-			ProcManager_curProc.Kill();
-
-			// Reset the stored list of checked files
-			ProcManager_fileList = null;
-
-			Thread exitThread = new Thread(() => {
-				Log("");
-				Log("**************************************************************");
-				Log("******** ABORTED JOB");
-				Log("**************************************************************");
-
-				// Re-enable the UI
-				EnableUI(true);
-			});
-			exitThread.Start();
-		}
-
-
-		/// <summary>
-		/// This is called after all the files have been processed.
-		/// </summary>
-		public void ProcManager_Complete()
-		{
-			ProcManager_isRunning = false;
-
-			Thread exitThread = new Thread(() => {
-				Log("");
-				Log("**************************************************************");
-				Log("******** FINISHED JOB");
-				Log("**************************************************************");
-
-				// Re-enable the UI
-				EnableUI(true);
-			});
-			exitThread.Start();
-
-			Thread soundThread = new Thread(() => {
-				if (prefs.ShowNotificationPopups)
-				{
-					trayIcon.Text = "Zero Munge: Idle";
-					trayIcon.BalloonTipTitle = "Success";
-					trayIcon.BalloonTipText = "The operation was completed successfully.";
-					trayIcon.ShowBalloonTip(30000);
-				}
-				Utilities.PlaySound("success");
-			});
-			soundThread.Start();
-		}
-
-		#endregion Process Manager
-
-
 		#region Output Log
 
 		// ***************************
@@ -1401,7 +960,7 @@ namespace ZeroMunge
 		};
 
 		List<string> logLineCollection = new List<string>();
-		bool notifyLogThread = false;
+		public bool notifyLogThread = false;
 		bool logThreadReady = true;
 
 		#endregion Output Log : Fields
@@ -1500,7 +1059,7 @@ namespace ZeroMunge
 				//});
 				//swThread.Start();
 				
-				if (ProcManager_isRunning)
+				if (ProcessManager.IsRunning())
 				{
 					notifyLogThread = true;
 				}
@@ -1558,7 +1117,7 @@ namespace ZeroMunge
 				text_OutputLog.Select(text_OutputLog.Text.Length, text_OutputLog.Text.Length);
 				text_OutputLog.ScrollToCaret();
 
-				if (ProcManager_isRunning)
+				if (ProcessManager.IsRunning())
 				{
 					// Only update the Output Log once every X milliseconds
 					Thread.Sleep(prefs.LogPollingRate);
@@ -1863,9 +1422,9 @@ namespace ZeroMunge
 		/// Returns a list of files that are currently checkmarked in the file list.
 		/// </summary>
 		/// <returns>List<MungeFactory> of files that are checkmarked.</returns>
-		private List<MungeFactory> GetCheckedFiles()
+		public List<MungeFactory> GetCheckedFiles()
 		{
-			var checkedFiles = new List<MungeFactory>();
+			List<MungeFactory> checkedFiles = new List<MungeFactory>();
 
 			Debug.WriteLine("There are " + (data_Files.RowCount - 1) + " rows");
 
@@ -1931,23 +1490,19 @@ namespace ZeroMunge
 						Debug.WriteLine(row.Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value.ToString());
 
 
-						// Construct a new FileFactory object and initialize our data into it
-						MungeFactory fileInfo = new MungeFactory();
-
-						// 'Copy' data
-						fileInfo.CopyToStaging = row.Cells[STR_DATA_FILES_CHK_COPY].Value.ToString();
-
-						// 'File directory' data
-						fileInfo.FileDir = row.Cells[STR_DATA_FILES_TXT_FILE].Value.ToString();
+						// Construct a new MungeFactory object and initialize our data into it
+						MungeFactory fileInfo = new MungeFactory
+						{
+							CopyToStaging = row.Cells[STR_DATA_FILES_CHK_COPY].Value.ToString(),    // 'Copy' data
+							FileDir = row.Cells[STR_DATA_FILES_TXT_FILE].Value.ToString(),          // 'File directory' data
+							MungeDir = row.Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value.ToString()     // 'Munge directory' data
+						};
 
 						// 'Staging directory' data
 						if (row.Cells[STR_DATA_FILES_TXT_STAGING].Value != null)
 						{
 							fileInfo.StagingDir = row.Cells[STR_DATA_FILES_TXT_STAGING].Value.ToString();
 						}
-
-						// 'Munge directory' data
-						fileInfo.MungeDir = row.Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value.ToString();
 
 						// 'Munged files' data
 						if (row.Cells[STR_DATA_FILES_TXT_MUNGED_FILES].Value != null)
@@ -1971,12 +1526,21 @@ namespace ZeroMunge
 
 
 		/// <summary>
+		/// Adds the specified file path to the file list. It is assumed that the file is not a munge script.
+		/// </summary>
+		/// <param name="file">Full path of file to add.</param>
+		/// <returns>True if the file was successfully added, false if not.</returns>
+		public bool AddFile(string file)
+		{
+			return AddFile(file, true);
+		}
+		/// <summary>
 		/// Adds the specified file path to the file list.
 		/// </summary>
 		/// <param name="file">Full path of file to add.</param>
 		/// <param name="isMungeScript">Whether or not the specified file is a munge script.</param>
 		/// <returns>True if the file was successfully added, false if not.</returns>
-		public bool AddFile(string file, bool isMungeScript = true)
+		public bool AddFile(string file, bool isMungeScript)
 		{
 			// Does the file path exist?
 			if (File.Exists(file))
@@ -2290,52 +1854,9 @@ namespace ZeroMunge
 		/// <summary>
 		/// Removes all committed rows from the file list.
 		/// </summary>
-		/// <param name="printErrors">Whether or not error messages should be printed to the Output Log.</param>
-		public void ClearFileList(bool printErrors = false)
+		public void ClearFileList()
 		{
 			data_Files.Rows.Clear();
-
-			// Is there at least 1 committed row to remove?
-			/*if (data_Files.RowCount > 1 && !data_Files.Rows[0].IsNewRow)
-			{
-				Debug.WriteLine("Rows to remove: " + (data_Files.RowCount - 1));
-
-				// Keep removing the topmost row until only 1 row remains
-				do
-				{
-					try
-					{
-						data_Files.Rows.RemoveAt(data_Files.Rows[0].Index);
-					}
-					catch (ArgumentOutOfRangeException e)
-					{
-						Trace.WriteLine("Argument out of range while removing row. Reason: " + e.Message);
-						Log("Argument out of range while removing row. Reason: " + e.Message, LogType.Error);
-						throw;
-					}
-					catch (InvalidOperationException e)
-					{
-						Trace.WriteLine("Invalid operation while removing row. Reason: " + e.Message);
-						Log("Invalid operation while removing row. Reason: " + e.Message, LogType.Error);
-						throw;
-					}
-					Debug.WriteLine("Rows remaining: " + (data_Files.RowCount - 1));
-				} while (data_Files.RowCount > 1);
-			}
-			else
-			{
-				Thread errorThread = new Thread(() =>
-				{
-					if (printErrors)
-					{
-						Log("File list must contain at least one file", LogType.Error);
-					}
-
-					// Re-enable the UI
-					EnableUI(true);
-				});
-				errorThread.Start();
-			}*/
 		}
 
 
@@ -2346,8 +1867,6 @@ namespace ZeroMunge
 		/// <param name="replaceCurrentContents">Whether or not to clear the contents of the file list before loading the new data into it. Default = true</param>
 		public bool LoadDataIntoFileList(DataFilesContainer data, string filePath, bool replaceCurrentContents = true)
 		{
-			//int numRowsAdded = 0;	// shouldn't be needed
-
 			try
 			{
 				if (data.DataRows == null)
@@ -2383,8 +1902,6 @@ namespace ZeroMunge
 					newRow.Cells[STR_DATA_FILES_TXT_MUNGED_FILES].Value = row.MungedFiles;
 					newRow.Cells[STR_DATA_FILES_CHK_IS_MUNGE_SCRIPT].Value = row.IsMungeScript;
 					newRow.Cells[STR_DATA_FILES_CHK_IS_VALID].Value = row.IsValid;
-
-					//numRowsAdded++;
 				}
 			}
 			catch (NullReferenceException e)
@@ -2420,7 +1937,7 @@ namespace ZeroMunge
 		/// </summary>
 		/// <param name="filePath">File path to save the file list to.</param>
 		/// <param name="isAutoSave">Whether or not this an auto-save.</param>
-		private void SaveFileListToFile(string filePath, bool isAutoSave)
+		private void SaveFileListToFile(string filePath, bool isAutoSave, bool inExitFlow)
 		{
 			// Serialize and save the data
 			SerializeData(filePath);
@@ -3010,7 +2527,7 @@ namespace ZeroMunge
 		// Begin processing the list of files as a playlist.
 		private void btn_Run_Click(object sender, EventArgs e)
 		{
-			ProcManager_Start();
+			ProcessManager.Start(this, GetCheckedFiles(), data_Files);
 		}
 
 
@@ -3018,7 +2535,7 @@ namespace ZeroMunge
 		// Abort the active process and stop processing files.
 		private void btn_Cancel_Click(object sender, EventArgs e)
 		{
-			ProcManager_Abort();
+			ProcessManager.Abort(this);
 		}
 
 
@@ -3248,7 +2765,7 @@ namespace ZeroMunge
 		{
 			lastCellChangeMethod = CellChangeMethod.Button;
 
-			ClearFileList(true);
+			ClearFileList();
 		}
 
 
@@ -3370,7 +2887,7 @@ namespace ZeroMunge
 		// Begin processing the list of files as a playlist.
 		private void cmenu_TrayIcon_Run_Click(object sender, EventArgs e)
 		{
-			ProcManager_Start();
+			ProcessManager.Start(this, GetCheckedFiles(), data_Files);
 		}
 
 
@@ -3378,7 +2895,7 @@ namespace ZeroMunge
 		// Abort the active process and stop processing files.
 		private void cmenu_TrayIcon_Cancel_Click(object sender, EventArgs e)
 		{
-			ProcManager_Abort();
+			ProcessManager.Abort(this);
 		}
 
 
@@ -3845,7 +3362,7 @@ namespace ZeroMunge
 				saveFileListLastDir = Utilities.GetFileDirectory(saveDlg_SaveFileListPrompt.FileName);
 
 				// Write the file list's contents to the file
-				SaveFileListToFile(saveDlg_SaveFileListPrompt.FileName, false);
+				SaveFileListToFile(saveDlg_SaveFileListPrompt.FileName, false, inExitFlow);
 			}
 		}
 
@@ -3873,7 +3390,7 @@ namespace ZeroMunge
 				DirectoryInfo projectDir = new DirectoryInfo(filePath).Parent.Parent.Parent;
 
 				string fileName = new FileInfo(filePath).Name;
-				string sideName = StringExt.SubstringIdx(fileName, 0, fileName.LastIndexOf('.')).ToUpper();
+				string sideName = fileName.SubstringIdx(0, fileName.LastIndexOf('.')).ToUpper();
 
 				CreateSideMungeFolder(projectDir.FullName, sideName);
 			}
@@ -4023,19 +3540,19 @@ namespace ZeroMunge
 
 		private void menu_viewChangelogToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			OpenFile("CHANGELOG.html");
+			OpenApplicationResourceFile("CHANGELOG.html");
 		}
 
 
 		private void menu_viewLicenseToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			OpenFile("LICENSE.html");
+			OpenApplicationResourceFile("LICENSE.html");
 		}
 
 
 		private void menu_viewReadmeToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			OpenFile("README.html");
+			OpenApplicationResourceFile("README.html");
 		}
 
 

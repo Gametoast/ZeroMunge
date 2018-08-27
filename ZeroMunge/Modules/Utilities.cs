@@ -9,6 +9,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using ZeroMunge.Modules;
 
 namespace ZeroMunge
 {
@@ -27,7 +28,7 @@ namespace ZeroMunge
 			Side,
 			Sound,
 			World
-		};
+		}
 
 		public enum ReqChunkParseState
 		{
@@ -42,14 +43,21 @@ namespace ZeroMunge
 			ChunkContents,
 			ChunkEnd,
 			FileEnd
-		};
+		}
 
 		public enum UpdateResult
 		{
 			NoneAvailable,
 			Available,
 			NetConnectionError
-		};
+		}
+
+		public enum SoundType
+		{
+			Start,
+			Success,
+			Abort
+		}
 
 
 		/// <summary>
@@ -97,18 +105,6 @@ namespace ZeroMunge
 
 
 		/// <summary>
-		/// Returns the first N characters of the specified string.
-		/// </summary>
-		/// <param name="str">String to truncate.</param>
-		/// <param name="maxLength">Number of characters to return.</param>
-		/// <returns>First N characters of the specified string</returns>
-		public static string TruncateLongString(this string str, int maxLength)
-		{
-			return str.Substring(0, Math.Min(str.Length, maxLength));
-		}
-
-
-		/// <summary>
 		/// Given a string containing lines of text separated by new-line delimiters ("\n"), returns a list containing each extracted line.
 		/// </summary>
 		/// <param name="str">String to extract lines from.</param>
@@ -133,48 +129,26 @@ namespace ZeroMunge
 
 
 		/// <summary>
-		/// Returns the extension of the file at the given path.  
-		/// Example: Inputting "C:\Documents\foo.bar" or simply "foo.bar" would return "bar".
-		/// </summary>
-		/// <param name="filePath">File path or name to get extension from.</param>
-		/// <returns>File extension of given file (e.g., "txt")</returns>
-		public static string GetFileExtension(string filePath)
-		{
-			return filePath.ToLower().Substring(filePath.LastIndexOf(".") + 1);
-		}
-
-
-		/// <summary>
-		/// Returns the directory of the specified file path.  
+		/// Shortcut method to return the directory of the specified file path.  
 		/// Example: Inputting "C:\Documents\foo.bar" would return "C:\Documents"
 		/// </summary>
 		/// <param name="filePath">Path of file to get directory from.</param>
 		/// <returns>Directory of the specified file path.</returns>
 		public static string GetFileDirectory(string filePath)
 		{
-			// Get the file's directory
-			string filePathDir = "";
-			int index = filePath.LastIndexOf(@"\");
-			if (index > 0)
-			{
-				filePathDir = filePath.Substring(0, index);
-			}
-
-			return filePathDir;
+			return new DirectoryInfo(filePath).Parent.FullName;
 		}
 
 
 		/// <summary>
-		/// Returns the name of the specified file path's parent folder.  
+		/// Shortcut method to return the name of the specified file path's parent folder.  
 		/// Example: Inputting "C:\Documents\foo.bar" would return "Documents"
 		/// </summary>
 		/// <param name="filePath">Path of file to get parent folder name from.</param>
 		/// <returns>Name of the specified file path's parent folder.</returns>
 		public static string GetParentFolderName(string filePath)
 		{
-			DirectoryInfo dir = new DirectoryInfo(GetFileDirectory(filePath));
-
-			return dir.Name;
+			return new DirectoryInfo(GetFileDirectory(filePath)).Name;
 		}
 
 
@@ -460,7 +434,7 @@ namespace ZeroMunge
 				return reqChunk;
 			}
 			
-			if (GetFileExtension(reqFilePath) != "req")
+			if (new FileInfo(reqFilePath).Extension != "req")
 			{
 				var message = "ERROR! File extension is " + reqFilePath;
 				Trace.WriteLine(message);
@@ -628,22 +602,18 @@ namespace ZeroMunge
 			while ((curLine = file.ReadLine()) != null)
 			{
 				// Is the line a levelpack line?
-				if (TruncateLongString(curLine, 9).ToLower() == "levelpack")
+				if (curLine.TruncateLongString(9).ToLower() == "levelpack")
 				{
-					string reqName = curLine;
 					bool skipFile = false;
 
 					// Sample of the beginning of a levelpack line
 					var levelpackSample = "levelpack -inputfile";
 
 					// Remove the right half of the string from the file extension onwards
-					reqName = reqName.TruncateLongString(reqName.LastIndexOf(".req"));
-
-					// Remove the left half of the string from the inputfile command onwards
-					reqName = reqName.Remove(0, levelpackSample.Length);
-
-					// Trim any excess spaces from the ends of the string
-					reqName = reqName.Trim(" "[0]);
+					string reqName = curLine
+						.TruncateLongString(curLine.LastIndexOf(".req"))    // Remove the right half of the string from the file extension onwards
+						.Remove(0, levelpackSample.Length)                  // Remove the left half of the string from the inputfile command onwards
+						.Trim(" "[0]);                                      // Trim any excess spaces from the ends of the string
 
 					// Add the LVL file extension to the end
 					reqName = string.Concat(reqName, ".lvl");
@@ -694,8 +664,6 @@ namespace ZeroMunge
 		public static MungeTypes GetMungeType(string filePath)
 		{
 			DirectoryInfo dir = new DirectoryInfo(GetFileDirectory(filePath));
-			DirectoryInfo dirdir = new DirectoryInfo(dir.Name);
-			DirectoryInfo dirdirdir = new DirectoryInfo(dirdir.Name);
 
 			// Get the project ID
 			MungeTypes type;
@@ -740,6 +708,12 @@ namespace ZeroMunge
 		}
 
 
+		/// <summary>
+		/// Attempts to download a JSON string from the specified URL and return it as a List of JsonPairs.
+		/// </summary>
+		/// <param name="sender">Sending form.</param>
+		/// <param name="url">Web address to download the JSON string from.</param>
+		/// <returns>List of JsonPairs parsed from the downloaded JSON string.</returns>
 		public static List<JsonPair> ParseJsonStringsFromUrl(Form sender, string url)
 		{
 			string json;
@@ -766,6 +740,12 @@ namespace ZeroMunge
 		}
 
 
+		/// <summary>
+		/// Converts a JSON string into a List of key-value JsonPairs.
+		/// </summary>
+		/// <param name="sender">Sending form.</param>
+		/// <param name="unparsedJson">JSON string to parse.</param>
+		/// <returns>List of JsonPairs parsed from the specified JSON string.</returns>
 		public static List<JsonPair> ParseJsonStrings(Form sender, string unparsedJson)
 		{
 			List<JsonPair> parsedJson = new List<JsonPair>();
@@ -1035,7 +1015,7 @@ namespace ZeroMunge
 		/// </summary>
 		/// <param name="fileName">Name of the file to open.</param>
 		/// <returns>If the file is opened successfully, a success message is returned. If not, an error message is returned.</returns>
-		public static string OpenFile(string fileName)
+		public static string OpenApplicationResourceFile(string fileName)
 		{
 			string file = Directory.GetCurrentDirectory() + "\\ZeroMunge\\" + fileName;
 			string result = "";
@@ -1073,24 +1053,26 @@ namespace ZeroMunge
 		/// <summary>
 		/// Plays the specified sound type.
 		/// </summary>
-		/// <param name="type">Type of sound to play ("start", "success", or "abort").</param>
-		public static void PlaySound(string type)
+		/// <param name="type">Type of sound to play.</param>
+		public static void PlaySound(SoundType type)
 		{
 			if (!Properties.Settings.Default.PlayNotificationSounds) { return; }
 
 			string soundToPlay = "null";
+			
+			switch (type)
+			{
+				case SoundType.Start:
+					soundToPlay = Directory.GetCurrentDirectory() + "\\ZeroMunge\\start.wav";
+					break;
 
-			if (type == "start")
-			{
-				soundToPlay = Directory.GetCurrentDirectory() + "\\ZeroMunge\\start.wav";
-			}
-			if (type == "success")
-			{
-				soundToPlay = Directory.GetCurrentDirectory() + "\\ZeroMunge\\success.wav";
-			}
-			if (type == "abort")
-			{
-				soundToPlay = Directory.GetCurrentDirectory() + "\\ZeroMunge\\abort.wav";
+				case SoundType.Success:
+					soundToPlay = Directory.GetCurrentDirectory() + "\\ZeroMunge\\success.wav";
+					break;
+
+				case SoundType.Abort:
+					soundToPlay = Directory.GetCurrentDirectory() + "\\ZeroMunge\\abort.wav";
+					break;
 			}
 
 			// Does the sound file exist?

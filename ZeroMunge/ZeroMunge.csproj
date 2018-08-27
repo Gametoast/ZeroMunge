@@ -159,6 +159,7 @@
     <Compile Include="Forms\Updates.Designer.cs">
       <DependentUpon>Updates.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modules\ProcessManager.cs" />
     <Compile Include="Modules\ReadWriteCsv.cs" />
     <Compile Include="Modules\StringExt.cs" />
     <Compile Include="Modules\Tooltips.cs" />

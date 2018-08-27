@@ -24,5 +24,17 @@ namespace ZeroMunge
 			var length = endIndex - startIndex;
 			return value.Substring(startIndex, length);
 		}
+
+
+		/// <summary>
+		/// Returns the first N characters of the specified string.
+		/// </summary>
+		/// <param name="str">String to truncate.</param>
+		/// <param name="maxLength">Number of characters to return.</param>
+		/// <returns>First N characters of the specified string</returns>
+		public static string TruncateLongString(this string str, int maxLength)
+		{
+			return str.Substring(0, Math.Min(str.Length, maxLength));
+		}
 	}
 }
