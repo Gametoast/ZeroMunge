@@ -663,6 +663,10 @@ namespace ZeroMunge
 			menu_clearLogToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_ClearLog);
 
 
+			// Tools Menu
+			menu_createSideMungeFolderToolStripMenuItem.ToolTipText = Tooltips.Tools.CreateSideMungeFolder;
+
+
 			// Settings
 			FormTooltips.SetToolTip(btn_SetGamePath, Tooltips.Settings.SetGamePath);
 

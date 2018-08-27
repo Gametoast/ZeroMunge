@@ -37,6 +37,11 @@ namespace ZeroMunge
 			public const string ClearLog = "Clear the contents of the output log.";
 		}
 
+		public static class Tools
+		{
+			public const string CreateSideMungeFolder = "Automatically create a side's munge folder based on the side's REQ file.";
+		}
+
 		public static class EasyFilePicker
 		{
 			public const string OK = "Close this dialog and add the munge files for the selected items to the file list.";
