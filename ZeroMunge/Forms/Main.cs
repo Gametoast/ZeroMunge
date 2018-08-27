@@ -3856,6 +3856,141 @@ namespace ZeroMunge
 		#endregion File Menu
 
 
+		#region Tools Menu
+
+		// When the user clicks the 'Create Side Munge Folder...' button in the Tools menu:
+		// Begin the logic for creating a side munge folder.
+		private void menu_createSideMungeFolderToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (openDlg_CreateSideMungeFolderPrompt.ShowDialog() == DialogResult.OK)
+			{
+				string filePath = openDlg_CreateSideMungeFolderPrompt.FileName;
+
+				DirectoryInfo projectDir = new DirectoryInfo(filePath).Parent.Parent.Parent;
+
+				string fileName = new FileInfo(filePath).Name;
+				string sideName = StringExt.SubstringIdx(fileName, 0, fileName.LastIndexOf('.')).ToUpper();
+
+				CreateSideMungeFolder(projectDir.FullName, sideName);
+			}
+		}
+
+
+		/// <summary>
+		/// Create a side munge folder for the specified side.
+		/// </summary>
+		/// <param name="projectDirectory">Project directory in which the side resides.</param>
+		/// <param name="sideName">Name of the side. Ex: "ABC"</param>
+		private void CreateSideMungeFolder(string projectDirectory, string sideName)
+		{
+			try
+			{
+				string destDir = projectDirectory + "\\_BUILD\\Sides\\" + sideName;
+				string cleanFile = Directory.GetCurrentDirectory() + "\\ZeroMunge\\templates\\SideMungeFolder\\clean.bat";
+				string mungeFile = Directory.GetCurrentDirectory() + "\\ZeroMunge\\templates\\SideMungeFolder\\munge.bat";
+
+				bool copyClean = true;
+				bool copyMunge = true;
+
+				// Copy the template files to the target directory
+				Directory.CreateDirectory(destDir);
+
+				// Warn user if clean.bat already exists and prompt them to overwrite it or not
+				if (File.Exists(destDir + "\\clean.bat"))
+				{
+					DialogResult cleanOverwritePromptResult = MessageBox.Show("A file named clean.bat already exists in the directory: \n" + destDir + "\n\nWould you like to overwrite it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+					if (cleanOverwritePromptResult == DialogResult.No)
+					{
+						copyClean = false;
+					}
+				}
+				if (copyClean)
+				{
+					Log(string.Format("Copying clean.bat template to directory: \"{0}\"", destDir), LogType.Info);
+					File.Copy(cleanFile, destDir + "\\clean.bat", true);
+				}
+
+				// Warn user if munge.bat already exists and prompt them to overwrite it or not
+				if (File.Exists(destDir + "\\munge.bat"))
+				{
+					DialogResult mungeOverwritePromptResult = MessageBox.Show("A file named munge.bat already exists in the directory: \n" + destDir + "\n\nWould you like to overwrite it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+					if (mungeOverwritePromptResult == DialogResult.No)
+					{
+						copyMunge = false;
+					}
+				}
+				if (copyMunge)
+				{
+					Log(string.Format("Copying munge.bat template to directory: \"{0}\"", destDir), LogType.Info);
+					File.Copy(mungeFile, destDir + "\\munge.bat", true);
+				}
+
+				// Rewrite the munge.bat template file
+				string mungeFileContents = File.ReadAllText(destDir + "\\munge.bat");
+				File.WriteAllText(destDir + "\\munge.bat", mungeFileContents.Replace("@#$", sideName));
+
+				Log(string.Format("Successfully created side munge folder for {0}: \"{1}\"", sideName, destDir), LogType.Info);
+
+				// Prompt user to add the munge file to the File List
+				DialogResult successPromptResult = MessageBox.Show("Would you like to add the munge file to the File List?", "Success", MessageBoxButtons.YesNo);
+				if (successPromptResult == DialogResult.Yes)
+				{
+					AddFile(destDir + "\\munge.bat", true);
+				}
+			}
+			catch (UnauthorizedAccessException ex)
+			{
+				var msg = "Failed to create side munge directory. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (NotSupportedException ex)
+			{
+				var msg = "Failed to create side munge directory. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (PathTooLongException ex)
+			{
+				var msg = "Failed to create side munge directory. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (DirectoryNotFoundException ex)
+			{
+				var msg = "Failed to create side munge directory. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (FileNotFoundException ex)
+			{
+				var msg = "Failed to create side munge directory. Reason: " + ex.Message + "\nFile: " + ex.FileName;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (IOException ex)
+			{
+				var msg = "Failed to create side munge directory. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (ArgumentNullException ex)
+			{
+				var msg = "Failed to create side munge directory. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (ArgumentException ex)
+			{
+				var msg = "Failed to create side munge directory. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+		}
+
+		#endregion Tools Menu
+
+
 		#region Settings Menu
 
 		// When the user clicks the Preferences button in the Settings menu:
@@ -4009,35 +4144,6 @@ namespace ZeroMunge
 
 		#endregion Debug Buttons
 
-		private void menu_createSideMungeFolderToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			if (openDlg_CreateSideMungeFolderPrompt.ShowDialog() == DialogResult.OK)
-			{
-				string filePath = openDlg_CreateSideMungeFolderPrompt.FileName;
-
-				DirectoryInfo projectDir = new DirectoryInfo(filePath).Parent.Parent.Parent;
-
-				string fileName = new FileInfo(filePath).Name;
-				string sideName = StringExt.SubstringIdx(fileName, 0, fileName.LastIndexOf('.')).ToUpper();
-
-				CreateSideMungeFolder(projectDir.FullName, sideName);
-			}
-		}
-
-		private void CreateSideMungeFolder(string projectDirectory, string sideName)
-		{
-			string destDir = projectDirectory + "\\_BUILD\\Sides\\" + sideName;
-			string cleanFile = Directory.GetCurrentDirectory() + "\\ZeroMunge\\templates\\SideMungeFolder\\clean.bat";
-			string mungeFile = Directory.GetCurrentDirectory() + "\\ZeroMunge\\templates\\SideMungeFolder\\munge.bat";
-
-			Directory.CreateDirectory(destDir);
-			File.Copy(cleanFile, destDir + "\\clean.bat");
-			File.Copy(mungeFile, destDir + "\\munge.bat");
-
-			List<string> mungeFileContents = File.ReadAllLines(destDir + "\\munge.bat").ToList();
-			mungeFileContents[0].Replace("@#$", sideName.ToUpper());
-			// TODO: finish this
-		}
 	}
 
 	public class MungeFactory
