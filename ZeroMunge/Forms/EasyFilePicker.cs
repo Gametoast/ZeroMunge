@@ -122,13 +122,29 @@ namespace ZeroMunge
 		// Check/uncheck all child nodes.
 		private void tv_Files_AfterCheck(object sender, TreeViewEventArgs e)
 		{
-			// Check/uncheck child nodes
-			TreeNode node = e.Node;
-			if (node.Nodes.Count > 0)
+			// Did the user cause the checked state to change?
+			if (e.Action != TreeViewAction.Unknown)
 			{
-				foreach (TreeNode childNode in node.Nodes)
+				if (e.Node.Nodes.Count > 0)
 				{
-					childNode.Checked = e.Node.Checked;
+					CheckAllChildNodes(e.Node, e.Node.Checked);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Recursively sets the checked state of the specified TreeNode's child nodes.
+		/// </summary>
+		/// <param name="treeNode">Node to set checked state for all children.</param>
+		/// <param name="nodeChecked">True, check node. False, uncheck node.</param>
+		private void CheckAllChildNodes(TreeNode treeNode, bool nodeChecked)
+		{
+			foreach (TreeNode node in treeNode.Nodes)
+			{
+				node.Checked = nodeChecked;
+				if (node.Nodes.Count > 0)
+				{
+					CheckAllChildNodes(node, nodeChecked);
 				}
 			}
 		}
@@ -190,6 +206,7 @@ namespace ZeroMunge
 
 					tv_Files.EndUpdate();
 					tv_Files.ExpandAll();
+					tv_Files.Nodes[0].EnsureVisible();
 
 					// Increment the current root index in case the user adds another project
 					curRoot++;

@@ -1541,172 +1541,189 @@ namespace ZeroMunge
 			// Does the file path exist?
 			if (File.Exists(file))
 			{
-				// Add the file to the list
-				if (data_Files.SelectedCells.Count >= 0)
+				try
 				{
-					// Auto-set the staging directory if the game directory has been set
-					if (prefs.GameDirectory != "")
+					// Add the file to the list
+					if (data_Files.SelectedCells.Count >= 0)
 					{
-						string projectStagingRoot = prefs.GameDirectory + "\\addon\\" + Utilities.GetProjectID(file);
-						string stagingDirectory = "";
-						string mungeOutputDirectory = "";
-						string compiledFiles = "";
-
-						List<string> compiledFilesList = Utilities.GetCompiledFiles(file);
-
-						Debug.WriteLine(Utilities.GetProjectID(file));
-
-						// Set the file's staging directory based on the file's munge type (e.g., side, world, common)
-						switch (Utilities.GetMungeType(file))
+						// Auto-set the staging directory if the game directory has been set
+						if (prefs.GameDirectory != "")
 						{
-							default:
+							string projectStagingRoot = prefs.GameDirectory + "\\addon\\" + Utilities.GetProjectID(file);
+							string stagingDirectory = "";
+							string mungeOutputDirectory = "";
+							string compiledFiles = "";
+
+							List<string> compiledFilesList = Utilities.GetCompiledFiles(file);
+
+							Debug.WriteLine(Utilities.GetProjectID(file));
+
+							// Set the file's staging directory based on the file's munge type (e.g., side, world, common)
+							switch (Utilities.GetMungeType(file))
+							{
+								default:
+									stagingDirectory = "nil";
+									break;
+								case Utilities.MungeTypes.Addme:
+									stagingDirectory = projectStagingRoot + "\\";
+									break;
+								case Utilities.MungeTypes.Common:
+									stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\";
+									break;
+								case Utilities.MungeTypes.Load:
+									stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\Load\\";
+									break;
+								case Utilities.MungeTypes.Shell:
+									stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\";
+									break;
+								case Utilities.MungeTypes.Side:
+									stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\SIDE\\";
+									break;
+								case Utilities.MungeTypes.Sound:
+									stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\Sound\\";
+									break;
+								case Utilities.MungeTypes.World:
+									stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\" + Utilities.GetProjectID(file) + "\\";
+									break;
+							}
+
+							// Get the file's munge output directory
+							mungeOutputDirectory = Utilities.GetMungeDirectory(file);
+
+
+							// Remove any duplicate backslashes
+							file = file.Replace(@"\\", @"\");
+							stagingDirectory = stagingDirectory.Replace(@"\\", @"\");
+							mungeOutputDirectory = mungeOutputDirectory.Replace(@"\\", @"\");
+
+
+							// Assemble a multi-line string of the compiled files' names
+							foreach (string compiledFile in compiledFilesList)
+							{
+								compiledFiles = string.Concat(compiledFiles, compiledFile, "\n");
+							}
+
+
+							// Make all data values nil if file isn't a munge script (except for the File Path value)
+							if (!isMungeScript)
+							{
 								stagingDirectory = "nil";
-								break;
-							case Utilities.MungeTypes.Addme:
-								stagingDirectory = projectStagingRoot + "\\";
-								break;
-							case Utilities.MungeTypes.Common:
-								stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\";
-								break;
-							case Utilities.MungeTypes.Load:
-								stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\Load\\";
-								break;
-							case Utilities.MungeTypes.Shell:
-								stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\";
-								break;
-							case Utilities.MungeTypes.Side:
-								stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\SIDE\\";
-								break;
-							case Utilities.MungeTypes.Sound:
-								stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\Sound\\";
-								break;
-							case Utilities.MungeTypes.World:
-								stagingDirectory = projectStagingRoot + "\\data\\_LVL_PC\\" + Utilities.GetProjectID(file) + "\\";
-								break;
-						}
+								mungeOutputDirectory = "nil";
+								compiledFiles = "nil";
 
-						// Get the file's munge output directory
-						mungeOutputDirectory = Utilities.GetMungeDirectory(file);
+								Thread infoThread = new Thread(() => {
+									var message = "File is not a munge script, copy operations will be disabled for it";
+									Debug.WriteLine(message);
+									Log(message, LogType.Info);
+								});
+								infoThread.Start();
+							}
 
 
-						// Remove any duplicate backslashes
-						file = file.Replace(@"\\", @"\");
-						stagingDirectory = stagingDirectory.Replace(@"\\", @"\");
-						mungeOutputDirectory = mungeOutputDirectory.Replace(@"\\", @"\");
+							if (!prefs.AutoDetectStagingDir)
+							{
+								stagingDirectory = "nil";
+
+								Thread infoThread = new Thread(() => {
+									var message = "Not setting Staging Directory in accordance with user preferences";
+									Debug.WriteLine(message);
+									Log(message, LogType.Info);
+								});
+								infoThread.Start();
+							}
 
 
-						// Assemble a multi-line string of the compiled files' names
-						foreach (string compiledFile in compiledFilesList)
-						{
-							compiledFiles = string.Concat(compiledFiles, compiledFile, "\n");
-						}
+							if (!prefs.AutoDetectMungedFiles)
+							{
+								compiledFiles = "nil";
+
+								Thread infoThread = new Thread(() => {
+									var message = "Not setting Munged Files in accordance with user preferences";
+									Debug.WriteLine(message);
+									Log(message, LogType.Info);
+								});
+								infoThread.Start();
+							}
 
 
-						// Make all data values nil if file isn't a munge script (except for the File Path value)
-						if (!isMungeScript)
-						{
-							stagingDirectory = "nil";
-							mungeOutputDirectory = "nil";
-							compiledFiles = "nil";
+							// Are none of the rows selected? (i.e., did the user click the "Add Files..." button?)
+							if (data_Files_CurSelectedRow == -1)
+							{
+								// Create a new row first
+								int rowId = data_Files.Rows.Add();
 
-							Thread infoThread = new Thread(() => {
-								var message = "File is not a munge script, copy operations will be disabled for it";
-								Debug.WriteLine(message);
-								Log(message, LogType.Info);
+								// Grab the new row
+								DataGridViewRow newRow = data_Files.Rows[rowId];
+
+								// Initialize data into the new row
+								newRow.Cells[STR_DATA_FILES_CHK_ENABLED].Value = true;
+								newRow.Cells[STR_DATA_FILES_CHK_COPY].Value = isMungeScript;
+								newRow.Cells[STR_DATA_FILES_TXT_FILE].Value = file;
+								newRow.Cells[STR_DATA_FILES_TXT_STAGING].Value = stagingDirectory;
+								newRow.Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value = mungeOutputDirectory;
+								newRow.Cells[STR_DATA_FILES_TXT_MUNGED_FILES].Value = compiledFiles;
+								newRow.Cells[STR_DATA_FILES_CHK_IS_MUNGE_SCRIPT].Value = isMungeScript;
+							}
+							else
+							{
+								// Add a blank row to the bottom of the list if we're not updating an existing row
+								if (data_Files[INT_DATA_FILES_TXT_FILE, data_Files_CurSelectedRow].Value == null)
+								{
+									data_Files.Rows.Add();
+								}
+
+								// Initialize data into the new row
+								data_Files[INT_DATA_FILES_CHK_ENABLED, data_Files_CurSelectedRow].Value = true;
+								data_Files[INT_DATA_FILES_CHK_COPY, data_Files_CurSelectedRow].Value = isMungeScript;
+								data_Files[INT_DATA_FILES_TXT_FILE, data_Files_CurSelectedRow].Value = file;
+								data_Files[INT_DATA_FILES_TXT_STAGING, data_Files_CurSelectedRow].Value = stagingDirectory;
+								data_Files[INT_DATA_FILES_TXT_MUNGE_DIR, data_Files_CurSelectedRow].Value = mungeOutputDirectory;
+								data_Files[INT_DATA_FILES_TXT_MUNGED_FILES, data_Files_CurSelectedRow].Value = compiledFiles;
+								data_Files[INT_DATA_FILES_CHK_IS_MUNGE_SCRIPT, data_Files_CurSelectedRow].Value = isMungeScript;
+							}
+
+
+							Thread logThread = new Thread(() => {
+								Log("");
+								Log(string.Format("Adding file: \"{0}\"", file), LogType.Info);
+								Log(string.Format("Staging directory: \"{0}\"", stagingDirectory), LogType.Info);
+								Log(string.Format("Munge output directory: \"{0}\"", mungeOutputDirectory), LogType.Info);
 							});
-							infoThread.Start();
-						}
+							logThread.Start();
 
 
-						if (!prefs.AutoDetectStagingDir)
-						{
-							stagingDirectory = "nil";
-
-							Thread infoThread = new Thread(() => {
-								var message = "Not setting Staging Directory in accordance with user preferences";
-								Debug.WriteLine(message);
-								Log(message, LogType.Info);
-							});
-							infoThread.Start();
-						}
-
-
-						if (!prefs.AutoDetectMungedFiles)
-						{
-							compiledFiles = "nil";
-
-							Thread infoThread = new Thread(() => {
-								var message = "Not setting Munged Files in accordance with user preferences";
-								Debug.WriteLine(message);
-								Log(message, LogType.Info);
-							});
-							infoThread.Start();
-						}
-
-
-						// Are none of the rows selected? (i.e., did the user click the "Add Files..." button?)
-						if (data_Files_CurSelectedRow == -1)
-						{
-							// Create a new row first
-							int rowId = data_Files.Rows.Add();
-
-							// Grab the new row
-							DataGridViewRow newRow = data_Files.Rows[rowId];
-
-							// Initialize data into the new row
-							newRow.Cells[STR_DATA_FILES_CHK_ENABLED].Value = true;
-							newRow.Cells[STR_DATA_FILES_CHK_COPY].Value = isMungeScript;
-							newRow.Cells[STR_DATA_FILES_TXT_FILE].Value = file;
-							newRow.Cells[STR_DATA_FILES_TXT_STAGING].Value = stagingDirectory;
-							newRow.Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value = mungeOutputDirectory;
-							newRow.Cells[STR_DATA_FILES_TXT_MUNGED_FILES].Value = compiledFiles;
-							newRow.Cells[STR_DATA_FILES_CHK_IS_MUNGE_SCRIPT].Value = isMungeScript;
+							// Reset the stored index of the currently selected row
+							data_Files_CurSelectedRow = -1;
 						}
 						else
 						{
-							// Add a blank row to the bottom of the list if we're not updating an existing row
-							if (data_Files[INT_DATA_FILES_TXT_FILE, data_Files_CurSelectedRow].Value == null)
-							{
-								data_Files.Rows.Add();
-							}
+							Thread errorThread = new Thread(() => {
+								var message = "Game path not set";
+								Debug.WriteLine(message);
+								Log(message, LogType.Error);
+							});
+							errorThread.Start();
 
-							// Initialize data into the new row
-							data_Files[INT_DATA_FILES_CHK_ENABLED, data_Files_CurSelectedRow].Value = true;
-							data_Files[INT_DATA_FILES_CHK_COPY, data_Files_CurSelectedRow].Value = isMungeScript;
-							data_Files[INT_DATA_FILES_TXT_FILE, data_Files_CurSelectedRow].Value = file;
-							data_Files[INT_DATA_FILES_TXT_STAGING, data_Files_CurSelectedRow].Value = stagingDirectory;
-							data_Files[INT_DATA_FILES_TXT_MUNGE_DIR, data_Files_CurSelectedRow].Value = mungeOutputDirectory;
-							data_Files[INT_DATA_FILES_TXT_MUNGED_FILES, data_Files_CurSelectedRow].Value = compiledFiles;
-							data_Files[INT_DATA_FILES_CHK_IS_MUNGE_SCRIPT, data_Files_CurSelectedRow].Value = isMungeScript;
+							return false;
 						}
-
-						
-						Thread logThread = new Thread(() => {
-							Log("");
-							Log(string.Format("Adding file: \"{0}\"", file), LogType.Info);
-							Log(string.Format("Staging directory: \"{0}\"", stagingDirectory), LogType.Info);
-							Log(string.Format("Munge output directory: \"{0}\"", mungeOutputDirectory), LogType.Info);
-						});
-						logThread.Start();
-
-
-						// Reset the stored index of the currently selected row
-						data_Files_CurSelectedRow = -1;
 					}
-					else
-					{
-						Thread errorThread = new Thread(() => {
-							var message = "Game path not set";
-							Debug.WriteLine(message);
-							Log(message, LogType.Error);
-						});
-						errorThread.Start();
 
-						return false;
-					}
+					return true;
 				}
-
-				return true;
+				catch (ArgumentOutOfRangeException ex)
+				{
+					var msg = "ArgumentOutOfRangeException when adding files to the file list. Reason: " + ex.Message;
+					Trace.WriteLine(msg);
+					Log(msg, LogType.Error);
+					throw;
+				}
+				catch (IndexOutOfRangeException ex)
+				{
+					var msg = "IndexOutOfRangeException when adding files to the file list. Reason: " + ex.Message;
+					Trace.WriteLine(msg);
+					Log(msg, LogType.Error);
+					throw;
+				}
 			}
 			else
 			{
@@ -3755,6 +3772,19 @@ namespace ZeroMunge
 					Debug.WriteLine("PrintAllRows(): ");
 				}
 			}
+		}
+	}
+}
+
+namespace System.Windows.Forms
+{
+	public class BetterTreeView : TreeView
+	{
+		protected override void WndProc(ref Message m)
+		{
+			// Suppress WM_LBUTTONDBLCLK
+			if (m.Msg == 0x203) { m.Result = IntPtr.Zero; }
+			else base.WndProc(ref m);
 		}
 	}
 }
