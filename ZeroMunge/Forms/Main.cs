@@ -1729,6 +1729,8 @@ namespace ZeroMunge
 		public void SerializeData(string filePath)
 		{
 			DataFilesContainer saveData = new DataFilesContainer();
+			saveData.FileVersion = Properties.Settings.Default.Info_SaveFileVersion;
+			saveData.AppVersion = Properties.Settings.Default.Info_Version;
 
 			foreach (DataGridViewRow row in data_Files.Rows)
 			{
@@ -1817,11 +1819,21 @@ namespace ZeroMunge
 			FileStream fs = new FileStream(filePath, FileMode.Open);
 			try
 			{
-				// Create an instance of the BinaryFormatter
 				IFormatter formatter = new BinaryFormatter();
 
 				// Deserialize and store the data
 				data = (DataFilesContainer)formatter.Deserialize(fs);
+
+				// Ensure that the save file is compatible with this version of the application
+				if (data.FileVersion == 0)
+				{
+					Log("Specified file was saved with a previous version of Zero Munge and might not be fully compatible with this version", LogType.Warning);
+				}
+				else if (data.FileVersion < Properties.Settings.Default.Info_SaveFileVersion)
+				{
+					Log("Specified file is incompatible with this version of Zero Munge", LogType.Error);
+					Log(string.Format("Failed to read from file path: \"{0}\"", filePath), LogType.Error);
+				}
 			}
 			catch (SerializationException e)
 			{
@@ -3700,7 +3712,16 @@ namespace ZeroMunge
 	[Serializable]
 	public class DataFilesContainer
 	{
+		// NOTE: Don't forget to increment Info_SaveFileVersion in the application properties settings when this data structure is changed!
 		public List<DataFilesRow> DataRows { get; private set; }
+		public int FileVersion { get; set; }
+		public string AppVersion { get; set; }
+
+		public DataFilesContainer()
+		{
+			FileVersion = 0;
+			AppVersion = "Unknown";
+		}
 
 		public DataFilesRow AddRow(DataFilesRow row)
 		{
