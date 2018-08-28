@@ -50,6 +50,7 @@ namespace ZeroMunge.Modules
 				if (sender.prefs.ShowTrayIcon)
 				{
 					sender.trayIcon.Text = "Zero Munge: Running";
+					sender.stat_JobStatus.Text = "Running";
 				}
 				Utilities.PlaySound(Utilities.SoundType.Start);
 			});
@@ -145,6 +146,7 @@ namespace ZeroMunge.Modules
 				if (sender.prefs.ShowTrayIcon)
 				{
 					sender.trayIcon.Text = "Zero Munge: Idle";
+					sender.stat_JobStatus.Text = "Idle";
 				}
 				Utilities.PlaySound(Utilities.SoundType.Abort);
 			});
@@ -197,6 +199,7 @@ namespace ZeroMunge.Modules
 					sender.trayIcon.BalloonTipTitle = "Success";
 					sender.trayIcon.BalloonTipText = "The operation was completed successfully.";
 					sender.trayIcon.ShowBalloonTip(30000);
+					sender.stat_JobStatus.Text = "Idle";
 				}
 				Utilities.PlaySound(Utilities.SoundType.Success);
 			});

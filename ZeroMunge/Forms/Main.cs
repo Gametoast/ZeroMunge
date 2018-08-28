@@ -157,11 +157,14 @@ namespace ZeroMunge
 		// Create the tray icon, initialize some stuff with the file list, and start a new output log.
 		private void ZeroMunge_Load(object sender, EventArgs e)
 		{
+			stat_UpdateLink.Visible = false;
+
 			// Set the tray icon if it's enabled
 			if (prefs.ShowTrayIcon)
 			{
 				trayIcon.Icon = Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
 				trayIcon.Text = "Zero Munge: Idle";
+				stat_JobStatus.Text = "Idle";
 			}
 			else
 			{
@@ -276,6 +279,9 @@ namespace ZeroMunge
 									});
 									logThread.Start();
 								}
+
+								stat_UpdateLink.Text = string.Format("Update available ({0})", updateInfo.LatestVersionInfo.Version);
+								stat_UpdateLink.Visible = true;
 								break;
 
 							case Utilities.UpdateResult.NoneAvailable:
@@ -744,20 +750,6 @@ namespace ZeroMunge
 			Log(result, logType);
 		}
 
-
-		/// <summary>
-		/// TODO
-		/// </summary>
-		/// <param name="available"></param>
-		public void SetUpdateStatusBar(bool available)
-		{
-			this.SetUpdateStatusBar(available, null);
-		}
-		public void SetUpdateStatusBar(bool available, string downloadUrl)
-		{
-			// do stuff
-		}
-
 		#endregion Main Window
 
 
@@ -1182,10 +1174,10 @@ namespace ZeroMunge
 		private void text_OutputLog_TextChanged(object sender, EventArgs e)
 		{
 			// Update character count
-			lbl_OutputLogChars.Text = string.Concat("Length: ", text_OutputLog.Text.Count().ToString());
+			stat_LogLength.Text = string.Concat("length : ", text_OutputLog.Text.Count().ToString("N0"));
 
 			// Update line count
-			lbl_OutputLogLines.Text = string.Concat("Lines: ", text_OutputLog.Lines.Count().ToString());
+			stat_LogLines.Text = string.Concat("lines : ", text_OutputLog.Lines.Count().ToString("N0"));
 		}
 
 
@@ -1252,6 +1244,10 @@ namespace ZeroMunge
 				btn_CopyLog.Enabled = enabled;
 				btn_SaveLog.Enabled = enabled;
 				btn_ClearLog.Enabled = enabled;
+
+
+				// Status Strip
+				stat_UpdateLink.Enabled = enabled;
 
 
 				// File list
@@ -2863,6 +2859,18 @@ namespace ZeroMunge
 		}
 
 		#endregion Flow : Set Game Directory
+
+
+		#region Status Bar
+
+		// When the "Update available" link is clicked:
+		// Open the update's download page in the user's default web browser.
+		private void stat_UpdateLink_Click(object sender, EventArgs e)
+		{
+			Process.Start(latestAppVersion.DownloadUrl);
+		}
+
+		#endregion Status Bar
 
 
 		#region Tray Icon
