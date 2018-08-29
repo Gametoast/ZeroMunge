@@ -3434,7 +3434,7 @@ namespace ZeroMunge
 			CommonOpenFileDialog openDlg_CreateSideMungeFolderPrompt2 = new CommonOpenFileDialog
 			{
 				Title = "Select Side Folders",
-				InitialDirectory = "J:\\BF2_ModTools",
+				DefaultDirectory = "C:\\BF2_ModTools",
 				IsFolderPicker = true,
 				RestoreDirectory = true,
 				Multiselect = true
@@ -3461,7 +3461,7 @@ namespace ZeroMunge
 			CommonOpenFileDialog openDlg_CreateWorldMungeFolderPrompt2 = new CommonOpenFileDialog
 			{
 				Title = "Select World Folders",
-				InitialDirectory = "J:\\BF2_ModTools",
+				DefaultDirectory = "C:\\BF2_ModTools",
 				IsFolderPicker = true,
 				RestoreDirectory = true,
 				Multiselect = true
@@ -3488,7 +3488,7 @@ namespace ZeroMunge
 			CommonOpenFileDialog openDlg_FixWorldMungeScriptsPrompt = new CommonOpenFileDialog
 			{
 				Title = "Select World Folders",
-				InitialDirectory = "J:\\BF2_ModTools",
+				DefaultDirectory = "C:\\BF2_ModTools",
 				IsFolderPicker = true,
 				RestoreDirectory = true,
 				Multiselect = true

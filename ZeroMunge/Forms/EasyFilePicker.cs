@@ -157,7 +157,7 @@ namespace ZeroMunge
 			CommonOpenFileDialog openDlg_AddProjectPrompt = new CommonOpenFileDialog
 			{
 				Title = "Select Project Folder",
-				InitialDirectory = "J:\\BF2_ModTools",
+				DefaultDirectory = "C:\\BF2_ModTools",
 				IsFolderPicker = true,
 				RestoreDirectory = true
 			};
