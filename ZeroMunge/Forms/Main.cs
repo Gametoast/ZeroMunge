@@ -3453,6 +3453,7 @@ namespace ZeroMunge
 			}
 		}
 
+
 		// When the user clicks the 'Create World Munge Folders...' button in the Tools menu:
 		// Begin the logic for creating a world munge folder.
 		private void menu_createWorldMungeFolderToolStripMenuItem_Click(object sender, EventArgs e)
@@ -3479,6 +3480,9 @@ namespace ZeroMunge
 			}
 		}
 
+
+		// When the user clicks the 'Fix World Munge File...' button in the Tools menu:
+		// Begin the logic for fixing a world munge file.
 		private void menu_fixWorldMungeScriptsToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			CommonOpenFileDialog openDlg_FixWorldMungeScriptsPrompt = new CommonOpenFileDialog
