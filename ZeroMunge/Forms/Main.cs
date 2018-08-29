@@ -3753,17 +3753,68 @@ namespace ZeroMunge
 		/// <param name="worldName">Name of world. Ex: "ABC"</param>
 		private void FixWorldMungeScript(string mungeFilePath, string worldName)
 		{
-			string destDir = new DirectoryInfo(mungeFilePath).Parent.FullName;
-			string mungeFileTemplate = Directory.GetCurrentDirectory() + "\\ZeroMunge\\templates\\WorldMungeFolder\\munge.bat";
+			try
+			{
+				string destDir = new DirectoryInfo(mungeFilePath).Parent.FullName;
+				string mungeFileTemplate = Directory.GetCurrentDirectory() + "\\ZeroMunge\\templates\\WorldMungeFolder\\munge.bat";
 
-			Log(string.Format("Copying munge.bat template to directory: \"{0}\"", destDir), LogType.Info);
-			File.Copy(mungeFileTemplate, destDir + "\\munge.bat", true);
+				Log(string.Format("Copying munge.bat template to directory: \"{0}\"", destDir), LogType.Info);
+				File.Copy(mungeFileTemplate, destDir + "\\munge.bat", true);
 
-			// Rewrite the munge.bat template file
-			string mungeFileContents = File.ReadAllText(destDir + "\\munge.bat");
-			File.WriteAllText(destDir + "\\munge.bat", mungeFileContents.Replace("@#$", worldName));
+				// Rewrite the munge.bat template file
+				string mungeFileContents = File.ReadAllText(destDir + "\\munge.bat");
+				File.WriteAllText(destDir + "\\munge.bat", mungeFileContents.Replace("@#$", worldName));
 
-			Log(string.Format("Successfully fixed world munge file for {0}", worldName), LogType.Info);
+				Log(string.Format("Successfully fixed world munge file for {0}", worldName), LogType.Info);
+			}
+			catch (UnauthorizedAccessException ex)
+			{
+				var msg = "Failed to fix world munge file. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (NotSupportedException ex)
+			{
+				var msg = "Failed to fix world munge file. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (PathTooLongException ex)
+			{
+				var msg = "Failed to fix world munge file. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (DirectoryNotFoundException ex)
+			{
+				var msg = "Failed to fix world munge file. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (FileNotFoundException ex)
+			{
+				var msg = "Failed to fix world munge file. Reason: " + ex.Message + "\nFile: " + ex.FileName;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (IOException ex)
+			{
+				var msg = "Failed to fix world munge file. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (ArgumentNullException ex)
+			{
+				var msg = "Failed to fix world munge file. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (ArgumentException ex)
+			{
+				var msg = "Failed to fix world munge file. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
 		}
 
 
