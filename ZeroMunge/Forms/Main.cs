@@ -3766,6 +3766,10 @@ namespace ZeroMunge
 			if (File.Exists(filePath))
 			{
 				string worldName = new DirectoryInfo(filePath).Name;
+				if (worldName.ToLower() == "munge.bat")
+				{
+					worldName = new DirectoryInfo(filePath).Parent.Name;
+				}
 
 				string fileContents = File.ReadAllText(filePath);
 				string nameInMungeFile = fileContents.Split(' ')[2];
