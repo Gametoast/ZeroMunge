@@ -3416,21 +3416,61 @@ namespace ZeroMunge
 
 		#region Tools Menu
 
-		// When the user clicks the 'Create Side Munge Folder...' button in the Tools menu:
+		// When the user clicks the 'Create Side Munge Folders...' button in the Tools menu:
 		// Begin the logic for creating a side munge folder.
 		private void menu_createSideMungeFolderToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			if (openDlg_CreateSideMungeFolderPrompt.ShowDialog() == DialogResult.OK)
+			CommonOpenFileDialog openDlg_CreateSideMungeFolderPrompt2 = new CommonOpenFileDialog
 			{
-				string filePath = openDlg_CreateSideMungeFolderPrompt.FileName;
+				Title = "Select Side Folders",
+				InitialDirectory = "J:\\BF2_ModTools",
+				IsFolderPicker = true,
+				RestoreDirectory = true,
+				Multiselect = true
+			};
 
-				DirectoryInfo projectDir = new DirectoryInfo(filePath).Parent.Parent.Parent;
+			if (openDlg_CreateSideMungeFolderPrompt2.ShowDialog() == CommonFileDialogResult.Ok)
+			{
+				foreach (string folder in openDlg_CreateSideMungeFolderPrompt2.FileNames)
+				{
+					DirectoryInfo projectDir = new DirectoryInfo(folder).Parent.Parent;
+					
+					string sideName = new DirectoryInfo(folder).Name;
 
-				string fileName = new FileInfo(filePath).Name;
-				string sideName = fileName.SubstringIdx(0, fileName.LastIndexOf('.')).ToUpper();
-
-				CreateSideMungeFolder(projectDir.FullName, sideName);
+					CreateSideMungeFolder(projectDir.FullName, sideName);
+				}
 			}
+		}
+
+		// When the user clicks the 'Create World Munge Folders...' button in the Tools menu:
+		// Begin the logic for creating a world munge folder.
+		private void menu_createWorldMungeFolderToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			CommonOpenFileDialog openDlg_CreateWorldMungeFolderPrompt2 = new CommonOpenFileDialog
+			{
+				Title = "Select World Folders",
+				InitialDirectory = "J:\\BF2_ModTools",
+				IsFolderPicker = true,
+				RestoreDirectory = true,
+				Multiselect = true
+			};
+
+			if (openDlg_CreateWorldMungeFolderPrompt2.ShowDialog() == CommonFileDialogResult.Ok)
+			{
+				foreach (string folder in openDlg_CreateWorldMungeFolderPrompt2.FileNames)
+				{
+					DirectoryInfo projectDir = new DirectoryInfo(folder).Parent.Parent;
+
+					string worldName = new DirectoryInfo(folder).Name;
+
+					CreateWorldMungeFolder(projectDir.FullName, worldName);
+				}
+			}
+		}
+
+		private void menu_fixWorldMungeScriptsToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+
 		}
 
 
@@ -3541,6 +3581,119 @@ namespace ZeroMunge
 			catch (ArgumentException ex)
 			{
 				var msg = "Failed to create side munge directory. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+		}
+
+
+		/// <summary>
+		/// Create a world munge folder for the specified world.
+		/// </summary>
+		/// <param name="projectDirectory">Project directory in which the world resides.</param>
+		/// <param name="worldName">Name of the world. Ex: "ABC"</param>
+		private void CreateWorldMungeFolder(string projectDirectory, string worldName)
+		{
+			try
+			{
+				string destDir = projectDirectory + "\\_BUILD\\Worlds\\" + worldName;
+				string cleanFile = Directory.GetCurrentDirectory() + "\\ZeroMunge\\templates\\WorldMungeFolder\\clean.bat";
+				string mungeFile = Directory.GetCurrentDirectory() + "\\ZeroMunge\\templates\\WorldMungeFolder\\munge.bat";
+
+				bool copyClean = true;
+				bool copyMunge = true;
+
+				// Copy the template files to the target directory
+				Directory.CreateDirectory(destDir);
+
+				// Warn user if clean.bat already exists and prompt them to overwrite it or not
+				if (File.Exists(destDir + "\\clean.bat"))
+				{
+					DialogResult cleanOverwritePromptResult = MessageBox.Show("A file named clean.bat already exists in the directory: \n" + destDir + "\n\nWould you like to overwrite it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+					if (cleanOverwritePromptResult == DialogResult.No)
+					{
+						copyClean = false;
+					}
+				}
+				if (copyClean)
+				{
+					Log(string.Format("Copying clean.bat template to directory: \"{0}\"", destDir), LogType.Info);
+					File.Copy(cleanFile, destDir + "\\clean.bat", true);
+				}
+
+				// Warn user if munge.bat already exists and prompt them to overwrite it or not
+				if (File.Exists(destDir + "\\munge.bat"))
+				{
+					DialogResult mungeOverwritePromptResult = MessageBox.Show("A file named munge.bat already exists in the directory: \n" + destDir + "\n\nWould you like to overwrite it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+					if (mungeOverwritePromptResult == DialogResult.No)
+					{
+						copyMunge = false;
+					}
+				}
+				if (copyMunge)
+				{
+					Log(string.Format("Copying munge.bat template to directory: \"{0}\"", destDir), LogType.Info);
+					File.Copy(mungeFile, destDir + "\\munge.bat", true);
+				}
+
+				// Rewrite the munge.bat template file
+				string mungeFileContents = File.ReadAllText(destDir + "\\munge.bat");
+				File.WriteAllText(destDir + "\\munge.bat", mungeFileContents.Replace("@#$", worldName));
+
+				Log(string.Format("Successfully created world munge folder for {0}: \"{1}\"", worldName, destDir), LogType.Info);
+
+				// Prompt user to add the munge file to the File List
+				DialogResult successPromptResult = MessageBox.Show("Would you like to add the munge file to the File List?", "Success", MessageBoxButtons.YesNo);
+				if (successPromptResult == DialogResult.Yes)
+				{
+					AddFile(destDir + "\\munge.bat", true);
+				}
+			}
+			catch (UnauthorizedAccessException ex)
+			{
+				var msg = "Failed to create world munge directory. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (NotSupportedException ex)
+			{
+				var msg = "Failed to create world munge directory. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (PathTooLongException ex)
+			{
+				var msg = "Failed to create world munge directory. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (DirectoryNotFoundException ex)
+			{
+				var msg = "Failed to create world munge directory. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (FileNotFoundException ex)
+			{
+				var msg = "Failed to create world munge directory. Reason: " + ex.Message + "\nFile: " + ex.FileName;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (IOException ex)
+			{
+				var msg = "Failed to create world munge directory. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (ArgumentNullException ex)
+			{
+				var msg = "Failed to create world munge directory. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (ArgumentException ex)
+			{
+				var msg = "Failed to create world munge directory. Reason: " + ex.Message;
 				Trace.WriteLine(msg);
 				Log(msg, LogType.Error);
 			}
@@ -3701,7 +3854,6 @@ namespace ZeroMunge
 		}
 
 		#endregion Debug Buttons
-
 	}
 
 	public class MungeFactory

@@ -239,6 +239,12 @@
     <None Include="ZeroMunge\templates\SideMungeFolder\munge.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="ZeroMunge\templates\WorldMungeFolder\clean.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ZeroMunge\templates\WorldMungeFolder\munge.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

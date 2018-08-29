@@ -39,7 +39,8 @@ namespace ZeroMunge
 
 		public static class Tools
 		{
-			public const string CreateSideMungeFolder = "Automatically create a side's munge folder based on the side's REQ file.";
+			public const string CreateSideMungeFolder = "Automatically create the munge folder (and batch scripts) for a side by simply selecting its side folder.";
+			public const string CreateWorldMungeFolder = "Automatically create the munge folder (and batch scripts) for a world by simply selecting its world folder.";
 		}
 
 		public static class EasyFilePicker

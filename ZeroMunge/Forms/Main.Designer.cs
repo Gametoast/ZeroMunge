@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ZeroMunge));
 			this.btn_Run = new System.Windows.Forms.Button();
 			this.btn_AddFiles = new System.Windows.Forms.Button();
@@ -110,6 +110,8 @@
 			this.menu_clearLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_createSideMungeFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.menu_createWorldMungeFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.menu_fixWorldMungeScriptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_setGamePathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
@@ -142,6 +144,7 @@
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.stat_LogLength = new System.Windows.Forms.ToolStripStatusLabel();
 			this.stat_LogLines = new System.Windows.Forms.ToolStripStatusLabel();
+			this.openDlg_CreateWorldMungeFolderPrompt = new System.Windows.Forms.OpenFileDialog();
 			this.pan_MungedFilesEdit.SuspendLayout();
 			this.status_MungedFilesEdit.SuspendLayout();
 			this.cmenu_Text.SuspendLayout();
@@ -515,9 +518,9 @@
 			// 
 			// col_FileBrowse
 			// 
-			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle5.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle5;
+			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle1;
 			this.col_FileBrowse.HeaderText = "";
 			this.col_FileBrowse.Name = "col_FileBrowse";
 			this.col_FileBrowse.ReadOnly = true;
@@ -538,9 +541,9 @@
 			// 
 			// col_StagingBrowse
 			// 
-			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle6.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-			this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle6;
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle2.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+			this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle2;
 			this.col_StagingBrowse.HeaderText = "";
 			this.col_StagingBrowse.Name = "col_StagingBrowse";
 			this.col_StagingBrowse.ReadOnly = true;
@@ -559,8 +562,8 @@
 			// 
 			// col_MungedFiles
 			// 
-			dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle7;
+			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle3;
 			this.col_MungedFiles.HeaderText = "Munged Files";
 			this.col_MungedFiles.MinimumWidth = 100;
 			this.col_MungedFiles.Name = "col_MungedFiles";
@@ -571,9 +574,9 @@
 			// 
 			// col_MungedFilesEdit
 			// 
-			dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle8.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-			this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle8;
+			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle4.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+			this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle4;
 			this.col_MungedFilesEdit.HeaderText = "";
 			this.col_MungedFilesEdit.Name = "col_MungedFilesEdit";
 			this.col_MungedFilesEdit.ReadOnly = true;
@@ -894,7 +897,9 @@
 			// toolsToolStripMenuItem
 			// 
 			this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menu_createSideMungeFolderToolStripMenuItem});
+            this.menu_createSideMungeFolderToolStripMenuItem,
+            this.menu_createWorldMungeFolderToolStripMenuItem,
+            this.menu_fixWorldMungeScriptsToolStripMenuItem});
 			this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
 			this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
 			this.toolsToolStripMenuItem.Text = "Tools";
@@ -902,9 +907,23 @@
 			// menu_createSideMungeFolderToolStripMenuItem
 			// 
 			this.menu_createSideMungeFolderToolStripMenuItem.Name = "menu_createSideMungeFolderToolStripMenuItem";
-			this.menu_createSideMungeFolderToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
-			this.menu_createSideMungeFolderToolStripMenuItem.Text = "Create Side Munge Folder...";
+			this.menu_createSideMungeFolderToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+			this.menu_createSideMungeFolderToolStripMenuItem.Text = "Create Side Munge Folders...";
 			this.menu_createSideMungeFolderToolStripMenuItem.Click += new System.EventHandler(this.menu_createSideMungeFolderToolStripMenuItem_Click);
+			// 
+			// menu_createWorldMungeFolderToolStripMenuItem
+			// 
+			this.menu_createWorldMungeFolderToolStripMenuItem.Name = "menu_createWorldMungeFolderToolStripMenuItem";
+			this.menu_createWorldMungeFolderToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+			this.menu_createWorldMungeFolderToolStripMenuItem.Text = "Create World Munge Folders...";
+			this.menu_createWorldMungeFolderToolStripMenuItem.Click += new System.EventHandler(this.menu_createWorldMungeFolderToolStripMenuItem_Click);
+			// 
+			// menu_fixWorldMungeScriptsToolStripMenuItem
+			// 
+			this.menu_fixWorldMungeScriptsToolStripMenuItem.Name = "menu_fixWorldMungeScriptsToolStripMenuItem";
+			this.menu_fixWorldMungeScriptsToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+			this.menu_fixWorldMungeScriptsToolStripMenuItem.Text = "Fix World Munge File...";
+			this.menu_fixWorldMungeScriptsToolStripMenuItem.Click += new System.EventHandler(this.menu_fixWorldMungeScriptsToolStripMenuItem_Click);
 			// 
 			// settingsToolStripMenuItem
 			// 
@@ -1123,7 +1142,7 @@
 			this.openDlg_CreateSideMungeFolderPrompt.Filter = "REQ files|*.req";
 			this.openDlg_CreateSideMungeFolderPrompt.InitialDirectory = "C:\\BF2_ModTools";
 			this.openDlg_CreateSideMungeFolderPrompt.RestoreDirectory = true;
-			this.openDlg_CreateSideMungeFolderPrompt.Title = "Select REQ file";
+			this.openDlg_CreateSideMungeFolderPrompt.Title = "Select Side REQ file";
 			// 
 			// statusStrip
 			// 
@@ -1173,6 +1192,13 @@
 			this.stat_LogLines.Name = "stat_LogLines";
 			this.stat_LogLines.Size = new System.Drawing.Size(46, 19);
 			this.stat_LogLines.Text = "lines : 0";
+			// 
+			// openDlg_CreateWorldMungeFolderPrompt
+			// 
+			this.openDlg_CreateWorldMungeFolderPrompt.Filter = "REQ files|*.req";
+			this.openDlg_CreateWorldMungeFolderPrompt.InitialDirectory = "C:\\BF2_ModTools";
+			this.openDlg_CreateWorldMungeFolderPrompt.RestoreDirectory = true;
+			this.openDlg_CreateWorldMungeFolderPrompt.Title = "Select World REQ file";
 			// 
 			// ZeroMunge
 			// 
@@ -1333,6 +1359,9 @@
 		private System.Windows.Forms.ToolStripStatusLabel stat_LogLines;
 		public System.Windows.Forms.ToolStripStatusLabel stat_JobStatus;
 		private System.Windows.Forms.ToolStripStatusLabel stat_UpdateLink;
+		private System.Windows.Forms.ToolStripMenuItem menu_createWorldMungeFolderToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem menu_fixWorldMungeScriptsToolStripMenuItem;
+		private System.Windows.Forms.OpenFileDialog openDlg_CreateWorldMungeFolderPrompt;
 	}
 }
 
