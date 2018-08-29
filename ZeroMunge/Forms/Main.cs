@@ -1541,6 +1541,17 @@ namespace ZeroMunge
 			// Does the file path exist?
 			if (File.Exists(file))
 			{
+				if (isMungeScript && !IsWorldMungeFileValid(file))
+				{
+					string worldName = new DirectoryInfo(file).Parent.Name;
+
+					DialogResult result = MessageBox.Show("World " + worldName + " appears to have an incorrect munge.bat file. Attempt to fix?", "Fix World Munge Script", MessageBoxButtons.YesNo);
+					if (result == DialogResult.Yes)
+					{
+						FixWorldMungeScript(file, worldName);
+					}
+				}
+
 				try
 				{
 					// Add the file to the list
