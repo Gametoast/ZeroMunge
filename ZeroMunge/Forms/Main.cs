@@ -3470,7 +3470,42 @@ namespace ZeroMunge
 
 		private void menu_fixWorldMungeScriptsToolStripMenuItem_Click(object sender, EventArgs e)
 		{
+			CommonOpenFileDialog openDlg_FixWorldMungeScriptsPrompt = new CommonOpenFileDialog
+			{
+				Title = "Select World Folders",
+				InitialDirectory = "J:\\BF2_ModTools",
+				IsFolderPicker = true,
+				RestoreDirectory = true,
+				Multiselect = true
+			};
 
+			if (openDlg_FixWorldMungeScriptsPrompt.ShowDialog() == CommonFileDialogResult.Ok)
+			{
+				foreach (string folder in openDlg_FixWorldMungeScriptsPrompt.FileNames)
+				{
+					DirectoryInfo projectDir = new DirectoryInfo(folder).Parent.Parent;
+					string worldName = new DirectoryInfo(folder).Name;
+					string mungeFilePath;
+
+					if (new DirectoryInfo(folder).Parent.Parent.Name.ToUpper() == "_BUILD")
+					{
+						mungeFilePath = folder + "\\munge.bat";
+					}
+					else
+					{
+						mungeFilePath = new DirectoryInfo(folder).Parent.Parent.FullName + "\\_BUILD\\Worlds\\" + worldName + "\\munge.bat";
+					}
+
+					if (!IsWorldMungeFileValid(mungeFilePath))
+					{
+						DialogResult result = MessageBox.Show("World " + worldName + " appears to have an incorrect munge.bat file. Attempt to fix?", "Fix World Munge Script", MessageBoxButtons.YesNo);
+						if (result == DialogResult.Yes)
+						{
+							FixWorldMungeScript(mungeFilePath, worldName);
+						}
+					}
+				}
+			}
 		}
 
 
@@ -3697,6 +3732,51 @@ namespace ZeroMunge
 				Trace.WriteLine(msg);
 				Log(msg, LogType.Error);
 			}
+		}
+
+
+		/// <summary>
+		/// Fix world munge script's world argument.
+		/// </summary>
+		/// <param name="mungeFilePath">File path of munge script.</param>
+		/// <param name="worldName">Name of world. Ex: "ABC"</param>
+		private void FixWorldMungeScript(string mungeFilePath, string worldName)
+		{
+			string destDir = new DirectoryInfo(mungeFilePath).Parent.FullName;
+			string mungeFileTemplate = Directory.GetCurrentDirectory() + "\\ZeroMunge\\templates\\WorldMungeFolder\\munge.bat";
+
+			Log(string.Format("Copying munge.bat template to directory: \"{0}\"", destDir), LogType.Info);
+			File.Copy(mungeFileTemplate, destDir + "\\munge.bat", true);
+
+			// Rewrite the munge.bat template file
+			string mungeFileContents = File.ReadAllText(destDir + "\\munge.bat");
+			File.WriteAllText(destDir + "\\munge.bat", mungeFileContents.Replace("@#$", worldName));
+
+			Log(string.Format("Successfully fixed world munge file for {0}", worldName), LogType.Info);
+		}
+
+
+		/// <summary>
+		/// Checks whether or not the specified world munge file munges the correct world.
+		/// </summary>
+		/// <param name="filePath">File path of world munge file.</param>
+		/// <returns>True, world munge file munges the correct world. False if not.</returns>
+		private bool IsWorldMungeFileValid(string filePath)
+		{
+			if (File.Exists(filePath))
+			{
+				string worldName = new DirectoryInfo(filePath).Name;
+
+				string fileContents = File.ReadAllText(filePath);
+				string nameInMungeFile = fileContents.Split(' ')[2];
+
+				if (nameInMungeFile.ToUpper() == worldName.ToUpper())
+				{
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		#endregion Tools Menu
