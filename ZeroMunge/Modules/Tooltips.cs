@@ -22,7 +22,7 @@ namespace ZeroMunge
 		{
 			public const string Run = "Sequentially execute each file in the file list.";
 			public const string Cancel = "Stop processing files.  \n\nWARNING: Canceling a munge is strongly NOT recommended.";
-			public const string EasyFilePicker = "Open the Easy File Picker, which greatly simplifies the process of adding files to the file list.";
+			public const string EasyFilePicker = "Open the Easy File Picker, which greatly simplifies the process of adding munge files to the file list.";
 			public const string AddFiles = "Open a prompt to add files to the file list.";
 			public const string AddFolders = "Open a prompt to select folders containing munge.bat files to add to the file list.";
 			public const string AddProject = "Open a prompt to select a project folder whose common munge.bat files will be added to the file list.";
