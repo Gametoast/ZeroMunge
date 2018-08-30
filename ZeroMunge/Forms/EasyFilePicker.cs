@@ -72,32 +72,38 @@ namespace ZeroMunge
 					if (nodePath.EndsWith("addme", StringComparison.CurrentCultureIgnoreCase))
 					{
 						buildPath = "";
-						fileName = "mungeAddme.bat";
+						fileName = "\\mungeAddme.bat";
 					}
-					string partialPath = nodePath.Substring(nodePath.IndexOf('\\'), nodePath.Length - nodePath.IndexOf('\\'));
-					string filePath = rootPaths[GetRootNode(node).Index] + buildPath + partialPath + fileName;
-
-					// Add the file to the file list if it exists and is not a template munge script
-					if (File.Exists(filePath)
-						&& !filePath.EndsWith("\\_BUILD\\munge.bat")
-						&& !filePath.EndsWith("\\_BUILD\\Sides\\munge.bat")
-						&& !filePath.EndsWith("\\_BUILD\\Worlds\\munge.bat"))
+					if (nodePath.Contains('\\'))
 					{
-						mungeFilePaths.Add(filePath);
+						string partialPath = nodePath.Substring(nodePath.IndexOf('\\'), nodePath.Length - nodePath.IndexOf('\\'));
+						string filePath = rootPaths[GetRootNode(node).Index] + buildPath + partialPath + fileName;
+
+						// Add the file to the file list if it exists and is not a template munge script
+						if (File.Exists(filePath) &&
+							!filePath.EndsWith("\\_BUILD\\munge.bat") &&
+							!filePath.EndsWith("\\_BUILD\\Sides\\munge.bat") &&
+							!filePath.EndsWith("\\_BUILD\\Worlds\\munge.bat"))
+						{
+							mungeFilePaths.Add(filePath);
+						}
 					}
 				}
 			}
 			catch (ArgumentOutOfRangeException ex)
 			{
 				Trace.WriteLine(ex.Message);
+				throw;
 			}
 			catch (ArgumentNullException ex)
 			{
 				Trace.WriteLine(ex.Message);
+				throw;
 			}
 			catch (ArgumentException ex)
 			{
 				Trace.WriteLine(ex.Message);
+				throw;
 			}
 
 			// Close the form
@@ -175,10 +181,25 @@ namespace ZeroMunge
 					string projectRoot = new DirectoryInfo(path).Name;
 
 					// Get all the munge files in the project directory
-					List<string> mungeFiles = Directory.GetFiles(path + "\\_BUILD", "munge.bat", SearchOption.AllDirectories).ToList();
-					mungeFiles.Remove(path + "\\_BUILD\\munge.bat");
-					mungeFiles.Remove(path + "\\_BUILD\\Sides\\munge.bat");
-					mungeFiles.Remove(path + "\\_BUILD\\Worlds\\munge.bat");
+					List<string> unprocMungeFiles = Directory.GetFiles(path + "\\_BUILD", "munge.bat", SearchOption.AllDirectories).ToList();
+					List<string> mungeFiles = new List<string>();
+
+					// Only add munge files that have a corresponding folder outside of the _BUILD directory
+					// Ex: data_***\_BUILD\Sides\REP\munge.bat wouldn't be added if data_***\Sides\REP doesn't exist
+					foreach (string file in unprocMungeFiles)
+					{
+						string resolvedPath = new DirectoryInfo(file.Replace("_BUILD\\", "")).Parent.FullName;
+
+						if (Directory.Exists(resolvedPath))
+						{
+							if (file != path + "\\_BUILD\\munge.bat" && 
+								file != path + "\\_BUILD\\Sides\\munge.bat" && 
+								file != path + "\\_BUILD\\Worlds\\munge.bat")
+							{
+								mungeFiles.Add(file);
+							}
+						}
+					}
 
 
 					// Create a list of the munge file directory paths starting at the project folder
@@ -187,14 +208,21 @@ namespace ZeroMunge
 					// Addme munge file exists outside of the _BUILD directory
 					if (File.Exists(path + "\\addme\\mungeAddme.bat"))
 					{
+						mungeFiles.Add(path + "\\addme\\mungeAddme.bat");
 						mungeFileDirs.Add(projectRoot + "\\addme");
 					}
 
 					int pathStartIndex = path.Length - projectRoot.Length;
 					foreach (string file in mungeFiles)
 					{
+						string fileName = "\\munge.bat";
+						if (file.ToLower().EndsWith("mungeAddme.bat".ToLower()))
+						{
+							fileName = "\\mungeAddme.bat";
+						}
+
 						string pathToAdd = file
-							.Substring(pathStartIndex, file.Length - "\\munge.bat".Length - pathStartIndex)
+							.Substring(pathStartIndex, file.Length - fileName.Length - pathStartIndex)
 							.Replace("_BUILD\\", "");
 						mungeFileDirs.Add(pathToAdd);
 					}
