@@ -1543,7 +1543,7 @@ namespace ZeroMunge
 			// Does the file path exist?
 			if (File.Exists(file))
 			{
-				if (isMungeScript && !IsWorldMungeFileValid(file))
+				if (isMungeScript && !IsWorldMungeFileValid(file) && new DirectoryInfo(file).Parent.Parent.Name.ToLower() == "worlds")
 				{
 					string worldName = new DirectoryInfo(file).Parent.Name;
 
