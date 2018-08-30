@@ -9,3 +9,8 @@ Click on a link below to view the commands available for that menu.
 - [**Tools**](topic_cmd_tools.html)
 - [**Settings**](topic_cmd_settings.html)
 - [**Help**](topic_cmd_help.html)
+
+### Related Pages
+
+- [**Getting Started**](topic_gs.html)
+- [**User Interface**](topic_ui.html)
