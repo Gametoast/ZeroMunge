@@ -3525,6 +3525,12 @@ namespace ZeroMunge
 			}
 		}
 
+		private void menu_fixSoundMungeFilesToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			SoundMungeForm form = new SoundMungeForm();
+			form.ShowDialog();
+		}
+
 
 		/// <summary>
 		/// Create a side munge folder for the specified side.
@@ -4006,6 +4012,7 @@ namespace ZeroMunge
 		}
 
 		#endregion Debug Buttons
+
 	}
 
 	public class MungeFactory

@@ -112,6 +112,7 @@
 			this.menu_createSideMungeFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_createWorldMungeFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_fixWorldMungeScriptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.menu_fixSoundMungeFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_setGamePathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
@@ -899,7 +900,8 @@
 			this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menu_createSideMungeFolderToolStripMenuItem,
             this.menu_createWorldMungeFolderToolStripMenuItem,
-            this.menu_fixWorldMungeScriptsToolStripMenuItem});
+            this.menu_fixWorldMungeScriptsToolStripMenuItem,
+            this.menu_fixSoundMungeFilesToolStripMenuItem});
 			this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
 			this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
 			this.toolsToolStripMenuItem.Text = "Tools";
@@ -907,23 +909,30 @@
 			// menu_createSideMungeFolderToolStripMenuItem
 			// 
 			this.menu_createSideMungeFolderToolStripMenuItem.Name = "menu_createSideMungeFolderToolStripMenuItem";
-			this.menu_createSideMungeFolderToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+			this.menu_createSideMungeFolderToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
 			this.menu_createSideMungeFolderToolStripMenuItem.Text = "Create Side Munge Folders...";
 			this.menu_createSideMungeFolderToolStripMenuItem.Click += new System.EventHandler(this.menu_createSideMungeFolderToolStripMenuItem_Click);
 			// 
 			// menu_createWorldMungeFolderToolStripMenuItem
 			// 
 			this.menu_createWorldMungeFolderToolStripMenuItem.Name = "menu_createWorldMungeFolderToolStripMenuItem";
-			this.menu_createWorldMungeFolderToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+			this.menu_createWorldMungeFolderToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
 			this.menu_createWorldMungeFolderToolStripMenuItem.Text = "Create World Munge Folders...";
 			this.menu_createWorldMungeFolderToolStripMenuItem.Click += new System.EventHandler(this.menu_createWorldMungeFolderToolStripMenuItem_Click);
 			// 
 			// menu_fixWorldMungeScriptsToolStripMenuItem
 			// 
 			this.menu_fixWorldMungeScriptsToolStripMenuItem.Name = "menu_fixWorldMungeScriptsToolStripMenuItem";
-			this.menu_fixWorldMungeScriptsToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+			this.menu_fixWorldMungeScriptsToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
 			this.menu_fixWorldMungeScriptsToolStripMenuItem.Text = "Fix World Munge File...";
 			this.menu_fixWorldMungeScriptsToolStripMenuItem.Click += new System.EventHandler(this.menu_fixWorldMungeScriptsToolStripMenuItem_Click);
+			// 
+			// menu_fixSoundMungeFilesToolStripMenuItem
+			// 
+			this.menu_fixSoundMungeFilesToolStripMenuItem.Name = "menu_fixSoundMungeFilesToolStripMenuItem";
+			this.menu_fixSoundMungeFilesToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
+			this.menu_fixSoundMungeFilesToolStripMenuItem.Text = "Fix/Modify Sound Munge Files...";
+			this.menu_fixSoundMungeFilesToolStripMenuItem.Click += new System.EventHandler(this.menu_fixSoundMungeFilesToolStripMenuItem_Click);
 			// 
 			// settingsToolStripMenuItem
 			// 
@@ -1362,6 +1371,7 @@
 		private System.Windows.Forms.ToolStripMenuItem menu_createWorldMungeFolderToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem menu_fixWorldMungeScriptsToolStripMenuItem;
 		private System.Windows.Forms.OpenFileDialog openDlg_CreateWorldMungeFolderPrompt;
+		private System.Windows.Forms.ToolStripMenuItem menu_fixSoundMungeFilesToolStripMenuItem;
 	}
 }
 
