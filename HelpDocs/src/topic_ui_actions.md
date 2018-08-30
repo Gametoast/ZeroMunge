@@ -1,4 +1,5 @@
 ## User Interface: Actions
+
 ![Actions](images/ui_actions.png)
 
 1. **Run** – Executes each file in the list in order.
@@ -11,4 +12,5 @@
 8. **Set Game Path...** – Opens a prompt to point Zero Munge to Star Wars Battlefront II's GameData directory.
 
 ### Related Pages
-- [TODO]
+
+- [**Overview**](topic_ui_overview.html)

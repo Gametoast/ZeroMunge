@@ -1,4 +1,5 @@
 ## User Interface: Output Log
+
 ![Output Log](images/ui_log.png)
 
 1. **Log Window** – Displays the last 100 lines of the log file. Output is updated in real-time.
@@ -7,4 +8,5 @@
 4. **Clear Log** – Clears the contents of the Log Window.
 
 ### Related Pages
-- [TODO]
+
+- [**Overview**](topic_ui_overview.html)

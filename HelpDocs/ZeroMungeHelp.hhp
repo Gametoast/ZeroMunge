@@ -14,6 +14,12 @@ src\topic_ui_actions.html
 src\topic_ui_filelist.html
 src\topic_ui_log.html
 src\topic_ui_overview.html
+src\topic_cmd.html
+src\topic_cmd_actions.html
+src\topic_cmd_file.html
+src\topic_cmd_help.html
+src\topic_cmd_settings.html
+src\topic_cmd_tools.html
 
 [INFOTYPES]
 

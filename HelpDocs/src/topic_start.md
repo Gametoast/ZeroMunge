@@ -1,6 +1,6 @@
 ![Zero Munge](images/app_banner.jpg)
 
-**Zero Munge v1.0.0-beta**  
+**Zero Munge v1.1.0-beta**  
 **Copyright © 2018 Aaron Gilbert. All rights reserved.**    
 [**View project on GitHub**](https://github.com/marth8880/ZeroMunge)
 

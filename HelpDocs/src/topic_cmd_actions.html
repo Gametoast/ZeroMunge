@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>topic_ui_filelist</title>
+<title>topic_cmd_actions</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <style type="text/css">
 /* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
@@ -291,24 +291,24 @@ img {
 </style>
 </head>
 <body>
-<h2>User Interface: File List</h2>
-<p><img src="images/ui_filelist.png" alt="File List" /></p>
-<ol>
-<li><strong>Process</strong> – If checked, executes the batch script located at the specified File Path.</li>
-<li><strong>Copy</strong> – If checked, copies the specified Munged Files to the Staging Directory after the batch script has finished executing.</li>
-<li><strong>File Path</strong> – File path of the batch script to execute.</li>
-<li><strong>File Path Browse</strong> – Open a prompt to browse for a new batch script.</li>
-<li><strong>Staging Directory</strong> – Directory to which the Munged Files are copied after the batch script has finished executing.</li>
-<li><strong>Staging Directory Browse</strong> – Open a prompt to browse for a new Staging Directory.</li>
-<li><strong>Munged Files</strong> – Names of files that will be copied to the Staging Directory after the batch script has finished executing. Each file name must be separated into its own line.</li>
-<li><strong>Munged Files Edit</strong> – Open a pop-up window to add/remove/edit names of Munged Files.</li>
-</ol>
-<h3>Munged Files Edit</h3>
-<p>This is what the Munged Files Edit window looks like.</p>
-<p><img src="images/ui_filelist_mungedfiles.png" alt="Munged Files Edit" /></p>
+<h2>Commands: Actions</h2>
+<p>This section covers all the file list and output log commands that Zero Munge can perform.</p>
+<ul>
+<li><strong>Run</strong> – Sequentially executes each file in the file list.</li>
+<li><strong>Cancel</strong> – Stops processing files. (WARNING: Canceling a munge is strongly NOT recommended.)</li>
+<li><strong>Easy File Picker</strong> – Opens the Easy File Picker, which greatly simplifies the process of adding munge files to the file list.</li>
+<li><strong>Add Files...</strong> – Opens a prompt to add files to the file list.</li>
+<li><strong>Add Folders...</strong> – Opens a prompt to select folders containing munge.bat files to add to the file list.</li>
+<li><strong>Add Project...</strong> – Opens a prompt to select a project folder whose common munge.bat files will be added to the file list.</li>
+<li><strong>Remove</strong> – Removes the selected files from the file list.</li>
+<li><strong>Remove All</strong> – Removes all files from the file list.</li>
+<li><strong>Log</strong> &gt; <strong>Copy Log</strong> – Copies the contents of the output log window to the clipboard.</li>
+<li><strong>Log</strong> &gt; <strong>Save Log As...</strong> – Saves the contents of the output log to a new file.</li>
+<li><strong>Log</strong> &gt; <strong>Clear Log</strong> – Clears the contents of the output log.</li>
+</ul>
 <h3>Related Pages</h3>
 <ul>
-<li><a href="topic_ui_overview.html"><strong>Overview</strong></a></li>
+<li><a href="topic_cmd.html"><strong>Commands</strong></a></li>
 </ul>
 
 </body>
