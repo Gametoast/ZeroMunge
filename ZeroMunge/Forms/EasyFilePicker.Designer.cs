@@ -35,6 +35,7 @@
 			this.btn_AddProject = new System.Windows.Forms.Button();
 			this.FormTooltips = new System.Windows.Forms.ToolTip(this.components);
 			this.tv_Files = new System.Windows.Forms.BetterTreeView();
+			this.label1 = new System.Windows.Forms.Label();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -43,7 +44,7 @@
 			this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.flowLayoutPanel1.Controls.Add(this.btn_Accept);
 			this.flowLayoutPanel1.Controls.Add(this.btn_Cancel);
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(644, 10);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(644, 29);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
 			this.flowLayoutPanel1.Size = new System.Drawing.Size(102, 192);
@@ -93,11 +94,20 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.tv_Files.CheckBoxes = true;
-			this.tv_Files.Location = new System.Drawing.Point(12, 12);
+			this.tv_Files.Location = new System.Drawing.Point(12, 29);
 			this.tv_Files.Name = "tv_Files";
-			this.tv_Files.Size = new System.Drawing.Size(627, 533);
+			this.tv_Files.Size = new System.Drawing.Size(627, 516);
 			this.tv_Files.TabIndex = 3;
 			this.tv_Files.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tv_Files_AfterCheck);
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(13, 13);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(192, 13);
+			this.label1.TabIndex = 4;
+			this.label1.Text = "Select which items to add to the file list:";
 			// 
 			// EasyFilePicker
 			// 
@@ -106,6 +116,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btn_Cancel;
 			this.ClientSize = new System.Drawing.Size(754, 586);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.tv_Files);
 			this.Controls.Add(this.btn_AddProject);
 			this.Controls.Add(this.flowLayoutPanel1);
@@ -118,6 +129,7 @@
 			this.Load += new System.EventHandler(this.EasyFilePicker_Load);
 			this.flowLayoutPanel1.ResumeLayout(false);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -128,5 +140,6 @@
 		public System.Windows.Forms.Button btn_AddProject;
 		private System.Windows.Forms.ToolTip FormTooltips;
 		private System.Windows.Forms.BetterTreeView tv_Files;
+		private System.Windows.Forms.Label label1;
 	}
 }
