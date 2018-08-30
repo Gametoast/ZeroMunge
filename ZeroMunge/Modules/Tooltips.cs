@@ -41,6 +41,7 @@ namespace ZeroMunge
 		{
 			public const string CreateSideMungeFolder = "Automatically create the munge folder (and batch scripts) for a side by simply selecting its side folder.";
 			public const string CreateWorldMungeFolder = "Automatically create the munge folder (and batch scripts) for a world by simply selecting its world folder.";
+			public const string FixWorldMungeFile = "Check to see if a world's munge.bat script is set to munge the correct world and fix it if not.";
 		}
 
 		public static class EasyFilePicker

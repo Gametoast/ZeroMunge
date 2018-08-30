@@ -672,6 +672,8 @@ namespace ZeroMunge
 
 			// Tools Menu
 			menu_createSideMungeFolderToolStripMenuItem.ToolTipText = Tooltips.Tools.CreateSideMungeFolder;
+			menu_createWorldMungeFolderToolStripMenuItem.ToolTipText = Tooltips.Tools.CreateWorldMungeFolder;
+			menu_fixWorldMungeScriptsToolStripMenuItem.ToolTipText = Tooltips.Tools.FixWorldMungeFile;
 
 
 			// Settings
