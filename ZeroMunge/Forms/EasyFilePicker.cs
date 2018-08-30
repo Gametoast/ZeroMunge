@@ -254,6 +254,19 @@ namespace ZeroMunge
 				catch (DirectoryNotFoundException ex)
 				{
 					Trace.WriteLine(ex.Message);
+					rootPaths.Remove(curRoot);
+					
+					// Show error message allowing user to select a different directory, ignore the error, or abort the operation
+					DialogResult dr = MessageBox.Show(string.Format("Unable to find _BUILD directory in \"{0}\".", openDlg_AddProjectPrompt.FileName), "Error", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error);
+					switch (dr)
+					{
+						case DialogResult.Abort:
+							Close();
+							break;
+						case DialogResult.Retry:
+							Prompt_AddProject();
+							break;
+					}
 				}
 				catch (IOException ex)
 				{
@@ -262,14 +275,17 @@ namespace ZeroMunge
 				catch (ArgumentOutOfRangeException ex)
 				{
 					Trace.WriteLine(ex.Message);
+					throw;
 				}
 				catch (ArgumentNullException ex)
 				{
 					Trace.WriteLine(ex.Message);
+					throw;
 				}
 				catch (ArgumentException ex)
 				{
 					Trace.WriteLine(ex.Message);
+					throw;
 				}
 			}
 		}
