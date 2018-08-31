@@ -346,21 +346,4 @@ namespace ZeroMunge
 			return parentNode;
 		}
 	}
-
-	internal static class TreeViewExt
-	{
-		// Adapted from https://stackoverflow.com/a/26543212/3639133
-		internal static IEnumerable<TreeNode> Descendants(this TreeNodeCollection c)
-		{
-			foreach (var node in c.OfType<TreeNode>())
-			{
-				yield return node;
-
-				foreach (var child in node.Nodes.Descendants())
-				{
-					yield return child;
-				}
-			}
-		}
-	}
 }

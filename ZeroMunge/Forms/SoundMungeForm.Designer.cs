@@ -72,16 +72,19 @@
 			this.btn_Browse.TabIndex = 1;
 			this.btn_Browse.Text = "Browse...";
 			this.btn_Browse.UseVisualStyleBackColor = true;
+			this.btn_Browse.Click += new System.EventHandler(this.btn_Browse_Click);
 			// 
 			// tv_SoundFolders
 			// 
 			this.tv_SoundFolders.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.tv_SoundFolders.CheckBoxes = true;
 			this.tv_SoundFolders.Location = new System.Drawing.Point(13, 80);
 			this.tv_SoundFolders.Name = "tv_SoundFolders";
 			this.tv_SoundFolders.Size = new System.Drawing.Size(431, 229);
 			this.tv_SoundFolders.TabIndex = 2;
+			this.tv_SoundFolders.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tv_SoundFolders_AfterCheck);
 			// 
 			// flowLayoutPanel1
 			// 
@@ -148,9 +151,9 @@
 			this.Controls.Add(this.flowLayoutPanel1);
 			this.Controls.Add(this.tv_SoundFolders);
 			this.Controls.Add(this.groupBox1);
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
 			this.Name = "SoundMungeForm";
+			this.ShowIcon = false;
+			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "SoundMungeForm";
 			this.Load += new System.EventHandler(this.SoundMungeForm_Load);

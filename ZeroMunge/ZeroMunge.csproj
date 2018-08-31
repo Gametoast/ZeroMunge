@@ -169,6 +169,7 @@
     <Compile Include="Modules\ReadWriteCsv.cs" />
     <Compile Include="Modules\StringExt.cs" />
     <Compile Include="Modules\Tooltips.cs" />
+    <Compile Include="Modules\TreeViewExt.cs" />
     <Compile Include="Modules\Utilities.cs" />
     <Compile Include="Forms\Preferences.cs">
       <SubType>Form</SubType>
