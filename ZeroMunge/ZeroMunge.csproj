@@ -249,6 +249,15 @@
     <None Include="ZeroMunge\templates\SideMungeFolder\munge.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="ZeroMunge\templates\SoundMungeFixes\munge.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ZeroMunge\templates\SoundMungeFixes\soundmunge.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ZeroMunge\templates\SoundMungeFixes\soundmungedir.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="ZeroMunge\templates\WorldMungeFolder\clean.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

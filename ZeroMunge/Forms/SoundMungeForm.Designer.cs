@@ -36,7 +36,6 @@
 			this.btn_Close = new System.Windows.Forms.Button();
 			this.btn_Apply = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
-			this.btn_FixMungeFiles = new System.Windows.Forms.Button();
 			this.groupBox1.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
@@ -61,7 +60,7 @@
 			this.groupBox1.Size = new System.Drawing.Size(538, 48);
 			this.groupBox1.TabIndex = 1;
 			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Project Directory:";
+			this.groupBox1.Text = "Project Directory";
 			// 
 			// btn_Browse
 			// 
@@ -90,7 +89,6 @@
 			// 
 			this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.flowLayoutPanel1.Controls.Add(this.btn_FixMungeFiles);
 			this.flowLayoutPanel1.Controls.Add(this.btn_Apply);
 			this.flowLayoutPanel1.Controls.Add(this.btn_Close);
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(449, 80);
@@ -103,7 +101,7 @@
 			// 
 			this.btn_Close.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.btn_Close.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btn_Close.Location = new System.Drawing.Point(0, 61);
+			this.btn_Close.Location = new System.Drawing.Point(0, 32);
 			this.btn_Close.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this.btn_Close.Name = "btn_Close";
 			this.btn_Close.Size = new System.Drawing.Size(102, 23);
@@ -114,7 +112,7 @@
 			// btn_Apply
 			// 
 			this.btn_Apply.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.btn_Apply.Location = new System.Drawing.Point(0, 32);
+			this.btn_Apply.Location = new System.Drawing.Point(0, 3);
 			this.btn_Apply.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this.btn_Apply.Name = "btn_Apply";
 			this.btn_Apply.Size = new System.Drawing.Size(102, 23);
@@ -128,21 +126,9 @@
 			this.label1.AutoSize = true;
 			this.label1.Location = new System.Drawing.Point(12, 64);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(78, 13);
+			this.label1.Size = new System.Drawing.Size(111, 13);
 			this.label1.TabIndex = 4;
-			this.label1.Text = "Sound Folders:";
-			// 
-			// btn_FixMungeFiles
-			// 
-			this.btn_FixMungeFiles.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.btn_FixMungeFiles.Location = new System.Drawing.Point(0, 3);
-			this.btn_FixMungeFiles.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
-			this.btn_FixMungeFiles.Name = "btn_FixMungeFiles";
-			this.btn_FixMungeFiles.Size = new System.Drawing.Size(102, 23);
-			this.btn_FixMungeFiles.TabIndex = 2;
-			this.btn_FixMungeFiles.Text = "Fix Munge Files";
-			this.btn_FixMungeFiles.UseVisualStyleBackColor = true;
-			this.btn_FixMungeFiles.Click += new System.EventHandler(this.btn_FixMungeFiles_Click);
+			this.label1.Text = "Select Sound Folders:";
 			// 
 			// SoundMungeForm
 			// 
@@ -157,7 +143,7 @@
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "SoundMungeForm";
+			this.Text = "Modify Munged Sound Folders";
 			this.Load += new System.EventHandler(this.SoundMungeForm_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
@@ -177,6 +163,5 @@
 		public System.Windows.Forms.Button btn_Close;
 		public System.Windows.Forms.Button btn_Apply;
 		private System.Windows.Forms.Label label1;
-		public System.Windows.Forms.Button btn_FixMungeFiles;
 	}
 }

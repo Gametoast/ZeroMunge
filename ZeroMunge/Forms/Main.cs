@@ -674,6 +674,8 @@ namespace ZeroMunge
 			menu_createSideMungeFolderToolStripMenuItem.ToolTipText = Tooltips.Tools.CreateSideMungeFolder;
 			menu_createWorldMungeFolderToolStripMenuItem.ToolTipText = Tooltips.Tools.CreateWorldMungeFolder;
 			menu_fixWorldMungeScriptsToolStripMenuItem.ToolTipText = Tooltips.Tools.FixWorldMungeFile;
+			menu_fixSoundMungeFilesToolStripMenuItem.ToolTipText = Tooltips.Tools.FixSoundMungeFiles;
+			menu_modifyMungedSoundFoldersToolStripMenuItem.ToolTipText = Tooltips.Tools.ModifyMungedSoundFolders;
 
 
 			// Settings
@@ -3525,10 +3527,26 @@ namespace ZeroMunge
 			}
 		}
 
-		private void menu_fixSoundMungeFilesToolStripMenuItem_Click(object sender, EventArgs e)
+		private void menu_modifyMungedSoundFoldersToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			SoundMungeForm form = new SoundMungeForm();
 			form.ShowDialog();
+		}
+
+		private void menu_fixSoundMungeFilesToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			CommonOpenFileDialog openDlg_SelectProjectPrompt = new CommonOpenFileDialog
+			{
+				Title = "Select Project Folder",
+				DefaultDirectory = "C:\\BF2_ModTools",
+				IsFolderPicker = true,
+				RestoreDirectory = true
+			};
+
+			if (openDlg_SelectProjectPrompt.ShowDialog() == CommonFileDialogResult.Ok)
+			{
+				FixSoundMungeFiles(openDlg_SelectProjectPrompt.FileName);
+			}
 		}
 
 
@@ -3857,6 +3875,128 @@ namespace ZeroMunge
 			return false;
 		}
 
+
+		private void FixSoundMungeFiles(string projectDirectory)
+		{
+			try
+			{
+				string projectDir = projectDirectory;
+
+				// Get the project ID
+				string projectID = Utilities.GetProjectID(projectDir);
+				string projectRoot = new DirectoryInfo(projectDir).Name;
+
+				string mungeFile = Directory.GetCurrentDirectory() + "\\ZeroMunge\\templates\\SoundMungeFixes\\munge.bat";
+				string soundmungeFile = Directory.GetCurrentDirectory() + "\\ZeroMunge\\templates\\SoundMungeFixes\\soundmunge.bat";
+				string soundmungedirFile = Directory.GetCurrentDirectory() + "\\ZeroMunge\\templates\\SoundMungeFixes\\soundmungedir.bat";
+
+				bool copyMunge = true;
+				bool copySoundmunge = true;
+				bool copySoundmungedir = true;
+
+				// Warn user if munge.bat already exists and prompt them to overwrite it or not
+				if (File.Exists(projectDir + "\\_BUILD\\Sound\\munge.bat"))
+				{
+					DialogResult mungeOverwritePromptResult = MessageBox.Show("A file named munge.bat already exists in the directory: \n" + projectDir + "\\_BUILD\\Sound" + "\n\nWould you like to overwrite it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+					if (mungeOverwritePromptResult == DialogResult.No)
+					{
+						copyMunge = false;
+					}
+				}
+				if (copyMunge)
+				{
+					Log(string.Format("Copying munge.bat template to directory: \"{0}\"", projectDir + "\\_BUILD\\Sound"), LogType.Info);
+					File.Copy(mungeFile, projectDir + "\\_BUILD\\Sound\\munge.bat", true);
+				}
+
+				// Warn user if soundmunge.bat already exists and prompt them to overwrite it or not
+				if (File.Exists(projectDir + "\\soundmunge.bat"))
+				{
+					DialogResult soundmungeOverwritePromptResult = MessageBox.Show("A file named soundmunge.bat already exists in the directory: \n" + projectDir + "\n\nWould you like to overwrite it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+					if (soundmungeOverwritePromptResult == DialogResult.No)
+					{
+						copySoundmunge = false;
+					}
+				}
+				if (copySoundmunge)
+				{
+					Log(string.Format("Copying soundmunge.bat template to directory: \"{0}\"", projectDir), LogType.Info);
+					File.Copy(soundmungeFile, projectDir + "\\soundmunge.bat", true);
+				}
+
+				// Warn user if soundmungedir.bat already exists and prompt them to overwrite it or not
+				if (File.Exists(projectDir + "\\soundmungedir.bat"))
+				{
+					DialogResult soundmungedirOverwritePromptResult = MessageBox.Show("A file named soundmungedir.bat already exists in the directory: \n" + projectDir + "\n\nWould you like to overwrite it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+					if (soundmungedirOverwritePromptResult == DialogResult.No)
+					{
+						copySoundmungedir = false;
+					}
+				}
+				if (copySoundmungedir)
+				{
+					Log(string.Format("Copying soundmunge.bat template to directory: \"{0}\"", projectDir), LogType.Info);
+					File.Copy(soundmungedirFile, projectDir + "\\soundmungedir.bat", true);
+				}
+
+				// Prompt the user to modify the munged sound folders
+				DialogResult modifySoundFoldersPromptResult = MessageBox.Show("Would you like to change which sound folders are munged? (recommended)", "Success", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+				if (modifySoundFoldersPromptResult == DialogResult.Yes)
+				{
+					SoundMungeForm form = new SoundMungeForm(projectDir);
+					form.ShowDialog();
+				}
+			}
+			catch (UnauthorizedAccessException ex)
+			{
+				var msg = "Failed to fix sound munge files. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (NotSupportedException ex)
+			{
+				var msg = "Failed to fix sound munge files. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (PathTooLongException ex)
+			{
+				var msg = "Failed to fix sound munge files. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (DirectoryNotFoundException ex)
+			{
+				var msg = "Failed to fix sound munge files. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (FileNotFoundException ex)
+			{
+				var msg = "Failed to fix sound munge files. Reason: " + ex.Message + "\nFile: " + ex.FileName;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (IOException ex)
+			{
+				var msg = "Failed to fix sound munge files. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (ArgumentNullException ex)
+			{
+				var msg = "Failed to fix sound munge files. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (ArgumentException ex)
+			{
+				var msg = "Failed to fix sound munge files. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+		}
+
 		#endregion Tools Menu
 
 
@@ -4012,7 +4152,6 @@ namespace ZeroMunge
 		}
 
 		#endregion Debug Buttons
-
 	}
 
 	public class MungeFactory

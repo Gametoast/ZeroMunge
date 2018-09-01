@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ZeroMunge));
 			this.btn_Run = new System.Windows.Forms.Button();
 			this.btn_AddFiles = new System.Windows.Forms.Button();
@@ -113,6 +113,7 @@
 			this.menu_createWorldMungeFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_fixWorldMungeScriptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_fixSoundMungeFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.menu_modifyMungedSoundFoldersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_setGamePathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
@@ -519,9 +520,9 @@
 			// 
 			// col_FileBrowse
 			// 
-			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle5.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle5;
 			this.col_FileBrowse.HeaderText = "";
 			this.col_FileBrowse.Name = "col_FileBrowse";
 			this.col_FileBrowse.ReadOnly = true;
@@ -542,9 +543,9 @@
 			// 
 			// col_StagingBrowse
 			// 
-			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle2.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-			this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle6.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+			this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle6;
 			this.col_StagingBrowse.HeaderText = "";
 			this.col_StagingBrowse.Name = "col_StagingBrowse";
 			this.col_StagingBrowse.ReadOnly = true;
@@ -563,8 +564,8 @@
 			// 
 			// col_MungedFiles
 			// 
-			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle7;
 			this.col_MungedFiles.HeaderText = "Munged Files";
 			this.col_MungedFiles.MinimumWidth = 100;
 			this.col_MungedFiles.Name = "col_MungedFiles";
@@ -575,9 +576,9 @@
 			// 
 			// col_MungedFilesEdit
 			// 
-			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle4.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-			this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle8.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+			this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle8;
 			this.col_MungedFilesEdit.HeaderText = "";
 			this.col_MungedFilesEdit.Name = "col_MungedFilesEdit";
 			this.col_MungedFilesEdit.ReadOnly = true;
@@ -901,7 +902,8 @@
             this.menu_createSideMungeFolderToolStripMenuItem,
             this.menu_createWorldMungeFolderToolStripMenuItem,
             this.menu_fixWorldMungeScriptsToolStripMenuItem,
-            this.menu_fixSoundMungeFilesToolStripMenuItem});
+            this.menu_fixSoundMungeFilesToolStripMenuItem,
+            this.menu_modifyMungedSoundFoldersToolStripMenuItem});
 			this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
 			this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
 			this.toolsToolStripMenuItem.Text = "Tools";
@@ -909,30 +911,37 @@
 			// menu_createSideMungeFolderToolStripMenuItem
 			// 
 			this.menu_createSideMungeFolderToolStripMenuItem.Name = "menu_createSideMungeFolderToolStripMenuItem";
-			this.menu_createSideMungeFolderToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
+			this.menu_createSideMungeFolderToolStripMenuItem.Size = new System.Drawing.Size(247, 22);
 			this.menu_createSideMungeFolderToolStripMenuItem.Text = "Create Side Munge Folders...";
 			this.menu_createSideMungeFolderToolStripMenuItem.Click += new System.EventHandler(this.menu_createSideMungeFolderToolStripMenuItem_Click);
 			// 
 			// menu_createWorldMungeFolderToolStripMenuItem
 			// 
 			this.menu_createWorldMungeFolderToolStripMenuItem.Name = "menu_createWorldMungeFolderToolStripMenuItem";
-			this.menu_createWorldMungeFolderToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
+			this.menu_createWorldMungeFolderToolStripMenuItem.Size = new System.Drawing.Size(247, 22);
 			this.menu_createWorldMungeFolderToolStripMenuItem.Text = "Create World Munge Folders...";
 			this.menu_createWorldMungeFolderToolStripMenuItem.Click += new System.EventHandler(this.menu_createWorldMungeFolderToolStripMenuItem_Click);
 			// 
 			// menu_fixWorldMungeScriptsToolStripMenuItem
 			// 
 			this.menu_fixWorldMungeScriptsToolStripMenuItem.Name = "menu_fixWorldMungeScriptsToolStripMenuItem";
-			this.menu_fixWorldMungeScriptsToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
+			this.menu_fixWorldMungeScriptsToolStripMenuItem.Size = new System.Drawing.Size(247, 22);
 			this.menu_fixWorldMungeScriptsToolStripMenuItem.Text = "Fix World Munge File...";
 			this.menu_fixWorldMungeScriptsToolStripMenuItem.Click += new System.EventHandler(this.menu_fixWorldMungeScriptsToolStripMenuItem_Click);
 			// 
 			// menu_fixSoundMungeFilesToolStripMenuItem
 			// 
 			this.menu_fixSoundMungeFilesToolStripMenuItem.Name = "menu_fixSoundMungeFilesToolStripMenuItem";
-			this.menu_fixSoundMungeFilesToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
-			this.menu_fixSoundMungeFilesToolStripMenuItem.Text = "Fix/Modify Sound Munge Files...";
+			this.menu_fixSoundMungeFilesToolStripMenuItem.Size = new System.Drawing.Size(247, 22);
+			this.menu_fixSoundMungeFilesToolStripMenuItem.Text = "Fix Sound Munge Files...";
 			this.menu_fixSoundMungeFilesToolStripMenuItem.Click += new System.EventHandler(this.menu_fixSoundMungeFilesToolStripMenuItem_Click);
+			// 
+			// menu_modifyMungedSoundFoldersToolStripMenuItem
+			// 
+			this.menu_modifyMungedSoundFoldersToolStripMenuItem.Name = "menu_modifyMungedSoundFoldersToolStripMenuItem";
+			this.menu_modifyMungedSoundFoldersToolStripMenuItem.Size = new System.Drawing.Size(247, 22);
+			this.menu_modifyMungedSoundFoldersToolStripMenuItem.Text = "Modify Munged Sound Folders...";
+			this.menu_modifyMungedSoundFoldersToolStripMenuItem.Click += new System.EventHandler(this.menu_modifyMungedSoundFoldersToolStripMenuItem_Click);
 			// 
 			// settingsToolStripMenuItem
 			// 
@@ -1371,6 +1380,7 @@
 		private System.Windows.Forms.ToolStripMenuItem menu_createWorldMungeFolderToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem menu_fixWorldMungeScriptsToolStripMenuItem;
 		private System.Windows.Forms.OpenFileDialog openDlg_CreateWorldMungeFolderPrompt;
+		private System.Windows.Forms.ToolStripMenuItem menu_modifyMungedSoundFoldersToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem menu_fixSoundMungeFilesToolStripMenuItem;
 	}
 }

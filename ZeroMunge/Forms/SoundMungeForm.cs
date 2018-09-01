@@ -14,9 +14,10 @@ namespace ZeroMunge
 {
 	public partial class SoundMungeForm : Form
 	{
-		public SoundMungeForm()
+		public SoundMungeForm(string projectDirectory = "")
 		{
 			InitializeComponent();
+			projectDir = projectDirectory;
 		}
 
 		string projectDir = "";
@@ -24,7 +25,14 @@ namespace ZeroMunge
 
 		private void SoundMungeForm_Load(object sender, EventArgs e)
 		{
-			Prompt_AddProject();
+			if (projectDir == "")
+			{
+				Prompt_AddProject();
+			}
+			else
+			{
+				AddProject(projectDir);
+			}
 		}
 
 		private void btn_Browse_Click(object sender, EventArgs e)
@@ -32,14 +40,21 @@ namespace ZeroMunge
 			Prompt_AddProject();
 		}
 
-		private void btn_FixMungeFiles_Click(object sender, EventArgs e)
-		{
-
-		}
-
 		private void btn_Apply_Click(object sender, EventArgs e)
 		{
-			ModifySoundFile();
+			if (File.Exists(projectDir + "\\soundmunge.bat"))
+			{
+				DialogResult overwritePrompt = MessageBox.Show(string.Format("This will overwrite the contents of \"{0}\". Do you want to continue?", projectDir + "\\soundmunge.bat"), "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+				if (overwritePrompt == DialogResult.Yes)
+				{
+					ModifySoundFile();
+				}
+			}
+			else
+			{
+				ModifySoundFile();
+			}
 		}
 
 		// After a node has been checked in the TreeView:
@@ -89,36 +104,42 @@ namespace ZeroMunge
 			// Auto-detect the munge.bat file inside each selected folder and add it to the file list
 			if (openDlg_AddProjectPrompt.ShowDialog() == CommonFileDialogResult.Ok)
 			{
-				projectDir = openDlg_AddProjectPrompt.FileName;
-				txt_ProjectDirectory.Text = projectDir;
-
-				// Get the project ID
-				string projectID = Utilities.GetProjectID(projectDir);
-				string projectRoot = new DirectoryInfo(projectDir).Name;
-
-				soundDir = new DirectoryInfo(projectDir).FullName + "\\Sound";
-				string[] soundFolders = Directory.GetDirectories(soundDir);
+				AddProject(openDlg_AddProjectPrompt.FileName);
+			}
+		}
 
 
-				tv_SoundFolders.BeginUpdate();
+		private void AddProject(string dir)
+		{
+			projectDir = dir;
+			txt_ProjectDirectory.Text = projectDir;
 
-				foreach (string folder in soundFolders)
+			// Get the project ID
+			string projectID = Utilities.GetProjectID(projectDir);
+			string projectRoot = new DirectoryInfo(projectDir).Name;
+
+			soundDir = new DirectoryInfo(projectDir).FullName + "\\Sound";
+			string[] soundFolders = Directory.GetDirectories(soundDir);
+
+
+			tv_SoundFolders.BeginUpdate();
+
+			foreach (string folder in soundFolders)
+			{
+				tv_SoundFolders.Nodes.Add(new DirectoryInfo(folder).Name.ToLower());
+
+				if (new DirectoryInfo(folder).Name.ToLower() == "worlds")
 				{
-					tv_SoundFolders.Nodes.Add(new DirectoryInfo(folder).Name.ToLower());
-
-					if (new DirectoryInfo(folder).Name.ToLower() == "worlds")
+					foreach (string childFolder in Directory.GetDirectories(soundDir + "\\worlds"))
 					{
-						foreach (string childFolder in Directory.GetDirectories(soundDir + "\\worlds"))
-						{
-							tv_SoundFolders.Nodes.GetNodeByValue("worlds").Nodes.Add(new DirectoryInfo(childFolder).Name.ToLower());
-						}
+						tv_SoundFolders.Nodes.GetNodeByValue("worlds").Nodes.Add(new DirectoryInfo(childFolder).Name.ToLower());
 					}
 				}
-
-				tv_SoundFolders.EndUpdate();
-				tv_SoundFolders.ExpandAll();
-				tv_SoundFolders.Nodes[0].EnsureVisible();
 			}
+
+			tv_SoundFolders.EndUpdate();
+			tv_SoundFolders.ExpandAll();
+			tv_SoundFolders.Nodes[0].EnsureVisible();
 		}
 
 
@@ -186,10 +207,7 @@ namespace ZeroMunge
 				newFileContents.Add(":exit");
 
 
-				foreach (string line in newFileContents)
-				{
-					Debug.WriteLine(line);
-				}
+				File.WriteAllLines(projectDir + "\\soundmunge.bat", newFileContents, Encoding.UTF8);
 			}
 		}
 	}
