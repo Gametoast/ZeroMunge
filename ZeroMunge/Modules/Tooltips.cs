@@ -46,6 +46,13 @@ namespace ZeroMunge
 			public const string ModifyMungedSoundFolders = "Select which sound folders should be munged when sound is munged.";
 		}
 
+		public static class SoundMungeForm
+		{
+			public const string Browse = "Browse for a project directory.";
+			public const string Apply = "Apply the modifications to the project directory's soundmunge.bat file. Each selected folder in the tree view will be added to the file.";
+			public const string Close = "Close this dialog.";
+		}
+
 		public static class EasyFilePicker
 		{
 			public const string OK = "Close this dialog and add the munge files for the selected items to the file list.";

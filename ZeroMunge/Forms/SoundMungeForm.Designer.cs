@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.txt_ProjectDirectory = new System.Windows.Forms.TextBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.btn_Browse = new System.Windows.Forms.Button();
@@ -36,6 +37,7 @@
 			this.btn_Close = new System.Windows.Forms.Button();
 			this.btn_Apply = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
+			this.FormTooltips = new System.Windows.Forms.ToolTip(this.components);
 			this.groupBox1.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
@@ -163,5 +165,6 @@
 		public System.Windows.Forms.Button btn_Close;
 		public System.Windows.Forms.Button btn_Apply;
 		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.ToolTip FormTooltips;
 	}
 }

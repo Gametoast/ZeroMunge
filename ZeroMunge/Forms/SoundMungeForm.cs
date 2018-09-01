@@ -25,6 +25,8 @@ namespace ZeroMunge
 
 		private void SoundMungeForm_Load(object sender, EventArgs e)
 		{
+			SetToolTips();
+
 			if (projectDir == "")
 			{
 				Prompt_AddProject();
@@ -69,6 +71,19 @@ namespace ZeroMunge
 					CheckAllChildNodes(e.Node, e.Node.Checked);
 				}
 			}
+		}
+
+		/// <summary>
+		/// Sets the form's tooltips.
+		/// </summary>
+		private void SetToolTips()
+		{
+			FormTooltips.AutoPopDelay = Properties.Settings.Default.TooltipPopDelay;
+
+			// Easy File Picker
+			FormTooltips.SetToolTip(btn_Browse, Tooltips.SoundMungeForm.Browse);
+			FormTooltips.SetToolTip(btn_Apply, Tooltips.SoundMungeForm.Apply);
+			FormTooltips.SetToolTip(btn_Close, Tooltips.SoundMungeForm.Close);
 		}
 
 		/// <summary>
