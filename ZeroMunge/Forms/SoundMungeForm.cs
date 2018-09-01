@@ -140,6 +140,9 @@ namespace ZeroMunge
 				projectDir = dir;
 				txt_ProjectDirectory.Text = projectDir;
 
+				if (!Directory.Exists(projectDir + "\\_BUILD"))
+					throw new DirectoryNotFoundException("Invalid project directory specified.");
+
 				// Get the project ID
 				string projectID = Utilities.GetProjectID(projectDir);
 				string projectRoot = new DirectoryInfo(projectDir).Name;
@@ -216,19 +219,18 @@ namespace ZeroMunge
 			catch (DirectoryNotFoundException ex)
 			{
 				Trace.WriteLine(ex.Message);
-				//rootPaths.Remove(curRoot);
 
-				//// Show error message allowing user to select a different directory, ignore the error, or abort the operation
-				//DialogResult dr = MessageBox.Show(string.Format("Unable to find _BUILD directory in \"{0}\".", openDlg_AddProjectPrompt.FileName), "Error", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error);
-				//switch (dr)
-				//{
-				//	case DialogResult.Abort:
-				//		Close();
-				//		break;
-				//	case DialogResult.Retry:
-				//		Prompt_AddProject();
-				//		break;
-				//}
+				// Show error message allowing user to select a different directory, ignore the error, or abort the operation
+				DialogResult dr = MessageBox.Show(string.Format("Unable to find _BUILD directory in \"{0}\".\n\nPlease specify a valid project directory, e.g. \"C:\\BF2_ModTools\\data_ABC\".", dir), "Error", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error);
+				switch (dr)
+				{
+					case DialogResult.Abort:
+						Close();
+						break;
+					case DialogResult.Retry:
+						Prompt_AddProject();
+						break;
+				}
 			}
 			catch (IOException ex)
 			{

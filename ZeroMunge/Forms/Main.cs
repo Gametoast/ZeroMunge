@@ -3477,11 +3477,32 @@ namespace ZeroMunge
 			{
 				foreach (string folder in openDlg_CreateSideMungeFolderPrompt2.FileNames)
 				{
-					DirectoryInfo projectDir = new DirectoryInfo(folder).Parent.Parent;
-					
-					string sideName = new DirectoryInfo(folder).Name;
+					try
+					{
+						if (!new DirectoryInfo(folder).Parent.FullName.ToLower().EndsWith("\\sides"))
+							throw new DirectoryNotFoundException("Invalid side folder(s) specified.");
 
-					CreateSideMungeFolder(projectDir.FullName, sideName);
+						DirectoryInfo projectDir = new DirectoryInfo(folder).Parent.Parent;
+						if (projectDir.Name.ToLower() == "_build")
+							projectDir = projectDir.Parent;
+
+						string sideName = new DirectoryInfo(folder).Name;
+
+						CreateSideMungeFolder(projectDir.FullName, sideName);
+					}
+					catch (DirectoryNotFoundException ex)
+					{
+						Trace.WriteLine(ex.Message);
+
+						// Show error message allowing user to select a different directory, ignore the error, or abort the operation
+						DialogResult dr = MessageBox.Show(string.Format("Invalid side folder specified: \"{0}\".\n\nPlease specify a valid side folder, e.g. \"C:\\BF2_ModTools\\data_ABC\\Sides\\CIS\".", folder), "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+						switch (dr)
+						{
+							case DialogResult.Retry:
+								menu_createSideMungeFolderToolStripMenuItem_Click(sender, e);
+								break;
+						}
+					}
 				}
 			}
 		}
@@ -3504,11 +3525,32 @@ namespace ZeroMunge
 			{
 				foreach (string folder in openDlg_CreateWorldMungeFolderPrompt2.FileNames)
 				{
-					DirectoryInfo projectDir = new DirectoryInfo(folder).Parent.Parent;
+					try
+					{
+						if (!new DirectoryInfo(folder).Parent.FullName.ToLower().EndsWith("\\worlds"))
+							throw new DirectoryNotFoundException("Invalid world folder(s) specified.");
 
-					string worldName = new DirectoryInfo(folder).Name;
+						DirectoryInfo projectDir = new DirectoryInfo(folder).Parent.Parent;
+						if (projectDir.Name.ToLower() == "_build")
+							projectDir = projectDir.Parent;
 
-					CreateWorldMungeFolder(projectDir.FullName, worldName);
+						string worldName = new DirectoryInfo(folder).Name;
+
+						CreateWorldMungeFolder(projectDir.FullName, worldName);
+					}
+					catch (DirectoryNotFoundException ex)
+					{
+						Trace.WriteLine(ex.Message);
+
+						// Show error message allowing user to select a different directory, ignore the error, or abort the operation
+						DialogResult dr = MessageBox.Show(string.Format("Invalid world folder specified: \"{0}\".\n\nPlease specify a valid world folder, e.g. \"C:\\BF2_ModTools\\data_ABC\\Worlds\\ABC\".", folder), "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+						switch (dr)
+						{
+							case DialogResult.Retry:
+								menu_createWorldMungeFolderToolStripMenuItem_Click(sender, e);
+								break;
+						}
+					}
 				}
 			}
 		}
@@ -3531,25 +3573,48 @@ namespace ZeroMunge
 			{
 				foreach (string folder in openDlg_FixWorldMungeScriptsPrompt.FileNames)
 				{
-					DirectoryInfo projectDir = new DirectoryInfo(folder).Parent.Parent;
-					string worldName = new DirectoryInfo(folder).Name;
-					string mungeFilePath;
+					try
+					{
+						if (!new DirectoryInfo(folder).Parent.FullName.ToLower().EndsWith("\\worlds"))
+							throw new DirectoryNotFoundException("Invalid world folder(s) specified.");
 
-					if (new DirectoryInfo(folder).Parent.Parent.Name.ToUpper() == "_BUILD")
-					{
-						mungeFilePath = folder + "\\munge.bat";
-					}
-					else
-					{
-						mungeFilePath = new DirectoryInfo(folder).Parent.Parent.FullName + "\\_BUILD\\Worlds\\" + worldName + "\\munge.bat";
-					}
+						DirectoryInfo projectDir = new DirectoryInfo(folder).Parent.Parent;
+						string worldName = new DirectoryInfo(folder).Name;
+						string mungeFilePath;
 
-					if (!IsWorldMungeFileValid(mungeFilePath))
-					{
-						DialogResult result = MessageBox.Show("World " + worldName + " appears to have an incorrect munge.bat file. Attempt to fix?", "Fix World Munge Script", MessageBoxButtons.YesNo);
-						if (result == DialogResult.Yes)
+						if (new DirectoryInfo(folder).Parent.Parent.Name.ToUpper() == "_BUILD")
 						{
-							FixWorldMungeScript(mungeFilePath, worldName);
+							mungeFilePath = folder + "\\munge.bat";
+						}
+						else
+						{
+							mungeFilePath = new DirectoryInfo(folder).Parent.Parent.FullName + "\\_BUILD\\Worlds\\" + worldName + "\\munge.bat";
+						}
+
+						if (!IsWorldMungeFileValid(mungeFilePath))
+						{
+							DialogResult result = MessageBox.Show("World " + worldName + " appears to have an incorrect munge.bat file. Attempt to fix?", "Fix World Munge Script", MessageBoxButtons.YesNo);
+							if (result == DialogResult.Yes)
+							{
+								FixWorldMungeScript(mungeFilePath, worldName);
+							}
+						}
+						else
+						{
+							MessageBox.Show(string.Format("World munge.bat file doesn't appear to contain problems.\n\nFile path: \"{0}\"", mungeFilePath), "There's magic in the air...", MessageBoxButtons.OK, MessageBoxIcon.Information);
+						}
+					}
+					catch (DirectoryNotFoundException ex)
+					{
+						Trace.WriteLine(ex.Message);
+
+						// Show error message allowing user to select a different directory, ignore the error, or abort the operation
+						DialogResult dr = MessageBox.Show(string.Format("Invalid world folder specified: \"{0}\".\n\nPlease specify a valid world folder, e.g. \"C:\\BF2_ModTools\\data_ABC\\Worlds\\ABC\".", folder), "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+						switch (dr)
+						{
+							case DialogResult.Retry:
+								menu_fixWorldMungeScriptsToolStripMenuItem_Click(sender, e);
+								break;
 						}
 					}
 				}
@@ -3571,7 +3636,26 @@ namespace ZeroMunge
 
 			if (openDlg_SelectProjectPrompt.ShowDialog() == CommonFileDialogResult.Ok)
 			{
-				FixSoundMungeFiles(openDlg_SelectProjectPrompt.FileName);
+				try
+				{
+					if (!Directory.Exists(openDlg_SelectProjectPrompt.FileName + "\\_BUILD"))
+						throw new DirectoryNotFoundException("Invalid project directory specified.");
+
+					FixSoundMungeFiles(openDlg_SelectProjectPrompt.FileName);
+				}
+				catch (DirectoryNotFoundException ex)
+				{
+					Trace.WriteLine(ex.Message);
+
+					// Show error message allowing user to select a different directory, ignore the error, or abort the operation
+					DialogResult dr = MessageBox.Show(string.Format("Unable to find _BUILD directory in \"{0}\".\n\nPlease specify a valid project directory, e.g. \"C:\\BF2_ModTools\\data_ABC\".", openDlg_SelectProjectPrompt.FileName), "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+					switch (dr)
+					{
+						case DialogResult.Retry:
+							menu_fixSoundMungeFilesToolStripMenuItem_Click(sender, e);
+							break;
+					}
+				}
 			}
 		}
 
@@ -3920,6 +4004,8 @@ namespace ZeroMunge
 			try
 			{
 				string projectDir = projectDirectory;
+
+				
 
 				// Get the project ID
 				string projectID = Utilities.GetProjectID(projectDir);
