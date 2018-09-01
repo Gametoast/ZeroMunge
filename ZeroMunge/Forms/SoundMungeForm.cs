@@ -129,6 +129,7 @@ namespace ZeroMunge
 			projectDir = dir;
 			txt_ProjectDirectory.Text = projectDir;
 
+
 			// Get the project ID
 			string projectID = Utilities.GetProjectID(projectDir);
 			string projectRoot = new DirectoryInfo(projectDir).Name;
@@ -155,6 +156,36 @@ namespace ZeroMunge
 			tv_SoundFolders.EndUpdate();
 			tv_SoundFolders.ExpandAll();
 			tv_SoundFolders.Nodes[0].EnsureVisible();
+
+			foreach (string line in File.ReadAllLines(projectDir + "\\soundmunge.bat"))
+			{
+				if (line.StartsWith("@call soundmungedir") || line.StartsWith("call soundmungedir"))
+				{
+					foreach (TreeNode node in tv_SoundFolders.Nodes)
+					{
+						if (node.FullPath.ToLower() == "worlds")
+						{
+							foreach (TreeNode childNode in node.Nodes)
+							{
+								if (line.ToLower().Contains("sound\\" + childNode.FullPath + " "))
+								{
+									childNode.Checked = true;
+									break;
+								}
+							}
+							break;
+						}
+						else
+						{
+							if (line.ToLower().Contains("sound\\".ToLower() + node.FullPath + " "))
+							{
+								node.Checked = true;
+								break;
+							}
+						}
+					}
+				}
+			}
 		}
 
 
