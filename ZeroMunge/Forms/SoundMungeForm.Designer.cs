@@ -48,7 +48,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.txt_ProjectDirectory.Location = new System.Drawing.Point(6, 19);
 			this.txt_ProjectDirectory.Name = "txt_ProjectDirectory";
-			this.txt_ProjectDirectory.Size = new System.Drawing.Size(445, 20);
+			this.txt_ProjectDirectory.Size = new System.Drawing.Size(407, 20);
 			this.txt_ProjectDirectory.TabIndex = 1;
 			// 
 			// groupBox1
@@ -59,7 +59,7 @@
 			this.groupBox1.Controls.Add(this.txt_ProjectDirectory);
 			this.groupBox1.Location = new System.Drawing.Point(12, 13);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(538, 48);
+			this.groupBox1.Size = new System.Drawing.Size(500, 48);
 			this.groupBox1.TabIndex = 1;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Project Directory";
@@ -67,7 +67,7 @@
 			// btn_Browse
 			// 
 			this.btn_Browse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_Browse.Location = new System.Drawing.Point(457, 17);
+			this.btn_Browse.Location = new System.Drawing.Point(419, 17);
 			this.btn_Browse.Name = "btn_Browse";
 			this.btn_Browse.Size = new System.Drawing.Size(75, 23);
 			this.btn_Browse.TabIndex = 0;
@@ -83,7 +83,7 @@
 			this.tv_SoundFolders.CheckBoxes = true;
 			this.tv_SoundFolders.Location = new System.Drawing.Point(13, 80);
 			this.tv_SoundFolders.Name = "tv_SoundFolders";
-			this.tv_SoundFolders.Size = new System.Drawing.Size(431, 229);
+			this.tv_SoundFolders.Size = new System.Drawing.Size(393, 229);
 			this.tv_SoundFolders.TabIndex = 5;
 			this.tv_SoundFolders.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tv_SoundFolders_AfterCheck);
 			// 
@@ -93,7 +93,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.flowLayoutPanel1.Controls.Add(this.btn_Apply);
 			this.flowLayoutPanel1.Controls.Add(this.btn_Close);
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(449, 80);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(411, 80);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
 			this.flowLayoutPanel1.Size = new System.Drawing.Size(102, 230);
@@ -136,11 +136,12 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(562, 321);
+			this.ClientSize = new System.Drawing.Size(524, 321);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.flowLayoutPanel1);
 			this.Controls.Add(this.tv_SoundFolders);
 			this.Controls.Add(this.groupBox1);
+			this.MinimumSize = new System.Drawing.Size(385, 360);
 			this.Name = "SoundMungeForm";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
