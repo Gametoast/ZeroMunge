@@ -139,6 +139,7 @@ namespace ZeroMunge
 
 
 			tv_SoundFolders.BeginUpdate();
+			tv_SoundFolders.Nodes.Clear();
 
 			foreach (string folder in soundFolders)
 			{
