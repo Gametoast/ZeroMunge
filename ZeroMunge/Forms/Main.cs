@@ -1293,6 +1293,7 @@ namespace ZeroMunge
 				menu_saveToolStripMenuItem.Enabled = enabled;
 				menu_saveAsToolStripMenuItem.Enabled = enabled;
 				menu_exitToolStripMenuItem.Enabled = enabled;
+				menu_openRecentToolStripMenuItem.Enabled = enabled;
 
 				// Edit menu
 				menu_runToolStripMenuItem.Enabled = enabled;
@@ -1306,6 +1307,10 @@ namespace ZeroMunge
 
 				// Tools menu
 				menu_createSideMungeFolderToolStripMenuItem.Enabled = enabled;
+				menu_createWorldMungeFolderToolStripMenuItem.Enabled = enabled;
+				menu_fixWorldMungeScriptsToolStripMenuItem.Enabled = enabled;
+				menu_fixSoundMungeFilesToolStripMenuItem.Enabled = enabled;
+				menu_modifyMungedSoundFoldersToolStripMenuItem.Enabled = enabled;
 
 				// Log menu
 				menu_copyLogToolStripMenuItem.Enabled = enabled;
@@ -3256,7 +3261,9 @@ namespace ZeroMunge
 				throw;
 			}
 		}
-		
+
+
+		ToolStripItem menu_clearRecentFileListToolStripMenuItem = new ToolStripMenuItem();
 
 		/// <summary>
 		/// Repopulate the Recent Files menu with the contents of the recentFiles collection.
@@ -3280,10 +3287,10 @@ namespace ZeroMunge
 
 			// Add the separator and Clear Recent File List menu items
 			menu_openRecentToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
-			ToolStripItem clearRecentFileListToolStripMenuItem = new ToolStripMenuItem("Clear Recent File List");
-			clearRecentFileListToolStripMenuItem.ToolTipText = Tooltips.FileMenu.ClearRecentFileList;
-			clearRecentFileListToolStripMenuItem.Click += menu_clearRecentFileListToolStripMenuItem_Click;
-			menu_openRecentToolStripMenuItem.DropDownItems.Add(clearRecentFileListToolStripMenuItem);
+			menu_clearRecentFileListToolStripMenuItem = new ToolStripMenuItem("Clear Recent File List");
+			menu_clearRecentFileListToolStripMenuItem.ToolTipText = Tooltips.FileMenu.ClearRecentFileList;
+			menu_clearRecentFileListToolStripMenuItem.Click += menu_clearRecentFileListToolStripMenuItem_Click;
+			menu_openRecentToolStripMenuItem.DropDownItems.Add(menu_clearRecentFileListToolStripMenuItem);
 
 			menu_openRecentToolStripMenuItem.Enabled = true;
 			menu_openRecentToolStripMenuItem.Visible = true;
