@@ -153,10 +153,32 @@ namespace ZeroMunge
 
 		#region Main Window
 
+		//public Thread outputLogThread;
+
 		// When the ZeroMunge form is finished loading:
 		// Create the tray icon, initialize some stuff with the file list, and start a new output log.
 		private void ZeroMunge_Load(object sender, EventArgs e)
 		{
+			//outputLogThread = new Thread(() =>
+			//{
+			//	RichTextBox rtb_OutputLog = new RichTextBox
+			//	{
+			//		Font = new Font("Consolas", 8.25f, FontStyle.Regular),
+			//		ReadOnly = true,
+			//		TabIndex = 12,
+			//		TabStop = true,
+			//		WordWrap = false,
+			//		Dock = DockStyle.Fill,
+			//		Location = new Point(0, 0),
+			//		Size = new Size(651, 297)
+			//		//Parent = cont_Panels.Panel2
+			//	};
+			//	rtb_OutputLog.TextChanged += text_OutputLog_TextChanged;
+			//	rtb_OutputLog.LinkClicked += text_OutputLog_LinkClicked;
+			//	cont_Panels.Panel2.Controls.Add(rtb_OutputLog);
+			//});
+			//outputLogThread.Start();
+
 			stat_UpdateLink.Visible = false;
 
 			// Set the tray icon if it's enabled
