@@ -3527,12 +3527,9 @@ namespace ZeroMunge
 			}
 		}
 
-		private void menu_modifyMungedSoundFoldersToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			SoundMungeForm form = new SoundMungeForm();
-			form.ShowDialog();
-		}
 
+		// When the user clicks the 'Fix Sound Munge Files' button in the Tools menu:
+		// Begin the logic for applying the sound munge fix.
 		private void menu_fixSoundMungeFilesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			CommonOpenFileDialog openDlg_SelectProjectPrompt = new CommonOpenFileDialog
@@ -3547,6 +3544,15 @@ namespace ZeroMunge
 			{
 				FixSoundMungeFiles(openDlg_SelectProjectPrompt.FileName);
 			}
+		}
+
+
+		// When the user clicks the 'Modify Munged Sound Folders' button in the Tools menu:
+		// Begin the logic for specifying which sound folders are munged.
+		private void menu_modifyMungedSoundFoldersToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			SoundMungeForm form = new SoundMungeForm();
+			form.ShowDialog();
 		}
 
 
@@ -3876,6 +3882,10 @@ namespace ZeroMunge
 		}
 
 
+		/// <summary>
+		/// Applies the sound munge fix to the specified project directory.
+		/// </summary>
+		/// <param name="projectDirectory">Project directory to apply the sound munge fix to.</param>
 		private void FixSoundMungeFiles(string projectDirectory)
 		{
 			try
