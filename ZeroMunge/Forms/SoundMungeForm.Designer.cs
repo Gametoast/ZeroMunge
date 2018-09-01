@@ -48,7 +48,7 @@
 			this.txt_ProjectDirectory.Location = new System.Drawing.Point(6, 19);
 			this.txt_ProjectDirectory.Name = "txt_ProjectDirectory";
 			this.txt_ProjectDirectory.Size = new System.Drawing.Size(445, 20);
-			this.txt_ProjectDirectory.TabIndex = 0;
+			this.txt_ProjectDirectory.TabIndex = 1;
 			// 
 			// groupBox1
 			// 
@@ -69,7 +69,7 @@
 			this.btn_Browse.Location = new System.Drawing.Point(457, 17);
 			this.btn_Browse.Name = "btn_Browse";
 			this.btn_Browse.Size = new System.Drawing.Size(75, 23);
-			this.btn_Browse.TabIndex = 1;
+			this.btn_Browse.TabIndex = 0;
 			this.btn_Browse.Text = "Browse...";
 			this.btn_Browse.UseVisualStyleBackColor = true;
 			this.btn_Browse.Click += new System.EventHandler(this.btn_Browse_Click);
@@ -83,7 +83,7 @@
 			this.tv_SoundFolders.Location = new System.Drawing.Point(13, 80);
 			this.tv_SoundFolders.Name = "tv_SoundFolders";
 			this.tv_SoundFolders.Size = new System.Drawing.Size(431, 229);
-			this.tv_SoundFolders.TabIndex = 2;
+			this.tv_SoundFolders.TabIndex = 5;
 			this.tv_SoundFolders.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tv_SoundFolders_AfterCheck);
 			// 
 			// flowLayoutPanel1
@@ -107,7 +107,7 @@
 			this.btn_Close.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this.btn_Close.Name = "btn_Close";
 			this.btn_Close.Size = new System.Drawing.Size(102, 23);
-			this.btn_Close.TabIndex = 0;
+			this.btn_Close.TabIndex = 4;
 			this.btn_Close.Text = "Close";
 			this.btn_Close.UseVisualStyleBackColor = true;
 			// 
@@ -118,9 +118,10 @@
 			this.btn_Apply.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this.btn_Apply.Name = "btn_Apply";
 			this.btn_Apply.Size = new System.Drawing.Size(102, 23);
-			this.btn_Apply.TabIndex = 1;
+			this.btn_Apply.TabIndex = 3;
 			this.btn_Apply.Text = "Apply";
 			this.btn_Apply.UseVisualStyleBackColor = true;
+			this.btn_Apply.Click += new System.EventHandler(this.btn_Apply_Click);
 			// 
 			// label1
 			// 
@@ -141,6 +142,7 @@
 			this.btn_FixMungeFiles.TabIndex = 2;
 			this.btn_FixMungeFiles.Text = "Fix Munge Files";
 			this.btn_FixMungeFiles.UseVisualStyleBackColor = true;
+			this.btn_FixMungeFiles.Click += new System.EventHandler(this.btn_FixMungeFiles_Click);
 			// 
 			// SoundMungeForm
 			// 
