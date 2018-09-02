@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ZeroMunge));
 			this.btn_Run = new System.Windows.Forms.Button();
 			this.btn_AddFiles = new System.Windows.Forms.Button();
@@ -104,7 +104,7 @@
 			this.menu_removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_removeAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.menu_logSubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_copyLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_saveLogAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_clearLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -265,7 +265,7 @@
             this.toolStripSeparator1,
             this.selectAllToolStripMenuItem});
 			this.cmenu_Text.Name = "cmenu_Text";
-			this.cmenu_Text.Size = new System.Drawing.Size(165, 120);
+			this.cmenu_Text.Size = new System.Drawing.Size(165, 98);
 			this.cmenu_Text.Opened += new System.EventHandler(this.cmenu_Text_Opened);
 			// 
 			// copyToolStripMenuItem
@@ -522,9 +522,9 @@
 			// 
 			// col_FileBrowse
 			// 
-			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle5.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.col_FileBrowse.DefaultCellStyle = dataGridViewCellStyle5;
 			this.col_FileBrowse.HeaderText = "";
 			this.col_FileBrowse.Name = "col_FileBrowse";
 			this.col_FileBrowse.ReadOnly = true;
@@ -545,9 +545,9 @@
 			// 
 			// col_StagingBrowse
 			// 
-			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle2.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-			this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle6.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+			this.col_StagingBrowse.DefaultCellStyle = dataGridViewCellStyle6;
 			this.col_StagingBrowse.HeaderText = "";
 			this.col_StagingBrowse.Name = "col_StagingBrowse";
 			this.col_StagingBrowse.ReadOnly = true;
@@ -566,8 +566,8 @@
 			// 
 			// col_MungedFiles
 			// 
-			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.col_MungedFiles.DefaultCellStyle = dataGridViewCellStyle7;
 			this.col_MungedFiles.HeaderText = "Munged Files";
 			this.col_MungedFiles.MinimumWidth = 100;
 			this.col_MungedFiles.Name = "col_MungedFiles";
@@ -578,9 +578,9 @@
 			// 
 			// col_MungedFilesEdit
 			// 
-			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle4.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
-			this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle8.Font = new System.Drawing.Font("Arial Black", 8.25F, System.Drawing.FontStyle.Bold);
+			this.col_MungedFilesEdit.DefaultCellStyle = dataGridViewCellStyle8;
 			this.col_MungedFilesEdit.HeaderText = "";
 			this.col_MungedFilesEdit.Name = "col_MungedFilesEdit";
 			this.col_MungedFilesEdit.ReadOnly = true;
@@ -783,7 +783,7 @@
             this.menu_removeToolStripMenuItem,
             this.menu_removeAllToolStripMenuItem,
             this.toolStripSeparator13,
-            this.toolStripMenuItem1});
+            this.menu_logSubToolStripMenuItem});
 			this.actionsToolStripMenuItem.Name = "actionsToolStripMenuItem";
 			this.actionsToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
 			this.actionsToolStripMenuItem.Text = "Actions";
@@ -867,34 +867,34 @@
 			this.toolStripSeparator13.Name = "toolStripSeparator13";
 			this.toolStripSeparator13.Size = new System.Drawing.Size(158, 6);
 			// 
-			// toolStripMenuItem1
+			// menu_logSubToolStripMenuItem
 			// 
-			this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.menu_logSubToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menu_copyLogToolStripMenuItem,
             this.menu_saveLogAsToolStripMenuItem,
             this.menu_clearLogToolStripMenuItem});
-			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(161, 22);
-			this.toolStripMenuItem1.Text = "Log";
+			this.menu_logSubToolStripMenuItem.Name = "menu_logSubToolStripMenuItem";
+			this.menu_logSubToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+			this.menu_logSubToolStripMenuItem.Text = "Log";
 			// 
 			// menu_copyLogToolStripMenuItem
 			// 
 			this.menu_copyLogToolStripMenuItem.Name = "menu_copyLogToolStripMenuItem";
-			this.menu_copyLogToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+			this.menu_copyLogToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.menu_copyLogToolStripMenuItem.Text = "Copy Log";
 			this.menu_copyLogToolStripMenuItem.Click += new System.EventHandler(this.btn_CopyLog_Click);
 			// 
 			// menu_saveLogAsToolStripMenuItem
 			// 
 			this.menu_saveLogAsToolStripMenuItem.Name = "menu_saveLogAsToolStripMenuItem";
-			this.menu_saveLogAsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+			this.menu_saveLogAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.menu_saveLogAsToolStripMenuItem.Text = "Save Log As...";
 			this.menu_saveLogAsToolStripMenuItem.Click += new System.EventHandler(this.btn_SaveLog_Click);
 			// 
 			// menu_clearLogToolStripMenuItem
 			// 
 			this.menu_clearLogToolStripMenuItem.Name = "menu_clearLogToolStripMenuItem";
-			this.menu_clearLogToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+			this.menu_clearLogToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.menu_clearLogToolStripMenuItem.Text = "Clear Log";
 			this.menu_clearLogToolStripMenuItem.Click += new System.EventHandler(this.btn_ClearLog_Click);
 			// 
@@ -1382,7 +1382,7 @@
 		private System.Windows.Forms.OpenFileDialog openDlg_CreateSideMungeFolderPrompt;
 		public System.Windows.Forms.DataGridView data_Files;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator13;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem menu_logSubToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem menu_copyLogToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem menu_saveLogAsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem menu_clearLogToolStripMenuItem;

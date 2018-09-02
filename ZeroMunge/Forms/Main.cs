@@ -1286,7 +1286,7 @@ namespace ZeroMunge
 				menu_exitToolStripMenuItem.Enabled = enabled;
 				menu_openRecentToolStripMenuItem.Enabled = enabled;
 
-				// Edit menu
+				// Actions menu
 				menu_runToolStripMenuItem.Enabled = enabled;
 				menu_cancelToolStripMenuItem.Enabled = !enabled;
 				menu_easyFilePickerToolStripMenuItem.Enabled = enabled;
@@ -1304,6 +1304,7 @@ namespace ZeroMunge
 				menu_modifyMungedSoundFoldersToolStripMenuItem.Enabled = enabled;
 
 				// Log menu
+				menu_logSubToolStripMenuItem.Enabled = enabled;
 				menu_copyLogToolStripMenuItem.Enabled = enabled;
 				menu_saveLogAsToolStripMenuItem.Enabled = enabled;
 				menu_clearLogToolStripMenuItem.Enabled = enabled;
