@@ -44,7 +44,7 @@
 			this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.flowLayoutPanel1.Controls.Add(this.btn_Accept);
 			this.flowLayoutPanel1.Controls.Add(this.btn_Cancel);
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(644, 29);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(358, 29);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
 			this.flowLayoutPanel1.Size = new System.Drawing.Size(102, 192);
@@ -79,7 +79,7 @@
 			// btn_AddProject
 			// 
 			this.btn_AddProject.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.btn_AddProject.Location = new System.Drawing.Point(9, 551);
+			this.btn_AddProject.Location = new System.Drawing.Point(9, 323);
 			this.btn_AddProject.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this.btn_AddProject.Name = "btn_AddProject";
 			this.btn_AddProject.Size = new System.Drawing.Size(102, 23);
@@ -96,7 +96,7 @@
 			this.tv_Files.CheckBoxes = true;
 			this.tv_Files.Location = new System.Drawing.Point(12, 29);
 			this.tv_Files.Name = "tv_Files";
-			this.tv_Files.Size = new System.Drawing.Size(627, 516);
+			this.tv_Files.Size = new System.Drawing.Size(341, 288);
 			this.tv_Files.TabIndex = 3;
 			this.tv_Files.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tv_Files_AfterCheck);
 			// 
@@ -115,7 +115,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btn_Cancel;
-			this.ClientSize = new System.Drawing.Size(754, 586);
+			this.ClientSize = new System.Drawing.Size(468, 358);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.tv_Files);
 			this.Controls.Add(this.btn_AddProject);
