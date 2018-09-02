@@ -15,14 +15,15 @@ namespace ZeroMunge
 {
 	public partial class EasyFilePicker : Form
 	{
+		private Dictionary<int, string> rootPaths = new Dictionary<int, string>();
+		private int curRoot = 0;
+		public List<string> mungeFilePaths = new List<string>();
+
 		public EasyFilePicker()
 		{
 			InitializeComponent();
 		}
 
-		private Dictionary<int, string> rootPaths = new Dictionary<int, string>();
-		private int curRoot = 0;
-		public List<string> mungeFilePaths = new List<string>();
 
 		// When the Form is loaded:
 		// Open a prompt to select a project folder to add to the TreeView.
@@ -32,12 +33,14 @@ namespace ZeroMunge
 			Prompt_AddProject();
 		}
 
+
 		// When the Form is closed:
 		// 
 		private void EasyFilePicker_FormClosed(object sender, FormClosedEventArgs e)
 		{
 
 		}
+
 
 		// When the 'OK' button is clicked:
 		// Add all the checked nodes to the public mungeFilePaths property.
@@ -97,12 +100,14 @@ namespace ZeroMunge
 			Close();
 		}
 
+
 		// When the 'Cancel' button is clicked:
 		// Close the form.
 		private void btn_Cancel_Click(object sender, EventArgs e)
 		{
 			Close();
 		}
+
 
 		// When the user clicks the "Help" button:
 		// Open the Help file at the "User Interface: Easy File Picker" topic.
@@ -111,12 +116,14 @@ namespace ZeroMunge
 			Utilities.OpenHelp(this, "topic_ui_easyfilepicker");
 		}
 
+
 		// When the 'Add Project...' button is clicked:
 		// Open a prompt to select a project folder to add to the TreeView.
 		private void btn_AddProject_Click(object sender, EventArgs e)
 		{
 			Prompt_AddProject();
 		}
+
 
 		// After a node has been checked in the TreeView:
 		// Check/uncheck all child nodes.
@@ -132,6 +139,7 @@ namespace ZeroMunge
 			}
 		}
 
+
 		/// <summary>
 		/// Sets the form's tooltips.
 		/// </summary>
@@ -145,6 +153,7 @@ namespace ZeroMunge
 			FormTooltips.SetToolTip(btn_AddProject, Tooltips.EasyFilePicker.AddProject);
 			FormTooltips.SetToolTip(btn_Help, Tooltips.EasyFilePicker.HelpButton);
 		}
+
 
 		/// <summary>
 		/// Recursively sets the checked state of the specified TreeNode's child nodes.
@@ -162,6 +171,7 @@ namespace ZeroMunge
 				}
 			}
 		}
+
 
 		/// <summary>
 		/// Open a prompt to select a project folder to add to the TreeView.
@@ -298,6 +308,7 @@ namespace ZeroMunge
 			}
 		}
 
+
 		/// <summary>
 		/// Populates a TreeView based on a list of file paths.
 		/// 
@@ -330,6 +341,7 @@ namespace ZeroMunge
 			}
 		}
 		
+
 		/// <summary>
 		/// Gets the root node of the specified TreeNode.
 		/// </summary>

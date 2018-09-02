@@ -265,7 +265,7 @@
             this.toolStripSeparator1,
             this.selectAllToolStripMenuItem});
 			this.cmenu_Text.Name = "cmenu_Text";
-			this.cmenu_Text.Size = new System.Drawing.Size(165, 98);
+			this.cmenu_Text.Size = new System.Drawing.Size(165, 120);
 			this.cmenu_Text.Opened += new System.EventHandler(this.cmenu_Text_Opened);
 			// 
 			// copyToolStripMenuItem

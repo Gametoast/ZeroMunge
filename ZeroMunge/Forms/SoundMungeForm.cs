@@ -14,14 +14,15 @@ namespace ZeroMunge
 {
 	public partial class SoundMungeForm : Form
 	{
+		string projectDir = "";
+		string soundDir = "";
+
 		public SoundMungeForm(string projectDirectory = "")
 		{
 			InitializeComponent();
 			projectDir = projectDirectory;
 		}
 
-		string projectDir = "";
-		string soundDir = "";
 
 		// When the form has loaded:
 		// Set the tooltips and prompt the user to select a project folder.
@@ -39,12 +40,14 @@ namespace ZeroMunge
 			}
 		}
 
+
 		// When the 'Browse' button is clicked:
 		// Open a prompt to select a project folder and populate the treeview.
 		private void btn_Browse_Click(object sender, EventArgs e)
 		{
 			Prompt_AddProject();
 		}
+
 
 		// When the 'Apply' button is clicked:
 		// Apply the modifications to the project folder's soundmunge.bat file.
@@ -65,12 +68,14 @@ namespace ZeroMunge
 			}
 		}
 
+
 		// When the user clicks the "Help" button:
 		// Open the Help file at the "User Interface: Modify Munged Sound Folders" topic.
 		private void btn_Help_Click(object sender, EventArgs e)
 		{
 			Utilities.OpenHelp(this, "topic_ui_modifymungedsoundfolders");
 		}
+
 
 		// After a node has been checked in the TreeView:
 		// Check/uncheck all child nodes.
@@ -86,6 +91,7 @@ namespace ZeroMunge
 			}
 		}
 
+
 		/// <summary>
 		/// Sets the form's tooltips.
 		/// </summary>
@@ -99,6 +105,7 @@ namespace ZeroMunge
 			FormTooltips.SetToolTip(btn_Close, Tooltips.SoundMungeForm.Close);
 			FormTooltips.SetToolTip(btn_Help, Tooltips.SoundMungeForm.HelpButton);
 		}
+
 
 		/// <summary>
 		/// Recursively sets the checked state of the specified TreeNode's child nodes.
@@ -117,6 +124,7 @@ namespace ZeroMunge
 			}
 		}
 		
+
 		/// <summary>
 		/// Open a prompt to select a project folder to add to the TreeView.
 		/// </summary>
@@ -136,6 +144,7 @@ namespace ZeroMunge
 				AddProject(openDlg_AddProjectPrompt.FileName);
 			}
 		}
+
 
 		/// <summary>
 		/// Populate the treeview with the sound folders.
@@ -260,6 +269,7 @@ namespace ZeroMunge
 				throw;
 			}
 		}
+
 
 		/// <summary>
 		/// Applies the modifications to the soundmunge.bat file.
