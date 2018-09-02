@@ -8,7 +8,9 @@
 
 ### Related Pages
 
+- [**User Interface: File List**](topic_ui_filelist.html)
+- [**User Interface: Easy File Picker**](topic_ui_easyfilepicker.html)
+- [**User Interface: Modify Munged Sound Folders**](topic_ui_modifymungedsoundfolders.html)
 - [**Getting Started**](topic_gs.html)
 - [**Commands**](topic_cmd.html)
 - [**Commands: Actions**](topic_cmd_actions.html)
-- [**User Interface: File List**](topic_ui_filelist.html)

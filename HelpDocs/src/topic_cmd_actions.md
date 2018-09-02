@@ -4,7 +4,7 @@ This section covers all the file list and output log commands that Zero Munge ca
 
 - **Run** – Sequentially executes each file in the file list.
 - **Cancel** – Stops processing files. (WARNING: Canceling a munge is strongly NOT recommended.)
-- **Easy File Picker** – Opens the Easy File Picker, which greatly simplifies the process of adding munge files to the file list.
+- **Easy File Picker** – Shows the [**Easy File Picker**](topic_ui_easyfilepicker.html) dialog, which greatly simplifies the process of adding munge files to the file list.
 - **Add Files** – Opens a prompt to add files to the file list.
 - **Add Folders** – Opens a prompt to select folders containing munge.bat files to add to the file list.
 - **Add Project** – Opens a prompt to select a project folder whose common munge.bat files will be added to the file list.
@@ -18,3 +18,4 @@ This section covers all the file list and output log commands that Zero Munge ca
 
 - [**Commands**](topic_cmd.html)
 - [**User Interface: File List**](topic_ui_filelist.html)
+- [**User Interface: Easy File Picker**](topic_ui_easyfilepicker.html)

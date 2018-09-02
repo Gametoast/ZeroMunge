@@ -20,3 +20,4 @@ This is what the Munged Files Edit window looks like.
 ### Related Pages
 
 - [**User Interface**](topic_ui.html)
+- [**Commands: Actions**](topic_cmd_actions.html)

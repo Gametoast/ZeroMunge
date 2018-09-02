@@ -25,6 +25,14 @@
 			<param name="Name" value="File List">
 			<param name="Local" value="src\topic_ui_filelist.html">
 			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Easy File Picker">
+			<param name="Local" value="src\topic_ui_easyfilepicker.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Modify Munged Sound Folders">
+			<param name="Local" value="src\topic_ui_modifymungedsoundfolders.html">
+			</OBJECT>
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Commands">
