@@ -140,6 +140,7 @@ namespace ZeroMunge.Modules
 		/// <param name="sender">The sending ZeroMunge form.</param>
 		public static void Abort(ZeroMunge sender)
 		{
+			if (!isRunning) return;
 			isRunning = false;
 
 			Thread soundThread = new Thread(() => {
