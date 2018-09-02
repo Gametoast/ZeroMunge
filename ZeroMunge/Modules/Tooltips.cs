@@ -28,6 +28,7 @@ namespace ZeroMunge
 			public const string AddProject = "Open a prompt to select a project folder whose common munge.bat files will be added to the file list.";
 			public const string RemoveFile = "Remove the selected files from the file list.";
 			public const string RemoveAllFiles = "Remove all files from the file list.";
+			public const string HelpButton = "Get help with the user interface.";
 		}
 
 		public static class OutputLog
@@ -51,12 +52,14 @@ namespace ZeroMunge
 			public const string Browse = "Browse for a project directory.";
 			public const string Apply = "Apply the modifications to the project directory's soundmunge.bat file. Each selected folder in the tree view will be added to the file.";
 			public const string Close = "Close this dialog.";
+			public const string HelpButton = "Get help with the user interface for this dialog.";
 		}
 
 		public static class EasyFilePicker
 		{
 			public const string OK = "Close this dialog and add the munge files for the selected items to the file list.";
 			public const string Cancel = "Close this dialog.";
+			public const string HelpButton = "Get help with the user interface for this dialog.";
 			public const string AddProject = "Open a prompt to select a mod project folder to add to the treeview.";
 		}
 

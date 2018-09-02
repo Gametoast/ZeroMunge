@@ -51,7 +51,7 @@ namespace ZeroMunge
 		
 		// Recent files list
 		public const int RECENT_FILES_MAX = 10;
-		
+
 		#region Constants : data_Files
 
 		// data_Files : Column names
@@ -671,6 +671,7 @@ namespace ZeroMunge
 			FormTooltips.SetToolTip(btn_AddProject, Tooltips.FileList.AddProject);
 			FormTooltips.SetToolTip(btn_RemoveFile, Tooltips.FileList.RemoveFile);
 			FormTooltips.SetToolTip(btn_RemoveAllFiles, Tooltips.FileList.RemoveAllFiles);
+			FormTooltips.SetToolTip(btn_Help, Tooltips.FileList.HelpButton);
 
 			menu_runToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_Run);
 			menu_cancelToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_Cancel);
@@ -819,18 +820,7 @@ namespace ZeroMunge
 		/// </summary>
 		private void OpenWindow_Help()
 		{
-			string helpPath = @"ZeroMunge\ZeroMungeHelp.chm";
-
-			if (File.Exists(helpPath))
-			{
-				Help.ShowHelp(this, helpPath);
-			}
-			else
-			{
-				var message = string.Format("Help file does not exist at path: \"{0}\"", helpPath);
-				Trace.WriteLine(message);
-				Log(message, LogType.Error);
-			}
+			Utilities.OpenHelp(this);
 		}
 
 
@@ -1266,6 +1256,7 @@ namespace ZeroMunge
 				btn_RemoveFile.Enabled = enabled;
 				btn_RemoveAllFiles.Enabled = enabled;
 				btn_SetGamePath.Enabled = enabled;
+				btn_Help.Enabled = enabled;
 
 				btn_CopyLog.Enabled = enabled;
 				btn_SaveLog.Enabled = enabled;
@@ -2843,6 +2834,14 @@ namespace ZeroMunge
 			Flow_SetGameDirectory_Start();
 		}
 
+
+		// When the user clicks the "Help" button:
+		// Open the Help file at the "User Interface" topic.
+		private void btn_Help_Click(object sender, EventArgs e)
+		{
+			Utilities.OpenHelp(this, "topic_ui");
+		}
+
 		#endregion File List : Sidebar Buttons
 
 
@@ -4205,11 +4204,13 @@ namespace ZeroMunge
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			string newItem = "TestFile" + recentFiles.Count;
-			recentFiles.Insert(0, newItem);
+			//Help.ShowHelp(this, HELP_PATH, HelpNavigator.Topic, "src/topic_gs.html");
 
-			ToolStripItem subItem = new ToolStripMenuItem(newItem);
-			menu_openRecentToolStripMenuItem.DropDownItems.Insert(0, subItem);
+			//string newItem = "TestFile" + recentFiles.Count;
+			//recentFiles.Insert(0, newItem);
+
+			//ToolStripItem subItem = new ToolStripMenuItem(newItem);
+			//menu_openRecentToolStripMenuItem.DropDownItems.Insert(0, subItem);
 			
 			//SaveFileListPrompt prompt = new SaveFileListPrompt();
 			//prompt.ShowDialog();

@@ -65,6 +65,13 @@ namespace ZeroMunge
 			}
 		}
 
+		// When the user clicks the "Help" button:
+		// Open the Help file at the "User Interface: Modify Munged Sound Folders" topic.
+		private void btn_Help_Click(object sender, EventArgs e)
+		{
+			Utilities.OpenHelp(this, "topic_ui_modifymungedsoundfolders");
+		}
+
 		// After a node has been checked in the TreeView:
 		// Check/uncheck all child nodes.
 		private void tv_SoundFolders_AfterCheck(object sender, TreeViewEventArgs e)
@@ -90,6 +97,7 @@ namespace ZeroMunge
 			FormTooltips.SetToolTip(btn_Browse, Tooltips.SoundMungeForm.Browse);
 			FormTooltips.SetToolTip(btn_Apply, Tooltips.SoundMungeForm.Apply);
 			FormTooltips.SetToolTip(btn_Close, Tooltips.SoundMungeForm.Close);
+			FormTooltips.SetToolTip(btn_Help, Tooltips.SoundMungeForm.HelpButton);
 		}
 
 		/// <summary>

@@ -135,6 +135,7 @@
 			this.menu_aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.flp_FileButtons = new System.Windows.Forms.FlowLayoutPanel();
 			this.btn_EasyFilePicker = new System.Windows.Forms.Button();
+			this.btn_Help = new System.Windows.Forms.Button();
 			this.button3 = new System.Windows.Forms.Button();
 			this.flp_LogButtons = new System.Windows.Forms.FlowLayoutPanel();
 			this.saveDlg_SaveFileListPrompt = new System.Windows.Forms.SaveFileDialog();
@@ -315,7 +316,7 @@
 			this.btn_ClearLog.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this.btn_ClearLog.Name = "btn_ClearLog";
 			this.btn_ClearLog.Size = new System.Drawing.Size(102, 23);
-			this.btn_ClearLog.TabIndex = 10;
+			this.btn_ClearLog.TabIndex = 11;
 			this.btn_ClearLog.Text = "Clear Log";
 			this.btn_ClearLog.UseVisualStyleBackColor = true;
 			this.btn_ClearLog.Click += new System.EventHandler(this.btn_ClearLog_Click);
@@ -327,7 +328,7 @@
 			this.btn_CopyLog.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this.btn_CopyLog.Name = "btn_CopyLog";
 			this.btn_CopyLog.Size = new System.Drawing.Size(102, 23);
-			this.btn_CopyLog.TabIndex = 8;
+			this.btn_CopyLog.TabIndex = 9;
 			this.btn_CopyLog.Text = "Copy Log";
 			this.btn_CopyLog.UseVisualStyleBackColor = true;
 			this.btn_CopyLog.Click += new System.EventHandler(this.btn_CopyLog_Click);
@@ -339,7 +340,7 @@
 			this.btn_SaveLog.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this.btn_SaveLog.Name = "btn_SaveLog";
 			this.btn_SaveLog.Size = new System.Drawing.Size(102, 23);
-			this.btn_SaveLog.TabIndex = 9;
+			this.btn_SaveLog.TabIndex = 10;
 			this.btn_SaveLog.Text = "Save Log As...";
 			this.btn_SaveLog.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.btn_SaveLog.UseVisualStyleBackColor = true;
@@ -407,6 +408,7 @@
 			this.btn_SetGamePath.TabIndex = 7;
 			this.btn_SetGamePath.Text = "Set Game Path...";
 			this.btn_SetGamePath.UseVisualStyleBackColor = true;
+			this.btn_SetGamePath.Visible = false;
 			this.btn_SetGamePath.Click += new System.EventHandler(this.btn_SetGamePath_Click);
 			// 
 			// text_OutputLog
@@ -418,7 +420,7 @@
 			this.text_OutputLog.Name = "text_OutputLog";
 			this.text_OutputLog.ReadOnly = true;
 			this.text_OutputLog.Size = new System.Drawing.Size(651, 297);
-			this.text_OutputLog.TabIndex = 12;
+			this.text_OutputLog.TabIndex = 21;
 			this.text_OutputLog.TabStop = false;
 			this.text_OutputLog.Text = "";
 			this.text_OutputLog.WordWrap = false;
@@ -482,7 +484,7 @@
 			this.data_Files.RowHeadersWidth = 31;
 			this.data_Files.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
 			this.data_Files.Size = new System.Drawing.Size(651, 217);
-			this.data_Files.TabIndex = 11;
+			this.data_Files.TabIndex = 20;
 			this.data_Files.TabStop = false;
 			this.data_Files.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.data_Files_CellClick);
 			this.data_Files.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.data_Files_CellContentClick);
@@ -660,7 +662,7 @@
 			// button2
 			// 
 			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button2.Location = new System.Drawing.Point(27, 264);
+			this.button2.Location = new System.Drawing.Point(27, 293);
 			this.button2.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(75, 23);
@@ -1098,6 +1100,7 @@
 			this.flp_FileButtons.Controls.Add(this.btn_RemoveFile);
 			this.flp_FileButtons.Controls.Add(this.btn_RemoveAllFiles);
 			this.flp_FileButtons.Controls.Add(this.btn_SetGamePath);
+			this.flp_FileButtons.Controls.Add(this.btn_Help);
 			this.flp_FileButtons.Controls.Add(this.button2);
 			this.flp_FileButtons.Controls.Add(this.button3);
 			this.flp_FileButtons.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
@@ -1118,9 +1121,21 @@
 			this.btn_EasyFilePicker.UseVisualStyleBackColor = true;
 			this.btn_EasyFilePicker.Click += new System.EventHandler(this.btn_EasyFilePicker_Click);
 			// 
+			// btn_Help
+			// 
+			this.btn_Help.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btn_Help.Location = new System.Drawing.Point(0, 264);
+			this.btn_Help.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+			this.btn_Help.Name = "btn_Help";
+			this.btn_Help.Size = new System.Drawing.Size(102, 23);
+			this.btn_Help.TabIndex = 8;
+			this.btn_Help.Text = "Help";
+			this.btn_Help.UseVisualStyleBackColor = true;
+			this.btn_Help.Click += new System.EventHandler(this.btn_Help_Click);
+			// 
 			// button3
 			// 
-			this.button3.Location = new System.Drawing.Point(3, 293);
+			this.button3.Location = new System.Drawing.Point(3, 322);
 			this.button3.Name = "button3";
 			this.button3.Size = new System.Drawing.Size(75, 23);
 			this.button3.TabIndex = 17;
@@ -1382,6 +1397,7 @@
 		private System.Windows.Forms.OpenFileDialog openDlg_CreateWorldMungeFolderPrompt;
 		private System.Windows.Forms.ToolStripMenuItem menu_modifyMungedSoundFoldersToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem menu_fixSoundMungeFilesToolStripMenuItem;
+		private System.Windows.Forms.Button btn_Help;
 	}
 }
 

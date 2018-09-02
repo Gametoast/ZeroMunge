@@ -38,6 +38,7 @@
 			this.btn_Apply = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.FormTooltips = new System.Windows.Forms.ToolTip(this.components);
+			this.btn_Help = new System.Windows.Forms.Button();
 			this.groupBox1.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
@@ -84,7 +85,7 @@
 			this.tv_SoundFolders.Location = new System.Drawing.Point(13, 80);
 			this.tv_SoundFolders.Name = "tv_SoundFolders";
 			this.tv_SoundFolders.Size = new System.Drawing.Size(393, 229);
-			this.tv_SoundFolders.TabIndex = 5;
+			this.tv_SoundFolders.TabIndex = 6;
 			this.tv_SoundFolders.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tv_SoundFolders_AfterCheck);
 			// 
 			// flowLayoutPanel1
@@ -93,6 +94,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.flowLayoutPanel1.Controls.Add(this.btn_Apply);
 			this.flowLayoutPanel1.Controls.Add(this.btn_Close);
+			this.flowLayoutPanel1.Controls.Add(this.btn_Help);
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(411, 80);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -132,6 +134,18 @@
 			this.label1.TabIndex = 4;
 			this.label1.Text = "Select Sound Folders:";
 			// 
+			// btn_Help
+			// 
+			this.btn_Help.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btn_Help.Location = new System.Drawing.Point(0, 61);
+			this.btn_Help.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+			this.btn_Help.Name = "btn_Help";
+			this.btn_Help.Size = new System.Drawing.Size(102, 23);
+			this.btn_Help.TabIndex = 5;
+			this.btn_Help.Text = "Help";
+			this.btn_Help.UseVisualStyleBackColor = true;
+			this.btn_Help.Click += new System.EventHandler(this.btn_Help_Click);
+			// 
 			// SoundMungeForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -167,5 +181,6 @@
 		public System.Windows.Forms.Button btn_Apply;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ToolTip FormTooltips;
+		private System.Windows.Forms.Button btn_Help;
 	}
 }

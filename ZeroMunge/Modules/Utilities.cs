@@ -17,6 +17,7 @@ namespace ZeroMunge
 	{
 		public const string UPDATES_URL = "https://raw.githubusercontent.com/marth8880/ZeroMunge/master/json/updates.json";
 		public const string NET_CHECK_URL = "http://clients3.google.com/generate_204";
+		public const string HELP_PATH = @"ZeroMunge\ZeroMungeHelp.chm";
 
 		public enum MungeTypes
 		{
@@ -1047,6 +1048,44 @@ namespace ZeroMunge
 			}
 
 			return result;
+		}
+
+
+		/// <summary>
+		/// Opens the Help file.
+		/// </summary>
+		/// <param name="sender">Sending form.</param>
+		public static void OpenHelp(Form sender)
+		{
+			OpenHelp(sender, "topic_start");
+		}
+		/// <summary>
+		/// Opens the Help file at the specified topic.
+		/// </summary>
+		/// <param name="sender">Sending form.</param>
+		/// <param name="topic">Name of the help topic to open. Should only be the file name without the extension. Ex: "topic_start"</param>
+		public static void OpenHelp(Form sender, string topic)
+		{
+			if (File.Exists(HELP_PATH))
+			{
+				string helpTopic = string.Format("src/{0}.html", topic);
+				Help.ShowHelp(sender, HELP_PATH, HelpNavigator.Topic, helpTopic);
+			}
+			else
+			{
+				var message = string.Format("Help file does not exist at path: \"{0}\"", HELP_PATH);
+				Trace.WriteLine(message);
+
+				if (sender is ZeroMunge)
+				{
+					ZeroMunge zm = sender as ZeroMunge;
+					zm.Log(message, ZeroMunge.LogType.Error);
+				}
+				else
+				{
+					MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
+			}
 		}
 
 

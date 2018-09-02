@@ -32,19 +32,6 @@ namespace ZeroMunge
 			Prompt_AddProject();
 		}
 
-		/// <summary>
-		/// Sets the form's tooltips.
-		/// </summary>
-		private void SetToolTips()
-		{
-			FormTooltips.AutoPopDelay = Properties.Settings.Default.TooltipPopDelay;
-
-			// Easy File Picker
-			FormTooltips.SetToolTip(btn_Accept, Tooltips.EasyFilePicker.OK);
-			FormTooltips.SetToolTip(btn_Cancel, Tooltips.EasyFilePicker.Cancel);
-			FormTooltips.SetToolTip(btn_AddProject, Tooltips.EasyFilePicker.AddProject);
-		}
-
 		// When the Form is closed:
 		// 
 		private void EasyFilePicker_FormClosed(object sender, FormClosedEventArgs e)
@@ -117,6 +104,13 @@ namespace ZeroMunge
 			Close();
 		}
 
+		// When the user clicks the "Help" button:
+		// Open the Help file at the "User Interface: Easy File Picker" topic.
+		private void btn_Help_Click(object sender, EventArgs e)
+		{
+			Utilities.OpenHelp(this, "topic_ui_easyfilepicker");
+		}
+
 		// When the 'Add Project...' button is clicked:
 		// Open a prompt to select a project folder to add to the TreeView.
 		private void btn_AddProject_Click(object sender, EventArgs e)
@@ -136,6 +130,20 @@ namespace ZeroMunge
 					CheckAllChildNodes(e.Node, e.Node.Checked);
 				}
 			}
+		}
+
+		/// <summary>
+		/// Sets the form's tooltips.
+		/// </summary>
+		private void SetToolTips()
+		{
+			FormTooltips.AutoPopDelay = Properties.Settings.Default.TooltipPopDelay;
+
+			// Easy File Picker
+			FormTooltips.SetToolTip(btn_Accept, Tooltips.EasyFilePicker.OK);
+			FormTooltips.SetToolTip(btn_Cancel, Tooltips.EasyFilePicker.Cancel);
+			FormTooltips.SetToolTip(btn_AddProject, Tooltips.EasyFilePicker.AddProject);
+			FormTooltips.SetToolTip(btn_Help, Tooltips.EasyFilePicker.HelpButton);
 		}
 
 		/// <summary>

@@ -36,6 +36,7 @@
 			this.FormTooltips = new System.Windows.Forms.ToolTip(this.components);
 			this.tv_Files = new System.Windows.Forms.BetterTreeView();
 			this.label1 = new System.Windows.Forms.Label();
+			this.btn_Help = new System.Windows.Forms.Button();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -44,6 +45,7 @@
 			this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.flowLayoutPanel1.Controls.Add(this.btn_Accept);
 			this.flowLayoutPanel1.Controls.Add(this.btn_Cancel);
+			this.flowLayoutPanel1.Controls.Add(this.btn_Help);
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(358, 29);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -109,6 +111,18 @@
 			this.label1.TabIndex = 4;
 			this.label1.Text = "Select which items to add to the file list:";
 			// 
+			// btn_Help
+			// 
+			this.btn_Help.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btn_Help.Location = new System.Drawing.Point(0, 61);
+			this.btn_Help.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+			this.btn_Help.Name = "btn_Help";
+			this.btn_Help.Size = new System.Drawing.Size(102, 23);
+			this.btn_Help.TabIndex = 2;
+			this.btn_Help.Text = "Help";
+			this.btn_Help.UseVisualStyleBackColor = true;
+			this.btn_Help.Click += new System.EventHandler(this.btn_Help_Click);
+			// 
 			// EasyFilePicker
 			// 
 			this.AcceptButton = this.btn_Accept;
@@ -141,5 +155,6 @@
 		private System.Windows.Forms.ToolTip FormTooltips;
 		private System.Windows.Forms.BetterTreeView tv_Files;
 		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Button btn_Help;
 	}
 }
