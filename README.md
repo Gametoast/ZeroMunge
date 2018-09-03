@@ -20,36 +20,18 @@ At its core, Zero Munge goes through a user-specified list of munge.bat files an
 
 Zero Munge includes the following features.
 
-- Execute a list of batch files in order
-- Toggle whether or not certain files will be executed
-- Log each file's output in real-time (with timestamps) to a log window and log file
-- Auto-detect the munge.bat file inside a selected folder and add it to the file list
-- Add typical munge.bat files (common, sides, world, etc.) for an entire project to the file list
-- Copy each file's associated LVL file(s) to the appropriate directory
-- Ability to check for updates and point user to latest release's download page
+- Sequentially execute a list of munge scripts and any other batch scripts
+- Toggle whether or not certain scripts in the list will be executed
+- Log each script's output in real-time (with timestamps) to a log window and log file
+- Various methods of adding munge scripts to the file list
+- Automatically copy each file's associated LVL file(s) to the appropriate directory
+- Easily create the munge folders/scripts for a side or world
+- Apply the sound munge fix to a project directory
+- Visual interface for modifying which sound folders get munged when sound is munged
 - Save and load different "presets" of the file list's contents
-- Automatically saves the file list on application exit
-- Automatically loads the last-saved file list on application startup
+- Auto-save and auto-load functionality for save files
+- Automatically check for updates and point user to latest release's download page
 
 ## How to use it
 
 Please see the [Getting Started](https://github.com/marth8880/ZeroMunge/wiki/Getting-Started) page.
-
-## Downloads
-
-[![ZeroMunge-latest-release](https://img.shields.io/github/release/marth8880/ZeroMunge.svg?label=latest%20release&maxAge=300)](https://github.com/marth8880/ZeroMunge/releases/latest)
-[![ZeroMunge-latest-downloads](https://img.shields.io/github/downloads/marth8880/ZeroMunge/latest/total.svg?maxAge=60)](https://github.com/marth8880/ZeroMunge/releases/latest)  
-[![ZeroMunge-r146-release](https://img.shields.io/badge/old%20release-r146-lightgrey.svg)](https://github.com/marth8880/ZeroMunge/releases/r146)
-![ZeroMunge-r146-downloads](https://img.shields.io/github/downloads/marth8880/ZeroMunge/r146/total.svg?maxAge=300)  
-[![ZeroMunge-r113-release](https://img.shields.io/badge/old%20release-r113-lightgrey.svg)](https://github.com/marth8880/ZeroMunge/releases/r113)
-![ZeroMunge-r113-downloads](https://img.shields.io/github/downloads/marth8880/ZeroMunge/r113/total.svg?maxAge=300)  
-[![ZeroMunge-r89-release](https://img.shields.io/badge/old%20release-r89-lightgrey.svg)](https://github.com/marth8880/ZeroMunge/releases/r89)
-![ZeroMunge-r89-downloads](https://img.shields.io/github/downloads/marth8880/ZeroMunge/r89/total.svg?maxAge=300)  
-[![ZeroMunge-r78-release](https://img.shields.io/badge/old%20release-r78-lightgrey.svg)](https://github.com/marth8880/ZeroMunge/releases/r78)
-![ZeroMunge-r78-downloads](https://img.shields.io/github/downloads/marth8880/ZeroMunge/r78/total.svg?maxAge=300)  
-[![ZeroMunge-r42-release](https://img.shields.io/badge/old%20release-r42-lightgrey.svg)](https://github.com/marth8880/ZeroMunge/releases/r42)
-![ZeroMunge-r42-downloads](https://img.shields.io/github/downloads/marth8880/ZeroMunge/r42/total.svg?maxAge=300)  
-[![ZeroMunge-r35-release](https://img.shields.io/badge/old%20release-r35-lightgrey.svg)](https://github.com/marth8880/ZeroMunge/releases/r35)
-![ZeroMunge-r35-downloads](https://img.shields.io/github/downloads/marth8880/ZeroMunge/r35/total.svg?maxAge=300)  
-[![ZeroMunge-r31-release](https://img.shields.io/badge/old%20release-r31-lightgrey.svg)](https://github.com/marth8880/ZeroMunge/releases/r31)
-![ZeroMunge-r31-downloads](https://img.shields.io/github/downloads/marth8880/ZeroMunge/r31/total.svg?maxAge=300)  
