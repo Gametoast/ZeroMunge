@@ -21,10 +21,10 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="Info_BuildDate" Type="System.DateTime" Scope="Application">
-      <Value Profile="(Default)">06/27/2018 16:04:00</Value>
+      <Value Profile="(Default)">09/02/2018 19:03:00</Value>
     </Setting>
     <Setting Name="Info_BuildNum" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">188</Value>
+      <Value Profile="(Default)">272</Value>
     </Setting>
     <Setting Name="ShowUpdatePromptOnStartup" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
