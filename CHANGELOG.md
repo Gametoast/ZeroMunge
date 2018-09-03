@@ -4,6 +4,37 @@ All notable changes to Zero Munge will be documented in this file. Numbers enclo
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [v1.1.0-beta] - 2018-09-02
+
+### Added
+
+- Actions menu: Easy File Picker (#36)
+- Tools menu: Create Side Munge Folder (#38)
+- Tools menu: Create World Munge Folder
+- Tools menu: Fix World Munge Script (#37)
+- Tools menu: Fix Sound Munge Files (#42)
+- Tools menu: Modify Munged Sound Folders (#42)
+- Status bar displaying log length/lines, job status, and update link (when available)
+- Save file versioning
+- Help docs: Getting Started topics (#39)
+- Help docs: Commands section and topics (#39)
+- Help docs: UI topics for Easy File Picker and Modify Munged Sound Folder dialogs (#39)
+- Help button in most dialogs that opens the relevant UI topic in the help docs
+- Context menu in Third Party Software dialog to Copy or Select All text
+
+### Changed
+
+- Overhaul of help docs (#39)
+- Many various code refactors
+
+### Fixed
+
+- JSON parser has no exception-handling (#35)
+- Null reference exception when attempting to abort updateCheckThread
+- File list doesn't auto-save when the last change is Remove All (#41)
+- Improper save logic when exiting the application
+- Incorrect default directory for dialogs that prompt to browse for a folder
+
 ## [v1.0.0-beta] - 2018-06-27
 
 ### Added
