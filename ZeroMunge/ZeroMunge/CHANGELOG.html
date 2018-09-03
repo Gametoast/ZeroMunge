@@ -289,65 +289,218 @@ img {
   max-width: 100%
 }
 </style>
+<style type="text/css">
+.highlight  { background: #ffffff; }
+.highlight .c { color: #999988; font-style: italic } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .k { font-weight: bold } /* Keyword */
+.highlight .o { font-weight: bold } /* Operator */
+.highlight .cm { color: #999988; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #999999; font-weight: bold } /* Comment.Preproc */
+.highlight .c1 { color: #999988; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #999999; font-weight: bold; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .gd .x { color: #000000; background-color: #ffaaaa } /* Generic.Deleted.Specific */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #aa0000 } /* Generic.Error */
+.highlight .gh { color: #999999 } /* Generic.Heading */
+.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .gi .x { color: #000000; background-color: #aaffaa } /* Generic.Inserted.Specific */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #555555 } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #aaaaaa } /* Generic.Subheading */
+.highlight .gt { color: #aa0000 } /* Generic.Traceback */
+.highlight .kc { font-weight: bold } /* Keyword.Constant */
+.highlight .kd { font-weight: bold } /* Keyword.Declaration */
+.highlight .kp { font-weight: bold } /* Keyword.Pseudo */
+.highlight .kr { font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #445588; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #009999 } /* Literal.Number */
+.highlight .s { color: #d14 } /* Literal.String */
+.highlight .na { color: #008080 } /* Name.Attribute */
+.highlight .nb { color: #0086B3 } /* Name.Builtin */
+.highlight .nc { color: #445588; font-weight: bold } /* Name.Class */
+.highlight .no { color: #008080 } /* Name.Constant */
+.highlight .ni { color: #800080 } /* Name.Entity */
+.highlight .ne { color: #990000; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #990000; font-weight: bold } /* Name.Function */
+.highlight .nn { color: #555555 } /* Name.Namespace */
+.highlight .nt { color: #000080 } /* Name.Tag */
+.highlight .nv { color: #008080 } /* Name.Variable */
+.highlight .ow { font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mf { color: #009999 } /* Literal.Number.Float */
+.highlight .mh { color: #009999 } /* Literal.Number.Hex */
+.highlight .mi { color: #009999 } /* Literal.Number.Integer */
+.highlight .mo { color: #009999 } /* Literal.Number.Oct */
+.highlight .sb { color: #d14 } /* Literal.String.Backtick */
+.highlight .sc { color: #d14 } /* Literal.String.Char */
+.highlight .sd { color: #d14 } /* Literal.String.Doc */
+.highlight .s2 { color: #d14 } /* Literal.String.Double */
+.highlight .se { color: #d14 } /* Literal.String.Escape */
+.highlight .sh { color: #d14 } /* Literal.String.Heredoc */
+.highlight .si { color: #d14 } /* Literal.String.Interpol */
+.highlight .sx { color: #d14 } /* Literal.String.Other */
+.highlight .sr { color: #009926 } /* Literal.String.Regex */
+.highlight .s1 { color: #d14 } /* Literal.String.Single */
+.highlight .ss { color: #990073 } /* Literal.String.Symbol */
+.highlight .bp { color: #999999 } /* Name.Builtin.Pseudo */
+.highlight .vc { color: #008080 } /* Name.Variable.Class */
+.highlight .vg { color: #008080 } /* Name.Variable.Global */
+.highlight .vi { color: #008080 } /* Name.Variable.Instance */
+.highlight .il { color: #009999 } /* Literal.Number.Integer.Long */
+.pl-c {
+    color: #969896;
+}
+
+.pl-c1,.pl-mdh,.pl-mm,.pl-mp,.pl-mr,.pl-s1 .pl-v,.pl-s3,.pl-sc,.pl-sv {
+    color: #0086b3;
+}
+
+.pl-e,.pl-en {
+    color: #795da3;
+}
+
+.pl-s1 .pl-s2,.pl-smi,.pl-smp,.pl-stj,.pl-vo,.pl-vpf {
+    color: #333;
+}
+
+.pl-ent {
+    color: #63a35c;
+}
+
+.pl-k,.pl-s,.pl-st {
+    color: #a71d5d;
+}
+
+.pl-pds,.pl-s1,.pl-s1 .pl-pse .pl-s2,.pl-sr,.pl-sr .pl-cce,.pl-sr .pl-sra,.pl-sr .pl-sre,.pl-src,.pl-v {
+    color: #df5000;
+}
+
+.pl-id {
+    color: #b52a1d;
+}
+
+.pl-ii {
+    background-color: #b52a1d;
+    color: #f8f8f8;
+}
+
+.pl-sr .pl-cce {
+    color: #63a35c;
+    font-weight: bold;
+}
+
+.pl-ml {
+    color: #693a17;
+}
+
+.pl-mh,.pl-mh .pl-en,.pl-ms {
+    color: #1d3e81;
+    font-weight: bold;
+}
+
+.pl-mq {
+    color: #008080;
+}
+
+.pl-mi {
+    color: #333;
+    font-style: italic;
+}
+
+.pl-mb {
+    color: #333;
+    font-weight: bold;
+}
+
+.pl-md,.pl-mdhf {
+    background-color: #ffecec;
+    color: #bd2c00;
+}
+
+.pl-mdht,.pl-mi1 {
+    background-color: #eaffea;
+    color: #55a532;
+}
+
+.pl-mdr {
+    color: #795da3;
+    font-weight: bold;
+}
+
+.pl-mo {
+    color: #1d3e81;
+}
+.task-list {
+padding-left:10px;
+margin-bottom:0;
+}
+
+.task-list li {
+    margin-left: 20px;
+}
+
+.task-list-item {
+list-style-type:none;
+padding-left:10px;
+}
+
+.task-list-item label {
+font-weight:400;
+}
+
+.task-list-item.enabled label {
+cursor:pointer;
+}
+
+.task-list-item+.task-list-item {
+margin-top:3px;
+}
+
+.task-list-item-checkbox {
+display:inline-block;
+margin-left:-20px;
+margin-right:3px;
+vertical-align:1px;
+}
+</style>
 </head>
 <body>
-<h1>Changelog</h1>
+<h1 id="changelog">Changelog</h1>
 <p>All notable changes to Zero Munge will be documented in this file. Numbers enclosed in parentheses (#1) refer to <a href="https://github.com/marth8880/ZeroMunge/issues">GitHub issues</a>.</p>
 <p>The format is based on <a href="http://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>.</p>
-<h2>[v1.0.0-beta] - 2018-06-27</h2>
-<h3>Added</h3>
+<h2 id="-v1-1-0-beta-2018-09-02">[v1.1.0-beta] - 2018-09-02</h2>
+<h3 id="added">Added</h3>
 <ul>
-<li>On application exit, the file list is automatically saved; with this functionality comes a user preference to disable it (#19)</li>
-<li>On application startup, the last-loaded file list is automatically loaded; with this functionality comes a user preference to disable it (#14)</li>
-<li>Buttons in the tray icon context menu to start and abort execution of the file list (#28)</li>
-<li>User preference to specify the Output Log's maximum line count (#26)</li>
-<li>Pre-exit prompt to save dirty file list if auto-save is disabled (#29)</li>
-<li>&quot;Open Recent&quot; sub-menu that lists the last 10 recently-opened files (#24)</li>
-</ul>
-<h3>Changed</h3>
+<li>Actions menu: Easy File Picker (#36)</li><li>Tools menu: Create Side Munge Folder (#38)</li><li>Tools menu: Create World Munge Folder</li><li>Tools menu: Fix World Munge Script (#37)</li><li>Tools menu: Fix Sound Munge Files (#42)</li><li>Tools menu: Modify Munged Sound Folders (#42)</li><li>Status bar displaying log length/lines, job status, and update link (when available)</li><li>Save file versioning</li><li>Help docs: Getting Started topics (#39)</li><li>Help docs: Commands section and topics (#39)</li><li>Help docs: UI topics for Easy File Picker and Modify Munged Sound Folder dialogs (#39)</li><li>Help button in most dialogs that opens the relevant UI topic in the help docs</li><li>Context menu in Third Party Software dialog to Copy or Select All text</li></ul>
+<h3 id="changed">Changed</h3>
 <ul>
-<li>Vastly improved Output Log performance by having it only update once every N milliseconds, and added a user preference to specify N</li>
-<li>When a (checkbox) setting that is a dependent of other settings is unticked, those dependent settings are also unticked</li>
-<li>All log messages that refer to file paths and directories now wrap the paths in quotes</li>
-<li>In the About window, replaced the &quot;Frayed Wires Studios&quot; link with a link to open a dialog listing all of the third-party software that is used in Zero Munge (#30)</li>
-<li>Application DLLs are now stored in and loaded from <code>ZeroMunge\lib</code></li>
-<li>&quot;Report a Bug&quot; and &quot;Provide a Suggestion&quot; menu links now take the user to the correct issue template form for each </li>
-</ul>
-<h3>Fixed</h3>
+<li>Overhaul of help docs (#39)</li><li>Many various code refactors</li></ul>
+<h3 id="fixed">Fixed</h3>
 <ul>
-<li>Exception thrown when application checks for updates while minimized</li>
-<li>When user starts a new file list out of the File menu, the file list's current contents aren't cleared (#20)</li>
-<li>Exception thrown when loading save file that contains empty file list (#22)</li>
-<li>Main window's title doesn't reflect the current file when a save file is opened (#27)</li>
-<li>File List isn't marked as dirty when rows are removed</li>
-<li>Various logic issues with save flow</li>
-</ul>
-<h2>[r146] - 2018-03-26</h2>
-<h3>Added</h3>
+<li>JSON parser has no exception-handling (#35)</li><li>Null reference exception when attempting to abort updateCheckThread</li><li>File list doesn&#39;t auto-save when the last change is Remove All (#41)</li><li>Improper save logic when exiting the application</li><li>Incorrect default directory for dialogs that prompt to browse for a folder</li></ul>
+<h2 id="-v1-0-0-beta-2018-06-27">[v1.0.0-beta] - 2018-06-27</h2>
+<h3 id="added">Added</h3>
 <ul>
-<li>When an update is available, the build num/date, download link, and release notes are printed to the Output Log on application load</li>
-<li>If GameDirectory is unset, user is prompted on application load to set it (#15)</li>
-<li>Menu items to check for updates, report bugs, provide suggestions, view all open issues, and view changelog/license/readme files (#17)</li>
-<li>User preference to toggle whether application should check for updates on startup</li>
-</ul>
-<h3>Changed</h3>
+<li>On application exit, the file list is automatically saved; with this functionality comes a user preference to disable it (#19)</li><li>On application startup, the last-loaded file list is automatically loaded; with this functionality comes a user preference to disable it (#14)</li><li>Buttons in the tray icon context menu to start and abort execution of the file list (#28)</li><li>User preference to specify the Output Log&#39;s maximum line count (#26)</li><li>Pre-exit prompt to save dirty file list if auto-save is disabled (#29)</li><li>&quot;Open Recent&quot; sub-menu that lists the last 10 recently-opened files (#24)</li></ul>
+<h3 id="changed">Changed</h3>
 <ul>
-<li>Output Log now updates at a timed interval when a job is running, fixing its performance issues</li>
-<li>'Remove' button now removes all selected rows instead of only the last-selected row (#13)</li>
-<li>User can now target any executable when setting GameDirectory</li>
-</ul>
-<h3>Fixed</h3>
+<li>Vastly improved Output Log performance by having it only update once every N milliseconds, and added a user preference to specify N</li><li>When a (checkbox) setting that is a dependent of other settings is unticked, those dependent settings are also unticked</li><li>All log messages that refer to file paths and directories now wrap the paths in quotes</li><li>In the About window, replaced the &quot;Frayed Wires Studios&quot; link with a link to open a dialog listing all of the third-party software that is used in Zero Munge (#30)</li><li>Application DLLs are now stored in and loaded from <code>ZeroMunge\lib</code></li><li>&quot;Report a Bug&quot; and &quot;Provide a Suggestion&quot; menu links now take the user to the correct issue template form for each </li></ul>
+<h3 id="fixed">Fixed</h3>
 <ul>
-<li>Stray sub-REQs are added to the Munged Files list for side REQs (#4)</li>
-<li>Copy/Cut/Paste/Select All/Delete key combos in Munged Files Edit window don't do anything (#7)</li>
-<li>Out-of-date tooltip text for 'Check for updates' link (#9)</li>
-<li>Exception thrown when attempting to commit an empty Munged Files list (#5)</li>
-<li>Exception thrown when a job finishes that contains an empty Munged Files list (#6)</li>
-<li>'Add Files...' button updates the selected row instead of always inserting a new row (#11)</li>
-<li>'Remove All' button doesn't always remove all rows from the file list (#12)</li>
-<li>Exception thrown when attempting to save a file list with an empty row (#16)</li>
-<li>Exception thrown when update URL domain can't be resolved during update check</li>
-</ul>
+<li>Exception thrown when application checks for updates while minimized</li><li>When user starts a new file list out of the File menu, the file list&#39;s current contents aren&#39;t cleared (#20)</li><li>Exception thrown when loading save file that contains empty file list (#22)</li><li>Main window&#39;s title doesn&#39;t reflect the current file when a save file is opened (#27)</li><li>File List isn&#39;t marked as dirty when rows are removed</li><li>Various logic issues with save flow</li></ul>
+<h2 id="-r146-2018-03-26">[r146] - 2018-03-26</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>When an update is available, the build num/date, download link, and release notes are printed to the Output Log on application load</li><li>If GameDirectory is unset, user is prompted on application load to set it (#15)</li><li>Menu items to check for updates, report bugs, provide suggestions, view all open issues, and view changelog/license/readme files (#17)</li><li>User preference to toggle whether application should check for updates on startup</li></ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Output Log now updates at a timed interval when a job is running, fixing its performance issues</li><li>&#39;Remove&#39; button now removes all selected rows instead of only the last-selected row (#13)</li><li>User can now target any executable when setting GameDirectory</li></ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Stray sub-REQs are added to the Munged Files list for side REQs (#4)</li><li>Copy/Cut/Paste/Select All/Delete key combos in Munged Files Edit window don&#39;t do anything (#7)</li><li>Out-of-date tooltip text for &#39;Check for updates&#39; link (#9)</li><li>Exception thrown when attempting to commit an empty Munged Files list (#5)</li><li>Exception thrown when a job finishes that contains an empty Munged Files list (#6)</li><li>&#39;Add Files...&#39; button updates the selected row instead of always inserting a new row (#11)</li><li>&#39;Remove All&#39; button doesn&#39;t always remove all rows from the file list (#12)</li><li>Exception thrown when attempting to save a file list with an empty row (#16)</li><li>Exception thrown when update URL domain can&#39;t be resolved during update check</li></ul>
 
 </body>
 </html>
