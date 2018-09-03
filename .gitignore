@@ -251,3 +251,4 @@ ModelManifest.xml
 test.bat
 generate-changelog.bat
 .vscode/launch.json
+CHANGELOG-gen.md
