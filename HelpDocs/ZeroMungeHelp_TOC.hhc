@@ -50,7 +50,7 @@
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Actions">
-			<param name="Local" value="src\topic_ui_actions.html">
+			<param name="Local" value="src\topic_cmd_actions.html">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Tools">

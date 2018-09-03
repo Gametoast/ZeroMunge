@@ -8,7 +8,7 @@
 
 The goal of Zero Munge is to act as a robust replacement for VisualMunge, the automated build tool provided with the SWBF2 mod tools.  
 
-It is written in Visual C# for [.NET Framework 4](https://www.microsoft.com/en-us/download/details.aspx?id=17718).
+It is written in Visual C# for [**.NET Framework 4**](https://www.microsoft.com/en-us/download/details.aspx?id=17718).
 
 ## What it does
 
@@ -16,16 +16,17 @@ At its core, Zero Munge goes through a user-specified list of munge.bat files an
 
 Zero Munge includes the following features.
 
-- Execute a list of batch files in order
-- Toggle whether or not certain files will be executed
-- Log each file's output in real-time (with timestamps) to a log window and log file
-- Auto-detect the munge.bat file inside a selected folder and add it to the file list
-- Add typical munge.bat files (common, sides, world, etc.) for an entire project to the file list
-- Copy each file's associated LVL file(s) to the appropriate directory
-- Ability to check for updates and point user to latest release's download page
+- Sequentially execute a list of munge scripts and any other batch scripts
+- Toggle whether or not certain scripts in the list will be executed ([**GO**](topic_ui_filelist.html))
+- Log each script's output in real-time (with timestamps) to a log window and log file
+- Various methods of adding munge scripts to the file list ([**GO**](topic_gs.html#adding-munge-scripts-to-the-file-list))
+- Automatically copy each file's associated LVL file(s) to the appropriate directory
+- Easily create the munge folders/scripts for a side or world ([**GO**](topic_cmd_tools.html))
+- Apply the sound munge fix to a project directory ([**GO**](topic_cmd_tools.html))
+- Visual interface for modifying which sound folders get munged when sound is munged ([**GO**](topic_cmd_tools.html))
 - Save and load different "presets" of the file list's contents
-- Automatically saves the file list on application exit
-- Automatically loads the last-saved file list on application startup
+- Auto-save and auto-load functionality for save files
+- Automatically check for updates and point user to latest release's download page
 
 ## Help sections
 
