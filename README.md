@@ -25,7 +25,7 @@ Zero Munge includes the following features.
 - Log each file's output in real-time (with timestamps) to a log window and log file
 - Auto-detect the munge.bat file inside a selected folder and add it to the file list
 - Add typical munge.bat files (common, sides, world, etc.) for an entire project to the file list
-- For each file, copy the associated LVL file(s) to another directory
+- Copy each file's associated LVL file(s) to the appropriate directory
 - Ability to check for updates and point user to latest release's download page
 - Save and load different "presets" of the file list's contents
 - Automatically saves the file list on application exit
