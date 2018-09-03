@@ -468,16 +468,16 @@ vertical-align:1px;
 </style>
 </head>
 <body>
-<h1 id="getting-started">Getting Started</h1>
+<h2 id="getting-started">Getting Started</h2>
 <p>This page will guide you through the basics of using Zero Munge.</p>
 <ul>
 <li><a href="#preamble-understanding-the-munge-process"><strong>Preamble</strong></a></li><li><a href="#alright-so-how-do-i-use-it-"><strong>How to use it</strong></a></li><li><a href="#adding-munge-scripts-to-the-file-list"><strong>Adding munge scripts to the File List</strong></a></li><li><a href="#further-notes"><strong>Further notes</strong></a></li></ul>
-<h2 id="preamble-understanding-the-munge-process">Preamble: Understanding the munge process</h2>
+<h3 id="preamble-understanding-the-munge-process">Preamble: Understanding the munge process</h3>
 <p>The first thing you need to understand is that VisualMunge does not munge things; it executes batch scripts that execute the necessary logic to turn raw assets into LVL files. The flow of how it works is this: </p>
 <ol>
 <li>In VisualMunge, the user selects what should be munged (sides/worlds/etc.). The user then clicks &#39;Munge&#39;.</li><li>VisualMunge sequentially executes the munge.bat scripts for each item that the user selected.</li><li>Each munge.bat script calls the appropriate compiler executables out of <code>BF2_ModTools\ToolsFL</code> (like <code>scriptmunge.exe</code> for Lua scripts or <code>texturemunge.exe</code> for TGA textures) to convert the raw assets into compiled files, which are put in the appropriate munge directory (like <code>data_***\_BUILD\Sides\REP\Munged\PC</code>). In most cases, the munge.bat script then calls <code>levelpack.exe</code>, which packs those compiled files into a single LVL file that is able to be read by the game.</li></ol>
 <p>At its core, Zero Munge essentially does the same thing that VisualMunge does - except you&#39;re given far more control over what you want to munge. How so? You&#39;re able to specify all the individual munge.bat scripts to execute, and optionally Zero Munge will also copy over the LVL file(s) associated with each munge.bat script to the correct folder in your project&#39;s addon directory.</p>
-<h2 id="alright-so-how-do-i-use-it-">Alright, so how do I use it?</h2>
+<h3 id="alright-so-how-do-i-use-it-">Alright, so how do I use it?</h3>
 <p>Using Zero Munge is fairly easy - to munge something, all you do is add the desired munge.bat scripts to the File List and press &#39;Run&#39;:</p>
 <ol>
 <li>Add munge scripts to the File List. (See section: <a href="#adding-munge-scripts-to-the-file-list"><strong>Adding munge scripts to the File List</strong></a>)</li><li>Click the &#39;Run&#39; button to have Zero Munge sequentially execute each file in the File List and optionally copy the associated LVL files to your project&#39;s addon directory.</li></ol>
@@ -485,23 +485,26 @@ vertical-align:1px;
 <ul>
 <li>REP side: <code>data_***\_BUILD\Sides\REP\munge.bat</code></li><li>Your world: <code>data_***\_BUILD\Worlds\***\munge.bat</code> (see section: <a href="#further-notes"><strong>Further notes</strong></a>)</li><li>Common: <code>data_***\_BUILD\Common\munge.bat</code></li><li>Addme script: <code>data_***\addme\mungeAddme.bat</code></li><li>Sounds: <code>data_***\_BUILD\Sound\munge.bat</code> (see section: <a href="#further-notes"><strong>Further notes</strong></a>)</li></ul>
 <p>See the next section for all the different methods with which you can add munge scripts to the File List.</p>
-<h2 id="adding-munge-scripts-to-the-file-list">Adding munge scripts to the File List</h2>
-<h3 id="method-1">Method #1</h3>
-<p>As of v1.1.0-beta, you can use the Easy File Picker to get a hierarchical overview of a project directory and select which items you want to add to the File List. </p>
+<h3 id="adding-munge-scripts-to-the-file-list">Adding munge scripts to the File List</h3>
+<h4 id="method-1">Method #1</h4>
+<p>As of v1.1.0-beta, you can use the <a href="topic_ui_easyfilepicker.html"><strong>Easy File Picker</strong></a> to get a hierarchical overview of a project directory and select which items you want to add to the File List. </p>
 <p>To use the Easy File Picker, click the &#39;Easy File Picker&#39; button in the main window - a pop-up will open where you&#39;ll browse for your project&#39;s directory (e.g. <code>BF2_ModTools\data_***</code>), hit OK, and Zero Munge will scan the directory for all munge.bat scripts. These munge.bat scripts will be displayed as a hierarchy (much like how a project directory is laid out) from which you will be able to select which files to add to the File List.</p>
-<h3 id="method-2">Method #2</h3>
+<h4 id="method-2">Method #2</h4>
 <p>The &quot;rawest&quot; method of adding munge scripts to the File List is with the &#39;Add Files&#39; button. You simply click the button, browse for a munge.bat script, and click open - the file will then be added to the File List.</p>
 <p>For example, if you wanted to add the munge.bat script for the CIS side, you&#39;d click &#39;Add Files&#39;, browse to <code>data_***\_BUILD\Sides\CIS</code>, select the munge.bat file, and click &#39;Open&#39; - the munge script for the CIS side would then be added to the File List.</p>
-<h3 id="method-3">Method #3</h3>
+<h4 id="method-3">Method #3</h4>
 <p>You can click the &#39;Add Folders&#39; button to select folders containing munge.bat scripts to add. This is almost identical to <a href="#method-2"><strong>Method #2</strong></a>, except you&#39;re selecting folders instead of individual munge.bat scripts. The benefit to this is that you can easily select multiple folders each containing a munge.bat script and all of those folders&#39; munge.bat scripts will be added.</p>
 <p>For example, if you wanted to add the munge.bat scripts for the CIS and REP sides in one action, you&#39;d click &#39;Add Folders&#39;, browse to <code>data_***\_BUILD\Sides</code>, select the CIS and REP folders, and click &#39;Open&#39; - the munge.bat scripts for the CIS and REP sides would then be added to the File List.</p>
-<h3 id="method-4">Method #4</h3>
+<h4 id="method-4">Method #4</h4>
 <p>To add a project&#39;s typical munge.bat files to the File List, you can do so by clicking the &#39;Add Project&#39; button, which will prompt you to select a project directory (e.g. <code>BF2_ModTools\data_***</code>) whose typical munge.bat files should be added to the File List. The following files, if found, will be added:</p>
 <ul>
 <li>Common: <code>data_***\_BUILD\Common\munge.bat</code>  </li><li>ALL side: <code>data_***\_BUILD\Sides\ALL\munge.bat</code></li><li>CIS side: <code>data_***\_BUILD\Sides\CIS\munge.bat</code></li><li>IMP side: <code>data_***\_BUILD\Sides\IMP\munge.bat</code></li><li>REP side: <code>data_***\_BUILD\Sides\REP\munge.bat</code></li><li>TUR side: <code>data_***\_BUILD\Sides\TUR\munge.bat</code></li><li>Your world (based on <code>***</code> in <code>data_***</code>): <code>data_***\_BUILD\World\***\munge.bat</code></li><li>Addme: <code>data_***\addme\mungeAddme.bat</code></li></ul>
-<h2 id="further-notes">Further notes</h2>
+<h3 id="further-notes">Further notes</h3>
 <ul>
-<li>For custom worlds, you will probably have to fix your world&#39;s munge.bat script in order to munge it. As of v1.1.0-beta, you can easily do this by selecting &#39;Fix World Munge File&#39; from the &#39;Tools&#39; menu - a pop-up will open where you&#39;ll browse for your world&#39;s folder (either in <code>data_***\_BUILD\Worlds</code> or in <code>data_***\Worlds</code>), hit OK, and it&#39;ll fix it for you. Alternatively you can fix it manually by opening the munge.bat script in a text editor like Notepad and changing <code>YAV</code> to your world&#39;s map ID (e.g. <code>ABC</code>). Please also note that you only have to do this once for a world&#39;s munge script.</li><li>By default, the sound munge.bat script munges all sound folders specified in <code>data_***\soundmunge.bat</code>. Also by default, Zero Munge doesn&#39;t automatically detect the outputted LVL files for sound munging, but optionally you can manually edit the Munged Files field for the sound munge.bat file to list the sound LVLs.</li><li>If you don&#39;t want a file to be executed when you click &#39;Run&#39;, uncheck the &#39;Process&#39; field in that file&#39;s row.</li><li>If you don&#39;t want a file&#39;s LVL file(s) to be automatically copied over after the file is executed, uncheck the &#39;Copy&#39; field in that file&#39;s row.</li></ul>
+<li>For custom worlds, you will probably have to fix your world&#39;s munge.bat script in order to munge it. As of v1.1.0-beta, you can easily do this by selecting <a href="topic_cmd_tools.html"><strong>Fix World Munge File</strong></a> from the &#39;Tools&#39; menu - a pop-up will open where you&#39;ll browse for your world&#39;s folder (either in <code>data_***\_BUILD\Worlds</code> or in <code>data_***\Worlds</code>), hit OK, and it&#39;ll fix it for you. Alternatively you can fix it manually by opening the munge.bat script in a text editor like Notepad and changing <code>YAV</code> to your world&#39;s map ID (e.g. <code>ABC</code>). Please also note that you only have to do this once for a world&#39;s munge script.</li><li>By default, the sound munge.bat script munges all sound folders specified in <code>data_***\soundmunge.bat</code>. Also by default, Zero Munge doesn&#39;t automatically detect the outputted LVL files for sound munging, but optionally you can manually edit the Munged Files field for the sound munge.bat file to list the sound LVLs.</li><li>If you don&#39;t want a file to be executed when you click &#39;Run&#39;, uncheck the &#39;Process&#39; field in that file&#39;s row.</li><li>If you don&#39;t want a file&#39;s LVL file(s) to be automatically copied over after the file is executed, uncheck the &#39;Copy&#39; field in that file&#39;s row.</li></ul>
+<h3 id="related-pages">Related Pages</h3>
+<ul>
+<li><a href="topic_cmd_tools.html"><strong>Commands: Tools</strong></a></li><li><a href="topic_ui.html"><strong>User Interface</strong></a></li><li><a href="topic_ui_filelist.html"><strong>User Interface: File List</strong></a></li><li><a href="topic_ui_easyfilepicker.html"><strong>User Interface: Easy File Picker</strong></a></li></ul>
 
 </body>
 </html>

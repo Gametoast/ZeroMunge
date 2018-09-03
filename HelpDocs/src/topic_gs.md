@@ -38,7 +38,7 @@ See the next section for all the different methods with which you can add munge 
 
 #### Method #1
 
-As of v1.1.0-beta, you can use the Easy File Picker to get a hierarchical overview of a project directory and select which items you want to add to the File List. 
+As of v1.1.0-beta, you can use the [**Easy File Picker**](topic_ui_easyfilepicker.html) to get a hierarchical overview of a project directory and select which items you want to add to the File List. 
 
 To use the Easy File Picker, click the 'Easy File Picker' button in the main window - a pop-up will open where you'll browse for your project's directory (e.g. `BF2_ModTools\data_***`), hit OK, and Zero Munge will scan the directory for all munge.bat scripts. These munge.bat scripts will be displayed as a hierarchy (much like how a project directory is laid out) from which you will be able to select which files to add to the File List.
 
@@ -69,7 +69,7 @@ To add a project's typical munge.bat files to the File List, you can do so by cl
 
 ### Further notes
 
-- For custom worlds, you will probably have to fix your world's munge.bat script in order to munge it. As of v1.1.0-beta, you can easily do this by selecting 'Fix World Munge File' from the 'Tools' menu - a pop-up will open where you'll browse for your world's folder (either in `data_***\_BUILD\Worlds` or in `data_***\Worlds`), hit OK, and it'll fix it for you. Alternatively you can fix it manually by opening the munge.bat script in a text editor like Notepad and changing `YAV` to your world's map ID (e.g. `ABC`). Please also note that you only have to do this once for a world's munge script.
+- For custom worlds, you will probably have to fix your world's munge.bat script in order to munge it. As of v1.1.0-beta, you can easily do this by selecting [**Fix World Munge File**](topic_cmd_tools.html) from the 'Tools' menu - a pop-up will open where you'll browse for your world's folder (either in `data_***\_BUILD\Worlds` or in `data_***\Worlds`), hit OK, and it'll fix it for you. Alternatively you can fix it manually by opening the munge.bat script in a text editor like Notepad and changing `YAV` to your world's map ID (e.g. `ABC`). Please also note that you only have to do this once for a world's munge script.
 - By default, the sound munge.bat script munges all sound folders specified in `data_***\soundmunge.bat`. Also by default, Zero Munge doesn't automatically detect the outputted LVL files for sound munging, but optionally you can manually edit the Munged Files field for the sound munge.bat file to list the sound LVLs.
 - If you don't want a file to be executed when you click 'Run', uncheck the 'Process' field in that file's row.
 - If you don't want a file's LVL file(s) to be automatically copied over after the file is executed, uncheck the 'Copy' field in that file's row.
@@ -79,3 +79,4 @@ To add a project's typical munge.bat files to the File List, you can do so by cl
 - [**Commands: Tools**](topic_cmd_tools.html)
 - [**User Interface**](topic_ui.html)
 - [**User Interface: File List**](topic_ui_filelist.html)
+- [**User Interface: Easy File Picker**](topic_ui_easyfilepicker.html)
