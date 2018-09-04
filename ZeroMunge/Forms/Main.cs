@@ -3668,61 +3668,73 @@ namespace ZeroMunge
 			form.ShowDialog();
 		}
 
+		enum MungeComponentType
+		{
+			World,
+			Side
+		}
 
 		/// <summary>
-		/// Create a side munge folder for the specified side.
+		/// Create a munge folder for the specified component.
 		/// </summary>
 		/// <param name="projectDirectory">Project directory in which the side resides.</param>
-		/// <param name="sideName">Name of the side. Ex: "ABC"</param>
-		private void CreateSideMungeFolder(string projectDirectory, string sideName)
+		/// <param name="componentName">Name of the component. Ex: "ABC"</param>
+		/// <param name="componentType">Type of the component.</param>
+		private void CreateMungeFolder(string projectDirectory, MungeComponentType componentType, string componentName, string cleanFile, string mungeFile)
 		{
+			string mungeDirParent;
+			string destDir;
+			string typeName = componentType.ToString();
+
 			try
 			{
-				string destDir = projectDirectory + "\\_BUILD\\Sides\\" + sideName;
-				string cleanFile = Directory.GetCurrentDirectory() + "\\ZeroMunge\\templates\\SideMungeFolder\\clean.bat";
-				string mungeFile = Directory.GetCurrentDirectory() + "\\ZeroMunge\\templates\\SideMungeFolder\\munge.bat";
+				void CopyFileTemplate(string filePath)
+				{
+					bool copy = true;
+					string fileName = new FileInfo(filePath).Name;
 
-				bool copyClean = true;
-				bool copyMunge = true;
+					// Warn user if the file already exists and prompt them to overwrite it or not
+					if (File.Exists(destDir + "\\" + fileName))
+					{
+						DialogResult cleanOverwritePromptResult = MessageBox.Show(string.Format("A file named {0} already exists in the directory: \n{1}\n\nWould you like to overwrite it?", fileName, destDir), "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+						if (cleanOverwritePromptResult == DialogResult.No)
+						{
+							copy = false;
+						}
+					}
+					if (copy)
+					{
+						Log(string.Format("Copying {0} template to directory: \"{1}\"", fileName, destDir), LogType.Info);
+						File.Copy(filePath, destDir + "\\" + fileName, true);
+					}
+				}
+
+				// Determine the munge root folder
+				switch (componentType)
+				{
+					case MungeComponentType.World:
+						mungeDirParent = "Worlds";
+						break;
+					case MungeComponentType.Side:
+						mungeDirParent = "Sides";
+						break;
+					default:
+						throw new ArgumentException("Invalid argument value specified.", "componentType");
+				}
+				
+				// What directory should the template files be copied to?
+				destDir = string.Format("{0}\\_BUILD\\{1}\\{2}", projectDirectory, mungeDirParent, componentName);
 
 				// Copy the template files to the target directory
 				Directory.CreateDirectory(destDir);
-
-				// Warn user if clean.bat already exists and prompt them to overwrite it or not
-				if (File.Exists(destDir + "\\clean.bat"))
-				{
-					DialogResult cleanOverwritePromptResult = MessageBox.Show("A file named clean.bat already exists in the directory: \n" + destDir + "\n\nWould you like to overwrite it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-					if (cleanOverwritePromptResult == DialogResult.No)
-					{
-						copyClean = false;
-					}
-				}
-				if (copyClean)
-				{
-					Log(string.Format("Copying clean.bat template to directory: \"{0}\"", destDir), LogType.Info);
-					File.Copy(cleanFile, destDir + "\\clean.bat", true);
-				}
-
-				// Warn user if munge.bat already exists and prompt them to overwrite it or not
-				if (File.Exists(destDir + "\\munge.bat"))
-				{
-					DialogResult mungeOverwritePromptResult = MessageBox.Show("A file named munge.bat already exists in the directory: \n" + destDir + "\n\nWould you like to overwrite it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-					if (mungeOverwritePromptResult == DialogResult.No)
-					{
-						copyMunge = false;
-					}
-				}
-				if (copyMunge)
-				{
-					Log(string.Format("Copying munge.bat template to directory: \"{0}\"", destDir), LogType.Info);
-					File.Copy(mungeFile, destDir + "\\munge.bat", true);
-				}
+				CopyFileTemplate(cleanFile);
+				CopyFileTemplate(mungeFile);
 
 				// Rewrite the munge.bat template file
 				string mungeFileContents = File.ReadAllText(destDir + "\\munge.bat");
-				File.WriteAllText(destDir + "\\munge.bat", mungeFileContents.Replace("@#$", sideName));
+				File.WriteAllText(destDir + "\\munge.bat", mungeFileContents.Replace("@#$", componentName));
 
-				Log(string.Format("Successfully created side munge folder for {0}: \"{1}\"", sideName, destDir), LogType.Info);
+				Log(string.Format("Successfully created {0} munge folder for {1}: \"{2}\"", typeName.ToLower(), componentName, destDir), LogType.Info);
 
 				// Prompt user to add the munge file to the File List
 				DialogResult successPromptResult = MessageBox.Show("Would you like to add the munge file to the File List?", "Success", MessageBoxButtons.YesNo);
@@ -3733,47 +3745,75 @@ namespace ZeroMunge
 			}
 			catch (UnauthorizedAccessException ex)
 			{
-				var msg = "Failed to create side munge directory. Reason: " + ex.Message;
+				var msg = string.Format("Failed to create {0} munge directory. Reason: {1}", typeName.ToLower(), ex.Message);
 				Trace.WriteLine(msg);
 				Log(msg, LogType.Error);
 			}
 			catch (NotSupportedException ex)
 			{
-				var msg = "Failed to create side munge directory. Reason: " + ex.Message;
+				var msg = string.Format("Failed to create {0} munge directory. Reason: {1}", typeName.ToLower(), ex.Message);
 				Trace.WriteLine(msg);
 				Log(msg, LogType.Error);
 			}
 			catch (PathTooLongException ex)
 			{
-				var msg = "Failed to create side munge directory. Reason: " + ex.Message;
+				var msg = string.Format("Failed to create {0} munge directory. Reason: {1}", typeName.ToLower(), ex.Message);
 				Trace.WriteLine(msg);
 				Log(msg, LogType.Error);
 			}
 			catch (DirectoryNotFoundException ex)
 			{
-				var msg = "Failed to create side munge directory. Reason: " + ex.Message;
+				var msg = string.Format("Failed to create {0} munge directory. Reason: {1}", typeName.ToLower(), ex.Message);
 				Trace.WriteLine(msg);
 				Log(msg, LogType.Error);
 			}
 			catch (FileNotFoundException ex)
 			{
-				var msg = "Failed to create side munge directory. Reason: " + ex.Message + "\nFile: " + ex.FileName;
+				var msg = string.Format("Failed to create {0} munge directory. Reason: {1}\nFile: {2}", typeName.ToLower(), ex.Message, ex.FileName);
 				Trace.WriteLine(msg);
 				Log(msg, LogType.Error);
 			}
 			catch (IOException ex)
 			{
-				var msg = "Failed to create side munge directory. Reason: " + ex.Message;
+				var msg = string.Format("Failed to create {0} munge directory. Reason: {1}", typeName.ToLower(), ex.Message);
 				Trace.WriteLine(msg);
 				Log(msg, LogType.Error);
 			}
 			catch (ArgumentNullException ex)
 			{
-				var msg = "Failed to create side munge directory. Reason: " + ex.Message;
+				var msg = string.Format("Failed to create {0} munge directory. Reason: {1}", typeName.ToLower(), ex.Message);
 				Trace.WriteLine(msg);
 				Log(msg, LogType.Error);
 			}
 			catch (ArgumentException ex)
+			{
+				var msg = string.Format("Failed to create {0} munge directory. Reason: {1}", typeName.ToLower(), ex.Message);
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+		}
+
+
+		/// <summary>
+		/// Create a side munge folder for the specified side.
+		/// </summary>
+		/// <param name="projectDirectory">Project directory in which the side resides.</param>
+		/// <param name="sideName">Name of the side. Ex: "ABC"</param>
+		private void CreateSideMungeFolder(string projectDirectory, string sideName)
+		{
+			try
+			{
+				CreateMungeFolder(projectDirectory, MungeComponentType.Side, sideName,
+					Directory.GetCurrentDirectory() + "\\ZeroMunge\\templates\\SideMungeFolder\\clean.bat",
+					Directory.GetCurrentDirectory() + "\\ZeroMunge\\templates\\SideMungeFolder\\munge.bat");
+			}
+			catch (UnauthorizedAccessException ex)
+			{
+				var msg = "Failed to create side munge directory. Reason: " + ex.Message;
+				Trace.WriteLine(msg);
+				Log(msg, LogType.Error);
+			}
+			catch (NotSupportedException ex)
 			{
 				var msg = "Failed to create side munge directory. Reason: " + ex.Message;
 				Trace.WriteLine(msg);
@@ -3791,58 +3831,9 @@ namespace ZeroMunge
 		{
 			try
 			{
-				string destDir = projectDirectory + "\\_BUILD\\Worlds\\" + worldName;
-				string cleanFile = Directory.GetCurrentDirectory() + "\\ZeroMunge\\templates\\WorldMungeFolder\\clean.bat";
-				string mungeFile = Directory.GetCurrentDirectory() + "\\ZeroMunge\\templates\\WorldMungeFolder\\munge.bat";
-
-				bool copyClean = true;
-				bool copyMunge = true;
-
-				// Copy the template files to the target directory
-				Directory.CreateDirectory(destDir);
-
-				// Warn user if clean.bat already exists and prompt them to overwrite it or not
-				if (File.Exists(destDir + "\\clean.bat"))
-				{
-					DialogResult cleanOverwritePromptResult = MessageBox.Show("A file named clean.bat already exists in the directory: \n" + destDir + "\n\nWould you like to overwrite it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-					if (cleanOverwritePromptResult == DialogResult.No)
-					{
-						copyClean = false;
-					}
-				}
-				if (copyClean)
-				{
-					Log(string.Format("Copying clean.bat template to directory: \"{0}\"", destDir), LogType.Info);
-					File.Copy(cleanFile, destDir + "\\clean.bat", true);
-				}
-
-				// Warn user if munge.bat already exists and prompt them to overwrite it or not
-				if (File.Exists(destDir + "\\munge.bat"))
-				{
-					DialogResult mungeOverwritePromptResult = MessageBox.Show("A file named munge.bat already exists in the directory: \n" + destDir + "\n\nWould you like to overwrite it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-					if (mungeOverwritePromptResult == DialogResult.No)
-					{
-						copyMunge = false;
-					}
-				}
-				if (copyMunge)
-				{
-					Log(string.Format("Copying munge.bat template to directory: \"{0}\"", destDir), LogType.Info);
-					File.Copy(mungeFile, destDir + "\\munge.bat", true);
-				}
-
-				// Rewrite the munge.bat template file
-				string mungeFileContents = File.ReadAllText(destDir + "\\munge.bat");
-				File.WriteAllText(destDir + "\\munge.bat", mungeFileContents.Replace("@#$", worldName));
-
-				Log(string.Format("Successfully created world munge folder for {0}: \"{1}\"", worldName, destDir), LogType.Info);
-
-				// Prompt user to add the munge file to the File List
-				DialogResult successPromptResult = MessageBox.Show("Would you like to add the munge file to the File List?", "Success", MessageBoxButtons.YesNo);
-				if (successPromptResult == DialogResult.Yes)
-				{
-					AddFile(destDir + "\\munge.bat", true);
-				}
+				CreateMungeFolder(projectDirectory, MungeComponentType.World, worldName,
+					Directory.GetCurrentDirectory() + "\\ZeroMunge\\templates\\WorldMungeFolder\\clean.bat",
+					Directory.GetCurrentDirectory() + "\\ZeroMunge\\templates\\WorldMungeFolder\\munge.bat");
 			}
 			catch (UnauthorizedAccessException ex)
 			{
@@ -3851,42 +3842,6 @@ namespace ZeroMunge
 				Log(msg, LogType.Error);
 			}
 			catch (NotSupportedException ex)
-			{
-				var msg = "Failed to create world munge directory. Reason: " + ex.Message;
-				Trace.WriteLine(msg);
-				Log(msg, LogType.Error);
-			}
-			catch (PathTooLongException ex)
-			{
-				var msg = "Failed to create world munge directory. Reason: " + ex.Message;
-				Trace.WriteLine(msg);
-				Log(msg, LogType.Error);
-			}
-			catch (DirectoryNotFoundException ex)
-			{
-				var msg = "Failed to create world munge directory. Reason: " + ex.Message;
-				Trace.WriteLine(msg);
-				Log(msg, LogType.Error);
-			}
-			catch (FileNotFoundException ex)
-			{
-				var msg = "Failed to create world munge directory. Reason: " + ex.Message + "\nFile: " + ex.FileName;
-				Trace.WriteLine(msg);
-				Log(msg, LogType.Error);
-			}
-			catch (IOException ex)
-			{
-				var msg = "Failed to create world munge directory. Reason: " + ex.Message;
-				Trace.WriteLine(msg);
-				Log(msg, LogType.Error);
-			}
-			catch (ArgumentNullException ex)
-			{
-				var msg = "Failed to create world munge directory. Reason: " + ex.Message;
-				Trace.WriteLine(msg);
-				Log(msg, LogType.Error);
-			}
-			catch (ArgumentException ex)
 			{
 				var msg = "Failed to create world munge directory. Reason: " + ex.Message;
 				Trace.WriteLine(msg);
