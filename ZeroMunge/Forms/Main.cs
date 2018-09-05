@@ -965,7 +965,7 @@ namespace ZeroMunge
 			Update,
 			Warning,
 			Error
-		};
+		}
 
 		List<string> logLineCollection = new List<string>();
 		public bool notifyLogThread = false;
