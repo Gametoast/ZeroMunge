@@ -487,13 +487,7 @@ namespace ZeroMunge
 				{
 					// Stop processing files in the file list.
 					case Keys.F5:
-						Debug.WriteLine("Shift + F5 was pressed");
-
-						if (ProcessManager.IsRunning())
-						{
-							ProcessManager.Abort(this);
-						}
-
+						Hotkey_ShiftF5();
 						e.Handled = true;
 						break;
 				}
@@ -565,6 +559,20 @@ namespace ZeroMunge
 					Hotkey_Delete();
 					e.Handled = true;
 					break;
+			}
+		}
+
+
+		/// <summary>
+		/// Executes the logic for the 'Shift + F5' hotkey.
+		/// </summary>
+		private void Hotkey_ShiftF5()
+		{
+			Debug.WriteLine("Shift + F5 was pressed");
+
+			if (ProcessManager.IsRunning())
+			{
+				ProcessManager.Abort(this);
 			}
 		}
 
