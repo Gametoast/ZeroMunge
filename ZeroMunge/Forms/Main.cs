@@ -506,70 +506,31 @@ namespace ZeroMunge
 				{
 					// Run the New command.
 					case Keys.N:
-						Debug.WriteLine("Ctrl + N was pressed");
-
-						if (!ProcessManager.IsRunning())
-						{
-							Command_New();
-						}
-
+						Hotkey_CtrlN();
 						e.Handled = true;
 						break;
 
 					// Run the Open command.
 					case Keys.O:
-						Debug.WriteLine("Ctrl + O was pressed");
-
-						if (!ProcessManager.IsRunning())
-						{
-							Command_Open();
-						}
-
+						Hotkey_CtrlO();
 						e.Handled = true;
 						break;
 
 					// Run the Save command.
 					case Keys.S:
-						Debug.WriteLine("Ctrl + S was pressed");
-
-						if (!ProcessManager.IsRunning())
-						{
-							if (!IsFileListEmpty())
-							{
-								Command_Save();
-							}
-							else
-							{
-								var message = "Cannot save empty file list!";
-								Trace.WriteLine(message);
-								Log(message, LogType.Error);
-							}
-						}
-
+						Hotkey_CtrlS();
 						e.Handled = true;
 						break;
 
 					// Exit the application.
 					case Keys.Q:
-						Debug.WriteLine("Ctrl + Q was pressed");
-
-						if (!ProcessManager.IsRunning())
-						{
-							Command_Quit();
-						}
-
+						Hotkey_CtrlQ();
 						e.Handled = true;
 						break;
 
 					// Open the Preferences window.
 					case Keys.P:
-						Debug.WriteLine("Ctrl + P was pressed");
-
-						if (!ProcessManager.IsRunning())
-						{
-							OpenWindow_Preferences();
-						}
-
+						Hotkey_CtrlP();
 						e.Handled = true;
 						break;
 				}
@@ -581,66 +542,174 @@ namespace ZeroMunge
 				// Open the Help window.
 				case Keys.F1:
 					if ((ModifierKeys & Keys.Shift) == Keys.Shift) { return; }
-
-					Debug.WriteLine("F1 was pressed");
-
-					if (!ProcessManager.IsRunning())
-					{
-						OpenWindow_Help();
-					}
-
+					Hotkey_F1();
 					e.Handled = true;
 					break;
 
 				// Start processing files in the file list.
 				case Keys.F5:
 					if ((ModifierKeys & Keys.Shift) == Keys.Shift) { return; }
-
-					Debug.WriteLine("F5 was pressed");
-
-					if (!ProcessManager.IsRunning())
-					{
-						ProcessManager.Start(this, GetCheckedFiles(), data_Files);
-					}
-
+					Hotkey_F5();
 					e.Handled = true;
 					break;
 
 				// Open the About window.
 				case Keys.F12:
 					if ((ModifierKeys & Keys.Shift) == Keys.Shift) { return; }
-
-					Debug.WriteLine("F12 was pressed");
-
-					if (!ProcessManager.IsRunning())
-					{
-						OpenWindow_About();
-					}
-
+					Hotkey_F12();
 					e.Handled = true;
 					break;
 
 				// Clear the contents of the currently selected cells in the file list.
 				case Keys.Delete:
-					Debug.WriteLine("Delete was pressed");
-
-					if (!ProcessManager.IsRunning())
-					{
-						foreach (DataGridViewCell cell in data_Files.SelectedCells)
-						{
-							// Determine the cell type
-							if (cell is DataGridViewTextBoxCell)
-							{
-								if (cell.Value != null)
-								{
-									cell.Value = "";
-								}
-							}
-						}
-					}
-
+					Hotkey_Delete();
 					e.Handled = true;
 					break;
+			}
+		}
+
+
+		/// <summary>
+		/// Executes the logic for the 'Ctrl + N' hotkey.
+		/// </summary>
+		private void Hotkey_CtrlN()
+		{
+			Debug.WriteLine("Ctrl + N was pressed");
+
+			if (!ProcessManager.IsRunning())
+			{
+				Command_New();
+			}
+		}
+
+
+		/// <summary>
+		/// Executes the logic for the 'Ctrl + O' hotkey.
+		/// </summary>
+		private void Hotkey_CtrlO()
+		{
+			Debug.WriteLine("Ctrl + O was pressed");
+
+			if (!ProcessManager.IsRunning())
+			{
+				Command_Open();
+			}
+		}
+
+
+		/// <summary>
+		/// Executes the logic for the 'Ctrl + S' hotkey.
+		/// </summary>
+		private void Hotkey_CtrlS()
+		{
+			Debug.WriteLine("Ctrl + S was pressed");
+
+			if (!ProcessManager.IsRunning())
+			{
+				if (!IsFileListEmpty())
+				{
+					Command_Save();
+				}
+				else
+				{
+					var message = "Cannot save empty file list!";
+					Trace.WriteLine(message);
+					Log(message, LogType.Error);
+				}
+			}
+		}
+
+
+		/// <summary>
+		/// Executes the logic for the 'Ctrl + Q' hotkey.
+		/// </summary>
+		private void Hotkey_CtrlQ()
+		{
+			Debug.WriteLine("Ctrl + Q was pressed");
+
+			if (!ProcessManager.IsRunning())
+			{
+				Command_Quit();
+			}
+		}
+
+
+		/// <summary>
+		/// Executes the logic for the 'Ctrl + P' hotkey.
+		/// </summary>
+		private void Hotkey_CtrlP()
+		{
+			Debug.WriteLine("Ctrl + P was pressed");
+
+			if (!ProcessManager.IsRunning())
+			{
+				OpenWindow_Preferences();
+			}
+		}
+
+
+		/// <summary>
+		/// Executes the logic for the 'F1' hotkey.
+		/// </summary>
+		private void Hotkey_F1()
+		{
+			Debug.WriteLine("F1 was pressed");
+
+			if (!ProcessManager.IsRunning())
+			{
+				OpenWindow_Help();
+			}
+		}
+
+
+		/// <summary>
+		/// Executes the logic for the 'F5' hotkey.
+		/// </summary>
+		private void Hotkey_F5()
+		{
+			Debug.WriteLine("F5 was pressed");
+
+			if (!ProcessManager.IsRunning())
+			{
+				ProcessManager.Start(this, GetCheckedFiles(), data_Files);
+			}
+		}
+
+
+		/// <summary>
+		/// Executes the logic for the 'F12' hotkey.
+		/// </summary>
+		private void Hotkey_F12()
+		{
+			Debug.WriteLine("F12 was pressed");
+
+			if (!ProcessManager.IsRunning())
+			{
+				OpenWindow_About();
+			}
+		}
+
+
+		/// <summary>
+		/// Executes the logic for the 'Delete' hotkey.
+		/// </summary>
+		private void Hotkey_Delete()
+		{
+			Debug.WriteLine("Delete was pressed");
+
+			if (!ProcessManager.IsRunning())
+			{
+				foreach (DataGridViewCell cell in data_Files.SelectedCells)
+				{
+					// Determine the cell type
+					if (cell is DataGridViewTextBoxCell)
+					{
+						if (cell.Value != null)
+						{
+							cell.Value = "";
+						}
+					}
+				}
 			}
 		}
 
