@@ -870,7 +870,10 @@ namespace ZeroMunge
 		public void Command_Open()
 		{
 			openDlg_OpenFileListPrompt.InitialDirectory = openFileListLastDir;
-			openDlg_OpenFileListPrompt.ShowDialog();
+			if (openDlg_OpenFileListPrompt.ShowDialog() == DialogResult.OK)
+			{
+				OpenFileListFile(openDlg_OpenFileListPrompt.FileName);
+			}
 		}
 
 
@@ -1864,7 +1867,7 @@ namespace ZeroMunge
 		public DataFilesContainer DeserializeData(string filePath)
 		{
 			// Declare an object variable of the type to be deserialized
-			DataFilesContainer data;
+			DataFilesContainer data = null;
 
 			// Attempt to read the binary file
 			FileStream fs = new FileStream(filePath, FileMode.Open);
@@ -1890,7 +1893,9 @@ namespace ZeroMunge
 			{
 				Trace.WriteLine("Failed to deserialize. Reason: " + e.Message);
 				Log("Failed to deserialize. Reason: " + e.Message, LogType.Error);
-				throw;
+				Log("Specified file is likely incompatible with this version of Zero Munge", LogType.Error);
+				Log(string.Format("Failed to read from file path: \"{0}\"", filePath), LogType.Error);
+				//throw;
 			}
 			catch (IOException e)
 			{
@@ -1904,7 +1909,7 @@ namespace ZeroMunge
 				fs.Close();
 			}
 
-			Trace.WriteLineIf(data.DataRows == null, string.Format("WARNING: No data was found in the file: \"{0}\"", filePath));
+			Trace.WriteLineIf(data == null || data.DataRows == null, string.Format("WARNING: No data was found in the file: \"{0}\"", filePath));
 
 			return data;
 		}
@@ -3353,17 +3358,19 @@ namespace ZeroMunge
 			// Has a file name been entered?
 			if (filePath != "")
 			{
+				Log(string.Format("Opening file at path: \"{0}\"", filePath), LogType.Info);
+
 				if (File.Exists(filePath))
 				{
 					// Store the current directory
 					openFileListLastDir = Utilities.GetFileDirectory(filePath);
 
 					DataFilesContainer data = DeserializeData(filePath);
-					if (data.DataRows == null)
+					if (data == null || data.DataRows == null)
 					{
 						var msg = string.Format("No data was found; failed to load the file: \"{0}\"", filePath);
 						Trace.WriteLine(msg);
-						Log(msg, LogType.Warning, true);
+						//Log(msg, LogType.Warning, true);
 
 						return false;
 					}
@@ -3378,6 +3385,7 @@ namespace ZeroMunge
 				}
 				else
 				{
+					Log(string.Format("File not found at path: \"{0}\"", filePath), LogType.Error);
 					return false;
 				}
 			}
@@ -4234,65 +4242,65 @@ namespace ZeroMunge
 		}
 
 		#endregion Debug Buttons
-	}
 
-	[Serializable]
-	public class DataFilesRow
-	{
-		public bool Enabled { get; set; }
-		public bool Copy { get; set; }
-		public string FilePath { get; set; }
-		public string StagingDir { get; set; }
-		public string MungeDir { get; set; }
-		public string MungedFiles { get; set; }
-		public bool IsMungeScript { get; set; }
-		public bool IsValid { get; set; }
-	}
-
-	[Serializable]
-	public class DataFilesContainer
-	{
-		// NOTE: Don't forget to increment Info_SaveFileVersion in the application properties settings when this data structure is changed!
-		public List<DataFilesRow> DataRows { get; private set; }
-		public int FileVersion { get; set; }
-		public string AppVersion { get; set; }
-
-		public DataFilesContainer()
+		[Serializable]
+		public class DataFilesRow
 		{
-			FileVersion = 0;
-			AppVersion = "Unknown";
+			public bool Enabled { get; set; }
+			public bool Copy { get; set; }
+			public string FilePath { get; set; }
+			public string StagingDir { get; set; }
+			public string MungeDir { get; set; }
+			public string MungedFiles { get; set; }
+			public bool IsMungeScript { get; set; }
+			public bool IsValid { get; set; }
 		}
 
-		public DataFilesRow AddRow(DataFilesRow row)
+		[Serializable]
+		public class DataFilesContainer
 		{
-			if (DataRows == null)
+			// NOTE: Don't forget to increment Info_SaveFileVersion in the application properties settings when this data structure is changed!
+			public List<DataFilesRow> DataRows { get; private set; }
+			public int FileVersion { get; set; }
+			public string AppVersion { get; set; }
+
+			public DataFilesContainer()
 			{
-				DataRows = new List<DataFilesRow>();
+				FileVersion = 0;
+				AppVersion = "Unknown";
 			}
 
-			DataRows.Add(row);
-
-			return row;
-		}
-
-		public void PrintAllRows()
-		{
-			if (DataRows != null)
+			public DataFilesRow AddRow(DataFilesRow row)
 			{
-				foreach (DataFilesRow row in DataRows)
+				if (DataRows == null)
 				{
-					Debug.WriteLine("PrintAllRows(): ");
-					Debug.WriteLine("PrintAllRows(): Printing next row");
-					Debug.WriteLine("PrintAllRows(): ");
-					Debug.WriteLine("PrintAllRows(): Enabled       = " + row.Enabled.ToString());
-					Debug.WriteLine("PrintAllRows(): Copy          = " + row.Copy.ToString());
-					Debug.WriteLine("PrintAllRows(): FilePath      = " + row.FilePath.ToString());
-					Debug.WriteLine("PrintAllRows(): StagingDir    = " + row.StagingDir.ToString());
-					Debug.WriteLine("PrintAllRows(): MungeDir      = " + row.MungeDir.ToString());
-					Debug.WriteLine("PrintAllRows(): MungedFiles   = " + row.MungedFiles.ToString());
-					Debug.WriteLine("PrintAllRows(): IsMungeScript = " + row.IsMungeScript.ToString());
-					Debug.WriteLine("PrintAllRows(): IsValid       = " + row.IsValid.ToString());
-					Debug.WriteLine("PrintAllRows(): ");
+					DataRows = new List<DataFilesRow>();
+				}
+
+				DataRows.Add(row);
+
+				return row;
+			}
+
+			public void PrintAllRows()
+			{
+				if (DataRows != null)
+				{
+					foreach (DataFilesRow row in DataRows)
+					{
+						Debug.WriteLine("PrintAllRows(): ");
+						Debug.WriteLine("PrintAllRows(): Printing next row");
+						Debug.WriteLine("PrintAllRows(): ");
+						Debug.WriteLine("PrintAllRows(): Enabled       = " + row.Enabled.ToString());
+						Debug.WriteLine("PrintAllRows(): Copy          = " + row.Copy.ToString());
+						Debug.WriteLine("PrintAllRows(): FilePath      = " + row.FilePath.ToString());
+						Debug.WriteLine("PrintAllRows(): StagingDir    = " + row.StagingDir.ToString());
+						Debug.WriteLine("PrintAllRows(): MungeDir      = " + row.MungeDir.ToString());
+						Debug.WriteLine("PrintAllRows(): MungedFiles   = " + row.MungedFiles.ToString());
+						Debug.WriteLine("PrintAllRows(): IsMungeScript = " + row.IsMungeScript.ToString());
+						Debug.WriteLine("PrintAllRows(): IsValid       = " + row.IsValid.ToString());
+						Debug.WriteLine("PrintAllRows(): ");
+					}
 				}
 			}
 		}
