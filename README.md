@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/marth8880/ZeroMunge.svg?branch=master&maxAge=300)](https://travis-ci.org/marth8880/ZeroMunge)
 [![Issues](https://img.shields.io/github/issues/marth8880/ZeroMunge.svg?maxAge=60)](https://github.com/marth8880/ZeroMunge/issues)
+[![CodeFactor](https://www.codefactor.io/repository/github/marth8880/zeromunge/badge/master)](https://www.codefactor.io/repository/github/marth8880/zeromunge/overview/master)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?label=license)](https://opensource.org/licenses/BSD-3-Clause)  
 [![Release](https://img.shields.io/github/release/marth8880/ZeroMunge.svg?label=latest%20release&maxAge=300)](https://github.com/marth8880/ZeroMunge/releases/latest)
 ![Downloads](https://img.shields.io/github/downloads/marth8880/ZeroMunge/latest/total.svg?maxAge=60)
