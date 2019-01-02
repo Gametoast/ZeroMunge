@@ -867,9 +867,11 @@ namespace ZeroMunge
 			EasyFilePicker easyFilePickerForm = new EasyFilePicker();
 			if (easyFilePickerForm.ShowDialog() == DialogResult.OK)
 			{
+				SelectLastRow();
+
 				foreach (string file in easyFilePickerForm.mungeFilePaths)
 				{
-					AddFile(file);
+					AddFile(file, true);
 				}
 			}
 		}
@@ -2002,6 +2004,17 @@ namespace ZeroMunge
 
 
 		/// <summary>
+		/// Reset the row selection to the bottom of the file list.
+		/// </summary>
+		public void SelectLastRow()
+		{
+			data_Files.ClearSelection();
+			data_Files[INT_DATA_FILES_BTN_FILE_BROWSE, data_Files.RowCount - 1].Selected = true;
+			data_Files_CurSelectedRow = data_Files.RowCount - 1;
+		}
+
+
+		/// <summary>
 		/// Loads data from the specified DataFilesContainer into the file list.
 		/// </summary>
 		/// <param name="data">DataFilesContainer object containing the data to load into the file list.</param>
@@ -2685,11 +2698,7 @@ namespace ZeroMunge
 		private void btn_AddFiles_Click(object sender, EventArgs e)
 		{
 			lastCellChangeMethod = CellChangeMethod.Button;
-
-			// Reset the row selection to the bottom of the file list
-			data_Files.ClearSelection();
-			data_Files[INT_DATA_FILES_BTN_FILE_BROWSE, data_Files.RowCount - 1].Selected = true;
-			data_Files_CurSelectedRow = data_Files.RowCount - 1;
+			SelectLastRow();
 
 			// Set the initial directory to the previous-most one
 			openDlg_AddFilesPrompt.InitialDirectory = addFilesLastDir;
