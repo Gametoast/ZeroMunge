@@ -54,7 +54,7 @@ namespace ZeroMunge
 		{
 			Debug.WriteLine("wb_Licenses_Document_Enter() entered");
 
-			rightClickedControl = (WebBrowser)sender;
+			//rightClickedControl = (WebBrowser)sender;
 		}
 
 
