@@ -4031,6 +4031,19 @@ namespace ZeroMunge
 			{
 				string projectDir = projectDirectory;
 
+				bool PromptOverwriteFile(string filePath)
+				{
+					if (File.Exists(filePath))
+					{
+						DialogResult overwritePromptResult = MessageBox.Show("The file already exists at the following path: \n" + filePath + "\n\nWould you like to overwrite it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+						if (overwritePromptResult == DialogResult.No)
+						{
+							return false;
+						}
+					}
+
+					return true;
+				}
 				
 
 				// Get the project ID
@@ -4041,50 +4054,22 @@ namespace ZeroMunge
 				string soundmungeFile = Directory.GetCurrentDirectory() + "\\ZeroMunge\\templates\\SoundMungeFixes\\soundmunge.bat";
 				string soundmungedirFile = Directory.GetCurrentDirectory() + "\\ZeroMunge\\templates\\SoundMungeFixes\\soundmungedir.bat";
 
-				bool copyMunge = true;
-				bool copySoundmunge = true;
-				bool copySoundmungedir = true;
-
 				// Warn user if munge.bat already exists and prompt them to overwrite it or not
-				if (File.Exists(projectDir + "\\_BUILD\\Sound\\munge.bat"))
-				{
-					DialogResult mungeOverwritePromptResult = MessageBox.Show("A file named munge.bat already exists in the directory: \n" + projectDir + "\\_BUILD\\Sound" + "\n\nWould you like to overwrite it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-					if (mungeOverwritePromptResult == DialogResult.No)
-					{
-						copyMunge = false;
-					}
-				}
-				if (copyMunge)
+				if (PromptOverwriteFile(projectDir + "\\_BUILD\\Sound\\munge.bat"))
 				{
 					Log(string.Format("Copying munge.bat template to directory: \"{0}\"", projectDir + "\\_BUILD\\Sound"), LogType.Info);
 					File.Copy(mungeFile, projectDir + "\\_BUILD\\Sound\\munge.bat", true);
 				}
 
 				// Warn user if soundmunge.bat already exists and prompt them to overwrite it or not
-				if (File.Exists(projectDir + "\\soundmunge.bat"))
-				{
-					DialogResult soundmungeOverwritePromptResult = MessageBox.Show("A file named soundmunge.bat already exists in the directory: \n" + projectDir + "\n\nWould you like to overwrite it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-					if (soundmungeOverwritePromptResult == DialogResult.No)
-					{
-						copySoundmunge = false;
-					}
-				}
-				if (copySoundmunge)
+				if (PromptOverwriteFile(projectDir + "\\soundmunge.bat"))
 				{
 					Log(string.Format("Copying soundmunge.bat template to directory: \"{0}\"", projectDir), LogType.Info);
 					File.Copy(soundmungeFile, projectDir + "\\soundmunge.bat", true);
 				}
 
 				// Warn user if soundmungedir.bat already exists and prompt them to overwrite it or not
-				if (File.Exists(projectDir + "\\soundmungedir.bat"))
-				{
-					DialogResult soundmungedirOverwritePromptResult = MessageBox.Show("A file named soundmungedir.bat already exists in the directory: \n" + projectDir + "\n\nWould you like to overwrite it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-					if (soundmungedirOverwritePromptResult == DialogResult.No)
-					{
-						copySoundmungedir = false;
-					}
-				}
-				if (copySoundmungedir)
+				if (PromptOverwriteFile(projectDir + "\\soundmungedir.bat"))
 				{
 					Log(string.Format("Copying soundmunge.bat template to directory: \"{0}\"", projectDir), LogType.Info);
 					File.Copy(soundmungedirFile, projectDir + "\\soundmungedir.bat", true);
