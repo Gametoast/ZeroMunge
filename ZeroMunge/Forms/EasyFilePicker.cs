@@ -38,7 +38,6 @@ namespace ZeroMunge
 		// 
 		private void EasyFilePicker_FormClosed(object sender, FormClosedEventArgs e)
 		{
-
 		}
 
 
@@ -337,7 +336,6 @@ namespace ZeroMunge
 						lastNode = nodes[0];
 				}
 				lastNode = null; // This is the place code was changed
-
 			}
 		}
 		
