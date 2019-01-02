@@ -326,8 +326,7 @@ namespace ZeroMunge
 			if (prefs.GameDirectory != "")
 			{
 				var msg = string.Format("Setting game path: \"{0}\"", prefs.GameDirectory);
-				Debug.WriteLine(msg);
-				Log(msg, LogType.Info);
+				Log(msg, LogType.Info, true);
 			}
 			else
 			{
@@ -1063,18 +1062,37 @@ namespace ZeroMunge
 		/// This method is executed on the worker thread and makes a thread-safe call on the RichTextBox control.
 		/// </summary>
 		/// <param name="message">Text to print.</param>
-		/// <param name="logType">Log type. See enum 'LogType'.</param>
-		/// <param name="newLine">Optional: True to append a new line to the end of the message.</param>
-		public void Log(string message, LogType logType = LogType.None, bool newLine = false)
+		public void Log(string message)
 		{
-			Log_Proc(message, logType, newLine);
+			Log_Proc(message, LogType.None, false);
+		}
+		/// <summary>
+		/// Prints the specified text to the output log.
+		/// This method is executed on the worker thread and makes a thread-safe call on the RichTextBox control.
+		/// </summary>
+		/// <param name="message">Text to print.</param>
+		/// <param name="logType">Log type. See enum 'LogType'.</param>
+		public void Log(string message, LogType logType)
+		{
+			Log_Proc(message, logType, false);
+		}
+		/// <summary>
+		/// Prints the specified text to the output log.
+		/// This method is executed on the worker thread and makes a thread-safe call on the RichTextBox control.
+		/// </summary>
+		/// <param name="message">Text to print.</param>
+		/// <param name="logType">Log type. See enum 'LogType'.</param>
+		/// <param name="debugWriteLine">Optional: True, write the message to the Debug output.</param>
+		public void Log(string message, LogType logType, bool debugWriteLine)
+		{
+			Log_Proc(message, logType, debugWriteLine);
 		}
 		
 		// This delegate enables asynchronous calls for setting the text property on the output log.
-		delegate void LogCallback(string message, LogType logType = LogType.None, bool newLine = false);
+		delegate void LogCallback(string message, LogType logType, bool debugWriteLine);
 
 		// WARNING: Don't call this directly, please call `Log` instead.
-		private void Log_Proc(string message, LogType logType = LogType.None, bool newLine = false)
+		private void Log_Proc(string message, LogType logType, bool debugWriteLine)
 		{
 			// InvokeRequired required compares the thread ID of the 
 			// calling thread to the thread ID of the creating thread. 
@@ -1082,16 +1100,16 @@ namespace ZeroMunge
 			if (text_OutputLog.InvokeRequired)
 			{
 				LogCallback cb = new LogCallback(Log_Proc);
-				BeginInvoke(cb, new object[] { message, logType, newLine });
+				BeginInvoke(cb, new object[] { message, logType, debugWriteLine });
 			}
 			else
 			{
 				//Thread swThread = new Thread(() => {
 				string newLineText = "";
 
-				if (newLine)
+				if (debugWriteLine)
 				{
-					newLineText = Environment.NewLine;
+					Debug.WriteLine(message);
 				}
 
 				string timestamp = "";
@@ -1111,13 +1129,6 @@ namespace ZeroMunge
 
 				// Print message
 				//text_OutputLog.AppendText(messageToLog);
-
-				// Are we supposed to print a new line?
-				if (newLine)
-				{
-					// Print message on new line
-					//text_OutputLog.AppendText(Environment.NewLine);
-				}
 
 				// Log the message to the log file
 				if (prefs.OutputLogToFile)
@@ -1548,37 +1559,32 @@ namespace ZeroMunge
 							if (row.Cells[STR_DATA_FILES_TXT_FILE].Value == null)
 							{
 								var message = "FilePath at row index " + row.Index + " isn't specified!";
-								Debug.WriteLine(message);
-								Log(message, LogType.Error);
+								Log(message, LogType.Error, true);
 							}
 
 							if (row.Cells[STR_DATA_FILES_TXT_STAGING].Value == null)
 							{
 								var message = "StagingDirectory at row index " + row.Index + " isn't specified!";
-								Debug.WriteLine(message);
 								Log(message, LogType.Warning);
 							}
 
 							if (row.Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value == null)
 							{
 								var message = "MungeDirectory at row index " + row.Index + " isn't specified!";
-								Debug.WriteLine(message);
-								Log(message, LogType.Error);
+								Log(message, LogType.Error, true);
 							}
 
 							if (row.Cells[STR_DATA_FILES_TXT_MUNGED_FILES].Value == null)
 							{
 								var message = "MungedFiles at row index " + row.Index + " isn't specified!";
-								Debug.WriteLine(message);
-								Log(message, LogType.Warning);
+								Log(message, LogType.Warning, true);
 							}
 
 
 							if (!File.Exists(row.Cells[STR_DATA_FILES_TXT_FILE].Value.ToString()))
 							{
 								var message = "FilePath at row index " + row.Index + " cannot be found!";
-								Debug.WriteLine(message);
-								Log(message, LogType.Error);
+								Log(message, LogType.Error, true);
 							}
 						});
 						errorThread.Start();
@@ -1708,9 +1714,9 @@ namespace ZeroMunge
 
 
 							// Remove any duplicate backslashes
-							file = file.Replace(@"\\", @"\");
-							stagingDirectory = stagingDirectory.Replace(@"\\", @"\");
-							mungeOutputDirectory = mungeOutputDirectory.Replace(@"\\", @"\");
+							//file = file.Replace(@"\\", @"\");
+							//stagingDirectory = stagingDirectory.Replace(@"\\", @"\");
+							//mungeOutputDirectory = mungeOutputDirectory.Replace(@"\\", @"\");
 
 
 							// Assemble a multi-line string of the compiled files' names
@@ -1726,39 +1732,27 @@ namespace ZeroMunge
 								stagingDirectory = "nil";
 								mungeOutputDirectory = "nil";
 								compiledFiles = "nil";
-
-								Thread infoThread = new Thread(() => {
-									var message = "File is not a munge script, copy operations will be disabled for it";
-									Debug.WriteLine(message);
-									Log(message, LogType.Info);
-								});
-								infoThread.Start();
+								
+								var message = "File is not a munge script, copy operations will be disabled for it";
+								Log(message, LogType.Info, true);
 							}
 
 
 							if (!prefs.AutoDetectStagingDir)
 							{
 								stagingDirectory = "nil";
-
-								Thread infoThread = new Thread(() => {
-									var message = "Not setting Staging Directory in accordance with user preferences";
-									Debug.WriteLine(message);
-									Log(message, LogType.Info);
-								});
-								infoThread.Start();
+								
+								var message = "Not setting Staging Directory in accordance with user preferences";
+								Log(message, LogType.Info, true);
 							}
 
 
 							if (!prefs.AutoDetectMungedFiles)
 							{
 								compiledFiles = "nil";
-
-								Thread infoThread = new Thread(() => {
-									var message = "Not setting Munged Files in accordance with user preferences";
-									Debug.WriteLine(message);
-									Log(message, LogType.Info);
-								});
-								infoThread.Start();
+								
+								var message = "Not setting Munged Files in accordance with user preferences";
+								Log(message, LogType.Info, true);
 							}
 
 
@@ -1798,14 +1792,11 @@ namespace ZeroMunge
 								data_Files[INT_DATA_FILES_CHK_IS_MUNGE_SCRIPT, data_Files_CurSelectedRow].Value = isMungeScript;
 							}
 
-
-							Thread logThread = new Thread(() => {
-								Log("");
-								Log(string.Format("Adding file: \"{0}\"", file), LogType.Info);
-								Log(string.Format("Staging directory: \"{0}\"", stagingDirectory), LogType.Info);
-								Log(string.Format("Munge output directory: \"{0}\"", mungeOutputDirectory), LogType.Info);
-							});
-							logThread.Start();
+							
+							Log("");
+							Log(string.Format("Adding file: \"{0}\"", file), LogType.Info);
+							Log(string.Format("Staging directory: \"{0}\"", stagingDirectory), LogType.Info);
+							Log(string.Format("Munge output directory: \"{0}\"", mungeOutputDirectory), LogType.Info);
 
 
 							// Reset the stored index of the currently selected row
@@ -1813,12 +1804,8 @@ namespace ZeroMunge
 						}
 						else
 						{
-							Thread errorThread = new Thread(() => {
-								var message = "Game path not set";
-								Debug.WriteLine(message);
-								Log(message, LogType.Error);
-							});
-							errorThread.Start();
+							var message = "Game path not set";
+							Log(message, LogType.Error, true);
 
 							return false;
 						}
@@ -1843,12 +1830,8 @@ namespace ZeroMunge
 			}
 			else
 			{
-				Thread errorThread = new Thread(() => {
-					var message = string.Format("Could not find file at path: \"{0}\"", file);
-					Debug.WriteLine(message);
-					Log(message, LogType.Error);
-				});
-				errorThread.Start();
+				var message = string.Format("Could not find file at path: \"{0}\"", file);
+				Log(message, LogType.Error, true);
 
 				return false;
 			}
@@ -2262,8 +2245,7 @@ namespace ZeroMunge
 					{
 						Thread errorThread = new Thread(() => {
 							var message = "File Path must first be specified";
-							Debug.WriteLine(message);
-							Log(message, LogType.Error);
+							Log(message, LogType.Error, true);
 						});
 						errorThread.Start();
 					}
@@ -2358,8 +2340,7 @@ namespace ZeroMunge
 					{
 						Thread errorThread = new Thread(() => {
 							var message = "File Path must first be specified";
-							Debug.WriteLine(message);
-							Log(message, LogType.Error);
+							Log(message, LogType.Error, true);
 						});
 						errorThread.Start();
 					}
@@ -2378,8 +2359,7 @@ namespace ZeroMunge
 
 						Thread errorThread = new Thread(() => {
 							var message = "File Path is blank";
-							Debug.WriteLine(message);
-							Log(message, LogType.Error);
+							Log(message, LogType.Error, true);
 						});
 						errorThread.Start();
 					}
@@ -2391,8 +2371,7 @@ namespace ZeroMunge
 
 						Thread errorThread = new Thread(() => {
 							var message = string.Format("Could not find file at path: \"{0}\"", data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value.ToString());
-							Debug.WriteLine(message);
-							Log(message, LogType.Error);
+							Log(message, LogType.Error, true);
 						});
 						errorThread.Start();
 					}
@@ -2762,8 +2741,7 @@ namespace ZeroMunge
 					{
 						Thread errorThread = new Thread(() => {
 							var message = string.Format("Could not find file at path: \"{0}\"", file);
-							Debug.WriteLine(message);
-							Log(message, LogType.Error);
+							Log(message, LogType.Error, true);
 						});
 						errorThread.Start();
 					}
@@ -3013,8 +2991,7 @@ namespace ZeroMunge
 
 				Thread outputThread = new Thread(() => {
 					var msg = string.Format("Saving game path: \"{0}\"", Properties.Settings.Default.GameDirectory);
-					Debug.WriteLine(msg);
-					Log(msg, LogType.Info);
+					Log(msg, LogType.Info, true);
 				});
 				outputThread.Start();
 			}
