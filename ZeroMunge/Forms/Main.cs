@@ -1714,9 +1714,9 @@ namespace ZeroMunge
 
 
 							// Remove any duplicate backslashes
-							//file = file.Replace(@"\\", @"\");
-							//stagingDirectory = stagingDirectory.Replace(@"\\", @"\");
-							//mungeOutputDirectory = mungeOutputDirectory.Replace(@"\\", @"\");
+							file = file.Replace(@"\\", @"\");
+							stagingDirectory = stagingDirectory.Replace(@"\\", @"\");
+							mungeOutputDirectory = mungeOutputDirectory.Replace(@"\\", @"\");
 
 
 							// Assemble a multi-line string of the compiled files' names
