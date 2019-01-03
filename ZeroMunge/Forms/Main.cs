@@ -2182,6 +2182,59 @@ namespace ZeroMunge
 			}
 		}
 
+
+		/// <summary>
+		/// Handles the logic for when a cell button is clicked based on which column the button belongs to.
+		/// </summary>
+		/// <param name="fileIsNull">Is the File Path cell's value null?</param>
+		private void HandleCellButtonClicked(bool fileIsNull)
+		{
+			switch (data_Files_CurSelectedColumn)
+			{
+				case INT_DATA_FILES_BTN_FILE_BROWSE:     // col_FileBrowse
+														 // Open the 'Add Files' prompt
+					openDlg_AddFilesPrompt.InitialDirectory = addFilesLastDir;
+					openDlg_AddFilesPrompt.ShowDialog();
+					break;
+
+				case INT_DATA_FILES_BTN_STAGING_BROWSE:     // col_StagingBrowse
+															// Fire the faux-event for the button
+					if (!fileIsNull)
+					{
+						btn_SetStaging_Click();
+					}
+					break;
+
+				case INT_DATA_FILES_BTN_MUNGED_FILES_EDIT:     // col_MungedFilesEdit
+															   // Fire the faux-event for the button
+					if (!fileIsNull)
+					{
+						btn_MungedFilesEdit_Click();
+					}
+					break;
+			}
+		}
+
+
+		/// <summary>
+		/// Checks whether or not the specified DataGridViewCell has a valid string value.
+		/// </summary>
+		/// <param name="cell">DataGridViewCell to check validity of. This should be a string cell.</param>
+		/// <returns>False if value is null, blank, or "nil".</returns>
+		private bool IsStringCellValueValid(DataGridViewCell cell)
+		{
+			if (cell.Value == null ||
+				cell.Value.ToString() == "" ||
+				cell.Value.ToString() == "nil")
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
+
 		#endregion File List : Logic Methods
 
 
@@ -2253,19 +2306,14 @@ namespace ZeroMunge
 			try
 			{
 				// Does the File Path cell contain actual data?
-				if (data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value == null || 
-					data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value.ToString() == "" || 
-					data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value.ToString() == "nil")
-				{
-					fileIsNull = true;
+				fileIsNull = !IsStringCellValueValid(data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE]);
 
+				if (fileIsNull)
+				{
 					if (data_Files_CurSelectedColumn != INT_DATA_FILES_BTN_FILE_BROWSE)
 					{
-						Thread errorThread = new Thread(() => {
-							var message = "File Path must first be specified";
-							Log(message, LogType.Error, true);
-						});
-						errorThread.Start();
+						var message = "File Path must first be specified";
+						Log(message, LogType.Error, true);
 					}
 				}
 			}
@@ -2277,30 +2325,7 @@ namespace ZeroMunge
 			// Do stuff if the clicked cell's type was Button
 			if (cellType == "Button" && e.RowIndex != -1)
 			{
-				switch (data_Files_CurSelectedColumn)
-				{
-					case INT_DATA_FILES_BTN_FILE_BROWSE:     // col_FileBrowse
-															 // Open the 'Add Files' prompt
-						openDlg_AddFilesPrompt.InitialDirectory = addFilesLastDir;
-						openDlg_AddFilesPrompt.ShowDialog();
-						break;
-
-					case INT_DATA_FILES_BTN_STAGING_BROWSE:     // col_StagingBrowse
-																// Fire the faux-event for the button
-						if (!fileIsNull)
-						{
-							btn_SetStaging_Click();
-						}
-						break;
-
-					case INT_DATA_FILES_BTN_MUNGED_FILES_EDIT:     // col_MungedFilesEdit
-																   // Fire the faux-event for the button
-						if (!fileIsNull)
-						{
-							btn_MungedFilesEdit_Click();
-						}
-						break;
-				}
+				HandleCellButtonClicked(fileIsNull);
 			}
 		}
 
