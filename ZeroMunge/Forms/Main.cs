@@ -2156,6 +2156,32 @@ namespace ZeroMunge
 			Utilities.SavePrefs(prefs);
 		}
 
+
+		/// <summary>
+		/// Gets the type of DataGridViewColumn represented as a string.
+		/// </summary>
+		/// <param name="column">DataGridViewColumn to get the type of.</param>
+		/// <returns>Possible values: 'TextBox', 'Button', 'CheckBox', or 'nil'.</returns>
+		private string GetColumnType(DataGridViewColumn column)
+		{
+			if (column is DataGridViewTextBoxColumn)
+			{
+				return "TextBox";
+			}
+			else if (column is DataGridViewButtonColumn)
+			{
+				return "Button";
+			}
+			else if (column is DataGridViewCheckBoxColumn)
+			{
+				return "CheckBox";
+			}
+			else
+			{
+				return "nil";
+			}
+		}
+
 		#endregion File List : Logic Methods
 
 
@@ -2213,18 +2239,10 @@ namespace ZeroMunge
 			if (e.RowIndex >= 0)
 			{
 				// Determine the cell type
-				if (senderGrid.Columns[e.ColumnIndex] is DataGridViewTextBoxColumn)
-				{
-					cellType = "TextBox";
-				}
-				else if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn)
-				{
-					cellType = "Button";
-				}
-				else if (senderGrid.Columns[e.ColumnIndex] is DataGridViewCheckBoxColumn)
-				{
-					cellType = "CheckBox";
+				cellType = GetColumnType(senderGrid.Columns[e.ColumnIndex]);
 
+				if (cellType == "CheckBox")
+				{
 					FileListIsDirty(true);
 					UpdateWindowTitle();
 				}
