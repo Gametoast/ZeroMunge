@@ -562,6 +562,8 @@ namespace ZeroMunge
 		}
 
 
+		#region Hotkeys
+
 		/// <summary>
 		/// Executes the logic for the 'Shift + F5' hotkey.
 		/// </summary>
@@ -720,6 +722,8 @@ namespace ZeroMunge
 			}
 		}
 
+		#endregion Hotkeys
+
 
 		/// <summary>
 		/// Sets tooltips for all form controls
@@ -874,6 +878,7 @@ namespace ZeroMunge
 				}
 			}
 		}
+
 
 		/// <summary>
 		/// Starts the update flow (duh).
@@ -1427,8 +1432,7 @@ namespace ZeroMunge
 		// ***************************
 
 		#region File List : DataGridView
-
-
+		
 		#region File List : Fields
 
 		/// <summary>
@@ -2698,6 +2702,7 @@ namespace ZeroMunge
 		{
 			OpenWindow_EasyFilePicker();
 		}
+
 
 		// When the user clicks the "Run" button:
 		// Begin processing the list of files as a playlist.
