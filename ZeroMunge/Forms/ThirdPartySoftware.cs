@@ -216,45 +216,45 @@ namespace ZeroMunge
 		}
 
 		#endregion Text Context Menu
-	}
 
-	// Representation of a single piece of software.
-	class SoftwareInfo : IComparable<SoftwareInfo>
-	{
-		public string Id { get; set; }
-		public string Name { get; set; }
-		public string Author { get; set; }
-		public string Url { get; set; }
-		public string License { get; set; }
-		public string LicenseResource { get; set; }
-
-		public int CompareTo(SoftwareInfo other)
+		// Representation of a single piece of software.
+		class SoftwareInfo : IComparable<SoftwareInfo>
 		{
-			return Name.CompareTo(other.Name);
-		}
+			public string Id { get; set; }
+			public string Name { get; set; }
+			public string Author { get; set; }
+			public string Url { get; set; }
+			public string License { get; set; }
+			public string LicenseResource { get; set; }
 
-		/// <summary>
-		/// Gets and sets the License based on the associated license resource file.
-		/// </summary>
-		public void SetLicense()
-		{
-			ResourceManager res = new ResourceManager(ThirdPartySoftware.RESOURCE_LIB_NAME, typeof(ZeroMunge).Assembly);
-			License = (string)res.GetObject(LicenseResource);
-		}
-	}
-
-	class SoftwareList
-	{
-		public List<SoftwareInfo> Software { get; set; }
-
-		/// <summary>
-		/// Go through and call each Software's SetLicense method.
-		/// </summary>
-		public void SetLicenses()
-		{
-			foreach (SoftwareInfo s in Software)
+			public int CompareTo(SoftwareInfo other)
 			{
-				s.SetLicense();
+				return Name.CompareTo(other.Name);
+			}
+
+			/// <summary>
+			/// Gets and sets the License based on the associated license resource file.
+			/// </summary>
+			public void SetLicense()
+			{
+				ResourceManager res = new ResourceManager(RESOURCE_LIB_NAME, typeof(ZeroMunge).Assembly);
+				License = (string)res.GetObject(LicenseResource);
+			}
+		}
+
+		class SoftwareList
+		{
+			public List<SoftwareInfo> Software { get; set; }
+
+			/// <summary>
+			/// Go through and call each Software's SetLicense method.
+			/// </summary>
+			public void SetLicenses()
+			{
+				foreach (SoftwareInfo s in Software)
+				{
+					s.SetLicense();
+				}
 			}
 		}
 	}
