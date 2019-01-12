@@ -12,7 +12,6 @@ namespace ZeroMunge
 {
 	public partial class About : Form
 	{
-
 		public About()
 		{
 			InitializeComponent();
