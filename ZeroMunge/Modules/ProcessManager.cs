@@ -383,7 +383,6 @@ namespace ZeroMunge.Modules
 		/// <returns>Process that was executed.</returns>
 		private static Process StartProcess(ZeroMunge sender, string filePath, bool singleFile = false)
 		{
-
 			// Initilialize process start info
 			ProcessStartInfo startInfo = new ProcessStartInfo(@filePath)
 			{
