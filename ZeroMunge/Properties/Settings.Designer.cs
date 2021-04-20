@@ -261,5 +261,81 @@ namespace ZeroMunge.Properties {
                 return ((int)(this["Info_SaveFileVersion"]));
             }
         }
-    }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PreferredTextEditor
+        {
+            get
+            {
+                return ((string)(this["PreferredTextEditor"]));
+            }
+            set
+            {
+                this["PreferredTextEditor"] = value;
+            }
+        }
+
+		//PreferredZeroEditor
+		[global::System.Configuration.UserScopedSettingAttribute()]
+		[global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+		[global::System.Configuration.DefaultSettingValueAttribute("")]
+		public string PreferredZeroEditor
+		{
+			get
+			{
+				return ((string)(this["PreferredZeroEditor"]));
+			}
+			set
+			{
+				this["PreferredZeroEditor"] = value;
+			}
+		}
+
+		[global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DebuggerExe
+        {
+            get
+            {
+                return ((string)(this["DebuggerExe"]));
+            }
+            set
+            {
+                this["DebuggerExe"] = value;
+            }
+        }
+
+		[global::System.Configuration.UserScopedSettingAttribute()]
+		[global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+		[global::System.Configuration.DefaultSettingValueAttribute("")]
+		public string DebuggerArgs
+		{
+			get
+			{
+				return ((string)(this["DebuggerArgs"]));
+			}
+			set
+			{
+				this["DebuggerArgs"] = value;
+			}
+		}
+		//GameExeArgs
+		[global::System.Configuration.UserScopedSettingAttribute()]
+		[global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+		[global::System.Configuration.DefaultSettingValueAttribute("")]
+		public string GameExeArgs
+		{
+			get
+			{
+				return ((string)(this["GameExeArgs"]));
+			}
+			set
+			{
+				this["GameExeArgs"] = value;
+			}
+		}
+	}
 }

@@ -20,6 +20,12 @@ namespace ZeroMunge
 		public const int PREFS_MAX_LINE_COUNT_MAX = 2000;
 		public const int PREFS_MAX_LINE_COUNT_INC = 10;
 
+		/// <summary>
+		/// Message to caller indicating what was set
+		/// </summary>
+		[DefaultValue("")]
+		public string Message { get; private set; }
+
 		public Preferences()
 		{
 			InitializeComponent();
@@ -56,6 +62,13 @@ namespace ZeroMunge
 			chk_LogPrintTimestamps.Checked = prefs.LogPrintTimestamps;
 			chk_ShowUpdatePromptOnStartup.Checked = prefs.ShowUpdatePromptOnStartup;
 			chk_CheckForUpdatesOnStartup.Checked = prefs.CheckForUpdatesOnStartup;
+			txt_editor.Text = prefs.PreferredTextEditor;
+			txt_zeroEditor.Text = prefs.PreferredZeroEditor;
+			txt_gameDebugger.Text = prefs.DebuggerExe;
+			if (!String.IsNullOrEmpty(prefs.GameDirectory))
+				txt_gameExe.Text = prefs.GameDirectory + "\\BattlefrontII.exe";
+			txt_debuggerArgs.Text = prefs.DebuggerArgs;
+			txt_gameArgs.Text = prefs.GameExeArgs;
 		}
 
 
@@ -84,6 +97,29 @@ namespace ZeroMunge
 			FormTooltips.SetToolTip(chk_LogPrintTimestamps, Tooltips.Settings.LogPrintTimestamps);
 			FormTooltips.SetToolTip(chk_CheckForUpdatesOnStartup, Tooltips.Settings.CheckForUpdatesOnStartup);
 			FormTooltips.SetToolTip(chk_ShowUpdatePromptOnStartup, Tooltips.Settings.ShowUpdatePromptOnStartup);
+
+			// these tooltips actually won't show up if the text boxes are disabled
+			FormTooltips.SetToolTip(txt_editor, Tooltips.Settings.PreferredTextEditorPath);
+			FormTooltips.SetToolTip(txt_gameDebugger, Tooltips.Settings.SetDebuggerPath);
+			FormTooltips.SetToolTip(txt_gameExe, Tooltips.Settings.SetGamePath);
+
+			FormTooltips.SetToolTip(btn_browseEditor, Tooltips.Settings.PreferredTextEditorPath);
+			FormTooltips.SetToolTip(btn_browseDebuggerExe, Tooltips.Settings.SetDebuggerPath);
+			FormTooltips.SetToolTip(btn_browseGameExe, Tooltips.Settings.SetGamePath);
+
+			FormTooltips.SetToolTip(grp_editor, Tooltips.Settings.PreferredTextEditorPath);
+			FormTooltips.SetToolTip(grp_debugger, Tooltips.Settings.SetDebuggerPath);
+			FormTooltips.SetToolTip(grp_setGameExe, Tooltips.Settings.SetGamePath);
+
+			FormTooltips.SetToolTip(txt_gameArgs, Tooltips.Settings.GameExeArgs);
+			FormTooltips.SetToolTip(txt_debuggerArgs, Tooltips.Settings.DebuggerArgs);
+			FormTooltips.SetToolTip(lab_gameExeArgs, Tooltips.Settings.GameExeArgs);
+			FormTooltips.SetToolTip(lab_debuggerArgs, Tooltips.Settings.DebuggerArgs);
+
+			FormTooltips.SetToolTip(txt_zeroEditor, Tooltips.Settings.PreferredZeroEditorPath);
+			FormTooltips.SetToolTip(btn_browseZeroEditor, Tooltips.Settings.PreferredZeroEditorPath);
+			FormTooltips.SetToolTip(grp_zeroEditor, Tooltips.Settings.PreferredZeroEditorPath);
+
 		}
 
 
@@ -104,6 +140,9 @@ namespace ZeroMunge
 			// Save the numeric input values
 			prefs.LogPollingRate = (int)num_LogPollingRate.Value;
 			prefs.LogMaxLineCount = (int)num_LogMaxLineCount.Value;
+
+			prefs.GameExeArgs = txt_gameArgs.Text;
+			prefs.DebuggerArgs = txt_debuggerArgs.Text;
 
 			Utilities.SavePrefs(prefs);
 			CloseForm();
@@ -204,5 +243,108 @@ namespace ZeroMunge
 		{
 			prefs.LogPrintTimestamps = chk_LogPrintTimestamps.Checked;
 		}
+
+        private void btn_browseExe_Click(object sender, EventArgs e)
+        {
+			if (sender == this.btn_browseGameExe)
+				SetGameDirectory();
+			else if (sender == this.btn_browseDebuggerExe)
+				PromptForDebuggerExe();
+			else if (sender == this.btn_browseEditor)
+				SetPreferredEditor();
+			else if (sender == this.btn_browseZeroEditor)
+				SetPreferredZeroEditor();
+        }
+
+
+        private void SetGameDirectory()
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.RestoreDirectory = true;
+            dlg.Title = "Browse To Game exe";
+            dlg.Filter = "Game Exe file|BattlefrontII.exe";
+            dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                String exePath = dlg.FileName;
+                int lastSlash = exePath.LastIndexOf("\\");
+                prefs.GameDirectory = exePath.Substring(0, lastSlash);
+                this.txt_gameExe.Text = dlg.FileName;
+                this.Message += "Game path set to: " + prefs.GameDirectory +"\n";
+            }
+            dlg.Dispose();
+        }
+
+        private void PromptForDebuggerExe()
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.RestoreDirectory = true;
+            dlg.Title = "Choose Debugger exe";
+            dlg.Filter = " Exe |*.exe";
+            dlg.InitialDirectory = prefs.GameDirectory;
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                prefs.DebuggerExe = dlg.FileName;
+                this.txt_gameDebugger.Text = dlg.FileName;
+                this.Message += "Debugger path set to: " + prefs.GameDirectory + "\n";
+            }
+            dlg.Dispose();
+        }
+
+        private void SetPreferredEditor()
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+			dlg.Title = "Browse to Preferred Text Editor exe";
+			dlg.RestoreDirectory = true;
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                prefs.PreferredTextEditor = dlg.FileName;
+                this.txt_editor.Text = dlg.FileName;
+                this.Message += "Saving Preferred editor to " + dlg.FileName + "\n";
+            }
+            dlg.Dispose();
+        }
+
+		private void SetPreferredZeroEditor()
+		{
+			OpenFileDialog dlg = new OpenFileDialog();
+			dlg.Title = "Browse to Preferred Zero Editor exe";
+			dlg.RestoreDirectory = true;
+
+			if (dlg.ShowDialog() == DialogResult.OK)
+			{
+				prefs.PreferredZeroEditor = dlg.FileName;
+				this.txt_zeroEditor.Text = dlg.FileName;
+				this.Message += "Saving Preferred Zero editor to " + dlg.FileName + "\n";
+			}
+			dlg.Dispose();
+		}
+
+		private void txt_Leave(object sender, EventArgs e)
+		{
+			string newText = ((TextBox)sender).Text;
+			if( sender == txt_gameDebugger)
+			{
+				prefs.DebuggerExe = newText;
+			}
+			else if (sender == txt_gameExe)
+			{
+				String exePath = newText;
+				int lastSlash = exePath.LastIndexOf("\\");
+				prefs.GameDirectory = exePath.Substring(0, lastSlash);
+			}
+			else if (sender == txt_editor)
+			{
+				prefs.PreferredTextEditor = newText;
+			}
+			else if( sender == txt_zeroEditor)
+			{
+				prefs.PreferredZeroEditor = newText;
+			}
+		}
+
 	}
 }

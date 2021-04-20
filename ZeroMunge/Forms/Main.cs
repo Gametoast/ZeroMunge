@@ -39,7 +39,7 @@ namespace ZeroMunge
 
 
 		#region Constants
-		
+
 		// Web links
 		public const string LINK_GH_OPENISSUES = "https://github.com/marth8880/ZeroMunge/issues";
 		public const string LINK_GH_BUGS = "https://github.com/marth8880/ZeroMunge/issues/new?template=bug_report.md";
@@ -48,7 +48,7 @@ namespace ZeroMunge
 		public const string LINK_EMAIL = "mailto:marth8880@gmail.com";
 		public const string LINK_WEBSITE = "https://www.frayedwiresstudios.com/";
 		public const string LINK_PROJECT = "https://github.com/marth8880/ZeroMunge";
-		
+
 		// Recent files list
 		public const int RECENT_FILES_MAX = 10;
 
@@ -114,7 +114,7 @@ namespace ZeroMunge
 
 		// User exit flow
 		public bool inExitFlow = false;
-		
+
 		// Recent files list
 		public List<string> recentFiles = new List<string>(RECENT_FILES_MAX);
 
@@ -130,13 +130,13 @@ namespace ZeroMunge
 			InitializeComponent();
 
 			// Set debug flag based on solution configuration
-			#if (BUILD_DEBUG)
-				BUILD_TYPE = BuildType.Debug;
-			#elif (BUILD_DEBUG_CLEARSETTINGS)
+#if (BUILD_DEBUG)
+			BUILD_TYPE = BuildType.Debug;
+#elif (BUILD_DEBUG_CLEARSETTINGS)
 				BUILD_TYPE = BuildType.DebugClearSettings;
-			#elif (BUILD_RELEASE)
+#elif (BUILD_RELEASE)
 				BUILD_TYPE = BuildType.Release;
-			#endif
+#endif
 			Trace.WriteLine("BUILD_TYPE: " + BUILD_TYPE.ToString());
 
 			if (BUILD_TYPE == BuildType.DebugClearSettings)
@@ -262,7 +262,7 @@ namespace ZeroMunge
 				updateCheckThread = new Thread(() =>
 				{
 					Log("Checking for updates... (Auto-check can be disabled in Preferences)", LogType.Update);
-					
+
 					UpdateInfo updateInfo = Utilities.CheckForUpdates(this, false);
 
 					if (updateInfo != null)
@@ -285,21 +285,13 @@ namespace ZeroMunge
 								if (prefs.ShowUpdatePromptOnStartup)
 								{
 									Trace.WriteLine("Check succeeded. Update is available. Pushing update prompt.");
-									Thread logThread = new Thread(() =>
-									{
-										Log(logMessage, LogType.Update);
-									});
-									logThread.Start();
+									Log(logMessage, LogType.Update);
 									Flow_Updates_Start();
 								}
 								else
 								{
 									Trace.WriteLine("Check succeeded. Update is available, but user has specified to not show the update prompt on startup.");
-									Thread logThread = new Thread(() =>
-									{
-										Log(logMessage, LogType.Update);
-									});
-									logThread.Start();
+									Log(logMessage, LogType.Update);
 								}
 
 								stat_UpdateLink.Text = string.Format("Update available ({0})", updateInfo.LatestVersionInfo.Version);
@@ -330,8 +322,7 @@ namespace ZeroMunge
 			}
 			else
 			{
-				SetGameDirectoryPrompt prompt = new SetGameDirectoryPrompt(this);
-				prompt.Show();
+				Flow_SetGameDirectory_Start();
 			}
 
 			// Auto-load the last save file
@@ -390,7 +381,29 @@ namespace ZeroMunge
 		{
 			//Debug.WriteLine("ZeroMunge_Deactivate() entered");
 		}
-		
+
+		private delegate void ShowCompletedMessageDelegate();
+
+		public void CompleteCallback()
+		{
+			if (this.InvokeRequired)
+			{
+				Debugger.Log(1, "debug", "ShowCompletedMessage: Invoke was required ");
+				this.BeginInvoke(new ShowCompletedMessageDelegate(CompleteCallback));
+			}
+			else
+			{
+				if (prefs.ShowNotificationPopups)
+				{
+					trayIcon.Text = "Zero Munge: Idle";
+					trayIcon.BalloonTipTitle = "Success";
+					trayIcon.BalloonTipText = "The operation was completed successfully.";
+					trayIcon.ShowBalloonTip(30000);
+					stat_JobStatus.Text = "Idle";
+				}
+			}
+		}
+
 
 		// When the form is in the process of closing:
 		// Auto-save the file list (if enabled).
@@ -407,15 +420,15 @@ namespace ZeroMunge
 			{
 				//if (!IsFileListEmpty())
 				//{
-					string filePath = prefs.LastSaveFilePath;
+				string filePath = prefs.LastSaveFilePath;
 
-					// Use the default autosave file path if LastSaveFilePath is unset
-					if (filePath == "UNSET")
-					{
-						filePath = Directory.GetCurrentDirectory() + @"\ZeroMunge-auto.zmd";
-					}
+				// Use the default autosave file path if LastSaveFilePath is unset
+				if (filePath == "UNSET")
+				{
+					filePath = Directory.GetCurrentDirectory() + @"\ZeroMunge-auto.zmd";
+				}
 
-					SaveFileListToFile(filePath, true, false);
+				SaveFileListToFile(filePath, true, false);
 				//}
 				//else
 				//{
@@ -441,7 +454,7 @@ namespace ZeroMunge
 							break;
 
 						case DialogResult.No:
-								
+
 							break;
 
 						case DialogResult.Cancel:
@@ -543,6 +556,14 @@ namespace ZeroMunge
 				case Keys.F5:
 					if ((ModifierKeys & Keys.Shift) == Keys.Shift) { return; }
 					Hotkey_F5();
+					e.Handled = true;
+					break;
+				case Keys.F6:
+					Hotkey_F6();
+					e.Handled = true;
+					break;
+				case Keys.F10:
+					Hotkey_F10();
 					e.Handled = true;
 					break;
 
@@ -684,6 +705,20 @@ namespace ZeroMunge
 			}
 		}
 
+		private void Hotkey_F6()
+		{
+			Debug.WriteLine("F6 was pressed");
+
+			LaunchDebuggerExe();
+		}
+
+		private void Hotkey_F10()
+		{
+			Debug.WriteLine("F10 was pressed");
+
+			LaunchZeroEditor();
+		}
+
 
 		/// <summary>
 		/// Executes the logic for the 'F12' hotkey.
@@ -762,7 +797,6 @@ namespace ZeroMunge
 			menu_removeToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_RemoveFile);
 			menu_removeAllToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_RemoveAllFiles);
 
-
 			// Output Log
 			FormTooltips.SetToolTip(btn_CopyLog, Tooltips.OutputLog.CopyLog);
 			FormTooltips.SetToolTip(btn_SaveLog, Tooltips.OutputLog.SaveLogAs);
@@ -772,6 +806,12 @@ namespace ZeroMunge
 			menu_saveLogAsToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_SaveLog);
 			menu_clearLogToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_ClearLog);
 
+			// Action Items
+			menu_openGameLog.ToolTipText = Tooltips.Actions.OpenGameLog;
+			menu_openModToolsExe.ToolTipText = Tooltips.Actions.OpenModToolsExe;
+			menu_openGameExe.ToolTipText = Tooltips.Actions.OpenGameExe;
+			menu_openGameFolder.ToolTipText = Tooltips.Actions.OpenGameFolder;
+			// -------------------------------------------------
 
 			// Tools Menu
 			menu_createSideMungeFolderToolStripMenuItem.ToolTipText = Tooltips.Tools.CreateSideMungeFolder;
@@ -893,7 +933,14 @@ namespace ZeroMunge
 		private void OpenWindow_Preferences()
 		{
 			Preferences prefsForm = new Preferences();
-			prefsForm.ShowDialog();
+			prefsForm.StartPosition = FormStartPosition.CenterParent;
+			if (prefsForm.ShowDialog(this) == DialogResult.OK && !String.IsNullOrEmpty(prefsForm.Message))
+			{
+				string[] lines = prefsForm.Message.Split(new char[] { '\n' });
+				foreach (string line in lines)
+					Log(line, LogType.Info);
+			}
+			prefsForm.Dispose();
 		}
 
 
@@ -967,14 +1014,14 @@ namespace ZeroMunge
 		{
 			//if (!IsFileListEmpty())
 			//{
-				if (curFileListPath == "null" || curFileListName == "null")
-				{
-					Command_SaveAs();
-				}
-				else
-				{
-					SaveFileListToFile(curFileListPath, isAutoSave, inExitFlow);
-				}
+			if (curFileListPath == "null" || curFileListName == "null")
+			{
+				Command_SaveAs();
+			}
+			else
+			{
+				SaveFileListToFile(curFileListPath, isAutoSave, inExitFlow);
+			}
 			//}
 			//else
 			//{
@@ -1092,7 +1139,7 @@ namespace ZeroMunge
 		{
 			Log_Proc(message, logType, debugWriteLine);
 		}
-		
+
 		// This delegate enables asynchronous calls for setting the text property on the output log.
 		delegate void LogCallback(string message, LogType logType, bool debugWriteLine);
 
@@ -1164,7 +1211,7 @@ namespace ZeroMunge
 				}
 				//});
 				//swThread.Start();
-				
+
 				if (ProcessManager.IsRunning())
 				{
 					notifyLogThread = true;
@@ -1175,8 +1222,8 @@ namespace ZeroMunge
 				}
 			}
 		}
-		
-		
+
+
 		/// <summary>
 		/// Update the output log if the thread is ready.
 		/// </summary>
@@ -1199,7 +1246,7 @@ namespace ZeroMunge
 			Debug.WriteLine(string.Concat(Utilities.GetTimestamp(), " : ", "UpdateOutputLog: Entered"));
 			UpdateOutputLog_Proc();
 		}
-		
+
 		// This delegate enables asynchronous calls for setting the text property on the output log.
 		delegate void UpdateOutputLogCallback();
 
@@ -1325,7 +1372,7 @@ namespace ZeroMunge
 		{
 			EnableUI_Proc(enabled);
 		}
-		
+
 		// This delegate enables asynchronous calls for setting the enabled property on the UI control.
 		delegate void EnableUICallback(bool enabled);
 
@@ -1432,7 +1479,7 @@ namespace ZeroMunge
 		// ***************************
 
 		#region File List : DataGridView
-		
+
 		#region File List : Fields
 
 		/// <summary>
@@ -1549,49 +1596,46 @@ namespace ZeroMunge
 				Debug.WriteLine("Row " + row.Index + ", entered");
 
 				// Add the file to the list if all its fields are correct and valid (note: StagingDirectory isn't required)
-				if (row.Cells[STR_DATA_FILES_CHK_ENABLED].Value != null && 
+				if (row.Cells[STR_DATA_FILES_CHK_ENABLED].Value != null &&
 					row.Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value != null)
 				{
 					if (row.Cells[STR_DATA_FILES_CHK_ENABLED].Value.ToString() == "True")
 					{
-						Thread errorThread = new Thread(() => {
-							if (row.Cells[STR_DATA_FILES_CHK_ENABLED].Value == null)
-							{
-								Debug.WriteLine("WARNING! Row at index " + row.Index + " isn't enabled!");
-							}
+						if (row.Cells[STR_DATA_FILES_CHK_ENABLED].Value == null)
+						{
+							Debug.WriteLine("WARNING! Row at index " + row.Index + " isn't enabled!");
+						}
 
-							if (row.Cells[STR_DATA_FILES_TXT_FILE].Value == null)
-							{
-								var message = "FilePath at row index " + row.Index + " isn't specified!";
-								Log(message, LogType.Error, true);
-							}
+						if (row.Cells[STR_DATA_FILES_TXT_FILE].Value == null)
+						{
+							var message = "FilePath at row index " + row.Index + " isn't specified!";
+							Log(message, LogType.Error, true);
+						}
 
-							if (row.Cells[STR_DATA_FILES_TXT_STAGING].Value == null)
-							{
-								var message = "StagingDirectory at row index " + row.Index + " isn't specified!";
-								Log(message, LogType.Warning);
-							}
+						if (row.Cells[STR_DATA_FILES_TXT_STAGING].Value == null)
+						{
+							var message = "StagingDirectory at row index " + row.Index + " isn't specified!";
+							Log(message, LogType.Warning);
+						}
 
-							if (row.Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value == null)
-							{
-								var message = "MungeDirectory at row index " + row.Index + " isn't specified!";
-								Log(message, LogType.Error, true);
-							}
+						if (row.Cells[STR_DATA_FILES_TXT_MUNGE_DIR].Value == null)
+						{
+							var message = "MungeDirectory at row index " + row.Index + " isn't specified!";
+							Log(message, LogType.Error, true);
+						}
 
-							if (row.Cells[STR_DATA_FILES_TXT_MUNGED_FILES].Value == null)
-							{
-								var message = "MungedFiles at row index " + row.Index + " isn't specified!";
-								Log(message, LogType.Warning, true);
-							}
+						if (row.Cells[STR_DATA_FILES_TXT_MUNGED_FILES].Value == null)
+						{
+							var message = "MungedFiles at row index " + row.Index + " isn't specified!";
+							Log(message, LogType.Warning, true);
+						}
 
 
-							if (!File.Exists(row.Cells[STR_DATA_FILES_TXT_FILE].Value.ToString()))
-							{
-								var message = "FilePath at row index " + row.Index + " cannot be found!";
-								Log(message, LogType.Error, true);
-							}
-						});
-						errorThread.Start();
+						if (!File.Exists(row.Cells[STR_DATA_FILES_TXT_FILE].Value.ToString()))
+						{
+							var message = "FilePath at row index " + row.Index + " cannot be found!";
+							Log(message, LogType.Error, true);
+						}
 
 						Debug.WriteLine(row.Cells[STR_DATA_FILES_TXT_FILE].Value.ToString());
 						if (row.Cells[STR_DATA_FILES_TXT_STAGING].Value != null)
@@ -1736,7 +1780,7 @@ namespace ZeroMunge
 								stagingDirectory = "nil";
 								mungeOutputDirectory = "nil";
 								compiledFiles = "nil";
-								
+
 								var message = "File is not a munge script, copy operations will be disabled for it";
 								Log(message, LogType.Info, true);
 							}
@@ -1745,7 +1789,7 @@ namespace ZeroMunge
 							if (!prefs.AutoDetectStagingDir)
 							{
 								stagingDirectory = "nil";
-								
+
 								var message = "Not setting Staging Directory in accordance with user preferences";
 								Log(message, LogType.Info, true);
 							}
@@ -1754,7 +1798,7 @@ namespace ZeroMunge
 							if (!prefs.AutoDetectMungedFiles)
 							{
 								compiledFiles = "nil";
-								
+
 								var message = "Not setting Munged Files in accordance with user preferences";
 								Log(message, LogType.Info, true);
 							}
@@ -1796,7 +1840,7 @@ namespace ZeroMunge
 								data_Files[INT_DATA_FILES_CHK_IS_MUNGE_SCRIPT, data_Files_CurSelectedRow].Value = isMungeScript;
 							}
 
-							
+
 							Log("");
 							Log(string.Format("Adding file: \"{0}\"", file), LogType.Info);
 							Log(string.Format("Staging directory: \"{0}\"", stagingDirectory), LogType.Info);
@@ -2047,13 +2091,8 @@ namespace ZeroMunge
 			}
 			catch (NullReferenceException e)
 			{
-				Thread errorThread = new Thread(() =>
-				{
-					Trace.WriteLine("Failed to load data into file list. Reason: " + e.Message);
-					Log("File does not contain any data to load", LogType.Error);
-				});
-				errorThread.Start();
-
+				Trace.WriteLine("Failed to load data into file list. Reason: " + e.Message);
+				Log("File does not contain any data to load", LogType.Error);
 				//throw;
 			}
 			catch (InvalidOperationException e)
@@ -2135,7 +2174,7 @@ namespace ZeroMunge
 			return true;
 		}
 
-		
+
 		/// <summary>
 		/// Update the current file list's save file path and name.
 		/// </summary>
@@ -2385,11 +2424,8 @@ namespace ZeroMunge
 				{
 					if (lastCellChangeMethod == CellChangeMethod.Cell)
 					{
-						Thread errorThread = new Thread(() => {
-							var message = "File Path must first be specified";
-							Log(message, LogType.Error, true);
-						});
-						errorThread.Start();
+						var message = "File Path must first be specified";
+						Log(message, LogType.Error, true);
 					}
 				}
 			}
@@ -2398,29 +2434,23 @@ namespace ZeroMunge
 			switch (e.ColumnIndex)
 			{
 				case INT_DATA_FILES_TXT_FILE:     // col_File
-					// Throw an error and color the cell red if the file at the specified path is blank, null, or doesn't exist
+												  // Throw an error and color the cell red if the file at the specified path is blank, null, or doesn't exist
 					if (fileIsNull)
 					{
 						data_Files_ValidateCell(e.RowIndex, INT_DATA_FILES_TXT_FILE, false);
 						data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_CHK_IS_VALID].Value = false;
 
-						Thread errorThread = new Thread(() => {
-							var message = "File Path is blank";
-							Log(message, LogType.Error, true);
-						});
-						errorThread.Start();
+						var message = "File Path is blank";
+						Log(message, LogType.Error, true);
 					}
-					else if (data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value.ToString() == "" || 
+					else if (data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value.ToString() == "" ||
 						!File.Exists(data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value.ToString()))
 					{
 						data_Files_ValidateCell(e.RowIndex, INT_DATA_FILES_TXT_FILE, false);
 						data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_CHK_IS_VALID].Value = false;
 
-						Thread errorThread = new Thread(() => {
-							var message = string.Format("Could not find file at path: \"{0}\"", data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value.ToString());
-							Log(message, LogType.Error, true);
-						});
-						errorThread.Start();
+						var message = string.Format("Could not find file at path: \"{0}\"", data_Files.Rows[e.RowIndex].Cells[INT_DATA_FILES_TXT_FILE].Value.ToString());
+						Log(message, LogType.Error, true);
 					}
 					else
 					{
@@ -2430,11 +2460,11 @@ namespace ZeroMunge
 					break;
 
 				case INT_DATA_FILES_TXT_STAGING:     // col_Staging
-					
+
 					break;
 
 				case INT_DATA_FILES_TXT_MUNGED_FILES:     // col_MungedFiles
-					
+
 					break;
 			}
 		}
@@ -2787,11 +2817,8 @@ namespace ZeroMunge
 					}
 					else
 					{
-						Thread errorThread = new Thread(() => {
-							var message = string.Format("Could not find file at path: \"{0}\"", file);
-							Log(message, LogType.Error, true);
-						});
-						errorThread.Start();
+						var message = string.Format("Could not find file at path: \"{0}\"", file);
+						Log(message, LogType.Error, true);
 					}
 				}
 			}
@@ -2850,13 +2877,10 @@ namespace ZeroMunge
 			// Don't continue if there aren't any files in the list
 			if (data_Files.RowCount <= 0)
 			{
-				Thread errorThread = new Thread(() => {
-					Log("File list must contain at least one file", LogType.Error);
+				Log("File list must contain at least one file", LogType.Error);
 
-					// Re-enable the UI
-					EnableUI(true);
-				});
-				errorThread.Start();
+				// Re-enable the UI
+				EnableUI(true);
 
 				return;
 			}
@@ -2873,7 +2897,7 @@ namespace ZeroMunge
 			{
 				var selectedCells = data_Files.SelectedCells;
 				List<DataGridViewRow> selectedRows = new List<DataGridViewRow>();
-				
+
 				// Go through the selected cells and add its row to the list of selected rows (without duplicates!)
 				foreach (DataGridViewCell cell in selectedCells)
 				{
@@ -2997,54 +3021,30 @@ namespace ZeroMunge
 		/// <returns>True, the user completed the flow successfully. False, the user cancelled out of the flow at some point.</returns>
 		public bool Flow_SetGameDirectory_ShowDialog()
 		{
-			openDlg_SelectGameExePrompt.InitialDirectory = Flow_SetGameDirectory_GetInitialDirectory();
+			bool retVal = false;
+			OpenFileDialog dlg = new OpenFileDialog();
+			dlg.RestoreDirectory = true;
+			dlg.Title = "Browse To Game exe";
+			dlg.Filter = "Game Exe file|BattlefrontII.exe";
+			dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
 
-			// Did the user quit out of the dialog?
-			if (openDlg_SelectGameExePrompt.ShowDialog() != DialogResult.OK)
+			if (dlg.ShowDialog() == DialogResult.OK)
 			{
-				// Give a warning if the user cancelled the flow and the GameDirectory is still unset
-				if (prefs.GameDirectory == "")
-				{
-					Flow_SetGameDirectory_WarnQuit();
-				}
-				return false;
+				String exePath = dlg.FileName;
+				int lastSlash = exePath.LastIndexOf("\\");
+				prefs.GameDirectory = exePath.Substring(0, lastSlash);
+				Utilities.SavePrefs(prefs);
+				retVal = true;
+				Log("Game path set to: " + prefs.GameDirectory, LogType.Info);
 			}
 			else
 			{
-				return true;
+				// Give a warning if the user cancelled the flow and the GameDirectory is still unset
+				Log("Game path is not set!", LogType.Warning);
 			}
+			dlg.Dispose();
+			return retVal;
 		}
-
-
-		/// <summary>
-		/// Log a warning to the output log that the game directory isn't set.
-		/// </summary>
-		public void Flow_SetGameDirectory_WarnQuit()
-		{
-			Log("Game path is not set!", LogType.Warning);
-		}
-
-
-		// When the user clicks the "OK" button in the "Select Game Executable..." prompt:
-		// Sets the game directory based on the file path of SWBF2's executable.
-		private void openDlg_SelectGameExePrompt_FileOk(object sender, CancelEventArgs e)
-		{
-			var file = openDlg_SelectGameExePrompt.FileName;
-
-			// Set the game path if it exists
-			if (Directory.Exists(Utilities.GetFileDirectory(file)))
-			{
-				prefs.GameDirectory = Utilities.GetFileDirectory(file);
-				Utilities.SavePrefs(prefs);
-
-				Thread outputThread = new Thread(() => {
-					var msg = string.Format("Saving game path: \"{0}\"", Properties.Settings.Default.GameDirectory);
-					Log(msg, LogType.Info, true);
-				});
-				outputThread.Start();
-			}
-		}
-
 		#endregion Flow : Set Game Directory
 
 
@@ -3222,7 +3222,7 @@ namespace ZeroMunge
 					{
 						Debug.WriteLine("Control is RichTextBox");
 						var rtb = (RichTextBox)rightClickedControl;
-						
+
 						rtb.Text = rtb.Text.Remove(rtb.SelectionStart, rtb.SelectionLength);
 					}
 				}
@@ -3324,7 +3324,7 @@ namespace ZeroMunge
 		{
 			return prefs.RecentFiles == null || prefs.RecentFiles.Count <= 0;
 		}
-		
+
 
 		/// <summary>
 		/// Adds the specified file path to the Recent Files list.
@@ -3507,7 +3507,7 @@ namespace ZeroMunge
 		}
 
 		#endregion File Menu : Recent Files List
-		
+
 
 		// When the user clicks the OK button in the Open File List prompt:
 		// Attempt to deserialize the data in the specified file and load it into the file list.
@@ -3549,8 +3549,8 @@ namespace ZeroMunge
 				Log(message, LogType.Error);
 			}
 		}
-		
-		
+
+
 		// When the user clicks the OK button in the Save File List prompt:
 		// Attempt to save the file list contents to the specified file path.
 		private void saveDlg_SaveFileListPrompt_FileOk(object sender, CancelEventArgs e)
@@ -3840,7 +3840,7 @@ namespace ZeroMunge
 					default:
 						throw new ArgumentException("Invalid argument value specified.", "componentType");
 				}
-				
+
 				// What directory should the template files be copied to?
 				destDir = string.Format("{0}\\_BUILD\\{1}\\{2}", projectDirectory, mungeDirParent, componentName);
 
@@ -4092,7 +4092,7 @@ namespace ZeroMunge
 
 					return true;
 				}
-				
+
 
 				// Get the project ID
 				string projectID = Utilities.GetProjectID(projectDir);
@@ -4271,10 +4271,10 @@ namespace ZeroMunge
 
 			//ToolStripItem subItem = new ToolStripMenuItem(newItem);
 			//menu_openRecentToolStripMenuItem.DropDownItems.Insert(0, subItem);
-			
+
 			//SaveFileListPrompt prompt = new SaveFileListPrompt();
 			//prompt.ShowDialog();
-			
+
 			//Debug.WriteLine(IsFileListEmpty().ToString());
 
 			//var parsedJson = Utilities.ParseJsonStrings(this, "https://raw.githubusercontent.com/marth8880/ZeroMunge/master/test.json");
@@ -4291,7 +4291,7 @@ namespace ZeroMunge
 
 			//var reqChunk = Utilities.ParseReqChunk(@"J:\BF2_ModTools\data_SOL\data_SOL\Sides\SOL\sol.req", "lvl");
 			//reqChunk.PrintAll();
-			
+
 			//SerializeData(@"data.zmd");
 
 			//Serialize();
@@ -4399,6 +4399,140 @@ namespace ZeroMunge
 					}
 				}
 			}
+		}
+
+		private void openBF2LogToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			OpenBFront2Log();
+		}
+
+		private void OpenBFront2Log()
+		{
+			if (String.IsNullOrEmpty(prefs.GameDirectory))
+			{
+				MessageBox.Show("Game path not set. Set Game path to use this feature.", "Error");
+				return;
+			}
+			string editor = "notepad.exe";
+			if (!String.IsNullOrEmpty(prefs.PreferredTextEditor))
+				editor = prefs.PreferredTextEditor;
+			string logPath = prefs.GameDirectory + "\\BFront2.log";
+			if (File.Exists(logPath))
+			{
+				this.Log("Opening BFront2.log...", LogType.Info);
+				ProcessManager.RunCommand(editor, "\"" + logPath + "\"", null);
+			}
+			else
+			{
+				MessageBox.Show(String.Format("Could not find '{0}'\r\nDid you Run the BF2_Modtools program yet?", logPath), "Warning");
+			}
+		}
+
+		private void setPreferredEditorToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			SetPreferredEditor();
+		}
+
+		private void SetPreferredEditor()
+		{
+			OpenFileDialog dlg = new OpenFileDialog();
+			dlg.RestoreDirectory = true;
+
+			if (dlg.ShowDialog() == DialogResult.OK)
+			{
+				prefs.PreferredTextEditor = dlg.FileName;
+				this.Log("Saving Preferred editor to " + dlg.FileName, LogType.Info);
+				Utilities.SavePrefs(prefs);
+			}
+			dlg.Dispose();
+		}
+
+		private void openModtoolsExeToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			LaunchDebuggerExe();
+		}
+
+		private void LaunchDebuggerExe()
+		{
+			if (String.IsNullOrEmpty(prefs.GameDirectory))
+			{
+				MessageBox.Show("Game path not set. Set Game path to use this feature.", "Error");
+				return;
+			}
+			string programName = prefs.DebuggerExe;
+
+			if (File.Exists(programName))
+			{
+				string msg = "Launching " + programName +" " + prefs.DebuggerArgs;
+				Debug.WriteLine(msg);
+				this.Log(msg, LogType.Info);
+				ProcessManager.RunCommand("\"" + programName + "\"", prefs.DebuggerArgs, prefs.GameDirectory);
+			}
+			else
+			{
+				MessageBox.Show(String.Format("Could not find '{0}'\r\n", programName), "Warning");
+			}
+		}
+
+		private void menu_openGameExe_Click(object sender, EventArgs e)
+		{
+			LaunchGameExe();
+		}
+
+		private void LaunchGameExe()
+		{
+			if (String.IsNullOrEmpty(prefs.GameDirectory))
+			{
+				MessageBox.Show("Game path not set. Set Game path to use this feature.", "Error");
+				return;
+			}
+			string programName = prefs.GameDirectory + "\\BattlefrontII.exe";
+
+			if (File.Exists(programName))
+			{
+				string msg = "Launching BattlefrontII.exe " + prefs.GameExeArgs;
+				Debug.WriteLine(msg);
+				this.Log(msg, LogType.Info);
+				ProcessManager.RunCommand("\"" + programName + "\"", prefs.GameExeArgs, prefs.GameDirectory);
+			}
+			else
+			{
+				MessageBox.Show(String.Format("Could not find '{0}'", programName), "Error");
+			}
+		}
+
+		private void menu_openGameFolder_Click(object sender, EventArgs e)
+		{
+			OpenGameFolder();
+		}
+
+		private void OpenGameFolder()
+		{
+			if (String.IsNullOrEmpty(prefs.GameDirectory))
+			{
+				MessageBox.Show("Game path not set. Set Game path in 'Preferences' to use this feature.", "Error");
+				return;
+			}
+			this.Log("Opening Game Folder...", LogType.Info);
+			ProcessManager.RunCommand("explorer.exe", "\"" + prefs.GameDirectory + "\"", null);
+		}
+
+		private void LaunchZeroEditor()
+		{
+			if (String.IsNullOrEmpty(prefs.PreferredZeroEditor))
+			{
+				MessageBox.Show("Zero editor path not set. Set Zero Editor path in 'Preferences' to use this feature.", "Error");
+				return;
+			}
+			int lastSlash = prefs.PreferredZeroEditor.LastIndexOf(Path.DirectorySeparatorChar);
+			string zeFolder = prefs.PreferredZeroEditor.Substring(0, lastSlash);
+			this.Log("Opening Zero Editor...", LogType.Info);
+			ProcessManager.RunCommand(prefs.PreferredZeroEditor, "", zeFolder);
+		}
+
+		private void menu_launchZeroEditor_Click(object sender, EventArgs e)
+		{
+			LaunchZeroEditor();
 		}
 	}
 }

@@ -33,7 +33,8 @@ namespace ZeroMunge.Modules
 
 			isRunning = true;
 
-			Thread logPollThread = new Thread(() => {
+			Thread logPollThread = new Thread(() =>
+			{
 				while (isRunning)
 				{
 					if (sender.notifyLogThread)
@@ -46,15 +47,13 @@ namespace ZeroMunge.Modules
 			logPollThread.Start();
 
 			// Update tray icon text and play start sound
-			Thread soundThread = new Thread(() => {
-				if (sender.prefs.ShowTrayIcon)
-				{
-					sender.trayIcon.Text = "Zero Munge: Running";
-					sender.stat_JobStatus.Text = "Running";
-				}
-				Utilities.PlaySound(Utilities.SoundType.Start);
-			});
-			soundThread.Start();
+			if (sender.prefs.ShowTrayIcon)
+			{
+				sender.trayIcon.Text = "Zero Munge: Running";
+				sender.stat_JobStatus.Text = "Running";
+			}
+
+			Utilities.PlaySound(Utilities.SoundType.Start);
 
 			// Grab the list of checked files
 			fileList = files;
@@ -87,28 +86,21 @@ namespace ZeroMunge.Modules
 			// Report the error if one is present
 			if (procError > 0)
 			{
-				Thread errorThread = new Thread(() => {
-					string errorMessage = "";
+				string errorMessage = "";
+				switch (procError)
+				{
+					case 1:
+						errorMessage = "File list must contain at least one file";
+						break;
+					case 2:
+						errorMessage = "At least one item must be checked";
+						break;
+				}
+				sender.Log(errorMessage, ZeroMunge.LogType.Error);
 
-					switch (procError)
-					{
-						case 1:
-							errorMessage = "File list must contain at least one file";
-							break;
-						case 2:
-							errorMessage = "At least one item must be checked";
-							break;
-					}
-
-					sender.Log(errorMessage, ZeroMunge.LogType.Error);
-
-					// Re-enable the UI
-					sender.EnableUI(true);
-				});
-				errorThread.Start();
-
+				// Re-enable the UI
+				sender.EnableUI(true);
 				isRunning = false;
-
 				return;
 			}
 
@@ -116,18 +108,14 @@ namespace ZeroMunge.Modules
 
 			// FINISH CHECKING FOR ROW ERRORS
 
-
 			activeFile = 0;
 			procAborted = false;
 
-			Thread enterThread = new Thread(() => {
-				sender.Log("");
-				sender.Log("**************************************************************");
-				sender.Log("******** STARTED JOB");
-				sender.Log("**************************************************************");
-				sender.Log("");
-			});
-			enterThread.Start();
+			sender.Log("");
+			sender.Log("**************************************************************");
+			sender.Log("******** STARTED JOB");
+			sender.Log("**************************************************************");
+			sender.Log("");
 
 			// Activate the first file
 			ActivateProcess(sender, 0);
@@ -143,34 +131,30 @@ namespace ZeroMunge.Modules
 			if (!isRunning) return;
 			isRunning = false;
 
-			Thread soundThread = new Thread(() => {
-				if (sender.prefs.ShowTrayIcon)
-				{
-					sender.trayIcon.Text = "Zero Munge: Idle";
-					sender.stat_JobStatus.Text = "Idle";
-				}
-				Utilities.PlaySound(Utilities.SoundType.Abort);
-			});
-			soundThread.Start();
+			if (sender.prefs.ShowTrayIcon)
+			{
+				sender.trayIcon.Text = "Zero Munge: Idle";
+				sender.stat_JobStatus.Text = "Idle";
+			}
+			Utilities.PlaySound(Utilities.SoundType.Abort);
 
 			procAborted = true;
 
 			// Kill the process
-			curProc.Kill();
+			if (curProc != null && !curProc.HasExited)
+				curProc.Kill();
 
 			// Reset the stored list of checked files
-			fileList = null;
+			//fileList = null;
+			fileList.Clear();
 
-			Thread exitThread = new Thread(() => {
-				sender.Log("");
-				sender.Log("**************************************************************");
-				sender.Log("******** ABORTED JOB");
-				sender.Log("**************************************************************");
+			sender.Log("");
+			sender.Log("**************************************************************");
+			sender.Log("******** ABORTED JOB");
+			sender.Log("**************************************************************");
 
-				// Re-enable the UI
-				sender.EnableUI(true);
-			});
-			exitThread.Start();
+			// Re-enable the UI
+			sender.EnableUI(true);
 		}
 
 
@@ -182,29 +166,24 @@ namespace ZeroMunge.Modules
 		{
 			isRunning = false;
 
-			Thread exitThread = new Thread(() => {
-				sender.Log("");
-				sender.Log("**************************************************************");
-				sender.Log("******** FINISHED JOB");
-				sender.Log("**************************************************************");
+			sender.Log("");
+			sender.Log("**************************************************************");
+			sender.Log("******** FINISHED JOB");
+			sender.Log("**************************************************************");
 
-				// Re-enable the UI
-				sender.EnableUI(true);
-			});
-			exitThread.Start();
-
-			Thread soundThread = new Thread(() => {
-				if (sender.prefs.ShowNotificationPopups)
-				{
-					sender.trayIcon.Text = "Zero Munge: Idle";
-					sender.trayIcon.BalloonTipTitle = "Success";
-					sender.trayIcon.BalloonTipText = "The operation was completed successfully.";
-					sender.trayIcon.ShowBalloonTip(30000);
-					sender.stat_JobStatus.Text = "Idle";
-				}
-				Utilities.PlaySound(Utilities.SoundType.Success);
-			});
-			soundThread.Start();
+			// Re-enable the UI
+			sender.EnableUI(true);
+			sender.CompleteCallback();
+			// when setting Control properties a 'BeginInvoke' should be used.
+			//if (sender.prefs.ShowNotificationPopups)
+			//{
+			//	sender.trayIcon.Text = "Zero Munge: Idle";
+			//	sender.trayIcon.BalloonTipTitle = "Success";
+			//	sender.trayIcon.BalloonTipText = "The operation was completed successfully.";
+			//	sender.trayIcon.ShowBalloonTip(30000);
+			//	sender.stat_JobStatus.Text = "Idle";
+			//}
+			Utilities.PlaySound(Utilities.SoundType.Success);
 		}
 
 
@@ -332,8 +311,6 @@ namespace ZeroMunge.Modules
 				sender.Log(message, ZeroMunge.LogType.Error);
 			}
 
-
-
 			// Are we processing multiple files?
 			if (!singleFile)
 			{
@@ -370,8 +347,11 @@ namespace ZeroMunge.Modules
 			}
 
 			activeFile = whichFile;
-
-			curProc = StartProcess(sender, fileList.ElementAt(activeFile).FileDir);
+			// Start & listen to the process on another thread to keep the UI thread responsive.
+			Thread runProcThread = new Thread(() =>
+				curProc = StartProcess(sender, fileList.ElementAt(activeFile).FileDir)
+			);
+			runProcThread.Start();
 		}
 
 
@@ -403,20 +383,14 @@ namespace ZeroMunge.Modules
 			{
 				if (!procAborted)
 				{
-					Thread outputThread = new Thread(() => sender.Log(e.Data, ZeroMunge.LogType.Munge));
-					outputThread.Start();
+					sender.Log(e.Data, ZeroMunge.LogType.Munge);
 				}
 			});
 
 
 			// Print the file path before starting
-			Thread initOutputThread = new Thread(() =>
-			{
-				sender.Log(string.Format("Executing file: \"{0}\"", @filePath), ZeroMunge.LogType.Info);
-				sender.Log("");
-			});
-			initOutputThread.Start();
-
+			sender.Log(string.Format("Executing file: \"{0}\"", @filePath), ZeroMunge.LogType.Info);
+			sender.Log("");
 
 			// Notify the manager that the process is done
 			proc.Exited += ((procSender, e) =>
@@ -424,23 +398,17 @@ namespace ZeroMunge.Modules
 				// Don't send out 'exited' messages if we've aborted
 				if (!procAborted)
 				{
-					Thread procExitThread = new Thread(() => {
-						sender.Log("File done", ZeroMunge.LogType.Info);
-					});
-					procExitThread.Start();
-
+					sender.Log("File done", ZeroMunge.LogType.Info);
 					NotifyProcessComplete(sender, activeFile, singleFile);
 				}
 			});
-
 
 			try
 			{
 				// Start the process
 				proc.Start();
 				proc.BeginOutputReadLine();
-				//proc.WaitForExit();
-				//Thread.Sleep(5000);
+				proc.WaitForExit();
 			}
 			catch (InvalidOperationException e)
 			{
@@ -454,6 +422,27 @@ namespace ZeroMunge.Modules
 			}
 
 			return proc;
+		}
+
+		/// <summary>
+		/// Starts a process with the given program name, arguments and working directory
+		/// </summary>
+		/// <param name="programName">The program name</param>
+		/// <param name="args">the space seperated arguments</param>
+		/// <param name="workingDir">Working dir for the process; (null = 'not important')</param>
+		public static void RunCommand(string programName, string args, string workingDir)
+		{
+			Console.WriteLine("Running command: " + programName + " " + args);
+			ProcessStartInfo processStartInfo = new ProcessStartInfo
+			{
+				FileName = programName,
+				Arguments = args,
+				UseShellExecute = false
+			};
+			if (workingDir != null)
+				processStartInfo.WorkingDirectory = workingDir;
+
+			Process.Start(processStartInfo);
 		}
 	}
 }

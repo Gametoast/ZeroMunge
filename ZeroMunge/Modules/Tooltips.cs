@@ -31,6 +31,14 @@ namespace ZeroMunge
 			public const string HelpButton = "Get help with the user interface.";
 		}
 
+		public static class Actions
+		{
+			public const string OpenGameLog = "Open BFront2.log 'debug log'";
+			public const string OpenModToolsExe = "Launch the ModTools debugger program";
+			public const string OpenGameExe = "Launch Star Wars Battlefront II Game";
+			public const string OpenGameFolder = "Open the 'GameData' folder";
+		}
+
 		public static class OutputLog
 		{
 			public const string CopyLog = "Copy the contents of the output log window to the clipboard.";
@@ -94,6 +102,13 @@ namespace ZeroMunge
 			public const string LogPrintTimestamps = "Whether or not to prepend timestamps to output log messages.";
 			public const string CheckForUpdatesOnStartup = "Whether or not to check for updates on application startup.";
 			public const string ShowUpdatePromptOnStartup = "Whether or not to show an update prompt on application startup if an update is available.  \n\nNOTE: 'Check For Updates On Startup' must be checked in order for this setting to work. If an update is available, a relevant message will always be printed to the output log regardless of whether or not this setting is enabled.";
+			public const string SetDebuggerPath = "Browse to the Debugger executable you use to debug Battlefront II";
+			public const string PreferredTextEditorPath = "Browse to your preferred text editor (used for viewing logs).";
+			public const string PreferredZeroEditorPath = "Browse to your preferred Zero Editor exe";
+
+			public const string DebuggerArgs = "Arguments to be passed to the Debugger exe, like launch mission name.\nExamples:\ncor1c_con \t\t(built-in mission name)\n/win\t\t\t(windowed mode)\n/resolution 1920 1080\t(specify resolution)";
+			public const string GameExeArgs = "Arguments to be passed to the Game exe, like launch mission name.\nExamples:\ncor1c_con \t\t(built-in mission name)\n/win\t\t\t(windowed mode)\n/resolution 1920 1080\t(specify resolution)";
+			
 		}
 
 		public static class HelpMenu

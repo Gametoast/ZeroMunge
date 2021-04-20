@@ -86,8 +86,9 @@
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup />
+  <PropertyGroup />
   <PropertyGroup>
-    <NoWin32Manifest>true</NoWin32Manifest>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Markdig, Version=0.15.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -144,12 +145,6 @@
     <Compile Include="Forms\SaveFileListPrompt.Designer.cs">
       <DependentUpon>SaveFileListPrompt.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SetGameDirectoryPrompt.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\SetGameDirectoryPrompt.Designer.cs">
-      <DependentUpon>SetGameDirectoryPrompt.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\SoundMungeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -203,9 +198,6 @@
     <EmbeddedResource Include="Forms\SaveFileListPrompt.resx">
       <DependentUpon>SaveFileListPrompt.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SetGameDirectoryPrompt.resx">
-      <DependentUpon>SetGameDirectoryPrompt.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SoundMungeForm.resx">
       <DependentUpon>SoundMungeForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -230,6 +222,7 @@
       <LastGenOutput>ThirdPtyDocs.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
