@@ -185,7 +185,7 @@
 			this.btn_browseZeroEditor.Name = "btn_browseZeroEditor";
 			this.btn_browseZeroEditor.Size = new System.Drawing.Size(105, 35);
 			this.btn_browseZeroEditor.TabIndex = 1;
-			this.btn_browseZeroEditor.Text = "Browse ...";
+			this.btn_browseZeroEditor.Text = "Browse...";
 			this.btn_browseZeroEditor.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.btn_browseZeroEditor.UseVisualStyleBackColor = true;
 			this.btn_browseZeroEditor.Click += new System.EventHandler(this.btn_browseExe_Click);
@@ -221,7 +221,7 @@
 			this.btn_browseEditor.Name = "btn_browseEditor";
 			this.btn_browseEditor.Size = new System.Drawing.Size(105, 35);
 			this.btn_browseEditor.TabIndex = 1;
-			this.btn_browseEditor.Text = "Browse ...";
+			this.btn_browseEditor.Text = "Browse...";
 			this.btn_browseEditor.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.btn_browseEditor.UseVisualStyleBackColor = true;
 			this.btn_browseEditor.Click += new System.EventHandler(this.btn_browseExe_Click);
@@ -278,7 +278,7 @@
 			this.btn_browseDebuggerExe.Name = "btn_browseDebuggerExe";
 			this.btn_browseDebuggerExe.Size = new System.Drawing.Size(105, 35);
 			this.btn_browseDebuggerExe.TabIndex = 1;
-			this.btn_browseDebuggerExe.Text = "Browse ...";
+			this.btn_browseDebuggerExe.Text = "Browse...";
 			this.btn_browseDebuggerExe.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.btn_browseDebuggerExe.UseVisualStyleBackColor = true;
 			this.btn_browseDebuggerExe.Click += new System.EventHandler(this.btn_browseExe_Click);
@@ -336,7 +336,7 @@
 			this.btn_browseGameExe.Name = "btn_browseGameExe";
 			this.btn_browseGameExe.Size = new System.Drawing.Size(105, 35);
 			this.btn_browseGameExe.TabIndex = 1;
-			this.btn_browseGameExe.Text = "Browse ...";
+			this.btn_browseGameExe.Text = "Browse...";
 			this.btn_browseGameExe.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.btn_browseGameExe.UseVisualStyleBackColor = true;
 			this.btn_browseGameExe.Click += new System.EventHandler(this.btn_browseExe_Click);

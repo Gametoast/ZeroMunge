@@ -809,6 +809,7 @@ namespace ZeroMunge
 			// Action Items
 			menu_openGameLog.ToolTipText = Tooltips.Actions.OpenGameLog;
 			menu_openModToolsExe.ToolTipText = Tooltips.Actions.OpenModToolsExe;
+			menu_launchZeroEditor.ToolTipText = Tooltips.Actions.OpenZeroEditor;
 			menu_openGameExe.ToolTipText = Tooltips.Actions.OpenGameExe;
 			menu_openGameFolder.ToolTipText = Tooltips.Actions.OpenGameFolder;
 			// -------------------------------------------------
@@ -3024,8 +3025,8 @@ namespace ZeroMunge
 			bool retVal = false;
 			OpenFileDialog dlg = new OpenFileDialog();
 			dlg.RestoreDirectory = true;
-			dlg.Title = "Browse To Game exe";
-			dlg.Filter = "Game Exe file|BattlefrontII.exe";
+			dlg.Title = "Browse to Game Executable";
+			dlg.Filter = "Game Executable file|BattlefrontII.exe";
 			dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
 
 			if (dlg.ShowDialog() == DialogResult.OK)
@@ -4521,7 +4522,7 @@ namespace ZeroMunge
 		{
 			if (String.IsNullOrEmpty(prefs.PreferredZeroEditor))
 			{
-				MessageBox.Show("Zero editor path not set. Set Zero Editor path in 'Preferences' to use this feature.", "Error");
+				MessageBox.Show("Zero Editor path not set. Set Zero Editor path in 'Preferences' to use this feature.", "Error");
 				return;
 			}
 			int lastSlash = prefs.PreferredZeroEditor.LastIndexOf(Path.DirectorySeparatorChar);
