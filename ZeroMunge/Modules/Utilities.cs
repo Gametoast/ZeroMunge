@@ -434,7 +434,7 @@ namespace ZeroMunge
 				Trace.WriteLine(message);
 				return reqChunk;
 			}
-			
+
 			if (new FileInfo(reqFilePath).Extension != "req")
 			{
 				var message = "ERROR! File extension is " + reqFilePath;
@@ -540,7 +540,7 @@ namespace ZeroMunge
 							(curState == ReqChunkParseState.ChunkContents || curState == ReqChunkParseState.ChunkName || curState == ReqChunkParseState.ChunkAlign || curState == ReqChunkParseState.ChunkPlatform))
 						{
 							curState = ReqChunkParseState.ChunkContents;
-							
+
 							// Don't add blank lines!
 							if (curLine.Contains("\""))
 							{
@@ -652,7 +652,7 @@ namespace ZeroMunge
 			}
 
 			file.Close();
-			
+
 			return reqs;
 		}
 
@@ -1098,7 +1098,7 @@ namespace ZeroMunge
 			if (!Properties.Settings.Default.PlayNotificationSounds) { return; }
 
 			string soundToPlay = "null";
-			
+
 			switch (type)
 			{
 				case SoundType.Start:
@@ -1129,7 +1129,8 @@ namespace ZeroMunge
 		/// <returns>Prefs object containing the application's saved user settings.</returns>
 		public static Prefs LoadPrefs()
 		{
-			Prefs prefs = new Prefs {
+			Prefs prefs = new Prefs
+			{
 				GameDirectory = Properties.Settings.Default.GameDirectory,
 				ShowTrayIcon = Properties.Settings.Default.ShowTrayIcon,
 				ShowNotificationPopups = Properties.Settings.Default.ShowNotificationPopups,
@@ -1145,8 +1146,13 @@ namespace ZeroMunge
 				AutoSaveEnabled = Properties.Settings.Default.AutoSaveEnabled,
 				LastSaveFilePath = Properties.Settings.Default.LastSaveFilePath,
 				AutoLoadEnabled = Properties.Settings.Default.AutoLoadEnabled,
-				RecentFiles = Properties.Settings.Default.RecentFiles
-			};
+				RecentFiles = Properties.Settings.Default.RecentFiles,
+				PreferredTextEditor = Properties.Settings.Default.PreferredTextEditor,
+				PreferredZeroEditor = Properties.Settings.Default.PreferredZeroEditor,
+				DebuggerExe = Properties.Settings.Default.DebuggerExe,
+				DebuggerArgs = Properties.Settings.Default.DebuggerArgs,
+				GameExeArgs = Properties.Settings.Default.GameExeArgs 
+		};
 
 			return prefs;
 		}
@@ -1174,6 +1180,12 @@ namespace ZeroMunge
 			Properties.Settings.Default.LastSaveFilePath = prefs.LastSaveFilePath;
 			Properties.Settings.Default.AutoLoadEnabled = prefs.AutoLoadEnabled;
 			Properties.Settings.Default.RecentFiles = prefs.RecentFiles;
+			Properties.Settings.Default.PreferredTextEditor = prefs.PreferredTextEditor;
+			Properties.Settings.Default.PreferredZeroEditor = prefs.PreferredZeroEditor;
+			Properties.Settings.Default.DebuggerExe = prefs.DebuggerExe;
+			Properties.Settings.Default.DebuggerArgs = prefs.DebuggerArgs;
+			Properties.Settings.Default.GameExeArgs = prefs.GameExeArgs;
+
 
 			Properties.Settings.Default.Save();
 		}
@@ -1218,6 +1230,11 @@ namespace ZeroMunge
 		public bool AutoLoadEnabled { get; set; }
 		public string LastSaveFilePath { get; set; }
 		public StringCollection RecentFiles { get; set; }
+        public String PreferredTextEditor { get; set; }
+		public String PreferredZeroEditor { get; set; }
+		public String DebuggerExe { get; set; }
+		public String DebuggerArgs { get; set; }
+		public String GameExeArgs { get; set; }
 	}
 
 	public class ReqChunk
