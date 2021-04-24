@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Frayed Wires Studios, LLC")]
 [assembly: AssemblyProduct("Zero Munge")]
-[assembly: AssemblyCopyright("Copyright © 2019 Aaron Gilbert, All Rights Reserved")]
+[assembly: AssemblyCopyright("Copyright © 2021 Aaron Gilbert, All Rights Reserved")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

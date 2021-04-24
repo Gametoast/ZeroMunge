@@ -15,7 +15,7 @@ namespace ZeroMunge
 {
 	public static class Utilities
 	{
-		public const string UPDATES_URL = "https://raw.githubusercontent.com/marth8880/ZeroMunge/master/json/updates.json";
+		public const string UPDATES_URL = "https://raw.githubusercontent.com/Gametoast/ZeroMunge/master/json/updates.json";
 		public const string NET_CHECK_URL = "http://clients3.google.com/generate_204";
 		public const string HELP_PATH = @"ZeroMunge\ZeroMungeHelp.chm";
 

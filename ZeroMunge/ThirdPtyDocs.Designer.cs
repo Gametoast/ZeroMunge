@@ -141,8 +141,28 @@ namespace ZeroMunge {
         
         /// <summary>
         ///   Looks up a localized string similar to {
-        ///	
-        ///}.
+        ///	&quot;Software&quot;: [
+        ///		{
+        ///			&quot;Id&quot;: &quot;NewtonsoftJson&quot;,
+        ///			&quot;Name&quot;: &quot;Json.NET&quot;,
+        ///			&quot;Author&quot;: &quot;James Newton-King&quot;,
+        ///			&quot;Url&quot;: &quot;https://www.newtonsoft.com/json&quot;,
+        ///			&quot;LicenseResource&quot;: &quot;license_NewtonsoftJson&quot;
+        ///		},
+        ///		
+        ///		{
+        ///			&quot;Id&quot;: &quot;Markdig&quot;,
+        ///			&quot;Name&quot;: &quot;Markdig&quot;,
+        ///			&quot;Author&quot;: &quot;Alexandre Mutel&quot;,
+        ///			&quot;Url&quot;: &quot;https://github.com/lunet-io/markdig&quot;,
+        ///			&quot;LicenseResource&quot;: &quot;license_markdig&quot;
+        ///		},
+        ///		
+        ///		{
+        ///			&quot;Id&quot;: &quot;PrettyBin&quot;,
+        ///			&quot;Name&quot;: &quot;PrettyBin&quot;,
+        ///			&quot;Author&quot;: &quot;Andrey Ershov&quot;,
+        ///			&quot;Url&quot;: &quot;https://github.com/ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string software {
             get {

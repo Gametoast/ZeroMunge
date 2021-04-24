@@ -21,7 +21,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="Info_BuildDate" Type="System.DateTime" Scope="Application">
-      <Value Profile="(Default)">01/01/2019 16:52:00</Value>
+      <Value Profile="(Default)">04/24/2021 15:20:00</Value>
     </Setting>
     <Setting Name="Info_BuildNum" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">272</Value>
