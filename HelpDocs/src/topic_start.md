@@ -1,14 +1,14 @@
 ![Zero Munge](images/app_banner.jpg)
 
-**Zero Munge v1.1.0-beta**  
-**Copyright © 2018 Aaron Gilbert. All rights reserved.**    
-[**View project on GitHub**](https://github.com/marth8880/ZeroMunge)
+**Zero Munge v1.2.0-beta**  
+**Copyright © 2021 Aaron Gilbert. All rights reserved.**    
+[**View project on GitHub**](https://github.com/Gametoast/ZeroMunge)
 
 ## What it is
 
 The goal of Zero Munge is to act as a robust replacement for VisualMunge, the automated build tool provided with the SWBF2 mod tools.  
 
-It is written in Visual C# for [**.NET Framework 4**](https://www.microsoft.com/en-us/download/details.aspx?id=17718).
+It is written in Visual C# for [**.NET Framework 4.7.1**](https://www.microsoft.com/en-us/download/details.aspx?id=56116).
 
 ## What it does
 

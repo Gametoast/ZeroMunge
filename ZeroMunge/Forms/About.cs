@@ -29,7 +29,7 @@ namespace ZeroMunge
 
 			// Initialize license text
 			text_License.SelectedText = "BSD 3-Clause License" + "\n\n";
-			text_License.SelectedText = "Copyright (c) 2019, Aaron Gilbert All rights reserved." + "\n\n";
+			text_License.SelectedText = "Copyright (c) 2021, Aaron Gilbert All rights reserved." + "\n\n";
 			text_License.SelectedText = "Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:" + "\n\n";
 
 			text_License.SelectionBullet = true;
