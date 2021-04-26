@@ -96,7 +96,7 @@ namespace ZeroMunge.Modules
 						errorMessage = "At least one item must be checked";
 						break;
 				}
-				sender.Log(errorMessage, ZeroMunge.LogType.Error);
+				sender.Log(errorMessage, LogType.Error);
 
 				// Re-enable the UI
 				sender.EnableUI(true);
@@ -238,7 +238,7 @@ namespace ZeroMunge.Modules
 							{
 								var message = string.Format("Source file does not exist at path: \"{0}\"", fullSourceFilePath);
 								Trace.WriteLine(message);
-								sender.Log(message, ZeroMunge.LogType.Error);
+								sender.Log(message, LogType.Error);
 							}
 							else
 							{
@@ -252,16 +252,16 @@ namespace ZeroMunge.Modules
 									catch (IOException e)
 									{
 										Trace.WriteLine(e.Message);
-										sender.Log(e.Message, ZeroMunge.LogType.Error);
+										sender.Log(e.Message, LogType.Error);
 									}
 									catch (UnauthorizedAccessException e)
 									{
 										Trace.WriteLine(e.Message);
-										sender.Log(e.Message, ZeroMunge.LogType.Error);
+										sender.Log(e.Message, LogType.Error);
 
 										var message = "Try running the application with administrative privileges";
 										Trace.WriteLine(message);
-										sender.Log(message, ZeroMunge.LogType.Error);
+										sender.Log(message, LogType.Error);
 									}
 								}
 
@@ -274,24 +274,24 @@ namespace ZeroMunge.Modules
 
 										var message = string.Format("Successfully copied \"{0}\" to \"{1}\"", fullSourceFilePath, fullTargetFilePath);
 										Debug.WriteLine(message);
-										sender.Log(message, ZeroMunge.LogType.Info);
+										sender.Log(message, LogType.Info);
 									}
 									catch (IOException e)
 									{
 										Trace.WriteLine(e.Message);
-										sender.Log(e.Message, ZeroMunge.LogType.Error);
+										sender.Log(e.Message, LogType.Error);
 									}
 									catch (UnauthorizedAccessException e)
 									{
 										Trace.WriteLine(e.Message);
-										sender.Log(e.Message, ZeroMunge.LogType.Error);
+										sender.Log(e.Message, LogType.Error);
 									}
 								}
 								else
 								{
 									var message = string.Format("File does not exist at path: \"{0}\"", fullSourceFilePath);
 									Trace.WriteLine(message);
-									sender.Log(message, ZeroMunge.LogType.Error);
+									sender.Log(message, LogType.Error);
 								}
 							}
 						}
@@ -300,7 +300,7 @@ namespace ZeroMunge.Modules
 					{
 						var message = string.Format("Copy is unchecked, skipping copy operation for \"{0}\"", fileList.ElementAt(whichFile).FileDir);
 						Debug.WriteLine(message);
-						sender.Log(message, ZeroMunge.LogType.Warning);
+						sender.Log(message, LogType.Warning);
 					}
 				}
 			}
@@ -308,7 +308,7 @@ namespace ZeroMunge.Modules
 			{
 				var message = "ArgumentOutOfRangeException! Reason: " + e.Message;
 				Trace.WriteLine(message);
-				sender.Log(message, ZeroMunge.LogType.Error);
+				sender.Log(message, LogType.Error);
 			}
 
 			// Are we processing multiple files?
@@ -383,13 +383,13 @@ namespace ZeroMunge.Modules
 			{
 				if (!procAborted)
 				{
-					sender.Log(e.Data, ZeroMunge.LogType.Munge);
+					sender.Log(e.Data, LogType.Munge);
 				}
 			});
 
 
 			// Print the file path before starting
-			sender.Log(string.Format("Executing file: \"{0}\"", @filePath), ZeroMunge.LogType.Info);
+			sender.Log(string.Format("Executing file: \"{0}\"", @filePath), LogType.Info);
 			sender.Log("");
 
 			// Notify the manager that the process is done
@@ -398,7 +398,7 @@ namespace ZeroMunge.Modules
 				// Don't send out 'exited' messages if we've aborted
 				if (!procAborted)
 				{
-					sender.Log("File done", ZeroMunge.LogType.Info);
+					sender.Log("File done", LogType.Info);
 					NotifyProcessComplete(sender, activeFile, singleFile);
 				}
 			});
@@ -443,6 +443,26 @@ namespace ZeroMunge.Modules
 				processStartInfo.WorkingDirectory = workingDir;
 
 			Process.Start(processStartInfo);
+		}
+
+		public static string RunCommandAndGetOutput(string programName, string args, bool includeStdErr)
+		{
+			Console.WriteLine("Running command: " + programName + " " + args);
+			ProcessStartInfo processStartInfo = new ProcessStartInfo
+			{
+				FileName = programName,
+				Arguments = args,
+				RedirectStandardOutput = true,
+				RedirectStandardError = true,
+				UseShellExecute = false
+			};
+			var process = Process.Start(processStartInfo);
+			string output = process.StandardOutput.ReadToEnd();
+			string err = process.StandardError.ReadToEnd();
+			process.WaitForExit();
+			if (includeStdErr)
+				output = output + "\r\n" + err;
+			return output;
 		}
 	}
 }

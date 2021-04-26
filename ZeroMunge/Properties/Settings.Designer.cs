@@ -337,5 +337,21 @@ namespace ZeroMunge.Properties {
 				this["GameExeArgs"] = value;
 			}
 		}
+
+		//ModToolsLocation
+		[global::System.Configuration.UserScopedSettingAttribute()]
+		[global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+		[global::System.Configuration.DefaultSettingValueAttribute("")]
+		public string ModToolsLocation
+		{
+			get
+			{
+				return ((string)(this["ModToolsLocation"]));
+			}
+			set
+			{
+				this["ModToolsLocation"] = value;
+			}
+		}
 	}
 }

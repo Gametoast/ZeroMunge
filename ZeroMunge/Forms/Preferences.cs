@@ -69,6 +69,7 @@ namespace ZeroMunge
 				txt_gameExe.Text = prefs.GameDirectory + "\\BattlefrontII.exe";
 			txt_debuggerArgs.Text = prefs.DebuggerArgs;
 			txt_gameArgs.Text = prefs.GameExeArgs;
+			txt_modToolsLocation.Text = prefs.ModToolsLocation;
 		}
 
 
@@ -143,6 +144,7 @@ namespace ZeroMunge
 
 			prefs.GameExeArgs = txt_gameArgs.Text;
 			prefs.DebuggerArgs = txt_debuggerArgs.Text;
+			prefs.ModToolsLocation = txt_modToolsLocation.Text;
 
 			Utilities.SavePrefs(prefs);
 			CloseForm();
@@ -244,8 +246,8 @@ namespace ZeroMunge
 			prefs.LogPrintTimestamps = chk_LogPrintTimestamps.Checked;
 		}
 
-        private void btn_browseExe_Click(object sender, EventArgs e)
-        {
+		private void btn_browseExe_Click(object sender, EventArgs e)
+		{
 			if (sender == this.btn_browseGameExe)
 				SetGameDirectory();
 			else if (sender == this.btn_browseDebuggerExe)
@@ -254,59 +256,73 @@ namespace ZeroMunge
 				SetPreferredEditor();
 			else if (sender == this.btn_browseZeroEditor)
 				SetPreferredZeroEditor();
-        }
+			else if (sender == btn_browseModTools)
+				BrowseForModtools();
+		}
 
+		private void BrowseForModtools()
+		{
+			FolderBrowserDialog dlg = new FolderBrowserDialog();
+			dlg.RootFolder = Environment.SpecialFolder.MyComputer;
+			dlg.Description = "Browse for BF2_ModTools folder";
+			if (dlg.ShowDialog() == DialogResult.OK)
+			{
+				txt_modToolsLocation.Text = dlg.SelectedPath;
+				this.Message += "Set BF2 ModTools path to: " + dlg.SelectedPath;
+			}
+			dlg.Dispose();
+		}
 
-        private void SetGameDirectory()
-        {
-            OpenFileDialog dlg = new OpenFileDialog();
-            dlg.RestoreDirectory = true;
-            dlg.Title = "Browse To Game exe";
-            dlg.Filter = "Game Exe file|BattlefrontII.exe";
-            dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+		private void SetGameDirectory()
+		{
+			OpenFileDialog dlg = new OpenFileDialog();
+			dlg.RestoreDirectory = true;
+			dlg.Title = "Browse To Game exe";
+			dlg.Filter = "Game Exe file|BattlefrontII.exe";
+			dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
 
-            if (dlg.ShowDialog() == DialogResult.OK)
-            {
-                String exePath = dlg.FileName;
-                int lastSlash = exePath.LastIndexOf("\\");
-                prefs.GameDirectory = exePath.Substring(0, lastSlash);
-                this.txt_gameExe.Text = dlg.FileName;
-                this.Message += "Game path set to: " + prefs.GameDirectory +"\n";
-            }
-            dlg.Dispose();
-        }
+			if (dlg.ShowDialog() == DialogResult.OK)
+			{
+				String exePath = dlg.FileName;
+				int lastSlash = exePath.LastIndexOf("\\");
+				prefs.GameDirectory = exePath.Substring(0, lastSlash);
+				this.txt_gameExe.Text = dlg.FileName;
+				this.Message += "Game path set to: " + prefs.GameDirectory + "\n";
+			}
+			dlg.Dispose();
+		}
 
-        private void PromptForDebuggerExe()
-        {
-            OpenFileDialog dlg = new OpenFileDialog();
-            dlg.RestoreDirectory = true;
-            dlg.Title = "Choose Debugger exe";
-            dlg.Filter = " Exe |*.exe";
-            dlg.InitialDirectory = prefs.GameDirectory;
+		private void PromptForDebuggerExe()
+		{
+			OpenFileDialog dlg = new OpenFileDialog();
+			dlg.RestoreDirectory = true;
+			dlg.Title = "Choose Debugger exe";
+			dlg.Filter = " Exe |*.exe";
+			dlg.InitialDirectory = prefs.GameDirectory;
 
-            if (dlg.ShowDialog() == DialogResult.OK)
-            {
-                prefs.DebuggerExe = dlg.FileName;
-                this.txt_gameDebugger.Text = dlg.FileName;
-                this.Message += "Debugger path set to: " + prefs.GameDirectory + "\n";
-            }
-            dlg.Dispose();
-        }
+			if (dlg.ShowDialog() == DialogResult.OK)
+			{
+				prefs.DebuggerExe = dlg.FileName;
+				this.txt_gameDebugger.Text = dlg.FileName;
+				this.Message += "Debugger path set to: " + prefs.GameDirectory + "\n";
+			}
+			dlg.Dispose();
+		}
 
-        private void SetPreferredEditor()
-        {
-            OpenFileDialog dlg = new OpenFileDialog();
+		private void SetPreferredEditor()
+		{
+			OpenFileDialog dlg = new OpenFileDialog();
 			dlg.Title = "Browse to Preferred Text Editor exe";
 			dlg.RestoreDirectory = true;
 
-            if (dlg.ShowDialog() == DialogResult.OK)
-            {
-                prefs.PreferredTextEditor = dlg.FileName;
-                this.txt_editor.Text = dlg.FileName;
-                this.Message += "Saving Preferred editor to " + dlg.FileName + "\n";
-            }
-            dlg.Dispose();
-        }
+			if (dlg.ShowDialog() == DialogResult.OK)
+			{
+				prefs.PreferredTextEditor = dlg.FileName;
+				this.txt_editor.Text = dlg.FileName;
+				this.Message += "Saving Preferred editor to " + dlg.FileName + "\n";
+			}
+			dlg.Dispose();
+		}
 
 		private void SetPreferredZeroEditor()
 		{
@@ -326,7 +342,7 @@ namespace ZeroMunge
 		private void txt_Leave(object sender, EventArgs e)
 		{
 			string newText = ((TextBox)sender).Text;
-			if( sender == txt_gameDebugger)
+			if (sender == txt_gameDebugger)
 			{
 				prefs.DebuggerExe = newText;
 			}
@@ -340,7 +356,7 @@ namespace ZeroMunge
 			{
 				prefs.PreferredTextEditor = newText;
 			}
-			else if( sender == txt_zeroEditor)
+			else if (sender == txt_zeroEditor)
 			{
 				prefs.PreferredZeroEditor = newText;
 			}

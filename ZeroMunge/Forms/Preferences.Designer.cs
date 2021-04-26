@@ -75,6 +75,9 @@
 			this.chk_CheckForUpdatesOnStartup = new System.Windows.Forms.CheckBox();
 			this.chk_ShowUpdatePromptOnStartup = new System.Windows.Forms.CheckBox();
 			this.FormTooltips = new System.Windows.Forms.ToolTip(this.components);
+			this.grp_modTools = new System.Windows.Forms.GroupBox();
+			this.btn_browseModTools = new System.Windows.Forms.Button();
+			this.txt_modToolsLocation = new System.Windows.Forms.TextBox();
 			this.cont_Prefs.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.interfacePanel.SuspendLayout();
@@ -92,13 +95,14 @@
 			((System.ComponentModel.ISupportInitialize)(this.num_LogMaxLineCount)).BeginInit();
 			this.groupBox3.SuspendLayout();
 			this.flowLayoutPanel3.SuspendLayout();
+			this.grp_modTools.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btn_Cancel
 			// 
 			this.btn_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btn_Cancel.Location = new System.Drawing.Point(657, 806);
+			this.btn_Cancel.Location = new System.Drawing.Point(657, 858);
 			this.btn_Cancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.btn_Cancel.Name = "btn_Cancel";
 			this.btn_Cancel.Size = new System.Drawing.Size(112, 35);
@@ -110,7 +114,7 @@
 			// btn_Accept
 			// 
 			this.btn_Accept.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_Accept.Location = new System.Drawing.Point(535, 806);
+			this.btn_Accept.Location = new System.Drawing.Point(535, 858);
 			this.btn_Accept.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.btn_Accept.Name = "btn_Accept";
 			this.btn_Accept.Size = new System.Drawing.Size(112, 35);
@@ -131,7 +135,7 @@
 			this.cont_Prefs.Location = new System.Drawing.Point(18, 18);
 			this.cont_Prefs.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.cont_Prefs.Name = "cont_Prefs";
-			this.cont_Prefs.Size = new System.Drawing.Size(751, 781);
+			this.cont_Prefs.Size = new System.Drawing.Size(751, 833);
 			this.cont_Prefs.TabIndex = 4;
 			// 
 			// groupBox1
@@ -142,7 +146,7 @@
 			this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.groupBox1.Size = new System.Drawing.Size(743, 422);
+			this.groupBox1.Size = new System.Drawing.Size(743, 486);
 			this.groupBox1.TabIndex = 4;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Interface";
@@ -151,6 +155,7 @@
 			// 
 			this.interfacePanel.AutoSize = true;
 			this.interfacePanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.interfacePanel.Controls.Add(this.grp_modTools);
 			this.interfacePanel.Controls.Add(this.grp_zeroEditor);
 			this.interfacePanel.Controls.Add(this.grp_editor);
 			this.interfacePanel.Controls.Add(this.grp_debugger);
@@ -162,12 +167,13 @@
 			this.interfacePanel.Location = new System.Drawing.Point(4, 24);
 			this.interfacePanel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.interfacePanel.Name = "interfacePanel";
-			this.interfacePanel.Size = new System.Drawing.Size(735, 393);
+			this.interfacePanel.Size = new System.Drawing.Size(735, 457);
 			this.interfacePanel.TabIndex = 0;
 			// 
 			// grp_zeroEditor
 			// 
-			this.grp_zeroEditor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.grp_zeroEditor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.grp_zeroEditor.Controls.Add(this.btn_browseZeroEditor);
 			this.grp_zeroEditor.Controls.Add(this.txt_zeroEditor);
 			this.grp_zeroEditor.Location = new System.Drawing.Point(4, 328);
@@ -203,7 +209,8 @@
 			// 
 			// grp_editor
 			// 
-			this.grp_editor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.grp_editor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.grp_editor.Controls.Add(this.btn_browseEditor);
 			this.grp_editor.Controls.Add(this.txt_editor);
 			this.grp_editor.Location = new System.Drawing.Point(4, 265);
@@ -239,7 +246,8 @@
 			// 
 			// grp_debugger
 			// 
-			this.grp_debugger.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.grp_debugger.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.grp_debugger.Controls.Add(this.lab_debuggerArgs);
 			this.grp_debugger.Controls.Add(this.txt_debuggerArgs);
 			this.grp_debugger.Controls.Add(this.btn_browseDebuggerExe);
@@ -398,7 +406,7 @@
 			// 
 			this.groupBox2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.groupBox2.Controls.Add(this.flowLayoutPanel2);
-			this.groupBox2.Location = new System.Drawing.Point(401, 437);
+			this.groupBox2.Location = new System.Drawing.Point(401, 529);
 			this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -483,7 +491,7 @@
 			// 
 			this.groupBox4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.groupBox4.Controls.Add(this.flowLayoutPanel4);
-			this.groupBox4.Location = new System.Drawing.Point(12, 437);
+			this.groupBox4.Location = new System.Drawing.Point(12, 529);
 			this.groupBox4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.groupBox4.Name = "groupBox4";
 			this.groupBox4.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -621,7 +629,7 @@
 			// 
 			this.groupBox3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.groupBox3.Controls.Add(this.flowLayoutPanel3);
-			this.groupBox3.Location = new System.Drawing.Point(12, 627);
+			this.groupBox3.Location = new System.Drawing.Point(12, 719);
 			this.groupBox3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -672,13 +680,49 @@
 			this.chk_ShowUpdatePromptOnStartup.UseVisualStyleBackColor = true;
 			this.chk_ShowUpdatePromptOnStartup.CheckedChanged += new System.EventHandler(this.chk_ShowUpdatePromptOnStartup_CheckedChanged);
 			// 
+			// grp_modTools
+			// 
+			this.grp_modTools.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.grp_modTools.Controls.Add(this.btn_browseModTools);
+			this.grp_modTools.Controls.Add(this.txt_modToolsLocation);
+			this.grp_modTools.Location = new System.Drawing.Point(7, 391);
+			this.grp_modTools.Name = "grp_modTools";
+			this.grp_modTools.Size = new System.Drawing.Size(728, 57);
+			this.grp_modTools.TabIndex = 7;
+			this.grp_modTools.TabStop = false;
+			this.grp_modTools.Text = "Set ModTools Location";
+			// 
+			// btn_browseModTools
+			// 
+			this.btn_browseModTools.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btn_browseModTools.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btn_browseModTools.Location = new System.Drawing.Point(617, 18);
+			this.btn_browseModTools.Name = "btn_browseModTools";
+			this.btn_browseModTools.Size = new System.Drawing.Size(105, 35);
+			this.btn_browseModTools.TabIndex = 1;
+			this.btn_browseModTools.Text = "Browse...";
+			this.btn_browseModTools.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.btn_browseModTools.UseVisualStyleBackColor = true;
+			this.btn_browseModTools.Click += new System.EventHandler(this.btn_browseExe_Click);
+			// 
+			// txt_modToolsLocation
+			// 
+			this.txt_modToolsLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.txt_modToolsLocation.BackColor = System.Drawing.Color.Azure;
+			this.txt_modToolsLocation.Location = new System.Drawing.Point(6, 22);
+			this.txt_modToolsLocation.Name = "txt_modToolsLocation";
+			this.txt_modToolsLocation.Size = new System.Drawing.Size(605, 26);
+			this.txt_modToolsLocation.TabIndex = 0;
+			// 
 			// Preferences
 			// 
 			this.AcceptButton = this.btn_Accept;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btn_Cancel;
-			this.ClientSize = new System.Drawing.Size(778, 849);
+			this.ClientSize = new System.Drawing.Size(778, 901);
 			this.Controls.Add(this.cont_Prefs);
 			this.Controls.Add(this.btn_Accept);
 			this.Controls.Add(this.btn_Cancel);
@@ -728,6 +772,8 @@
 			this.groupBox3.PerformLayout();
 			this.flowLayoutPanel3.ResumeLayout(false);
 			this.flowLayoutPanel3.PerformLayout();
+			this.grp_modTools.ResumeLayout(false);
+			this.grp_modTools.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -779,5 +825,8 @@
 		private System.Windows.Forms.GroupBox grp_zeroEditor;
 		private System.Windows.Forms.Button btn_browseZeroEditor;
 		private System.Windows.Forms.TextBox txt_zeroEditor;
+		private System.Windows.Forms.GroupBox grp_modTools;
+		private System.Windows.Forms.Button btn_browseModTools;
+		private System.Windows.Forms.TextBox txt_modToolsLocation;
 	}
 }

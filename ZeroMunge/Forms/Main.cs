@@ -25,7 +25,7 @@ using ZeroMunge.Modules;
 namespace ZeroMunge
 {
 	[Serializable]
-	public partial class ZeroMunge : Form
+	public partial class ZeroMunge : Form, Logger
 	{
 		public enum BuildType
 		{
@@ -1091,15 +1091,6 @@ namespace ZeroMunge
 
 		#region Output Log : Fields
 
-		public enum LogType
-		{
-			None,
-			Munge,
-			Info,
-			Update,
-			Warning,
-			Error
-		}
 
 		List<string> logLineCollection = new List<string>();
 		public bool notifyLogThread = false;
@@ -4534,6 +4525,13 @@ namespace ZeroMunge
 		private void menu_launchZeroEditor_Click(object sender, EventArgs e)
 		{
 			LaunchZeroEditor();
+		}
+
+		private void launchMissionInDebuggerToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			MissionLauncherForm launcher = new MissionLauncherForm(this);
+			launcher.StartPosition = FormStartPosition.CenterParent;
+			launcher.Show();
 		}
 	}
 }

@@ -112,6 +112,13 @@ namespace ZeroMunge
 			
 		}
 
+		public static class MissionLauncher
+		{
+			public const string Mission = "The mission name; can be a shipped mission or one added with 'AddDownloadableContent(map,missionName,4)'";
+			public const string Launch =  "The debugger will launch into the specified mission after you choose your profile.";
+			public const string Close =   "Closing this window will clean up the auto launch mission (addme)";
+		}
+
 		public static class HelpMenu
 		{
 			public const string ViewHelp = "Open the help viewer.";     // TODO: change this wtf are you thinking this dosent' help anyonne

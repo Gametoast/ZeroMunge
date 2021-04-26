@@ -731,7 +731,7 @@ namespace ZeroMunge
 				Trace.WriteLine(message);
 				if (mainForm != null)
 				{
-					mainForm.Log(message, ZeroMunge.LogType.Error);
+					mainForm.Log(message, LogType.Error);
 				}
 
 				return null;
@@ -805,7 +805,7 @@ namespace ZeroMunge
 				Trace.WriteLine(msg);
 				if (mainForm != null)
 				{
-					mainForm.Log(msg, ZeroMunge.LogType.Error);
+					mainForm.Log(msg, LogType.Error);
 				}
 			}
 			catch (NullReferenceException ex)
@@ -814,7 +814,7 @@ namespace ZeroMunge
 				Trace.WriteLine(msg);
 				if (mainForm != null)
 				{
-					mainForm.Log(msg, ZeroMunge.LogType.Error);
+					mainForm.Log(msg, LogType.Error);
 				}
 			}
 			catch (JsonReaderException ex)
@@ -823,7 +823,7 @@ namespace ZeroMunge
 				Trace.WriteLine(msg);
 				if (mainForm != null)
 				{
-					mainForm.Log(msg, ZeroMunge.LogType.Error);
+					mainForm.Log(msg, LogType.Error);
 				}
 			}
 
@@ -1079,7 +1079,7 @@ namespace ZeroMunge
 				if (sender is ZeroMunge)
 				{
 					ZeroMunge zm = sender as ZeroMunge;
-					zm.Log(message, ZeroMunge.LogType.Error);
+					zm.Log(message, LogType.Error);
 				}
 				else
 				{
@@ -1151,8 +1151,9 @@ namespace ZeroMunge
 				PreferredZeroEditor = Properties.Settings.Default.PreferredZeroEditor,
 				DebuggerExe = Properties.Settings.Default.DebuggerExe,
 				DebuggerArgs = Properties.Settings.Default.DebuggerArgs,
-				GameExeArgs = Properties.Settings.Default.GameExeArgs 
-		};
+				GameExeArgs = Properties.Settings.Default.GameExeArgs,
+				ModToolsLocation = Properties.Settings.Default.ModToolsLocation
+			};
 
 			return prefs;
 		}
@@ -1185,6 +1186,7 @@ namespace ZeroMunge
 			Properties.Settings.Default.DebuggerExe = prefs.DebuggerExe;
 			Properties.Settings.Default.DebuggerArgs = prefs.DebuggerArgs;
 			Properties.Settings.Default.GameExeArgs = prefs.GameExeArgs;
+			Properties.Settings.Default.ModToolsLocation = prefs.ModToolsLocation;
 
 
 			Properties.Settings.Default.Save();
@@ -1230,11 +1232,12 @@ namespace ZeroMunge
 		public bool AutoLoadEnabled { get; set; }
 		public string LastSaveFilePath { get; set; }
 		public StringCollection RecentFiles { get; set; }
-        public String PreferredTextEditor { get; set; }
+		public String PreferredTextEditor { get; set; }
 		public String PreferredZeroEditor { get; set; }
 		public String DebuggerExe { get; set; }
 		public String DebuggerArgs { get; set; }
 		public String GameExeArgs { get; set; }
+		public String ModToolsLocation { get; set; }
 	}
 
 	public class ReqChunk
@@ -1292,5 +1295,21 @@ namespace ZeroMunge
 			}
 			Debug.WriteLine("PrintAll(): END OF CHUNK");
 		}
+	}
+
+	public enum LogType
+	{
+		None,
+		Munge,
+		Info,
+		Update,
+		Warning,
+		Error
+	}
+	public interface Logger
+	{
+		void Log(string message);
+		void Log(string message, LogType logType);
+
 	}
 }
