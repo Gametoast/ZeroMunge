@@ -31,6 +31,10 @@ namespace ZeroMunge.Modules
 			// Disable the UI
 			sender.EnableUI(false);
 
+			string mungeLog = sender.MungeLogName;
+			if(File.Exists(mungeLog))
+				File.Delete(mungeLog);
+
 			isRunning = true;
 
 			Thread logPollThread = new Thread(() =>
@@ -44,6 +48,7 @@ namespace ZeroMunge.Modules
 					}
 				}
 			});
+			logPollThread.Name = "logPollThread";
 			logPollThread.Start();
 
 			// Update tray icon text and play start sound
@@ -57,7 +62,6 @@ namespace ZeroMunge.Modules
 
 			// Grab the list of checked files
 			fileList = files;
-
 
 			// BEGIN CHECKING FOR ROW ERRORS
 
@@ -173,7 +177,7 @@ namespace ZeroMunge.Modules
 
 			// Re-enable the UI
 			sender.EnableUI(true);
-			sender.CompleteCallback();
+			sender.CompleteCallback(fileList);
 			// when setting Control properties a 'BeginInvoke' should be used.
 			//if (sender.prefs.ShowNotificationPopups)
 			//{
@@ -184,8 +188,22 @@ namespace ZeroMunge.Modules
 			//	sender.stat_JobStatus.Text = "Idle";
 			//}
 			Utilities.PlaySound(Utilities.SoundType.Success);
+			ShowLog(sender);
 		}
 
+		private static void ShowLog(ZeroMunge sender)
+		{
+			string mungeLog = sender.MungeLogName;
+			if (File.Exists(mungeLog))
+			{
+				FileInfo info = new FileInfo(mungeLog);
+				if (info.Length > 0)
+				{
+					sender.Log("munge log not empty, showing munge log", LogType.Warning);
+					RunCommand("Notepad.exe", mungeLog, info.DirectoryName);
+				}
+			}
+		}
 
 		/// <summary>
 		/// Checks whether or not the ProcessManager is running.
@@ -207,19 +225,25 @@ namespace ZeroMunge.Modules
 		{
 			try
 			{
-				if (fileList.ElementAt(whichFile).MungedFiles.Count() > 0 &&
-				fileList.ElementAt(whichFile).MungedFiles != null &&
-				fileList.ElementAt(whichFile).MungedFiles[0] != "nil" &&
-				fileList.ElementAt(whichFile).StagingDir != null &&
-				fileList.ElementAt(whichFile).CopyToStaging != null)
+				MungeFactory target = fileList.ElementAt(whichFile);
+
+				if (target.MungedFiles != null &&
+					target.MungedFiles.Count() > 0 &&
+					target.MungedFiles != null &&
+					target.MungedFiles[0] != "nil" &&
+					target.StagingDir != null &&
+					!target.FileDir.Contains("clean.bat") &&
+					target.CopyToStaging != null &&
+					sender.Platform == Platform.PC // only copy to staging area for the 'PC' Build
+				)
 				{
-					if (fileList.ElementAt(whichFile).CopyToStaging == "True")
+					if (target.CopyToStaging == "True")
 					{
 						// Copy the compiled files to the staging directory
-						List<string> filesToCopy = fileList.ElementAt(whichFile).MungedFiles;
+						List<string> filesToCopy = target.MungedFiles;
 
-						string sourceDir = fileList.ElementAt(whichFile).MungeDir;
-						string targetDir = fileList.ElementAt(whichFile).StagingDir;
+						string sourceDir = target.MungeDir;
+						string targetDir = target.StagingDir;
 
 						// Copy each file to the staging directory
 						foreach (string file in filesToCopy)
@@ -298,10 +322,16 @@ namespace ZeroMunge.Modules
 					}
 					else
 					{
-						var message = string.Format("Copy is unchecked, skipping copy operation for \"{0}\"", fileList.ElementAt(whichFile).FileDir);
+						var message = string.Format("Copy is unchecked, skipping copy operation for \"{0}\"", target.FileDir);
 						Debug.WriteLine(message);
 						sender.Log(message, LogType.Warning);
 					}
+				}
+				else if (sender.Platform != Platform.PC)
+				{
+					String message = "Platform is not 'PC', no copy to staging area ";
+					Debug.WriteLine(message);
+					sender.Log(message, LogType.Info);
 				}
 			}
 			catch (ArgumentOutOfRangeException e)
@@ -345,15 +375,15 @@ namespace ZeroMunge.Modules
 			{
 				return;
 			}
-
 			activeFile = whichFile;
+			MungeFactory target = fileList.ElementAt(whichFile);
 			// Start & listen to the process on another thread to keep the UI thread responsive.
 			Thread runProcThread = new Thread(() =>
-				curProc = StartProcess(sender, fileList.ElementAt(activeFile).FileDir)
+				curProc = StartProcess(sender, target.FileDir,  target.Args)
 			);
+			runProcThread.Name = "runProcThread: "+ target.FileDir;
 			runProcThread.Start();
 		}
-
 
 		/// <summary>
 		/// Executes the specified file in a new process.
@@ -361,8 +391,17 @@ namespace ZeroMunge.Modules
 		/// <param name="filePath">Full path of the file to execute.</param>
 		/// <param name="singleFile">True to only execute a single file, false to notify the manager to execute the next file after this one is finished.</param>
 		/// <returns>Process that was executed.</returns>
-		private static Process StartProcess(ZeroMunge sender, string filePath, bool singleFile = false)
+		private static Process StartProcess(ZeroMunge sender, string filePath, string args = "", bool singleFile = false)
 		{
+			if (string.IsNullOrEmpty(args))
+			{
+				switch (sender.Platform)
+				{
+					case Platform.PS2: args = " PS2 "; break;
+					case Platform.XBOX: args = " XBOX "; break;
+				}
+			}
+			if (args == null) args = "";// so it gets Logged nicely below
 			// Initilialize process start info
 			ProcessStartInfo startInfo = new ProcessStartInfo(@filePath)
 			{
@@ -370,8 +409,11 @@ namespace ZeroMunge.Modules
 				WindowStyle = ProcessWindowStyle.Hidden,
 				UseShellExecute = false,
 				RedirectStandardOutput = true,
-				CreateNoWindow = true
+				CreateNoWindow = true,
+				Arguments = args
 			};
+			string mungeLog = sender.MungeLogName;
+			startInfo.EnvironmentVariables.Add("MUNGE_LOG", mungeLog);
 
 			// Initialize the process
 			Process proc = new Process();
@@ -389,7 +431,7 @@ namespace ZeroMunge.Modules
 
 
 			// Print the file path before starting
-			sender.Log(string.Format("Executing file: \"{0}\"", @filePath), LogType.Info);
+			sender.Log(string.Format("Executing file: \"{0}\" {1}", startInfo.FileName, startInfo.Arguments), LogType.Info);
 			sender.Log("");
 
 			// Notify the manager that the process is done
@@ -454,7 +496,8 @@ namespace ZeroMunge.Modules
 				Arguments = args,
 				RedirectStandardOutput = true,
 				RedirectStandardError = true,
-				UseShellExecute = false
+				UseShellExecute = false,
+				CreateNoWindow = true,
 			};
 			var process = Process.Start(processStartInfo);
 			string output = process.StandardOutput.ReadToEnd();
@@ -463,6 +506,18 @@ namespace ZeroMunge.Modules
 			if (includeStdErr)
 				output = output + "\r\n" + err;
 			return output;
+		}
+
+		public static bool IsProcessOpen(string name)
+		{
+			foreach (Process clsProcess in Process.GetProcesses())
+			{
+				if (clsProcess.ProcessName.Contains(name))
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 }

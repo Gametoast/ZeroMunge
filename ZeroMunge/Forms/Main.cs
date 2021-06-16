@@ -123,6 +123,62 @@ namespace ZeroMunge
 
 		#endregion Fields
 
+		#region Properties
+
+		public string MungeLogName
+		{
+			get
+			{
+				string retVal = Path.GetFullPath( this.Platform.ToString() + "_MungeLog.txt");
+				return retVal;
+			}
+		}
+		private Platform plt_Platform = Platform.PC;
+		/// <summary>
+		/// The munge platform
+		/// </summary>
+		public Platform Platform
+		{
+			get { return plt_Platform; }
+			set
+			{
+				if (this.plt_Platform != value)
+				{
+					this.plt_Platform = value;
+					OnPlatformChanged();
+				}
+			}
+		}
+
+		private void OnPlatformChanged()
+		{
+			string text = "";
+			Color backColor = this.data_Files.Columns[0].DefaultCellStyle.BackColor;
+
+			switch (this.Platform)
+			{
+				case Platform.PC:
+					text = "Platform (PC)";
+					break;
+				case Platform.XBOX:
+					text = "Platform (XBOX)";
+					backColor = Color.Gray;
+					break;
+				case Platform.PS2:
+					text = "Platform (PS2/PSP)";
+					backColor = Color.Gray;
+					break;
+			}
+			this.data_Files.Columns[1].DefaultCellStyle.BackColor = backColor;
+			menu_strip_platform.Text = text;
+			string message = "Platform changed to "+Platform.ToString();
+			if (Platform != Platform.PC)
+				message += ", files will not be copied to staging area.";
+			mungePanel.Platform = this.Platform;
+			Log(message, LogType.Info);
+		}
+		#endregion Properties
+
 
 		// This is the very first method called by the application. It initializes the UI controls and loads user settings.
 		public ZeroMunge()
@@ -148,8 +204,142 @@ namespace ZeroMunge
 
 			// Load any saved settings
 			LoadSettings();
+			mungePanel.Logger = this;
+			UsingAlternateUI = menu_alternateUI.Checked;
+			mungePanel.PlatformChanged += MungePanel_PlatformChanged;
 		}
 
+
+		#region  Alternate UI Stuff
+		private void MungePanel_PlatformChanged(object sender, EventArgs e)
+		{
+			this.Platform = mungePanel.Platform;
+		}
+
+		private void menu_alternateUI_Click(object sender, EventArgs e)
+		{
+			menu_alternateUI.Checked = !menu_alternateUI.Checked;
+		}
+		private void menu_alternateUI_CheckChanged(object sender, EventArgs e)
+		{
+			mungePanel.Visible = UsingAlternateUI = menu_alternateUI.Checked;
+			InitializeAlternateUI();
+		}
+
+		public bool UsingAlternateUI { get; private set; }
+
+		private void InitializeAlternateUI()
+		{
+			if (menu_alternateUI.Checked)
+			{
+				if (data_Files.Rows.Count > 0 &&
+					data_Files.Rows[0].Cells.Count > 1 &&
+					data_Files.Rows[0].Cells[2].Value != null)
+				{
+					string dir = data_Files.Rows[0].Cells[2].Value.ToString();
+					int index = dir.IndexOf("_BUILD");
+					string arg = dir.Substring(0, index + 6);
+					mungePanel.SetBuildDir(arg);
+					string pc_outputDir = Utilities.EnsureTrailingSlash(data_Files.Rows[0].Cells[4].Value.ToString());
+					pc_outputDir = pc_outputDir.Replace("data\\_LVL_PC\\", "");
+
+					mungePanel.PCOutputFolder = pc_outputDir;
+					mungePanel.Prefs = this.prefs;
+				}
+				else
+				{
+					menu_alternateUI.Checked = false;
+					MessageBox.Show("First Load a project to use the Alternate UI");
+				}
+			}
+		}
+		/// <summary>
+		/// munge.bat or clean.bat
+		/// </summary>
+		public string GetAltUIOperationFile()
+		{
+			string retVal = "";
+			if (menu_alternateUI.Checked)
+			{
+				if(mungePanel.GetOverrideCommand().Trim().StartsWith("clean", StringComparison.OrdinalIgnoreCase))
+					retVal = Utilities.EnsureTrailingSlash(mungePanel.MungeDir) + "clean.bat";
+				else
+					retVal = Utilities.EnsureTrailingSlash(mungePanel.MungeDir) + "munge.bat";
+			}
+			return retVal;
+		}
+
+		private bool askedAboutMissionMungeFile = false;
+		public List<MungeFactory> GetAltUIFileList()
+		{
+			List<MungeFactory> retVal = new List<MungeFactory>();
+			if (menu_alternateUI.Checked)
+			{
+				MungeFactory munge = new MungeFactory()
+				{
+					FileDir = GetAltUIOperationFile(),
+					Args = GetAltUIOptions(),
+				};
+				if(mungePanel.MissionOnly)
+				{
+					string missionOnlyMungeFile = Utilities.EnsureTrailingSlash(mungePanel.MungeDir) + "Common\\munge_MISSION.bat";
+					if(!File.Exists(missionOnlyMungeFile) && !this.askedAboutMissionMungeFile)
+					{
+						if( MessageBox.Show(
+							"You have selected 'mission' only, would you like to create a 'munge_Mission.bat' file to handle this",
+							"Create special 'mission only' batch file?", 
+							MessageBoxButtons.YesNo, 
+							MessageBoxIcon.Question
+							) == DialogResult.Yes)
+						{
+							Assembly assembly = Assembly.GetExecutingAssembly();
+							//string[] names = assembly.GetManifestResourceNames();// uncomment to see resources in debugger
+							StreamReader reader = new StreamReader(assembly.GetManifestResourceStream("ZeroMunge.Resources.munge_MISSION.bat"));
+							string content = reader.ReadToEnd();
+							File.WriteAllText(missionOnlyMungeFile, content);
+						}
+						this.askedAboutMissionMungeFile = true;
+					}
+					if (File.Exists(missionOnlyMungeFile) )
+					{
+						munge.FileDir = missionOnlyMungeFile;
+						munge.Args = Platform.ToString();
+					}
+				}
+				retVal.Add(munge);
+
+				if (mungePanel.MungeAddme && !munge.FileDir.ToLower().Contains("clean.bat"))
+				{
+					FileInfo addmeInfo = new FileInfo(Utilities.EnsureTrailingSlash(mungePanel.MungeDir) + "..\\addme\\mungeAddme.bat");
+					MungeFactory addme = new MungeFactory()
+					{
+						FileDir = addmeInfo.FullName,
+						Args = "",
+					};
+					retVal.Insert(0,addme);
+				}
+			}
+			return retVal;
+		}
+
+		public List<MungeFactory> GetAltUICleanFileList()
+		{
+			MungeFactory cleaner = new MungeFactory()
+			{
+				FileDir = Utilities.EnsureTrailingSlash(mungePanel.MungeDir) + "clean.bat",
+				Args = this.GetAltUIOptions(),
+			};
+			List<MungeFactory> retVal = new List<MungeFactory>();
+			retVal.Add(cleaner);
+			return retVal;
+		}
+
+		public string GetAltUIOptions()
+		{
+			return mungePanel.GetOptions();
+		}
+
+		#endregion
 
 		#region Main Window
 
@@ -310,6 +500,7 @@ namespace ZeroMunge
 						}
 					}
 				});
+				updateCheckThread.Name = "updateCheckThread";
 				updateCheckThread.Start();
 			}
 
@@ -382,14 +573,15 @@ namespace ZeroMunge
 			//Debug.WriteLine("ZeroMunge_Deactivate() entered");
 		}
 
-		private delegate void ShowCompletedMessageDelegate();
+		private delegate void CallbackCompleteDelegate(List<MungeFactory> fileList);
 
-		public void CompleteCallback()
+		public void CompleteCallback(List<MungeFactory> fileList)
 		{
 			if (this.InvokeRequired)
 			{
 				Debugger.Log(1, "debug", "ShowCompletedMessage: Invoke was required ");
-				this.BeginInvoke(new ShowCompletedMessageDelegate(CompleteCallback));
+				CallbackCompleteDelegate cb = new CallbackCompleteDelegate(CompleteCallback);
+				this.BeginInvoke(cb, new object[] { fileList });
 			}
 			else
 			{
@@ -400,6 +592,16 @@ namespace ZeroMunge
 					trayIcon.BalloonTipText = "The operation was completed successfully.";
 					trayIcon.ShowBalloonTip(30000);
 					stat_JobStatus.Text = "Idle";
+				}
+
+				if (fileList.Count > 0 && fileList[0].FileDir.IndexOf("clean.bat", StringComparison.OrdinalIgnoreCase) == -1)
+				{ // a munge operation has finished
+					if (UsingAlternateUI)
+					{
+						// don't do automatic copy of non-PC builds.
+						if (this.Platform == Platform.PC && mungePanel.AutoCopy)
+							mungePanel.CopyFiles();
+					}
 				}
 			}
 		}
@@ -701,8 +903,16 @@ namespace ZeroMunge
 
 			if (!ProcessManager.IsRunning())
 			{
-				ProcessManager.Start(this, GetCheckedFiles(), data_Files);
+				StartMunge();
 			}
+		}
+
+		private void StartMunge()
+		{
+			if(UsingAlternateUI)
+				ProcessManager.Start(this, GetAltUIFileList(), data_Files);
+			else
+				ProcessManager.Start(this, GetCheckedFiles(), data_Files);
 		}
 
 		private void Hotkey_F6()
@@ -908,6 +1118,8 @@ namespace ZeroMunge
 		/// </summary>
 		private void OpenWindow_EasyFilePicker()
 		{
+			menu_alternateUI.Checked = false;// force user back to default ui
+
 			EasyFilePicker easyFilePickerForm = new EasyFilePicker();
 			if (easyFilePickerForm.ShowDialog() == DialogResult.OK)
 			{
@@ -918,6 +1130,7 @@ namespace ZeroMunge
 					AddFile(file, true);
 				}
 			}
+			easyFilePickerForm.Dispose();
 		}
 
 
@@ -1398,6 +1611,7 @@ namespace ZeroMunge
 				btn_CopyLog.Enabled = enabled;
 				btn_SaveLog.Enabled = enabled;
 				btn_ClearLog.Enabled = enabled;
+				btn_clean.Enabled = enabled;
 
 
 				// Status Strip
@@ -1422,6 +1636,7 @@ namespace ZeroMunge
 				menu_saveAsToolStripMenuItem.Enabled = enabled;
 				menu_exitToolStripMenuItem.Enabled = enabled;
 				menu_openRecentToolStripMenuItem.Enabled = enabled;
+				menu_strip_platform.Enabled = enabled;
 
 				// Actions menu
 				menu_runToolStripMenuItem.Enabled = enabled;
@@ -1458,6 +1673,8 @@ namespace ZeroMunge
 				menu_provideFeedbackToolStripMenuItem.Enabled = enabled;
 				menu_checkForUpdatesToolStripMenuItem.Enabled = enabled;
 				menu_aboutToolStripMenuItem.Enabled = enabled;
+
+				mungePanel.Enabled = enabled;
 			}
 		}
 
@@ -1576,8 +1793,9 @@ namespace ZeroMunge
 		/// <summary>
 		/// Returns a list of files that are currently checkmarked in the file list.
 		/// </summary>
+		/// <param name="arg">if cleaning, set arg="clean", otherwise it'll get the munge files</param>
 		/// <returns>List<MungeFactory> of files that are checkmarked.</returns>
-		public List<MungeFactory> GetCheckedFiles()
+		public List<MungeFactory> GetCheckedFiles(string arg="")
 		{
 			List<MungeFactory> checkedFiles = new List<MungeFactory>();
 
@@ -1657,9 +1875,19 @@ namespace ZeroMunge
 							fileInfo.MungedFiles = Utilities.ExtractLines(row.Cells[STR_DATA_FILES_TXT_MUNGED_FILES].Value.ToString());
 						}
 
-
-						// Add our MungeFactory object to the checked files list
-						checkedFiles.Add(fileInfo);
+						if("clean".Equals(arg, StringComparison.OrdinalIgnoreCase))
+						{
+							string target = fileInfo.FileDir.Replace("munge.bat", "clean.bat");
+							if (File.Exists(target) && target.IndexOf("clean") > -1)
+								fileInfo.FileDir = target;
+							else
+								fileInfo = null;
+						}
+						if (fileInfo != null)
+						{
+							// Add our MungeFactory object to the checked files list
+							checkedFiles.Add(fileInfo);
+						}
 					}
 					else
 					{
@@ -2730,7 +2958,7 @@ namespace ZeroMunge
 		// Begin processing the list of files as a playlist.
 		private void btn_Run_Click(object sender, EventArgs e)
 		{
-			ProcessManager.Start(this, GetCheckedFiles(), data_Files);
+			StartMunge();
 		}
 
 
@@ -2746,6 +2974,7 @@ namespace ZeroMunge
 		// Prompt the user to select files to add to the file list.
 		private void btn_AddFiles_Click(object sender, EventArgs e)
 		{
+			menu_alternateUI.Checked = false;
 			lastCellChangeMethod = CellChangeMethod.Button;
 			SelectLastRow();
 
@@ -2783,6 +3012,7 @@ namespace ZeroMunge
 		// Prompt the user to select folders containing munge.bat files to add to the file list.
 		private void btn_AddFolders_Click(object sender, EventArgs e)
 		{
+			menu_alternateUI.Checked = false;
 			lastCellChangeMethod = CellChangeMethod.Button;
 
 			openDlg_AddFoldersPrompt.Title = "Select Folders";
@@ -2857,6 +3087,7 @@ namespace ZeroMunge
 					AddFile(path);
 				}
 			}
+			InitializeAlternateUI();
 		}
 
 
@@ -2864,6 +3095,7 @@ namespace ZeroMunge
 		// Remove the selected file from the file list.
 		private void btn_RemoveFile_Click(object sender, EventArgs e)
 		{
+			menu_alternateUI.Checked = false;
 			lastCellChangeMethod = CellChangeMethod.Button;
 
 			// Don't continue if there aren't any files in the list
@@ -2955,8 +3187,8 @@ namespace ZeroMunge
 		// Remove all files from the file list.
 		private void btn_RemoveAllFiles_Click(object sender, EventArgs e)
 		{
+			menu_alternateUI.Checked = false;// force user back to default ui
 			lastCellChangeMethod = CellChangeMethod.Button;
-
 			ClearFileList();
 		}
 
@@ -3074,7 +3306,7 @@ namespace ZeroMunge
 		// Begin processing the list of files as a playlist.
 		private void cmenu_TrayIcon_Run_Click(object sender, EventArgs e)
 		{
-			ProcessManager.Start(this, GetCheckedFiles(), data_Files);
+			StartMunge();
 		}
 
 
@@ -4326,7 +4558,7 @@ namespace ZeroMunge
 
 			//LoadDataIntoFileList(data);
 
-			EnableUI(!UIEnabled);
+			//EnableUI(!UIEnabled);
 		}
 
 		#endregion Debug Buttons
@@ -4455,7 +4687,7 @@ namespace ZeroMunge
 
 			if (File.Exists(programName))
 			{
-				string msg = "Launching " + programName +" " + prefs.DebuggerArgs;
+				string msg = "Launching " + programName + " " + prefs.DebuggerArgs;
 				Debug.WriteLine(msg);
 				this.Log(msg, LogType.Info);
 				ProcessManager.RunCommand("\"" + programName + "\"", prefs.DebuggerArgs, prefs.GameDirectory);
@@ -4533,5 +4765,211 @@ namespace ZeroMunge
 			launcher.StartPosition = FormStartPosition.CenterParent;
 			launcher.Show();
 		}
+
+		private void menu_Platform_Click(object sender, EventArgs e)
+		{
+			ToolStripMenuItem current = sender as ToolStripMenuItem;
+			menu_pcPlatform.Checked = false;
+			menu_xboxPlatform.Checked = false;
+			menu_ps2Platform.Checked = false;
+
+			current.Checked = true;
+			if (menu_pcPlatform.Checked)
+				this.Platform = Platform.PC;
+			else if (menu_xboxPlatform.Checked)
+				this.Platform = Platform.XBOX;
+			else if (menu_ps2Platform.Checked)
+				this.Platform = Platform.PS2;
+		}
+
+		private void menu_launchPPSSPP_Click(object sender, EventArgs e)
+		{
+			LaunchPPSSPP();
+		}
+
+		private void LaunchPPSSPP()
+		{
+			if (String.IsNullOrEmpty(prefs.PPSSPPLocation) || String.IsNullOrEmpty(prefs.PSPGameLocation))
+			{
+				MessageBox.Show("Please set 'PPSSPP (emulator exe) Location' and 'PSP Game Folder' to use this feature.", "Error");
+				return;
+			}
+			string programName = prefs.PPSSPPLocation;
+
+			if (File.Exists(programName))
+			{
+				string msg = "Launching " + programName + " " + prefs.PSPGameLocation;
+				Log(msg, LogType.Info);
+				int index = prefs.PPSSPPLocation.LastIndexOf("\\");
+				string PPSSPPdir = prefs.PPSSPPLocation.Substring(0, index);
+				string programArgs = prefs.PSPGameLocation;
+				ProcessManager.RunCommand("\"" + programName + "\"", programArgs, PPSSPPdir);
+			}
+			else
+			{
+				string msg = String.Format("Could not find '{0}'\r\n", programName);
+				Log(msg, LogType.Warning);
+				MessageBox.Show(msg, "Warning");
+			}
+		}
+
+		private void menu_copyFiles_Click(object sender, EventArgs e)
+		{
+			LaunchCopyFileForm();
+		}
+
+
+		private void LaunchCopyFileForm()
+		{
+			FileCopyForm form = new FileCopyForm();
+			int buildIndex = -1;
+			string tmp = "";
+			string cellVal;
+			for(int i = 0; i < data_Files.Rows.Count; i++)
+			{
+				if (data_Files.Rows[i].Cells[2].Value != null)
+				{
+					cellVal = data_Files.Rows[i].Cells[2].Value.ToString();
+					buildIndex = cellVal.IndexOf("_BUILD");
+					if (buildIndex > -1)
+					{
+						tmp = cellVal.Substring(0, buildIndex);
+						if (!form.SourceFolders.Contains(tmp))
+						{
+							form.SourceFolders.Insert(0, tmp);
+							if (Directory.Exists(tmp + "_LVL_PS2"))
+								form.SourceFolders.Insert(0, tmp + "_LVL_PS2");
+							if (Directory.Exists(tmp + "_LVL_XBOX"))
+								form.SourceFolders.Insert(0, tmp + "_LVL_XBOX");
+						}
+					}
+				}
+			}
+			form.Show();
+		}
+
+		private string  GetProjectFolderFromSelectedCell()
+		{
+			string folder = null;
+			int col = 2;  // Target the 'munge.bat' columns
+			int row = -1;
+			if (data_Files.SelectedCells.Count > 0 )
+			{
+				row = data_Files.SelectedCells[0].RowIndex;
+				if (data_Files.Rows[row].Cells.Count > 2 && data_Files.Rows[row].Cells[col].Value != null )
+				{
+					string filename = data_Files.Rows[row].Cells[col].Value.ToString();
+					int index = filename.IndexOf("_BUILD");
+					if (index < 0) index = filename.IndexOf("addme");
+					if (index > -1)
+						folder = filename.Substring(0, index);
+				}
+			}
+			return folder;
+		}
+
+		private string GetStagingFolderFromSelectedCell()
+		{
+			string folder = null;
+			int col = 4;  // Target the Staging folder column
+			int row = -1;
+			if (data_Files.SelectedCells.Count > 0)
+			{
+				row = data_Files.SelectedCells[0].RowIndex;
+				if (data_Files.Rows[row].Cells.Count > 2 && data_Files.Rows[row].Cells[col].Value != null)
+					folder = data_Files.Rows[row].Cells[col].Value.ToString();
+			}
+			return folder;
+		}
+		private void menu_openProjectFolderEditor(object sender, EventArgs e)
+		{
+			if(String.IsNullOrEmpty( prefs.PreferredTextEditor ))
+			{
+				MessageBox.Show("Please Set Preferred Editor in 'Preferences' (to an editor that can open a folder, like Code or SublimeText)");
+				return;
+			}
+			string folder = GetProjectFolderFromSelectedCell();
+			if (folder != null)
+			{
+				Log("Opening Project folder: "+ folder, LogType.Info);
+				ProcessManager.RunCommand(prefs.PreferredTextEditor, "\"" + folder + "\"", folder);
+			}
+			else
+				MessageBox.Show("Could not determine project folder from selected Cell");
+		}
+
+		private void menu_openBuildCmd_Click(object sender, EventArgs e)
+		{
+			string folder = GetProjectFolderFromSelectedCell();
+			if (folder != null)
+			{
+				Log("Opening cmd.exe ... ", LogType.Info);
+				ProcessManager.RunCommand("cmd.exe", "", Utilities.EnsureTrailingSlash(folder) + "_BUILD");
+			}
+			else
+				MessageBox.Show("Could not determine project folder from selected Cell");
+		}
+
+		private void menu_openStagingDirectory_Click(object sender, EventArgs e)
+		{
+			string folder = GetStagingFolderFromSelectedCell();
+			if (folder != null)
+			{
+				if (Directory.Exists(folder))
+				{
+					Log("Opening addon  folder: " + folder, LogType.Info);
+					ProcessManager.RunCommand("Explorer.exe", "\"" + folder + "\"", folder);
+				}
+				else
+					MessageBox.Show("Folder does not exist:"+ folder+"\r\nDid you munge yet?", "Error");
+			}
+			else
+				MessageBox.Show("Could not determine staging folder from selected Cell");
+		}
+
+		private void menu_gametoastForums_Click(object sender, EventArgs e)
+		{
+			System.Diagnostics.Process.Start("https://gametoast.com/");
+		}
+
+		private void menu_gametoastGithub_Click(object sender, EventArgs e)
+		{
+			System.Diagnostics.Process.Start("https://github.com/Gametoast");
+		}
+
+		private void menu_openProjectFolder_Click(object sender, EventArgs e)
+		{
+			string folder = GetProjectFolderFromSelectedCell();
+			if (folder != null)
+			{
+				Log("Opening project folder: " + folder, LogType.Info);
+				ProcessManager.RunCommand("Explorer.exe", "\""+folder + "\"", folder);
+			}
+			else
+				MessageBox.Show("Could not determine project folder from selected Cell");
+		}
+
+		private void btn_clean_Click(object sender, EventArgs e)
+		{
+			Debug.WriteLine("Clean was pressed");
+			StartClean();
+		}
+
+		private void StartClean()
+		{
+			if (!ProcessManager.IsRunning())
+			{
+				if (UsingAlternateUI)
+					ProcessManager.Start(this, GetAltUICleanFileList(), data_Files);
+				else
+					ProcessManager.Start(this, GetCheckedFiles("clean"), data_Files);
+			}
+		}
+
+		private void menu_Battlefront2API_Click(object sender, EventArgs e)
+		{
+			System.Diagnostics.Process.Start("https://github.com/Gametoast/SWBF2-Lua-API/blob/master/API/LuaDevelopmentTools/Battlefront2API.doclua");
+		}
+
 	}
 }

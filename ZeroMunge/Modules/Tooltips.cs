@@ -109,14 +109,29 @@ namespace ZeroMunge
 
 			public const string DebuggerArgs = "Arguments to be passed to the Debugger executable, like launch mission name.\nExamples:\ncor1c_con \t\t(built-in mission name)\n/win\t\t\t(windowed mode)\n/resolution 1920 1080\t(specify resolution)";
 			public const string GameExeArgs = "Arguments to be passed to the Game executable, like launch mission name.\nExamples:\ncor1c_con \t\t(built-in mission name)\n/win\t\t\t(windowed mode)\n/resolution 1920 1080\t(specify resolution)";
-			
+			public const string ModToolsDir = "The path to 'BF2_ModTools'";
+			public const string ConsoleSupport = "Check/enable your ModTools for Console (XBOX,PS2/PSP) munge";
 		}
 
 		public static class MissionLauncher
 		{
 			public const string Mission = "The mission name; can be a shipped mission or one added with 'AddDownloadableContent(map,missionName,4)'";
-			public const string Launch =  "The debugger will launch into the specified mission after you choose your profile.";
+			public const string LaunchDebugger =  "The debugger will launch into the specified mission after you choose your profile.";
 			public const string Close =   "Closing this window will clean up the auto launch mission (addme)";
+			public const string PPSSPPAutoLaunch = "'auto launch' a mission using PPSSPP and the Alternate addon system for PSP\nGame contents must have been extracted to the file system and 'Alt addon' system must be setup.";
+			public const string AutoLaunchFileLocation = "The location of the autolaunch (addon) file.";
+		}
+
+		public static class FileCopyForm
+		{
+			public const string Browse = "Browse To Local Folder";
+			public const string Source = "The source folder on your computer to copy from. Select from the drop down list or type in location + press Enter to populate file tree. Right Click for delete item option.";
+			public const string Dest = "The place to copy files to. Local or FTP. FTP address must be in the form 'ftp://user:password@ip_address/path/to/dest/folder'. Right Click for delete item option. ";
+			public const string Copy = "Copy the selected files to the destination. Can be local or FTP";
+			public const string GenerateScript = "Generate a batch file (and companion ftp instructions for FTP) to copy the selected files to the destination.";
+			public const string ListRemote = "Connect to dest address and list the files at that location/cancel list operation.";
+			public const string Clear = "Clear out the status text window";
+			public const string CopyScripts = "Displays 'copy' batch files stored under the project '_BUILD' folder.\r\nDouble click list item to run batch file, right click item for to view or run.";
 		}
 
 		public static class HelpMenu

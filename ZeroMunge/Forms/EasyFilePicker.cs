@@ -305,6 +305,10 @@ namespace ZeroMunge
 					throw;
 				}
 			}
+			else
+			{
+				this.Close();
+			}
 		}
 
 

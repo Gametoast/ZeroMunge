@@ -7,7 +7,6 @@ namespace ZeroMunge.Modules
 {
 	/// <summary>
 	/// Object used to create .lvl files 'on the fly' 
-	/// 
 	/// </summary>
 	/// <example>
 	/// Munger dude = new Munger();
