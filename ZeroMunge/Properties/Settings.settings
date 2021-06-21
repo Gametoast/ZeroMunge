@@ -89,12 +89,6 @@
     <Setting Name="PPSSPPLocation" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="FileCopyFormSources" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="FileCopyFormDests" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="ProfileName" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
@@ -102,6 +96,9 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="PS2CopyFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="FTPDest" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

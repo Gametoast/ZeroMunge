@@ -10,6 +10,7 @@
 6. **Staging Directory Browse** – Opens a prompt to browse for a new Staging Directory.
 7. **Munged Files** – Names of files that will be copied to the Staging Directory after the batch script has finished executing. Each file name must be separated into its own line.
 8. **Munged Files Edit** – Opens a pop-up window to add/remove/edit names of Munged Files. Each file is separated into its own new line.
+9. **Context menu** – [See context menu section](topic_ui_context_menus.html)
 
 ### Munged Files Edit
 
@@ -17,7 +18,9 @@ This is what the Munged Files Edit window looks like.
 
 ![Munged Files Edit](images/ui_filelist_mungedfiles.png)
 
+
 ### Related Pages
 
 - [**User Interface**](topic_ui.html)
-- [**Commands: Actions**](topic_cmd_actions.html)
+- [**Commands: Actions**](topic_menu_actions.html)
+- [**User Interface: Context menus**](topic_ui_context_menus.html)

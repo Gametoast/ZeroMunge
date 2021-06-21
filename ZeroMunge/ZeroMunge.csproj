@@ -94,9 +94,6 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentFTP">
-      <HintPath>..\packages\FluentFTP\FluentFTP.dll</HintPath>
-    </Reference>
     <Reference Include="Markdig, Version=0.15.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Markdig.0.15.0\lib\net40\Markdig.dll</HintPath>
     </Reference>
@@ -138,11 +135,11 @@
     <Compile Include="Forms\EasyFilePicker.Designer.cs">
       <DependentUpon>EasyFilePicker.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FileCopyForm.cs">
+    <Compile Include="Forms\FTPScriptForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FileCopyForm.Designer.cs">
-      <DependentUpon>FileCopyForm.cs</DependentUpon>
+    <Compile Include="Forms\FTPScriptForm.Designer.cs">
+      <DependentUpon>FTPScriptForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Main.cs">
       <SubType>Form</SubType>
@@ -156,17 +153,20 @@
     <Compile Include="Forms\SaveFileListPrompt.Designer.cs">
       <DependentUpon>SaveFileListPrompt.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SimpleMungePanel.cs">
+    <Compile Include="Forms\AltUIMungePanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\SimpleMungePanel.Designer.cs">
-      <DependentUpon>SimpleMungePanel.cs</DependentUpon>
+    <Compile Include="Forms\AltUIMungePanel.Designer.cs">
+      <DependentUpon>AltUIMungePanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\SoundMungeForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\SoundMungeForm.Designer.cs">
       <DependentUpon>SoundMungeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\StringInputDlg.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ThirdPartySoftware.cs">
       <SubType>Form</SubType>
@@ -213,8 +213,8 @@
     <EmbeddedResource Include="Forms\EasyFilePicker.resx">
       <DependentUpon>EasyFilePicker.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FileCopyForm.resx">
-      <DependentUpon>FileCopyForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FTPScriptForm.resx">
+      <DependentUpon>FTPScriptForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
@@ -225,11 +225,14 @@
     <EmbeddedResource Include="Forms\SaveFileListPrompt.resx">
       <DependentUpon>SaveFileListPrompt.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SimpleMungePanel.resx">
-      <DependentUpon>SimpleMungePanel.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\AltUIMungePanel.resx">
+      <DependentUpon>AltUIMungePanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SoundMungeForm.resx">
       <DependentUpon>SoundMungeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\StringInputDlg.resx">
+      <DependentUpon>StringInputDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ThirdPartySoftware.resx">
       <DependentUpon>ThirdPartySoftware.cs</DependentUpon>

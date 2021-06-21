@@ -20,12 +20,13 @@ namespace ZeroMunge
 
 		public static class FileList
 		{
-			public const string Run = "Sequentially execute each file in the file list.";
+			public const string Run = "Start the munge process. In the default 'list view' UI, each file will be executed sequentially.\n"+
+									  "In the 'alternate UI' view (F12), only the project for the specified 'munge folder' will be munged.";
 			public const string Cancel = "Stop processing files.  \n\nWARNING: Canceling a munge is strongly NOT recommended.";
 			public const string EasyFilePicker = "Open the Easy File Picker, which greatly simplifies the process of adding munge files to the file list.";
 			public const string AddFiles = "Open a prompt to add files to the file list.";
 			public const string AddFolders = "Open a prompt to select folders containing munge.bat files to add to the file list.";
-			public const string AddProject = "Open a prompt to select a project folder whose common munge.bat files will be added to the file list.";
+			public const string AddProject = "Open a prompt to select a project folder (the 'data_<MOD_ID>' folder).";
 			public const string RemoveFile = "Remove the selected files from the file list.";
 			public const string RemoveAllFiles = "Remove all files from the file list.";
 			public const string HelpButton = "Get help with the user interface.";
@@ -113,6 +114,35 @@ namespace ZeroMunge
 			public const string ConsoleSupport = "Check/enable your ModTools for Console (XBOX,PS2/PSP) munge";
 		}
 
+		public static class AltUIPanel
+		{
+			public const string CheckShell = 
+				"If you're munging 'shell', typically you'll first need to copy the 'BF2_ModTools\\assets\\shell' folder to your 'data_ABC' folder.\n" +
+				"(munge.bat /SHELL)";
+			public const string CheckLoad = "Munge the loading screen data \n(munge.bat /LOAD)";
+			public const string CheckSound = "Sound will me munged when this is checked ( munge.bat /SOUND )";
+			public const string CheckMovies = "Movies will me munged when this is checked ( munge.bat /MOVIES )";
+			public const string CheckMissions = "If this is checked by itself, you are given the option to only munge mission.lvl (will prompt for creating 'mission only' batch file)";
+			public const string CheckCommon = "Munge common stuff [core.lvl, common.lvl, ingame.lvl, mission.lvl] ( munge.bat /COMMON )";
+			public const string CheckAddme =  "addme.script will be munged when this is checked ( mungeAddme.bat )";
+			public const string CheckCopyIfNewer= "Only copy a file if it is newer than the one already at the deployment location.";
+			public const string CheckAutoCopy = "For the PC Munge, automatically copy files after the munge is complete.";
+			public const string ButtonCopy = "Copy the files now. For PC, the addme.script will be placed at the root of the addon folder. The LVL files will be placed according to the 'normal' structure.";
+			public const string ButtonBrowseOutputFolder= "Browse to a folder that you want your files copied to.";
+			public const string GroupMungeFolder= "The target munge folder";
+			public const string OverrideDesc = "Run a batch file in the '_BUILD' folder instead of just 'munge' or 'clean'";
+			public const string ComboSide=  "Select the specific 'side' to munge.";
+			public const string ComboWorld= "Select the specific 'World' to munge.";
+			public const string GroupPlatform= "Select the platform to munge";
+			public const string CopyLocationTip =
+				"Location to copy files to (per platform). Will copy .lvl, .script, .txt and .mvs files.\n" +
+				"For PS2 and XBOX the files will be copied to the destination, preserving the file structure of the _LVL_<platform> folder.\n" +
+				"For 'PC', the files will be copied according to the PC file pattern.\n" +
+				"   'addme.script' will be placed at ...\\GameData\\addon\\<MOD_ID>\\addme.script.\n" +
+				"   The rest of the files will be copied to ...\\GameData\\addon\\<MOD_ID>\\data\\_LVL_PC\\\n";
+			
+		}
+
 		public static class MissionLauncher
 		{
 			public const string Mission = "The mission name; can be a shipped mission or one added with 'AddDownloadableContent(map,missionName,4)'";
@@ -122,16 +152,13 @@ namespace ZeroMunge
 			public const string AutoLaunchFileLocation = "The location of the autolaunch (addon) file.";
 		}
 
-		public static class FileCopyForm
+		public static class FTPScriptForm
 		{
 			public const string Browse = "Browse To Local Folder";
-			public const string Source = "The source folder on your computer to copy from. Select from the drop down list or type in location + press Enter to populate file tree. Right Click for delete item option.";
-			public const string Dest = "The place to copy files to. Local or FTP. FTP address must be in the form 'ftp://user:password@ip_address/path/to/dest/folder'. Right Click for delete item option. ";
-			public const string Copy = "Copy the selected files to the destination. Can be local or FTP";
-			public const string GenerateScript = "Generate a batch file (and companion ftp instructions for FTP) to copy the selected files to the destination.";
-			public const string ListRemote = "Connect to dest address and list the files at that location/cancel list operation.";
-			public const string Clear = "Clear out the status text window";
-			public const string CopyScripts = "Displays 'copy' batch files stored under the project '_BUILD' folder.\r\nDouble click list item to run batch file, right click item for to view or run.";
+			public const string Source = "The source folder on your computer to copy from.";
+			public const string Dest = "IP address of the dest.";
+			public const string RemoteFolder = "The base folder location on the XBOX to transfer files to";
+			public const string GenerateScript = "Generate a batch file (and companion ftp instructions ) to copy the selected files to the destination.";
 		}
 
 		public static class HelpMenu

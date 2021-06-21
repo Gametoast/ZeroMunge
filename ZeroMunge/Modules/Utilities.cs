@@ -1166,10 +1166,9 @@ namespace ZeroMunge
 				PSPGameLocation = Properties.Settings.Default.PSPGameLocation,
 				PPSSPPLocation = Properties.Settings.Default.PPSSPPLocation,
 				ProfileName = Properties.Settings.Default.ProfileName,
-				FileCopyFormSources = Properties.Settings.Default.FileCopyFormSources,
-				FileCopyFormDests = Properties.Settings.Default.FileCopyFormDests,
 				XboxCopyFolder = Properties.Settings.Default.XboxCopyFolder,
 				PS2CopyFolder = Properties.Settings.Default.PS2CopyFolder,
+				FTPDest = Properties.Settings.Default.FTPDest,
 			};
 
 			return prefs;
@@ -1207,10 +1206,9 @@ namespace ZeroMunge
 			Properties.Settings.Default.PSPGameLocation = prefs.PSPGameLocation;
 			Properties.Settings.Default.PPSSPPLocation = prefs.PPSSPPLocation;
 			Properties.Settings.Default.ProfileName = prefs.ProfileName;
-			Properties.Settings.Default.FileCopyFormSources = prefs.FileCopyFormSources;
-			Properties.Settings.Default.FileCopyFormDests = prefs.FileCopyFormDests;
 			Properties.Settings.Default.XboxCopyFolder = prefs.XboxCopyFolder;
 			Properties.Settings.Default.PS2CopyFolder = prefs.PS2CopyFolder;
+			Properties.Settings.Default.FTPDest = prefs.FTPDest;
 			Properties.Settings.Default.Save();
 		}
 	}
@@ -1263,11 +1261,9 @@ namespace ZeroMunge
 		public string PSPGameLocation { get; set; }
 		public string PPSSPPLocation { get; set; }
 		public string ProfileName { get; set; }
-		public string FileCopyFormSources {get;set;}
-		public string FileCopyFormDests { get; set; }
 		public string XboxCopyFolder { get; set; }
 		public string PS2CopyFolder { get; set; }
-
+		public string FTPDest { get; set; }
 	}
 
 	public class ReqChunk

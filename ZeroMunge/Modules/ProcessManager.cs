@@ -327,12 +327,6 @@ namespace ZeroMunge.Modules
 						sender.Log(message, LogType.Warning);
 					}
 				}
-				else if (sender.Platform != Platform.PC)
-				{
-					String message = "Platform is not 'PC', no copy to staging area ";
-					Debug.WriteLine(message);
-					sender.Log(message, LogType.Info);
-				}
 			}
 			catch (ArgumentOutOfRangeException e)
 			{

@@ -361,30 +361,6 @@ namespace ZeroMunge.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string FileCopyFormSources {
-            get {
-                return ((string)(this["FileCopyFormSources"]));
-            }
-            set {
-                this["FileCopyFormSources"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string FileCopyFormDests {
-            get {
-                return ((string)(this["FileCopyFormDests"]));
-            }
-            set {
-                this["FileCopyFormDests"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string ProfileName {
             get {
                 return ((string)(this["ProfileName"]));
@@ -415,6 +391,18 @@ namespace ZeroMunge.Properties {
             }
             set {
                 this["PS2CopyFolder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string FTPDest {
+            get {
+                return ((string)(this["FTPDest"]));
+            }
+            set {
+                this["FTPDest"] = value;
             }
         }
     }

@@ -21,6 +21,7 @@ using System.Xml.Serialization;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Newtonsoft.Json;
 using ZeroMunge.Modules;
+using System.Text;
 
 namespace ZeroMunge
 {
@@ -150,6 +151,7 @@ namespace ZeroMunge
 			}
 		}
 
+		bool checkConsoleSupport = true;
 		private void OnPlatformChanged()
 		{
 			string text = "";
@@ -176,6 +178,12 @@ namespace ZeroMunge
 				message += ", files will not be copied to staging area.";
 			mungePanel.Platform = this.Platform;
 			Log(message, LogType.Info);
+
+			if (checkConsoleSupport && this.Platform != Platform.PC)
+			{
+				Preferences.CheckConsoleMungeSupport(prefs.ModToolsLocation);
+				checkConsoleSupport = false;
+			}
 		}
 		#endregion Properties
 
@@ -204,8 +212,8 @@ namespace ZeroMunge
 
 			// Load any saved settings
 			LoadSettings();
-			mungePanel.Logger = this;
 			UsingAlternateUI = menu_alternateUI.Checked;
+			mungePanel.Logger = this;
 			mungePanel.PlatformChanged += MungePanel_PlatformChanged;
 		}
 
@@ -241,8 +249,11 @@ namespace ZeroMunge
 					string arg = dir.Substring(0, index + 6);
 					mungePanel.SetBuildDir(arg);
 					string pc_outputDir = Utilities.EnsureTrailingSlash(data_Files.Rows[0].Cells[4].Value.ToString());
-					pc_outputDir = pc_outputDir.Replace("data\\_LVL_PC\\", "");
-
+					index = pc_outputDir.IndexOf("data\\_LVL_PC\\");
+					if (index > -1)
+						pc_outputDir = pc_outputDir.Substring(0, index);
+					else
+						Log("AlternateUI: Error finding PC copy destination. You may need to manually edit dest.", LogType.Error );
 					mungePanel.PCOutputFolder = pc_outputDir;
 					mungePanel.Prefs = this.prefs;
 				}
@@ -253,6 +264,21 @@ namespace ZeroMunge
 				}
 			}
 		}
+
+		private string GetCurrentProjectFolder()
+		{
+			string retVal = null;
+			if (data_Files.Rows.Count > 0 &&
+					data_Files.Rows[0].Cells.Count > 1 &&
+					data_Files.Rows[0].Cells[2].Value != null)
+			{
+				string dir = data_Files.Rows[0].Cells[2].Value.ToString();
+				int index = dir.IndexOf("_BUILD");
+				retVal = dir.Substring(0, index );
+			}
+			return retVal;
+		}
+
 		/// <summary>
 		/// munge.bat or clean.bat
 		/// </summary>
@@ -261,8 +287,27 @@ namespace ZeroMunge
 			string retVal = "";
 			if (menu_alternateUI.Checked)
 			{
-				if(mungePanel.GetOverrideCommand().Trim().StartsWith("clean", StringComparison.OrdinalIgnoreCase))
-					retVal = Utilities.EnsureTrailingSlash(mungePanel.MungeDir) + "clean.bat";
+				if (mungePanel.UseOVerrideCommand)
+				{
+					if (mungePanel.GetOverrideCommand().Trim().StartsWith("clean", StringComparison.OrdinalIgnoreCase))
+						retVal = Utilities.EnsureTrailingSlash(mungePanel.MungeDir) + "clean.bat";
+					else if (mungePanel.GetOverrideCommand().Trim().StartsWith("munge", StringComparison.OrdinalIgnoreCase))
+						retVal = Utilities.EnsureTrailingSlash(mungePanel.MungeDir) + "munge.bat";
+					else
+					{
+						string batchFile = mungePanel.GetOverrideCommand().Trim();
+						int index = batchFile.IndexOf(' ');
+						if(index > -1)
+							batchFile = batchFile.Substring(0, index);
+						string test = Utilities.EnsureTrailingSlash(mungePanel.MungeDir) + batchFile;
+						if (!File.Exists(test))
+							test = Utilities.EnsureTrailingSlash(mungePanel.MungeDir) + batchFile+".bat";
+						if (File.Exists(test))
+							retVal = test;
+						else
+							throw new InvalidOperationException("Invalid Override command; must be a batch file in the '_BUILD' folder.");
+					}
+				}
 				else
 					retVal = Utilities.EnsureTrailingSlash(mungePanel.MungeDir) + "munge.bat";
 			}
@@ -308,7 +353,7 @@ namespace ZeroMunge
 				}
 				retVal.Add(munge);
 
-				if (mungePanel.MungeAddme && !munge.FileDir.ToLower().Contains("clean.bat"))
+				if (mungePanel.MungeAddme && !munge.FileDir.ToLower().Contains("clean.bat") && !mungePanel.UseOVerrideCommand )
 				{
 					FileInfo addmeInfo = new FileInfo(Utilities.EnsureTrailingSlash(mungePanel.MungeDir) + "..\\addme\\mungeAddme.bat");
 					MungeFactory addme = new MungeFactory()
@@ -909,10 +954,18 @@ namespace ZeroMunge
 
 		private void StartMunge()
 		{
-			if(UsingAlternateUI)
-				ProcessManager.Start(this, GetAltUIFileList(), data_Files);
-			else
-				ProcessManager.Start(this, GetCheckedFiles(), data_Files);
+			try
+			{
+				if (UsingAlternateUI)
+					ProcessManager.Start(this, GetAltUIFileList(), data_Files);
+				else
+					ProcessManager.Start(this, GetCheckedFiles(), data_Files);
+			}
+			catch(InvalidOperationException e)
+			{
+				// Alt UI Panel can throw this exception when using the 'override command'
+				MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
 		}
 
 		private void Hotkey_F6()
@@ -4813,41 +4866,6 @@ namespace ZeroMunge
 			}
 		}
 
-		private void menu_copyFiles_Click(object sender, EventArgs e)
-		{
-			LaunchCopyFileForm();
-		}
-
-
-		private void LaunchCopyFileForm()
-		{
-			FileCopyForm form = new FileCopyForm();
-			int buildIndex = -1;
-			string tmp = "";
-			string cellVal;
-			for(int i = 0; i < data_Files.Rows.Count; i++)
-			{
-				if (data_Files.Rows[i].Cells[2].Value != null)
-				{
-					cellVal = data_Files.Rows[i].Cells[2].Value.ToString();
-					buildIndex = cellVal.IndexOf("_BUILD");
-					if (buildIndex > -1)
-					{
-						tmp = cellVal.Substring(0, buildIndex);
-						if (!form.SourceFolders.Contains(tmp))
-						{
-							form.SourceFolders.Insert(0, tmp);
-							if (Directory.Exists(tmp + "_LVL_PS2"))
-								form.SourceFolders.Insert(0, tmp + "_LVL_PS2");
-							if (Directory.Exists(tmp + "_LVL_XBOX"))
-								form.SourceFolders.Insert(0, tmp + "_LVL_XBOX");
-						}
-					}
-				}
-			}
-			form.Show();
-		}
-
 		private string  GetProjectFolderFromSelectedCell()
 		{
 			string folder = null;
@@ -4946,7 +4964,7 @@ namespace ZeroMunge
 				ProcessManager.RunCommand("Explorer.exe", "\""+folder + "\"", folder);
 			}
 			else
-				MessageBox.Show("Could not determine project folder from selected Cell");
+				MessageBox.Show("Could not determine project folder, is there one currently loaded? ");
 		}
 
 		private void btn_clean_Click(object sender, EventArgs e)
@@ -4971,5 +4989,122 @@ namespace ZeroMunge
 			System.Diagnostics.Process.Start("https://github.com/Gametoast/SWBF2-Lua-API/blob/master/API/LuaDevelopmentTools/Battlefront2API.doclua");
 		}
 
+		private void menu_addMission_Click(object sender, EventArgs e)
+		{
+			AddMission();
+		}
+
+		private void AddMission()
+		{
+			string input = StringInputDlg.GetString("Enter mission name", "Enter a mission name", "ABCg_con.lua");
+			string projectFolder = GetCurrentProjectFolder();
+			if(projectFolder == null)
+			{
+				Log("error determining project folder, no mission added.", LogType.Error);
+				return;
+			}
+			if (input != null)
+			{
+				if (input.IndexOf(".") == -1) input += ".lua";
+				try
+				{
+					AddMission(projectFolder, input);
+				}
+				catch (InvalidOperationException ex)
+				{
+					MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Adds a mission (creates req file, updates mission.req, creates .lua mission file, opend in default editor)
+		/// throws InvalidOperationException on failure.
+		/// </summary>
+		/// <param name="modFolder">The full path to the mod folder</param>
+		/// <param name="missionFileName">The mission file name</param>
+		private void AddMission(string modFolder, string missionFileName)
+		{
+			if (missionFileName.IndexOf(".") == -1)
+				missionFileName += ".lua";
+			DirectoryInfo commonFolder = new DirectoryInfo(modFolder + "Common");
+			FileInfo[] infos = commonFolder.GetFiles(missionFileName);
+			if (infos.Length > 0) throw new InvalidOperationException( "Error:, file already exists\r\n" + infos[0].FullName);
+			
+			// create req file, update mission.req, create mission lua file
+			string reqFileName = commonFolder.FullName + "\\mission\\" + missionFileName.Replace(".lua", ".req");
+			string missionName = missionFileName.Replace(".lua", "");
+			string missionFolder = GetMissionLuaFolder(missionName, modFolder);
+			FileInfo luaFileInfo = new FileInfo(missionFolder + "\\" + missionFileName);
+			FileInfo[] missionReqs = commonFolder.GetFiles("mission.req", SearchOption.AllDirectories);
+
+			if (luaFileInfo.Exists) throw new InvalidOperationException("Error: File already exists " + luaFileInfo.FullName);
+			if (missionFolder.Length == 0) throw new InvalidOperationException("Error: Could not determine mod name");
+			if (missionReqs.Length == 0) throw new InvalidOperationException("Error: Could not find 'mission.req'");
+			
+			string reqContent =
+@"ucft
+{
+	REQN
+	{
+		'script'
+		'XXX'
+	}
+}".Replace("'", "\"").Replace("XXX", missionName);
+
+			string missionReqText = File.ReadAllText(missionReqs[0].FullName);
+			int index = missionReqText.LastIndexOf("\"") + 1;
+			if (index < 3) throw new InvalidOperationException("Error updating mission.req");
+
+			missionReqText = missionReqText.Insert(index, string.Format("\r\n\t\t\"{0}\"", missionName));
+
+			// update mission.req 
+			File.WriteAllText(missionReqs[0].FullName, missionReqText);
+			Log("Updaated mission.req ", LogType.Info);
+
+			// write the req file
+			File.WriteAllText(reqFileName, reqContent);
+			Log("Wrote " + reqFileName, LogType.Info);
+			// create the Lua file
+			if (!luaFileInfo.Directory.Exists) luaFileInfo.Directory.Create(); // create the folder if it does not exits
+			File.WriteAllText(luaFileInfo.FullName, 
+				string.Format("--{0}\n--TODO: Update addme\n",luaFileInfo.Name));
+			string editor = "notepad.exe";
+			if (!String.IsNullOrEmpty(prefs.PreferredTextEditor))
+				editor = prefs.PreferredTextEditor;
+			this.Log(String.Format(" Opening {0}...", luaFileInfo.FullName), LogType.Info);
+			ProcessManager.RunCommand(editor, "\"" + luaFileInfo.FullName + "\"", null);
+		}
+
+		private string GetMissionLuaFolder(string missionName,string modFolder)
+		{
+			string retVal = "";
+			DirectoryInfo scriptFolder = new DirectoryInfo(modFolder + "\\Common\\scripts");
+			int index = missionName.IndexOf('_');
+			if (index > -1)
+			{
+				string test = "";
+				do
+				{
+					test = scriptFolder.FullName + "\\" + missionName.Substring(0, index - 1);
+					if(Directory.Exists(test))
+					{
+						retVal = test;
+						break;
+					}
+					index--;
+				} while (index > 1);
+				if(retVal == "")
+				{
+					index = modFolder.LastIndexOf("_")+1;
+					if (index > 0)
+					{
+						string subFolder = modFolder.Substring(index).Replace("\\", "");
+						retVal = modFolder + "\\Common\\scripts\\" + subFolder;
+					}
+				}
+			}
+			return retVal;
+		}
 	}
 }

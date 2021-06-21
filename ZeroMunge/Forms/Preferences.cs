@@ -422,6 +422,11 @@ namespace ZeroMunge
 
 		public static bool CheckConsoleMungeSupport(string path)
 		{
+			if(!Directory.Exists(path))
+			{
+				MessageBox.Show("Please setup 'ModTools Location' in Preferences first.");
+				return false;
+			}
 			bool retVal = true;
 			string modToolsPath = Utilities.EnsureTrailingSlash( path);
 

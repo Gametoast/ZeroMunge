@@ -60,7 +60,7 @@
 			this.text_OutputLog = new System.Windows.Forms.RichTextBox();
 			this.saveDlg_SaveLogPrompt = new System.Windows.Forms.SaveFileDialog();
 			this.cont_Panels = new System.Windows.Forms.SplitContainer();
-			this.mungePanel = new SimpleMungePanel();
+			this.mungePanel = new AltUIMungePanel();
 			this.data_Files = new System.Windows.Forms.DataGridView();
 			this.col_Enabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.col_Copy = new System.Windows.Forms.DataGridViewCheckBoxColumn();
@@ -128,7 +128,7 @@
 			this.menu_fixWorldMungeScriptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_fixSoundMungeFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_modifyMungedSoundFoldersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.menu_copyFiles = new System.Windows.Forms.ToolStripMenuItem();
+			this.menu_addMission = new System.Windows.Forms.ToolStripMenuItem();
 			this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_setGamePathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_setPreferredEditor = new System.Windows.Forms.ToolStripMenuItem();
@@ -172,6 +172,7 @@
 			this.stat_LogLength = new System.Windows.Forms.ToolStripStatusLabel();
 			this.stat_LogLines = new System.Windows.Forms.ToolStripStatusLabel();
 			this.openDlg_CreateWorldMungeFolderPrompt = new System.Windows.Forms.OpenFileDialog();
+			this.menu_openProjectFolder2 = new System.Windows.Forms.ToolStripMenuItem();
 			this.pan_MungedFilesEdit.SuspendLayout();
 			this.status_MungedFilesEdit.SuspendLayout();
 			this.cmenu_Text.SuspendLayout();
@@ -506,7 +507,7 @@
 			this.mungePanel.PCOutputFolder = "";
 			this.mungePanel.Platform = Platform.PC;
 			this.mungePanel.Prefs = null;
-			this.mungePanel.Size = new System.Drawing.Size(983, 338);
+			this.mungePanel.Size = new System.Drawing.Size(980, 338);
 			this.mungePanel.TabIndex = 21;
 			this.mungePanel.Visible = false;
 			// 
@@ -897,6 +898,7 @@
             this.menu_launchZeroEditor,
             this.menu_openGameExe,
             this.menu_openGameFolder,
+            this.menu_openProjectFolder2,
             this.menu_launchPPSSPP,
             this.menu_debugMission});
 			this.actionsToolStripMenuItem.Name = "actionsToolStripMenuItem";
@@ -1085,7 +1087,7 @@
             this.menu_fixWorldMungeScriptsToolStripMenuItem,
             this.menu_fixSoundMungeFilesToolStripMenuItem,
             this.menu_modifyMungedSoundFoldersToolStripMenuItem,
-            this.menu_copyFiles});
+            this.menu_addMission});
 			this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
 			this.toolsToolStripMenuItem.Size = new System.Drawing.Size(69, 29);
 			this.toolsToolStripMenuItem.Text = "Tools";
@@ -1125,12 +1127,12 @@
 			this.menu_modifyMungedSoundFoldersToolStripMenuItem.Text = "Modify Munged Sound Folders...";
 			this.menu_modifyMungedSoundFoldersToolStripMenuItem.Click += new System.EventHandler(this.menu_modifyMungedSoundFoldersToolStripMenuItem_Click);
 			// 
-			// menu_copyFiles
+			// menu_addMission
 			// 
-			this.menu_copyFiles.Name = "menu_copyFiles";
-			this.menu_copyFiles.Size = new System.Drawing.Size(375, 34);
-			this.menu_copyFiles.Text = "Copy File Dialog (local && ftp)";
-			this.menu_copyFiles.Click += new System.EventHandler(this.menu_copyFiles_Click);
+			this.menu_addMission.Name = "menu_addMission";
+			this.menu_addMission.Size = new System.Drawing.Size(375, 34);
+			this.menu_addMission.Text = "Add Mission...";
+			this.menu_addMission.Click += new System.EventHandler(this.menu_addMission_Click);
 			// 
 			// settingsToolStripMenuItem
 			// 
@@ -1508,6 +1510,14 @@
 			this.openDlg_CreateWorldMungeFolderPrompt.RestoreDirectory = true;
 			this.openDlg_CreateWorldMungeFolderPrompt.Title = "Select World REQ file";
 			// 
+			// menu_openProjectFolder2
+			// 
+			this.menu_openProjectFolder2.Image = global::ZeroMunge.Properties.Resources.FolderOpen1;
+			this.menu_openProjectFolder2.Name = "menu_openProjectFolder2";
+			this.menu_openProjectFolder2.Size = new System.Drawing.Size(370, 34);
+			this.menu_openProjectFolder2.Text = "Open Project Folder";
+			this.menu_openProjectFolder2.Click += new System.EventHandler(this.menu_openProjectFolder_Click);
+			// 
 			// ZeroMunge
 			// 
 			this.AcceptButton = this.btn_Run;
@@ -1687,7 +1697,6 @@
 		private System.Windows.Forms.ToolStripMenuItem menu_xboxPlatform;
 		private System.Windows.Forms.ToolStripMenuItem menu_ps2Platform;
 		private System.Windows.Forms.ToolStripMenuItem menu_launchPPSSPP;
-		private System.Windows.Forms.ToolStripMenuItem menu_copyFiles;
 		private System.Windows.Forms.ContextMenuStrip cmenu_dataGrid;
 		private System.Windows.Forms.ToolStripMenuItem menu_openProjectFolderInEditor;
 		private System.Windows.Forms.ToolStripMenuItem menu_openBuildCmd;
@@ -1697,8 +1706,10 @@
 		private System.Windows.Forms.ToolStripMenuItem menu_openProjectFolder;
 		public System.Windows.Forms.Button btn_clean;
 		private System.Windows.Forms.ToolStripMenuItem menu_Battlefront2API;
-		private SimpleMungePanel mungePanel;
+		private AltUIMungePanel mungePanel;
 		private System.Windows.Forms.ToolStripMenuItem menu_alternateUI;
+		private System.Windows.Forms.ToolStripMenuItem menu_addMission;
+		private System.Windows.Forms.ToolStripMenuItem menu_openProjectFolder2;
 	}
 }
 

@@ -10,4 +10,4 @@
 ### Related Pages
 
 - [**User Interface**](topic_ui.html)
-- [**Commands: Tools**](topic_cmd_tools.html)
+- [**Menus: Tools**](topic_menu_tools.html)

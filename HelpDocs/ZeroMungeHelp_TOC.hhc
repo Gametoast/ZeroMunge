@@ -26,43 +26,68 @@
 			<param name="Local" value="src\topic_ui_filelist.html">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Actions">
+			<param name="Local" value="src\topic_ui_actions.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Easy File Picker">
 			<param name="Local" value="src\topic_ui_easyfilepicker.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Alternate UI">
+			<param name="Local" value="src\topic_ui_alternate_ui.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Launch Mission">
+			<param name="Local" value="src\topic_ui_launch_mission.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Context Menus">
+			<param name="Local" value="src\topic_ui_context_menus.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Log">
+			<param name="Local" value="src\topic_ui_log.html">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Modify Munged Sound Folders">
 			<param name="Local" value="src\topic_ui_modifymungedsoundfolders.html">
 			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Make FTP Script">
+			<param name="Local" value="src\topic_ui_make_ftp_script.html">
+			</OBJECT>
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Commands">
-		<param name="Local" value="src\topic_cmd.html">
-		<param name="Local" value="src\topic_cmd_actions.html">
-		<param name="Local" value="src\topic_cmd_file.html">
-		<param name="Local" value="src\topic_cmd_help.html">
-		<param name="Local" value="src\topic_cmd_settings.html">
-		<param name="Local" value="src\topic_cmd_tools.html">
+		<param name="Name" value="Menus">
+		<param name="Local" value="src\topic_menu.html">
+		<param name="Local" value="src\topic_menu_actions.html">
+		<param name="Local" value="src\topic_menu_file.html">
+		<param name="Local" value="src\topic_menu_help.html">
+		<param name="Local" value="src\topic_menu_preferences.html">
+		<param name="Local" value="src\topic_menu_platform.html">
+		<param name="Local" value="src\topic_menu_tools.html">
 		</OBJECT>
 	<UL>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="File">
-			<param name="Local" value="src\topic_cmd_file.html">
+			<param name="Local" value="src\topic_menu_file.html">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Actions">
-			<param name="Local" value="src\topic_cmd_actions.html">
+			<param name="Local" value="src\topic_menu_actions.html">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Tools">
-			<param name="Local" value="src\topic_cmd_tools.html">
+			<param name="Local" value="src\topic_menu_tools.html">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Settings">
-			<param name="Local" value="src\topic_cmd_settings.html">
+			<param name="Name" value="Preferences">
+			<param name="Local" value="src\topic_menu_preferences.html">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Help">
-			<param name="Local" value="src\topic_cmd_help.html">
+			<param name="Local" value="src\topic_menu_help.html">
 			</OBJECT>
 	</UL>
 </UL>
