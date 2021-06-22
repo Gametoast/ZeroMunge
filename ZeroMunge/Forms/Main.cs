@@ -171,6 +171,10 @@ namespace ZeroMunge
 					backColor = Color.Gray;
 					break;
 			}
+			menu_xboxPlatform.Checked = Platform == Platform.XBOX;
+			menu_pcPlatform.Checked = Platform == Platform.PC;
+			menu_ps2Platform.Checked = Platform == Platform.PS2;
+
 			this.data_Files.Columns[1].DefaultCellStyle.BackColor = backColor;
 			menu_strip_platform.Text = text;
 			string message = "Platform changed to "+Platform.ToString();
