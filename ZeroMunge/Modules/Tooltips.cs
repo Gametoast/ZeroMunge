@@ -29,7 +29,6 @@ namespace ZeroMunge
 			public const string AddProject = "Open a prompt to select a project folder (the 'data_<MOD_ID>' folder).";
 			public const string RemoveFile = "Remove the selected files from the file list.";
 			public const string RemoveAllFiles = "Remove all files from the file list.";
-			public const string HelpButton = "Get help with the user interface.";
 		}
 
 		public static class Actions
@@ -39,6 +38,7 @@ namespace ZeroMunge
 			public const string OpenZeroEditor = "Launch Zero Editor.";
 			public const string OpenGameExe = "Launch Star Wars Battlefront II.";
 			public const string OpenGameFolder = "Open the 'GameData' folder.";
+			public const string OpenMungeLog = "Open the munge log (currently selected platform) in your preferred editor.";
 		}
 
 		public static class OutputLog
@@ -46,6 +46,7 @@ namespace ZeroMunge
 			public const string CopyLog = "Copy the contents of the output log window to the clipboard.";
 			public const string SaveLogAs = "Save the contents of the output log to a new file.";
 			public const string ClearLog = "Clear the contents of the output log.";
+			public const string OpenLog = "Open output the log in your preferred editor.";
 		}
 
 		public static class Tools
@@ -55,6 +56,7 @@ namespace ZeroMunge
 			public const string FixWorldMungeFile = "Check to see if a world's munge.bat script is set to munge the correct world and fix it if not.";
 			public const string FixSoundMungeFiles = "Apply the sound munge fixes to a project directory.";
 			public const string ModifyMungedSoundFolders = "Select which sound folders should be munged when sound is munged.";
+			public const string AddMission = "Add a mission to the current project. (adds req, lua files; updates mission.req)";
 		}
 
 		public static class SoundMungeForm
@@ -176,6 +178,9 @@ namespace ZeroMunge
 			public const string CheckForUpdates = "Check to see if a new release of Zero Munge is available.  \n\nNOTE: This requires an Internet connection.";
 			public const string Contact = "Send me an e-mail at marth8880@gmail.com  \n\nNOTE: If a default e-mail program isn't set up, this link probably won't do anything.";
 			public const string ThirdPartySoftware = "View a list of the third-party software used in Zero Munge.";
+			public const string GametoastGithub = "Open your browser to the Gametoast organization Github page";
+			public const string Gametoast = "Open your browser to the Gametoast website";
+			public const string Battlefront2API = "Open your browser to the Battlefront 2 Lua API ";
 		}
 
 		public static class SaveFileListPrompt

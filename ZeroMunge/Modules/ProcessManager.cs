@@ -188,21 +188,7 @@ namespace ZeroMunge.Modules
 			//	sender.stat_JobStatus.Text = "Idle";
 			//}
 			Utilities.PlaySound(Utilities.SoundType.Success);
-			ShowLog(sender);
-		}
-
-		private static void ShowLog(ZeroMunge sender)
-		{
-			string mungeLog = sender.MungeLogName;
-			if (File.Exists(mungeLog))
-			{
-				FileInfo info = new FileInfo(mungeLog);
-				if (info.Length > 0)
-				{
-					sender.Log("munge log not empty, showing munge log", LogType.Warning);
-					RunCommand("Notepad.exe", mungeLog, info.DirectoryName);
-				}
-			}
+			sender.ShowMungeLog(false, "Notepad.exe");
 		}
 
 		/// <summary>

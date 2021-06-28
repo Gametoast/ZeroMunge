@@ -48,32 +48,32 @@
 			this.group_copyDest = new System.Windows.Forms.GroupBox();
 			this.btn_browseOutputFolder = new System.Windows.Forms.Button();
 			this.txt_copyDestFolder = new System.Windows.Forms.TextBox();
+			this.cxt_menu_copyDest = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.openCopyDestInExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.group_overrideCommand = new System.Windows.Forms.GroupBox();
+			this.cxt_menu_mungeFolder = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.openInExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.check_useOverrideCommand = new System.Windows.Forms.CheckBox();
 			this.combo_overrideCommand = new System.Windows.Forms.ComboBox();
+			this.cxt_menu_overrideCommand = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.openInEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.FormToolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.btn_copy = new System.Windows.Forms.Button();
 			this.check_copyIfNewer = new System.Windows.Forms.CheckBox();
 			this.group_mungeFolder = new System.Windows.Forms.GroupBox();
-			this.cxt_menu_mungeFolder = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.openInExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.txt_mungeFolder = new System.Windows.Forms.TextBox();
 			this.check_autoCopy = new System.Windows.Forms.CheckBox();
 			this.btn_generateFTPScript = new System.Windows.Forms.Button();
-			this.cxt_menu_copyDest = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.openCopyDestInExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.cxt_menu_overrideCommand = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.openInEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.group_platform.SuspendLayout();
 			this.grp_side.SuspendLayout();
 			this.grp_world.SuspendLayout();
 			this.grp_options.SuspendLayout();
 			this.group_copyDest.SuspendLayout();
-			this.group_overrideCommand.SuspendLayout();
-			this.group_mungeFolder.SuspendLayout();
-			this.cxt_menu_mungeFolder.SuspendLayout();
 			this.cxt_menu_copyDest.SuspendLayout();
+			this.group_overrideCommand.SuspendLayout();
+			this.cxt_menu_mungeFolder.SuspendLayout();
 			this.cxt_menu_overrideCommand.SuspendLayout();
+			this.group_mungeFolder.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// group_platform
@@ -219,7 +219,7 @@
 			this.check_missions.AutoSize = true;
 			this.check_missions.Checked = true;
 			this.check_missions.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.check_missions.Location = new System.Drawing.Point(8, 98);
+			this.check_missions.Location = new System.Drawing.Point(9, 98);
 			this.check_missions.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.check_missions.Name = "check_missions";
 			this.check_missions.Size = new System.Drawing.Size(96, 24);
@@ -323,6 +323,22 @@
 			this.txt_copyDestFolder.TabIndex = 0;
 			this.txt_copyDestFolder.TextChanged += new System.EventHandler(this.txt_outputFolder_TextChanged);
 			// 
+			// cxt_menu_copyDest
+			// 
+			this.cxt_menu_copyDest.ImageScalingSize = new System.Drawing.Size(24, 24);
+			this.cxt_menu_copyDest.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openCopyDestInExplorerToolStripMenuItem});
+			this.cxt_menu_copyDest.Name = "cxt_menu_copyDest";
+			this.cxt_menu_copyDest.Size = new System.Drawing.Size(313, 36);
+			// 
+			// openCopyDestInExplorerToolStripMenuItem
+			// 
+			this.openCopyDestInExplorerToolStripMenuItem.Image = global::ZeroMunge.Properties.Resources.FolderOpen1;
+			this.openCopyDestInExplorerToolStripMenuItem.Name = "openCopyDestInExplorerToolStripMenuItem";
+			this.openCopyDestInExplorerToolStripMenuItem.Size = new System.Drawing.Size(312, 32);
+			this.openCopyDestInExplorerToolStripMenuItem.Text = "Open Copy Dest in Explorer";
+			this.openCopyDestInExplorerToolStripMenuItem.Click += new System.EventHandler(this.openCopyDestInExplorerToolStripMenuItem_Click);
+			// 
 			// group_overrideCommand
 			// 
 			this.group_overrideCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -338,6 +354,22 @@
 			this.group_overrideCommand.TabIndex = 14;
 			this.group_overrideCommand.TabStop = false;
 			this.group_overrideCommand.Text = "Override command";
+			// 
+			// cxt_menu_mungeFolder
+			// 
+			this.cxt_menu_mungeFolder.ImageScalingSize = new System.Drawing.Size(24, 24);
+			this.cxt_menu_mungeFolder.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openInExplorerToolStripMenuItem});
+			this.cxt_menu_mungeFolder.Name = "cxt_menu_mungeFolder";
+			this.cxt_menu_mungeFolder.Size = new System.Drawing.Size(225, 36);
+			// 
+			// openInExplorerToolStripMenuItem
+			// 
+			this.openInExplorerToolStripMenuItem.Image = global::ZeroMunge.Properties.Resources.FolderOpen1;
+			this.openInExplorerToolStripMenuItem.Name = "openInExplorerToolStripMenuItem";
+			this.openInExplorerToolStripMenuItem.Size = new System.Drawing.Size(224, 32);
+			this.openInExplorerToolStripMenuItem.Text = "Open in Explorer";
+			this.openInExplorerToolStripMenuItem.Click += new System.EventHandler(this.openInExplorerToolStripMenuItem_Click);
 			// 
 			// check_useOverrideCommand
 			// 
@@ -361,6 +393,22 @@
 			this.combo_overrideCommand.Name = "combo_overrideCommand";
 			this.combo_overrideCommand.Size = new System.Drawing.Size(575, 28);
 			this.combo_overrideCommand.TabIndex = 0;
+			// 
+			// cxt_menu_overrideCommand
+			// 
+			this.cxt_menu_overrideCommand.ImageScalingSize = new System.Drawing.Size(24, 24);
+			this.cxt_menu_overrideCommand.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openInEditorToolStripMenuItem});
+			this.cxt_menu_overrideCommand.Name = "cxt_menu_overrideCommand";
+			this.cxt_menu_overrideCommand.Size = new System.Drawing.Size(208, 36);
+			// 
+			// openInEditorToolStripMenuItem
+			// 
+			this.openInEditorToolStripMenuItem.Image = global::ZeroMunge.Properties.Resources.TextEditorIcon;
+			this.openInEditorToolStripMenuItem.Name = "openInEditorToolStripMenuItem";
+			this.openInEditorToolStripMenuItem.Size = new System.Drawing.Size(207, 32);
+			this.openInEditorToolStripMenuItem.Text = "Open in Editor";
+			this.openInEditorToolStripMenuItem.Click += new System.EventHandler(this.openInEditorToolStripMenuItem_Click);
 			// 
 			// btn_copy
 			// 
@@ -403,22 +451,6 @@
 			this.group_mungeFolder.TabStop = false;
 			this.group_mungeFolder.Text = "Munge Folder";
 			// 
-			// cxt_menu_mungeFolder
-			// 
-			this.cxt_menu_mungeFolder.ImageScalingSize = new System.Drawing.Size(24, 24);
-			this.cxt_menu_mungeFolder.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openInExplorerToolStripMenuItem});
-			this.cxt_menu_mungeFolder.Name = "cxt_menu_mungeFolder";
-			this.cxt_menu_mungeFolder.Size = new System.Drawing.Size(225, 36);
-			// 
-			// openInExplorerToolStripMenuItem
-			// 
-			this.openInExplorerToolStripMenuItem.Image = global::ZeroMunge.Properties.Resources.FolderOpen1;
-			this.openInExplorerToolStripMenuItem.Name = "openInExplorerToolStripMenuItem";
-			this.openInExplorerToolStripMenuItem.Size = new System.Drawing.Size(224, 32);
-			this.openInExplorerToolStripMenuItem.Text = "Open in Explorer";
-			this.openInExplorerToolStripMenuItem.Click += new System.EventHandler(this.openInExplorerToolStripMenuItem_Click);
-			// 
 			// txt_mungeFolder
 			// 
 			this.txt_mungeFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -459,38 +491,6 @@
 			this.btn_generateFTPScript.Visible = false;
 			this.btn_generateFTPScript.Click += new System.EventHandler(this.btn_generateFTPScript_Click);
 			// 
-			// cxt_menu_copyDest
-			// 
-			this.cxt_menu_copyDest.ImageScalingSize = new System.Drawing.Size(24, 24);
-			this.cxt_menu_copyDest.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openCopyDestInExplorerToolStripMenuItem});
-			this.cxt_menu_copyDest.Name = "cxt_menu_copyDest";
-			this.cxt_menu_copyDest.Size = new System.Drawing.Size(313, 36);
-			// 
-			// openCopyDestInExplorerToolStripMenuItem
-			// 
-			this.openCopyDestInExplorerToolStripMenuItem.Image = global::ZeroMunge.Properties.Resources.FolderOpen1;
-			this.openCopyDestInExplorerToolStripMenuItem.Name = "openCopyDestInExplorerToolStripMenuItem";
-			this.openCopyDestInExplorerToolStripMenuItem.Size = new System.Drawing.Size(312, 32);
-			this.openCopyDestInExplorerToolStripMenuItem.Text = "Open Copy Dest in Explorer";
-			this.openCopyDestInExplorerToolStripMenuItem.Click += new System.EventHandler(this.openCopyDestInExplorerToolStripMenuItem_Click);
-			// 
-			// cxt_menu_overrideCommand
-			// 
-			this.cxt_menu_overrideCommand.ImageScalingSize = new System.Drawing.Size(24, 24);
-			this.cxt_menu_overrideCommand.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openInEditorToolStripMenuItem});
-			this.cxt_menu_overrideCommand.Name = "cxt_menu_overrideCommand";
-			this.cxt_menu_overrideCommand.Size = new System.Drawing.Size(208, 36);
-			// 
-			// openInEditorToolStripMenuItem
-			// 
-			this.openInEditorToolStripMenuItem.Image = global::ZeroMunge.Properties.Resources.TextEditorIcon;
-			this.openInEditorToolStripMenuItem.Name = "openInEditorToolStripMenuItem";
-			this.openInEditorToolStripMenuItem.Size = new System.Drawing.Size(248, 32);
-			this.openInEditorToolStripMenuItem.Text = "Open in Editor";
-			this.openInEditorToolStripMenuItem.Click += new System.EventHandler(this.openInEditorToolStripMenuItem_Click);
-			// 
 			// AltUIMungePanel
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -517,13 +517,13 @@
 			this.grp_options.PerformLayout();
 			this.group_copyDest.ResumeLayout(false);
 			this.group_copyDest.PerformLayout();
+			this.cxt_menu_copyDest.ResumeLayout(false);
 			this.group_overrideCommand.ResumeLayout(false);
 			this.group_overrideCommand.PerformLayout();
+			this.cxt_menu_mungeFolder.ResumeLayout(false);
+			this.cxt_menu_overrideCommand.ResumeLayout(false);
 			this.group_mungeFolder.ResumeLayout(false);
 			this.group_mungeFolder.PerformLayout();
-			this.cxt_menu_mungeFolder.ResumeLayout(false);
-			this.cxt_menu_copyDest.ResumeLayout(false);
-			this.cxt_menu_overrideCommand.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

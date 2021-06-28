@@ -130,7 +130,12 @@ namespace ZeroMunge
 		{
 			get
 			{
-				string retVal = Path.GetFullPath( this.Platform.ToString() + "_MungeLog.txt");
+				string folder = GetProjectFolderFromRow(1);
+				if (folder == null)
+					folder = ".\\";
+				else
+					folder += "\\_BUILD";
+				string retVal = Path.GetFullPath(Utilities.EnsureTrailingSlash( folder ) + this.Platform.ToString() + "_MungeLog.txt");
 				return retVal;
 			}
 		}
@@ -391,6 +396,7 @@ namespace ZeroMunge
 		#endregion
 
 		#region Main Window
+		private const string ZeroMungeLog = ".\\ZeroMunge_OutputLog.log";
 
 		//public Thread outputLogThread;
 
@@ -452,8 +458,8 @@ namespace ZeroMunge
 			{
 				try
 				{
-					string openMessage = "Opened logfile ZeroMunge_OutputLog.log  " + DateTime.Now.ToString("yyyy-MM-dd") + " " + Utilities.GetTimestamp();
-					File.WriteAllText(Directory.GetCurrentDirectory() + @"\ZeroMunge_OutputLog.log", openMessage + Environment.NewLine);
+					string openMessage = "Opened logfile " + ZeroMungeLog + "  " + DateTime.Now.ToString("yyyy-MM-dd") + " " + Utilities.GetTimestamp();
+					File.WriteAllText(ZeroMungeLog, openMessage + Environment.NewLine);
 				}
 				catch (IOException ex)
 				{
@@ -1053,7 +1059,6 @@ namespace ZeroMunge
 			FormTooltips.SetToolTip(btn_AddProject, Tooltips.FileList.AddProject);
 			FormTooltips.SetToolTip(btn_RemoveFile, Tooltips.FileList.RemoveFile);
 			FormTooltips.SetToolTip(btn_RemoveAllFiles, Tooltips.FileList.RemoveAllFiles);
-			FormTooltips.SetToolTip(btn_Help, Tooltips.FileList.HelpButton);
 
 			menu_runToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_Run);
 			menu_cancelToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_Cancel);
@@ -1065,11 +1070,12 @@ namespace ZeroMunge
 			menu_removeAllToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_RemoveAllFiles);
 
 			// Output Log
-			FormTooltips.SetToolTip(btn_CopyLog, Tooltips.OutputLog.CopyLog);
+			FormTooltips.SetToolTip(btn_OpenMungeLog, Tooltips.Actions.OpenMungeLog);
+			FormTooltips.SetToolTip(btn_OpenLog, Tooltips.OutputLog.OpenLog);
 			FormTooltips.SetToolTip(btn_SaveLog, Tooltips.OutputLog.SaveLogAs);
 			FormTooltips.SetToolTip(btn_ClearLog, Tooltips.OutputLog.ClearLog);
 
-			menu_copyLogToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_CopyLog);
+			menu_copyLogToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_OpenMungeLog);
 			menu_saveLogAsToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_SaveLog);
 			menu_clearLogToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_ClearLog);
 
@@ -1079,6 +1085,8 @@ namespace ZeroMunge
 			menu_launchZeroEditor.ToolTipText = Tooltips.Actions.OpenZeroEditor;
 			menu_openGameExe.ToolTipText = Tooltips.Actions.OpenGameExe;
 			menu_openGameFolder.ToolTipText = Tooltips.Actions.OpenGameFolder;
+			menu_openMungeLog.ToolTipText = Tooltips.Actions.OpenMungeLog;
+			menu_openLog.ToolTipText = Tooltips.OutputLog.OpenLog;
 			// -------------------------------------------------
 
 			// Tools Menu
@@ -1087,6 +1095,7 @@ namespace ZeroMunge
 			menu_fixWorldMungeScriptsToolStripMenuItem.ToolTipText = Tooltips.Tools.FixWorldMungeFile;
 			menu_fixSoundMungeFilesToolStripMenuItem.ToolTipText = Tooltips.Tools.FixSoundMungeFiles;
 			menu_modifyMungedSoundFoldersToolStripMenuItem.ToolTipText = Tooltips.Tools.ModifyMungedSoundFolders;
+			menu_addMission.ToolTipText = Tooltips.Tools.AddMission;
 
 
 			// Settings
@@ -1106,6 +1115,9 @@ namespace ZeroMunge
 			menu_viewOpenIssuesToolStripMenuItem.ToolTipText = Tooltips.HelpMenu.ViewOpenIssues;
 			menu_checkForUpdatesToolStripMenuItem.ToolTipText = Tooltips.HelpMenu.CheckForUpdates;
 			menu_aboutToolStripMenuItem.ToolTipText = Tooltips.HelpMenu.OpenAbout;
+			menu_gametoastForums.ToolTipText = Tooltips.HelpMenu.Gametoast;
+			menu_gametoastGithub.ToolTipText = Tooltips.HelpMenu.GametoastGithub;
+			menu_Battlefront2API.ToolTipText = Tooltips.HelpMenu.Battlefront2API;
 		}
 
 
@@ -1663,9 +1675,8 @@ namespace ZeroMunge
 				btn_RemoveFile.Enabled = enabled;
 				btn_RemoveAllFiles.Enabled = enabled;
 				btn_SetGamePath.Enabled = enabled;
-				btn_Help.Enabled = enabled;
 
-				btn_CopyLog.Enabled = enabled;
+				btn_OpenMungeLog.Enabled = enabled;
 				btn_SaveLog.Enabled = enabled;
 				btn_ClearLog.Enabled = enabled;
 				btn_clean.Enabled = enabled;
@@ -3257,14 +3268,6 @@ namespace ZeroMunge
 			Flow_SetGameDirectory_Start();
 		}
 
-
-		// When the user clicks the "Help" button:
-		// Open the Help file at the "User Interface" topic.
-		private void btn_Help_Click(object sender, EventArgs e)
-		{
-			Utilities.OpenHelp(this, "topic_ui");
-		}
-
 		#endregion File List : Sidebar Buttons
 
 
@@ -4694,9 +4697,7 @@ namespace ZeroMunge
 				MessageBox.Show("Game path not set. Set Game path to use this feature.", "Error");
 				return;
 			}
-			string editor = "notepad.exe";
-			if (!String.IsNullOrEmpty(prefs.PreferredTextEditor))
-				editor = prefs.PreferredTextEditor;
+			string editor = GetEditor();
 			string logPath = prefs.GameDirectory + "\\BFront2.log";
 			if (File.Exists(logPath))
 			{
@@ -4873,19 +4874,28 @@ namespace ZeroMunge
 		private string  GetProjectFolderFromSelectedCell()
 		{
 			string folder = null;
-			int col = 2;  // Target the 'munge.bat' columns
 			int row = -1;
 			if (data_Files.SelectedCells.Count > 0 )
 			{
 				row = data_Files.SelectedCells[0].RowIndex;
-				if (data_Files.Rows[row].Cells.Count > 2 && data_Files.Rows[row].Cells[col].Value != null )
-				{
-					string filename = data_Files.Rows[row].Cells[col].Value.ToString();
-					int index = filename.IndexOf("_BUILD");
-					if (index < 0) index = filename.IndexOf("addme");
-					if (index > -1)
-						folder = filename.Substring(0, index);
-				}
+				folder = GetProjectFolderFromRow(row);
+			}
+			return folder;
+		}
+
+		private string GetProjectFolderFromRow(int row)
+		{
+			string folder = null;
+			int col = 2;  // Target the 'munge.bat' columns
+			if ( (row < data_Files.Rows.Count) &&
+				 (data_Files.Rows[row].Cells.Count > 2) &&
+				 (data_Files.Rows[row].Cells[col].Value != null) )
+			{
+				string filename = data_Files.Rows[row].Cells[col].Value.ToString();
+				int index = filename.IndexOf("_BUILD");
+				if (index < 0) index = filename.IndexOf("addme");
+				if (index > -1)
+					folder = filename.Substring(0, index);
 			}
 			return folder;
 		}
@@ -5000,7 +5010,14 @@ namespace ZeroMunge
 
 		private void AddMission()
 		{
-			string input = StringInputDlg.GetString("Enter mission name", "Enter a mission name", "ABCg_con.lua");
+			string input = StringInputDlg.GetString("Enter mission name",
+				"Pressing 'OK' will:\r\n"+
+				"  1. Add a <mission_name>.req to the 'Common\\mission' folder.\r\n"+
+				"  2. Update 'mission.req'\r\n"+
+				"  3. Create <mission_name>.lua and open it in preferred editor.",
+				"ABCg_con.lua");
+			if (input == null)
+				return;// user canceled
 			string projectFolder = GetCurrentProjectFolder();
 			if(projectFolder == null)
 			{
@@ -5073,11 +5090,17 @@ namespace ZeroMunge
 			if (!luaFileInfo.Directory.Exists) luaFileInfo.Directory.Create(); // create the folder if it does not exits
 			File.WriteAllText(luaFileInfo.FullName, 
 				string.Format("--{0}\n--TODO: Update addme\n",luaFileInfo.Name));
-			string editor = "notepad.exe";
-			if (!String.IsNullOrEmpty(prefs.PreferredTextEditor))
-				editor = prefs.PreferredTextEditor;
+			string editor = GetEditor();
 			this.Log(String.Format(" Opening {0}...", luaFileInfo.FullName), LogType.Info);
 			ProcessManager.RunCommand(editor, "\"" + luaFileInfo.FullName + "\"", null);
+		}
+
+		private string GetEditor()
+		{
+			string editor = "notepad.exe";
+			if (prefs.PreferredTextEditor != null && File.Exists(prefs.PreferredTextEditor))
+				editor = prefs.PreferredTextEditor;
+			return editor;
 		}
 
 		private string GetMissionLuaFolder(string missionName,string modFolder)
@@ -5109,6 +5132,58 @@ namespace ZeroMunge
 				}
 			}
 			return retVal;
+		}
+
+		private void btn_OpenLog_Click(object sender, EventArgs e)
+		{
+			OpenZeroMungeLog();
+		}
+
+		private void OpenZeroMungeLog()
+		{
+			string editor = GetEditor();
+			this.Log(String.Format("Opening {0}...", ZeroMungeLog), LogType.Info);
+			ProcessManager.RunCommand(editor, "\"" + Path.GetFullPath(ZeroMungeLog) + "\"", null);
+		}
+
+		public void ShowMungeLog(bool verbose, string editor=null)
+		{
+			string mungeLog = MungeLogName;
+			if( editor == null)
+				editor = GetEditor();
+
+			if (File.Exists(mungeLog))
+			{
+				FileInfo info = new FileInfo(mungeLog);
+				if (info.Length > 0)
+				{
+					Log("munge log not empty, showing munge log", LogType.Warning);
+					ProcessManager.RunCommand(editor, mungeLog, info.DirectoryName);
+				}
+				else if(verbose)
+				{
+					Log(String.Format("'{0}' is empty", mungeLog), LogType.Info);
+				}
+			}
+			else if (verbose)
+			{
+				Log(String.Format("'{0}' does not exist", mungeLog), LogType.Warning);
+			}
+		}
+
+		private void menu_openLog_Click(object sender, EventArgs e)
+		{
+			OpenZeroMungeLog();
+		}
+
+		private void menu_openMungeLog_Click(object sender, EventArgs e)
+		{
+			ShowMungeLog(true);
+		}
+
+		private void btn_OpenMungeLog_Click(object sender, EventArgs e)
+		{
+			ShowMungeLog(true);
 		}
 	}
 }

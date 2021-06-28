@@ -32,21 +32,27 @@ namespace ZeroMunge
 			this.mUserInput.Text= initialText;
 			this.mUserInput.SelectAll();
 		}
-
+		/// <summary>
+		/// Returns null string on cancel.
+		/// </summary>
 		public static string GetString(string title, string message)
 		{
+			string ret = null;
 			StringInputDlg sid = new StringInputDlg(title, message,"");
-			sid.ShowDialog();
-			string ret = sid.getResult();
+			if( sid.ShowDialog() == DialogResult.OK)
+				ret = sid.getResult();
 			sid.Dispose();
 			return ret;
 		}
-
+		/// <summary>
+		/// Returns null string on cancel.
+		/// </summary>
 		public static string GetString(string title, string message, string initialText)
 		{
+			string ret = null;
 			StringInputDlg sid = new StringInputDlg(title, message, initialText);
-			sid.ShowDialog();
-			string ret = sid.getResult();
+			if (sid.ShowDialog() == DialogResult.OK)
+				ret = sid.getResult();
 			sid.Dispose();
 			return ret;
 		}
@@ -230,7 +236,7 @@ namespace ZeroMunge
 			// 
 			this.mOkButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.mOkButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.mOkButton.Location = new System.Drawing.Point(176, 92);
+			this.mOkButton.Location = new System.Drawing.Point(220, 216);
 			this.mOkButton.Name = "mOkButton";
 			this.mOkButton.Size = new System.Drawing.Size(67, 32);
 			this.mOkButton.TabIndex = 1;
@@ -241,7 +247,7 @@ namespace ZeroMunge
 			// 
 			this.mCancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.mCancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.mCancelButton.Location = new System.Drawing.Point(264, 92);
+			this.mCancelButton.Location = new System.Drawing.Point(308, 216);
 			this.mCancelButton.Name = "mCancelButton";
 			this.mCancelButton.Size = new System.Drawing.Size(86, 32);
 			this.mCancelButton.TabIndex = 2;
@@ -250,28 +256,30 @@ namespace ZeroMunge
 			// 
 			// mUserInput
 			// 
-			this.mUserInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.mUserInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.mUserInput.Location = new System.Drawing.Point(56, 40);
+			this.mUserInput.Location = new System.Drawing.Point(56, 153);
 			this.mUserInput.Name = "mUserInput";
-			this.mUserInput.Size = new System.Drawing.Size(294, 26);
+			this.mUserInput.Size = new System.Drawing.Size(338, 26);
 			this.mUserInput.TabIndex = 0;
 			this.mUserInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.userInput_KeyDown);
 			// 
 			// label1
 			// 
-			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.label1.BackColor = System.Drawing.Color.Transparent;
 			this.label1.Location = new System.Drawing.Point(56, 8);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(294, 32);
+			this.label1.Size = new System.Drawing.Size(338, 126);
 			this.label1.TabIndex = 3;
 			// 
 			// StringInputDlg
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.CancelButton = this.mCancelButton;
-			this.ClientSize = new System.Drawing.Size(376, 130);
+			this.ClientSize = new System.Drawing.Size(436, 260);
 			this.ControlBox = false;
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.mUserInput);

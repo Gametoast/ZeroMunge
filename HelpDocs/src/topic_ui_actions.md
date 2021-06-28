@@ -10,8 +10,7 @@
 6. **Add Project...** – Opens a prompt to select a project folder whose common munge.bat files will be added to the file list.
 7. **Remove** – Removes the selected file.
 8. **Remove All** – Removes all files from the file list.
-9. **Help...** – Open the 'Help' file.
-10. **Clean** – Run the 'clean' command for the corresponding checked munge files.
+9. **Clean** – Run the 'clean' command for the corresponding checked munge files.
 
 ### Related Pages
 

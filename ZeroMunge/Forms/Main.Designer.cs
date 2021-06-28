@@ -50,7 +50,7 @@
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.selectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.btn_ClearLog = new System.Windows.Forms.Button();
-			this.btn_CopyLog = new System.Windows.Forms.Button();
+			this.btn_OpenMungeLog = new System.Windows.Forms.Button();
 			this.btn_SaveLog = new System.Windows.Forms.Button();
 			this.btn_AddFolders = new System.Windows.Forms.Button();
 			this.btn_AddProject = new System.Windows.Forms.Button();
@@ -111,6 +111,8 @@
 			this.menu_removeAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator14 = new System.Windows.Forms.ToolStripSeparator();
 			this.menu_logSubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.menu_openMungeLog = new System.Windows.Forms.ToolStripMenuItem();
+			this.menu_openLog = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_copyLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_saveLogAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_clearLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -120,6 +122,7 @@
 			this.menu_launchZeroEditor = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_openGameExe = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_openGameFolder = new System.Windows.Forms.ToolStripMenuItem();
+			this.menu_openProjectFolder2 = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_launchPPSSPP = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_debugMission = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -158,10 +161,10 @@
 			this.menu_aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.flp_FileButtons = new System.Windows.Forms.FlowLayoutPanel();
 			this.btn_EasyFilePicker = new System.Windows.Forms.Button();
-			this.btn_Help = new System.Windows.Forms.Button();
 			this.btn_clean = new System.Windows.Forms.Button();
 			this.button3 = new System.Windows.Forms.Button();
 			this.flp_LogButtons = new System.Windows.Forms.FlowLayoutPanel();
+			this.btn_OpenLog = new System.Windows.Forms.Button();
 			this.saveDlg_SaveFileListPrompt = new System.Windows.Forms.SaveFileDialog();
 			this.openDlg_OpenFileListPrompt = new System.Windows.Forms.OpenFileDialog();
 			this.openDlg_CreateSideMungeFolderPrompt = new System.Windows.Forms.OpenFileDialog();
@@ -172,7 +175,6 @@
 			this.stat_LogLength = new System.Windows.Forms.ToolStripStatusLabel();
 			this.stat_LogLines = new System.Windows.Forms.ToolStripStatusLabel();
 			this.openDlg_CreateWorldMungeFolderPrompt = new System.Windows.Forms.OpenFileDialog();
-			this.menu_openProjectFolder2 = new System.Windows.Forms.ToolStripMenuItem();
 			this.pan_MungedFilesEdit.SuspendLayout();
 			this.status_MungedFilesEdit.SuspendLayout();
 			this.cmenu_Text.SuspendLayout();
@@ -341,7 +343,7 @@
 			// btn_ClearLog
 			// 
 			this.btn_ClearLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_ClearLog.Location = new System.Drawing.Point(0, 95);
+			this.btn_ClearLog.Location = new System.Drawing.Point(0, 148);
 			this.btn_ClearLog.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
 			this.btn_ClearLog.Name = "btn_ClearLog";
 			this.btn_ClearLog.Size = new System.Drawing.Size(153, 35);
@@ -350,22 +352,22 @@
 			this.btn_ClearLog.UseVisualStyleBackColor = true;
 			this.btn_ClearLog.Click += new System.EventHandler(this.btn_ClearLog_Click);
 			// 
-			// btn_CopyLog
+			// btn_OpenMungeLog
 			// 
-			this.btn_CopyLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_CopyLog.Location = new System.Drawing.Point(0, 5);
-			this.btn_CopyLog.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
-			this.btn_CopyLog.Name = "btn_CopyLog";
-			this.btn_CopyLog.Size = new System.Drawing.Size(153, 35);
-			this.btn_CopyLog.TabIndex = 9;
-			this.btn_CopyLog.Text = "Copy Log";
-			this.btn_CopyLog.UseVisualStyleBackColor = true;
-			this.btn_CopyLog.Click += new System.EventHandler(this.btn_CopyLog_Click);
+			this.btn_OpenMungeLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.btn_OpenMungeLog.Location = new System.Drawing.Point(0, 13);
+			this.btn_OpenMungeLog.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
+			this.btn_OpenMungeLog.Name = "btn_OpenMungeLog";
+			this.btn_OpenMungeLog.Size = new System.Drawing.Size(153, 35);
+			this.btn_OpenMungeLog.TabIndex = 9;
+			this.btn_OpenMungeLog.Text = "Open Munge Log";
+			this.btn_OpenMungeLog.UseVisualStyleBackColor = true;
+			this.btn_OpenMungeLog.Click += new System.EventHandler(this.btn_OpenMungeLog_Click);
 			// 
 			// btn_SaveLog
 			// 
 			this.btn_SaveLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_SaveLog.Location = new System.Drawing.Point(0, 50);
+			this.btn_SaveLog.Location = new System.Drawing.Point(0, 103);
 			this.btn_SaveLog.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
 			this.btn_SaveLog.Name = "btn_SaveLog";
 			this.btn_SaveLog.Size = new System.Drawing.Size(153, 35);
@@ -408,7 +410,6 @@
 			this.btn_RemoveAllFiles.Size = new System.Drawing.Size(153, 35);
 			this.btn_RemoveAllFiles.TabIndex = 6;
 			this.btn_RemoveAllFiles.Text = "Remove All";
-			this.btn_RemoveAllFiles.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.btn_RemoveAllFiles.UseVisualStyleBackColor = true;
 			this.btn_RemoveAllFiles.Click += new System.EventHandler(this.btn_RemoveAllFiles_Click);
 			// 
@@ -765,7 +766,7 @@
 			// button2
 			// 
 			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button2.Location = new System.Drawing.Point(41, 500);
+			this.button2.Location = new System.Drawing.Point(41, 455);
 			this.button2.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(112, 35);
@@ -987,6 +988,8 @@
 			// menu_logSubToolStripMenuItem
 			// 
 			this.menu_logSubToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_openMungeLog,
+            this.menu_openLog,
             this.menu_copyLogToolStripMenuItem,
             this.menu_saveLogAsToolStripMenuItem,
             this.menu_clearLogToolStripMenuItem});
@@ -994,24 +997,38 @@
 			this.menu_logSubToolStripMenuItem.Size = new System.Drawing.Size(370, 34);
 			this.menu_logSubToolStripMenuItem.Text = "Log";
 			// 
+			// menu_openMungeLog
+			// 
+			this.menu_openMungeLog.Name = "menu_openMungeLog";
+			this.menu_openMungeLog.Size = new System.Drawing.Size(293, 34);
+			this.menu_openMungeLog.Text = "Open Munge Log";
+			this.menu_openMungeLog.Click += new System.EventHandler(this.menu_openMungeLog_Click);
+			// 
+			// menu_openLog
+			// 
+			this.menu_openLog.Name = "menu_openLog";
+			this.menu_openLog.Size = new System.Drawing.Size(293, 34);
+			this.menu_openLog.Text = "Open Log";
+			this.menu_openLog.Click += new System.EventHandler(this.menu_openLog_Click);
+			// 
 			// menu_copyLogToolStripMenuItem
 			// 
 			this.menu_copyLogToolStripMenuItem.Name = "menu_copyLogToolStripMenuItem";
-			this.menu_copyLogToolStripMenuItem.Size = new System.Drawing.Size(223, 34);
-			this.menu_copyLogToolStripMenuItem.Text = "Copy Log";
+			this.menu_copyLogToolStripMenuItem.Size = new System.Drawing.Size(293, 34);
+			this.menu_copyLogToolStripMenuItem.Text = "Copy Log to clipboard";
 			this.menu_copyLogToolStripMenuItem.Click += new System.EventHandler(this.btn_CopyLog_Click);
 			// 
 			// menu_saveLogAsToolStripMenuItem
 			// 
 			this.menu_saveLogAsToolStripMenuItem.Name = "menu_saveLogAsToolStripMenuItem";
-			this.menu_saveLogAsToolStripMenuItem.Size = new System.Drawing.Size(223, 34);
+			this.menu_saveLogAsToolStripMenuItem.Size = new System.Drawing.Size(293, 34);
 			this.menu_saveLogAsToolStripMenuItem.Text = "Save Log As...";
 			this.menu_saveLogAsToolStripMenuItem.Click += new System.EventHandler(this.btn_SaveLog_Click);
 			// 
 			// menu_clearLogToolStripMenuItem
 			// 
 			this.menu_clearLogToolStripMenuItem.Name = "menu_clearLogToolStripMenuItem";
-			this.menu_clearLogToolStripMenuItem.Size = new System.Drawing.Size(223, 34);
+			this.menu_clearLogToolStripMenuItem.Size = new System.Drawing.Size(293, 34);
 			this.menu_clearLogToolStripMenuItem.Text = "Clear Log";
 			this.menu_clearLogToolStripMenuItem.Click += new System.EventHandler(this.btn_ClearLog_Click);
 			// 
@@ -1061,6 +1078,14 @@
 			this.menu_openGameFolder.Size = new System.Drawing.Size(370, 34);
 			this.menu_openGameFolder.Text = "Open Game Folder";
 			this.menu_openGameFolder.Click += new System.EventHandler(this.menu_openGameFolder_Click);
+			// 
+			// menu_openProjectFolder2
+			// 
+			this.menu_openProjectFolder2.Image = global::ZeroMunge.Properties.Resources.FolderOpen1;
+			this.menu_openProjectFolder2.Name = "menu_openProjectFolder2";
+			this.menu_openProjectFolder2.Size = new System.Drawing.Size(370, 34);
+			this.menu_openProjectFolder2.Text = "Open Project Folder";
+			this.menu_openProjectFolder2.Click += new System.EventHandler(this.menu_openProjectFolder_Click);
 			// 
 			// menu_launchPPSSPP
 			// 
@@ -1360,7 +1385,6 @@
 			this.flp_FileButtons.Controls.Add(this.btn_RemoveFile);
 			this.flp_FileButtons.Controls.Add(this.btn_RemoveAllFiles);
 			this.flp_FileButtons.Controls.Add(this.btn_SetGamePath);
-			this.flp_FileButtons.Controls.Add(this.btn_Help);
 			this.flp_FileButtons.Controls.Add(this.btn_clean);
 			this.flp_FileButtons.Controls.Add(this.button2);
 			this.flp_FileButtons.Controls.Add(this.button3);
@@ -1368,7 +1392,7 @@
 			this.flp_FileButtons.Location = new System.Drawing.Point(1010, 42);
 			this.flp_FileButtons.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.flp_FileButtons.Name = "flp_FileButtons";
-			this.flp_FileButtons.Size = new System.Drawing.Size(153, 602);
+			this.flp_FileButtons.Size = new System.Drawing.Size(153, 545);
 			this.flp_FileButtons.TabIndex = 19;
 			// 
 			// btn_EasyFilePicker
@@ -1383,22 +1407,10 @@
 			this.btn_EasyFilePicker.UseVisualStyleBackColor = true;
 			this.btn_EasyFilePicker.Click += new System.EventHandler(this.btn_EasyFilePicker_Click);
 			// 
-			// btn_Help
-			// 
-			this.btn_Help.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_Help.Location = new System.Drawing.Point(0, 410);
-			this.btn_Help.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
-			this.btn_Help.Name = "btn_Help";
-			this.btn_Help.Size = new System.Drawing.Size(153, 35);
-			this.btn_Help.TabIndex = 8;
-			this.btn_Help.Text = "Help";
-			this.btn_Help.UseVisualStyleBackColor = true;
-			this.btn_Help.Click += new System.EventHandler(this.btn_Help_Click);
-			// 
 			// btn_clean
 			// 
 			this.btn_clean.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_clean.Location = new System.Drawing.Point(0, 455);
+			this.btn_clean.Location = new System.Drawing.Point(0, 410);
 			this.btn_clean.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
 			this.btn_clean.Name = "btn_clean";
 			this.btn_clean.Size = new System.Drawing.Size(153, 35);
@@ -1409,7 +1421,7 @@
 			// 
 			// button3
 			// 
-			this.button3.Location = new System.Drawing.Point(4, 545);
+			this.button3.Location = new System.Drawing.Point(4, 500);
 			this.button3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.button3.Name = "button3";
 			this.button3.Size = new System.Drawing.Size(112, 35);
@@ -1424,13 +1436,26 @@
 			this.flp_LogButtons.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.flp_LogButtons.Controls.Add(this.btn_ClearLog);
 			this.flp_LogButtons.Controls.Add(this.btn_SaveLog);
-			this.flp_LogButtons.Controls.Add(this.btn_CopyLog);
+			this.flp_LogButtons.Controls.Add(this.btn_OpenLog);
+			this.flp_LogButtons.Controls.Add(this.btn_OpenMungeLog);
 			this.flp_LogButtons.FlowDirection = System.Windows.Forms.FlowDirection.BottomUp;
-			this.flp_LogButtons.Location = new System.Drawing.Point(1010, 765);
+			this.flp_LogButtons.Location = new System.Drawing.Point(1010, 712);
 			this.flp_LogButtons.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.flp_LogButtons.Name = "flp_LogButtons";
-			this.flp_LogButtons.Size = new System.Drawing.Size(153, 135);
+			this.flp_LogButtons.Size = new System.Drawing.Size(153, 188);
 			this.flp_LogButtons.TabIndex = 20;
+			// 
+			// btn_OpenLog
+			// 
+			this.btn_OpenLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.btn_OpenLog.Location = new System.Drawing.Point(0, 58);
+			this.btn_OpenLog.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
+			this.btn_OpenLog.Name = "btn_OpenLog";
+			this.btn_OpenLog.Size = new System.Drawing.Size(153, 35);
+			this.btn_OpenLog.TabIndex = 8;
+			this.btn_OpenLog.Text = "Open Log";
+			this.btn_OpenLog.UseVisualStyleBackColor = true;
+			this.btn_OpenLog.Click += new System.EventHandler(this.btn_OpenLog_Click);
 			// 
 			// saveDlg_SaveFileListPrompt
 			// 
@@ -1510,14 +1535,6 @@
 			this.openDlg_CreateWorldMungeFolderPrompt.RestoreDirectory = true;
 			this.openDlg_CreateWorldMungeFolderPrompt.Title = "Select World REQ file";
 			// 
-			// menu_openProjectFolder2
-			// 
-			this.menu_openProjectFolder2.Image = global::ZeroMunge.Properties.Resources.FolderOpen1;
-			this.menu_openProjectFolder2.Name = "menu_openProjectFolder2";
-			this.menu_openProjectFolder2.Size = new System.Drawing.Size(370, 34);
-			this.menu_openProjectFolder2.Text = "Open Project Folder";
-			this.menu_openProjectFolder2.Click += new System.EventHandler(this.menu_openProjectFolder_Click);
-			// 
 			// ZeroMunge
 			// 
 			this.AcceptButton = this.btn_Run;
@@ -1579,7 +1596,7 @@
 		public System.Windows.Forms.ToolTip FormTooltips;
 		public System.Windows.Forms.RichTextBox text_OutputLog;
 		public System.Windows.Forms.Button btn_ClearLog;
-		public System.Windows.Forms.Button btn_CopyLog;
+		public System.Windows.Forms.Button btn_OpenMungeLog;
 		public System.Windows.Forms.Button btn_SaveLog;
 		public System.Windows.Forms.SaveFileDialog saveDlg_SaveLogPrompt;
 		public System.Windows.Forms.Button btn_AddFolders;
@@ -1683,7 +1700,6 @@
 		private System.Windows.Forms.OpenFileDialog openDlg_CreateWorldMungeFolderPrompt;
 		private System.Windows.Forms.ToolStripMenuItem menu_modifyMungedSoundFoldersToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem menu_fixSoundMungeFilesToolStripMenuItem;
-		private System.Windows.Forms.Button btn_Help;
 		private System.Windows.Forms.ToolStripMenuItem menu_openGameLog;
 		private System.Windows.Forms.ToolStripMenuItem menu_setPreferredEditor;
 		private System.Windows.Forms.ToolStripMenuItem menu_openModToolsExe;
@@ -1710,6 +1726,9 @@
 		private System.Windows.Forms.ToolStripMenuItem menu_alternateUI;
 		private System.Windows.Forms.ToolStripMenuItem menu_addMission;
 		private System.Windows.Forms.ToolStripMenuItem menu_openProjectFolder2;
+		public System.Windows.Forms.Button btn_OpenLog;
+		private System.Windows.Forms.ToolStripMenuItem menu_openLog;
+		private System.Windows.Forms.ToolStripMenuItem menu_openMungeLog;
 	}
 }
 
