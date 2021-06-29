@@ -318,7 +318,7 @@ namespace ZeroMunge
 			filesToCopy.AddRange(sourceDir.GetFiles("*.mvs", SearchOption.AllDirectories));
 			if (platform == Platform.PC)
 			{
-				DirectoryInfo addmeDir = new DirectoryInfo(this.MungeDir +"..\\addme\\munged");
+				DirectoryInfo addmeDir = new DirectoryInfo( Path.GetFullPath( this.MungeDir +"\\..\\addme\\munged"));
 				if (addmeDir.Exists)
 					filesToCopy.AddRange(addmeDir.GetFiles("addme.script"));
 			}
