@@ -1038,6 +1038,7 @@ namespace ZeroMunge
 			FormTooltips.SetToolTip(btn_AddProject, Tooltips.FileList.AddProject);
 			FormTooltips.SetToolTip(btn_RemoveFile, Tooltips.FileList.RemoveFile);
 			FormTooltips.SetToolTip(btn_RemoveAllFiles, Tooltips.FileList.RemoveAllFiles);
+			FormTooltips.SetToolTip(btn_clean, Tooltips.FileList.Clean);
 
 			menu_runToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_Run);
 			menu_cancelToolStripMenuItem.ToolTipText = FormTooltips.GetToolTip(btn_Cancel);

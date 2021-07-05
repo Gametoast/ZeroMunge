@@ -459,5 +459,9 @@ Answering 'OK' will create the following :
 			return retVal;
 		}
 
+		private void grp_modTools_Enter(object sender, EventArgs e)
+		{
+
+		}
 	}
 }
