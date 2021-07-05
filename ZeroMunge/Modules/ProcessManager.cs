@@ -37,20 +37,6 @@ namespace ZeroMunge.Modules
 
 			isRunning = true;
 
-			Thread logPollThread = new Thread(() =>
-			{
-				while (isRunning)
-				{
-					if (sender.notifyLogThread)
-					{
-						sender.notifyLogThread = false;
-						sender.NotifyOutputLog();
-					}
-				}
-			});
-			logPollThread.Name = "logPollThread";
-			logPollThread.Start();
-
 			// Update tray icon text and play start sound
 			if (sender.prefs.ShowTrayIcon)
 			{
