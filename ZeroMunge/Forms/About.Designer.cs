@@ -101,9 +101,9 @@
 			this.label3.Location = new System.Drawing.Point(3, 38);
 			this.label3.Name = "label3";
 			this.label3.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
-			this.label3.Size = new System.Drawing.Size(137, 19);
+			this.label3.Size = new System.Drawing.Size(187, 19);
 			this.label3.TabIndex = 2;
-			this.label3.Text = "Developed by Aaron Gilbert";
+			this.label3.Text = "Developed by Aaron Gilbert && BAD-AL";
 			// 
 			// pnl_License
 			// 
