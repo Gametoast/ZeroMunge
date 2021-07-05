@@ -1401,7 +1401,15 @@ namespace ZeroMunge
 				if (debugWriteLine)
 					Debug.WriteLine(message);
 
-				string messageToLog = String.Format("{0} [{1}]\t{2}\r\n", Utilities.GetTimestamp(), logType.ToString(), message);
+				string timestamp = "";
+				if (prefs.LogPrintTimestamps)
+					timestamp = Utilities.GetTimestamp();
+
+				string typeInfo = "";
+				if (logType != LogType.None)
+					typeInfo = logType.ToString();
+
+				string messageToLog = String.Format("{0} [{1}]\t{2}\r\n", timestamp, typeInfo, message);
 
 				// Log the message to the log file
 				if (prefs.OutputLogToFile)
