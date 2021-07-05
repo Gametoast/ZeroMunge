@@ -1,6 +1,6 @@
 ## User Interface: Context menus
 
-There are multiple context menus in the ZeroMunge User Interface.
+There are multiple context menus in the Zero Munge User Interface.
 
 ### File List 
 ![File list context menu](images/ui_filelist_context_menu.png)
