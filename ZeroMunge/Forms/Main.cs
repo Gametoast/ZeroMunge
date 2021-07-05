@@ -42,13 +42,13 @@ namespace ZeroMunge
 		#region Constants
 
 		// Web links
-		public const string LINK_GH_OPENISSUES = "https://github.com/marth8880/ZeroMunge/issues";
-		public const string LINK_GH_BUGS = "https://github.com/marth8880/ZeroMunge/issues/new?template=bug_report.md";
-		public const string LINK_GH_SUGGESTIONS = "https://github.com/marth8880/ZeroMunge/issues/new?template=feature_request.md";
+		public const string LINK_GH_OPENISSUES = "https://github.com/Gametoast/ZeroMunge/issues";
+		public const string LINK_GH_BUGS = "https://github.com/Gametoast/ZeroMunge/issues/new?template=bug_report.md";
+		public const string LINK_GH_SUGGESTIONS = "https://github.com/Gametoast/ZeroMunge/issues/new?template=feature_request.md";
 		public const string LINK_LICENSE = "https://www.w3.org/Consortium/Legal/2008/03-bsd-license.html";
 		public const string LINK_EMAIL = "mailto:marth8880@gmail.com";
-		public const string LINK_WEBSITE = "https://www.frayedwiresstudios.com/";
-		public const string LINK_PROJECT = "https://github.com/marth8880/ZeroMunge";
+		public const string LINK_WEBSITE = "http://www.moddb.com/company/frayedwiresstudios";
+		public const string LINK_PROJECT = "https://github.com/Gametoast/ZeroMunge";
 
 		// Recent files list
 		public const int RECENT_FILES_MAX = 10;
