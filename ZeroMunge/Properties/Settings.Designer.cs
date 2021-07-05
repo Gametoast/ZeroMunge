@@ -12,7 +12,7 @@ namespace ZeroMunge.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.9.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.3.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -261,81 +261,149 @@ namespace ZeroMunge.Properties {
                 return ((int)(this["Info_SaveFileVersion"]));
             }
         }
-
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string PreferredTextEditor
-        {
-            get
-            {
+        public string PreferredTextEditor {
+            get {
                 return ((string)(this["PreferredTextEditor"]));
             }
-            set
-            {
+            set {
                 this["PreferredTextEditor"] = value;
             }
         }
-
-		//PreferredZeroEditor
-		[global::System.Configuration.UserScopedSettingAttribute()]
-		[global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-		[global::System.Configuration.DefaultSettingValueAttribute("")]
-		public string PreferredZeroEditor
-		{
-			get
-			{
-				return ((string)(this["PreferredZeroEditor"]));
-			}
-			set
-			{
-				this["PreferredZeroEditor"] = value;
-			}
-		}
-
-		[global::System.Configuration.UserScopedSettingAttribute()]
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DebuggerExe
-        {
-            get
-            {
+        public string PreferredZeroEditor {
+            get {
+                return ((string)(this["PreferredZeroEditor"]));
+            }
+            set {
+                this["PreferredZeroEditor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DebuggerExe {
+            get {
                 return ((string)(this["DebuggerExe"]));
             }
-            set
-            {
+            set {
                 this["DebuggerExe"] = value;
             }
         }
-
-		[global::System.Configuration.UserScopedSettingAttribute()]
-		[global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-		[global::System.Configuration.DefaultSettingValueAttribute("")]
-		public string DebuggerArgs
-		{
-			get
-			{
-				return ((string)(this["DebuggerArgs"]));
-			}
-			set
-			{
-				this["DebuggerArgs"] = value;
-			}
-		}
-		//GameExeArgs
-		[global::System.Configuration.UserScopedSettingAttribute()]
-		[global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-		[global::System.Configuration.DefaultSettingValueAttribute("")]
-		public string GameExeArgs
-		{
-			get
-			{
-				return ((string)(this["GameExeArgs"]));
-			}
-			set
-			{
-				this["GameExeArgs"] = value;
-			}
-		}
-	}
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DebuggerArgs {
+            get {
+                return ((string)(this["DebuggerArgs"]));
+            }
+            set {
+                this["DebuggerArgs"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string GameExeArgs {
+            get {
+                return ((string)(this["GameExeArgs"]));
+            }
+            set {
+                this["GameExeArgs"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ModToolsLocation {
+            get {
+                return ((string)(this["ModToolsLocation"]));
+            }
+            set {
+                this["ModToolsLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PSPGameLocation {
+            get {
+                return ((string)(this["PSPGameLocation"]));
+            }
+            set {
+                this["PSPGameLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PPSSPPLocation {
+            get {
+                return ((string)(this["PPSSPPLocation"]));
+            }
+            set {
+                this["PPSSPPLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ProfileName {
+            get {
+                return ((string)(this["ProfileName"]));
+            }
+            set {
+                this["ProfileName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string XboxCopyFolder {
+            get {
+                return ((string)(this["XboxCopyFolder"]));
+            }
+            set {
+                this["XboxCopyFolder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PS2CopyFolder {
+            get {
+                return ((string)(this["PS2CopyFolder"]));
+            }
+            set {
+                this["PS2CopyFolder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string FTPDest {
+            get {
+                return ((string)(this["FTPDest"]));
+            }
+            set {
+                this["FTPDest"] = value;
+            }
+        }
+    }
 }

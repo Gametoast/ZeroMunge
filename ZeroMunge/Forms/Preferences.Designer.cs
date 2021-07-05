@@ -35,6 +35,16 @@
 			this.cont_Prefs = new System.Windows.Forms.Panel();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.interfacePanel = new System.Windows.Forms.Panel();
+			this.groupBox5 = new System.Windows.Forms.GroupBox();
+			this.btn_browsePSPGameFolder = new System.Windows.Forms.Button();
+			this.lab_pspGameFolder = new System.Windows.Forms.Label();
+			this.txt_pspGameFolder = new System.Windows.Forms.TextBox();
+			this.btn_browsePPSSPP = new System.Windows.Forms.Button();
+			this.txt_PPSSPP = new System.Windows.Forms.TextBox();
+			this.grp_modTools = new System.Windows.Forms.GroupBox();
+			this.btn_consoleCheck = new System.Windows.Forms.Button();
+			this.btn_browseModTools = new System.Windows.Forms.Button();
+			this.txt_modToolsLocation = new System.Windows.Forms.TextBox();
 			this.grp_zeroEditor = new System.Windows.Forms.GroupBox();
 			this.btn_browseZeroEditor = new System.Windows.Forms.Button();
 			this.txt_zeroEditor = new System.Windows.Forms.TextBox();
@@ -78,6 +88,8 @@
 			this.cont_Prefs.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.interfacePanel.SuspendLayout();
+			this.groupBox5.SuspendLayout();
+			this.grp_modTools.SuspendLayout();
 			this.grp_zeroEditor.SuspendLayout();
 			this.grp_editor.SuspendLayout();
 			this.grp_debugger.SuspendLayout();
@@ -98,7 +110,7 @@
 			// 
 			this.btn_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btn_Cancel.Location = new System.Drawing.Point(657, 806);
+			this.btn_Cancel.Location = new System.Drawing.Point(657, 1003);
 			this.btn_Cancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.btn_Cancel.Name = "btn_Cancel";
 			this.btn_Cancel.Size = new System.Drawing.Size(112, 35);
@@ -110,7 +122,7 @@
 			// btn_Accept
 			// 
 			this.btn_Accept.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_Accept.Location = new System.Drawing.Point(535, 806);
+			this.btn_Accept.Location = new System.Drawing.Point(535, 1003);
 			this.btn_Accept.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.btn_Accept.Name = "btn_Accept";
 			this.btn_Accept.Size = new System.Drawing.Size(112, 35);
@@ -131,7 +143,7 @@
 			this.cont_Prefs.Location = new System.Drawing.Point(18, 18);
 			this.cont_Prefs.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.cont_Prefs.Name = "cont_Prefs";
-			this.cont_Prefs.Size = new System.Drawing.Size(751, 781);
+			this.cont_Prefs.Size = new System.Drawing.Size(751, 978);
 			this.cont_Prefs.TabIndex = 4;
 			// 
 			// groupBox1
@@ -142,7 +154,7 @@
 			this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.groupBox1.Size = new System.Drawing.Size(743, 422);
+			this.groupBox1.Size = new System.Drawing.Size(743, 611);
 			this.groupBox1.TabIndex = 4;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Interface";
@@ -151,6 +163,8 @@
 			// 
 			this.interfacePanel.AutoSize = true;
 			this.interfacePanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.interfacePanel.Controls.Add(this.groupBox5);
+			this.interfacePanel.Controls.Add(this.grp_modTools);
 			this.interfacePanel.Controls.Add(this.grp_zeroEditor);
 			this.interfacePanel.Controls.Add(this.grp_editor);
 			this.interfacePanel.Controls.Add(this.grp_debugger);
@@ -162,15 +176,131 @@
 			this.interfacePanel.Location = new System.Drawing.Point(4, 24);
 			this.interfacePanel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.interfacePanel.Name = "interfacePanel";
-			this.interfacePanel.Size = new System.Drawing.Size(735, 393);
+			this.interfacePanel.Size = new System.Drawing.Size(735, 582);
 			this.interfacePanel.TabIndex = 0;
+			// 
+			// groupBox5
+			// 
+			this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox5.Controls.Add(this.btn_browsePSPGameFolder);
+			this.groupBox5.Controls.Add(this.lab_pspGameFolder);
+			this.groupBox5.Controls.Add(this.txt_pspGameFolder);
+			this.groupBox5.Controls.Add(this.btn_browsePPSSPP);
+			this.groupBox5.Controls.Add(this.txt_PPSSPP);
+			this.groupBox5.Location = new System.Drawing.Point(4, 257);
+			this.groupBox5.Name = "groupBox5";
+			this.groupBox5.Size = new System.Drawing.Size(728, 95);
+			this.groupBox5.TabIndex = 5;
+			this.groupBox5.TabStop = false;
+			this.groupBox5.Text = "Set PPSSPP Location";
+			// 
+			// btn_browsePSPGameFolder
+			// 
+			this.btn_browsePSPGameFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btn_browsePSPGameFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btn_browsePSPGameFolder.Location = new System.Drawing.Point(617, 59);
+			this.btn_browsePSPGameFolder.Name = "btn_browsePSPGameFolder";
+			this.btn_browsePSPGameFolder.Size = new System.Drawing.Size(105, 35);
+			this.btn_browsePSPGameFolder.TabIndex = 4;
+			this.btn_browsePSPGameFolder.Text = "Browse...";
+			this.btn_browsePSPGameFolder.UseVisualStyleBackColor = true;
+			this.btn_browsePSPGameFolder.Click += new System.EventHandler(this.btn_browseExe_Click);
+			// 
+			// lab_pspGameFolder
+			// 
+			this.lab_pspGameFolder.AutoSize = true;
+			this.lab_pspGameFolder.Location = new System.Drawing.Point(6, 57);
+			this.lab_pspGameFolder.Name = "lab_pspGameFolder";
+			this.lab_pspGameFolder.Size = new System.Drawing.Size(172, 20);
+			this.lab_pspGameFolder.TabIndex = 3;
+			this.lab_pspGameFolder.Text = "PSP Mod Game Folder";
+			// 
+			// txt_pspGameFolder
+			// 
+			this.txt_pspGameFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.txt_pspGameFolder.BackColor = System.Drawing.Color.AliceBlue;
+			this.txt_pspGameFolder.Location = new System.Drawing.Point(190, 57);
+			this.txt_pspGameFolder.Name = "txt_pspGameFolder";
+			this.txt_pspGameFolder.Size = new System.Drawing.Size(421, 26);
+			this.txt_pspGameFolder.TabIndex = 2;
+			// 
+			// btn_browsePPSSPP
+			// 
+			this.btn_browsePPSSPP.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btn_browsePPSSPP.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btn_browsePPSSPP.Location = new System.Drawing.Point(617, 18);
+			this.btn_browsePPSSPP.Name = "btn_browsePPSSPP";
+			this.btn_browsePPSSPP.Size = new System.Drawing.Size(105, 35);
+			this.btn_browsePPSSPP.TabIndex = 1;
+			this.btn_browsePPSSPP.Text = "Browse...";
+			this.btn_browsePPSSPP.UseVisualStyleBackColor = true;
+			this.btn_browsePPSSPP.Click += new System.EventHandler(this.btn_browseExe_Click);
+			// 
+			// txt_PPSSPP
+			// 
+			this.txt_PPSSPP.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.txt_PPSSPP.BackColor = System.Drawing.Color.Azure;
+			this.txt_PPSSPP.Location = new System.Drawing.Point(6, 22);
+			this.txt_PPSSPP.Name = "txt_PPSSPP";
+			this.txt_PPSSPP.Size = new System.Drawing.Size(605, 26);
+			this.txt_PPSSPP.TabIndex = 0;
+			// 
+			// grp_modTools
+			// 
+			this.grp_modTools.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.grp_modTools.Controls.Add(this.btn_consoleCheck);
+			this.grp_modTools.Controls.Add(this.btn_browseModTools);
+			this.grp_modTools.Controls.Add(this.txt_modToolsLocation);
+			this.grp_modTools.Location = new System.Drawing.Point(7, 484);
+			this.grp_modTools.Name = "grp_modTools";
+			this.grp_modTools.Size = new System.Drawing.Size(728, 91);
+			this.grp_modTools.TabIndex = 7;
+			this.grp_modTools.TabStop = false;
+			this.grp_modTools.Text = "Set ModTools Location";
+			// 
+			// btn_consoleCheck
+			// 
+			this.btn_consoleCheck.Location = new System.Drawing.Point(6, 54);
+			this.btn_consoleCheck.Name = "btn_consoleCheck";
+			this.btn_consoleCheck.Size = new System.Drawing.Size(450, 32);
+			this.btn_consoleCheck.TabIndex = 8;
+			this.btn_consoleCheck.Text = "Check XBOX, PS2 && PSP support";
+			this.btn_consoleCheck.UseVisualStyleBackColor = true;
+			this.btn_consoleCheck.Click += new System.EventHandler(this.btn_consoleCheck_Click);
+			// 
+			// btn_browseModTools
+			// 
+			this.btn_browseModTools.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btn_browseModTools.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btn_browseModTools.Location = new System.Drawing.Point(617, 18);
+			this.btn_browseModTools.Name = "btn_browseModTools";
+			this.btn_browseModTools.Size = new System.Drawing.Size(105, 35);
+			this.btn_browseModTools.TabIndex = 1;
+			this.btn_browseModTools.Text = "Browse...";
+			this.btn_browseModTools.UseVisualStyleBackColor = true;
+			this.btn_browseModTools.Click += new System.EventHandler(this.btn_browseExe_Click);
+			// 
+			// txt_modToolsLocation
+			// 
+			this.txt_modToolsLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.txt_modToolsLocation.BackColor = System.Drawing.Color.Azure;
+			this.txt_modToolsLocation.Location = new System.Drawing.Point(6, 22);
+			this.txt_modToolsLocation.Name = "txt_modToolsLocation";
+			this.txt_modToolsLocation.Size = new System.Drawing.Size(605, 26);
+			this.txt_modToolsLocation.TabIndex = 0;
 			// 
 			// grp_zeroEditor
 			// 
-			this.grp_zeroEditor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.grp_zeroEditor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.grp_zeroEditor.Controls.Add(this.btn_browseZeroEditor);
 			this.grp_zeroEditor.Controls.Add(this.txt_zeroEditor);
-			this.grp_zeroEditor.Location = new System.Drawing.Point(4, 328);
+			this.grp_zeroEditor.Location = new System.Drawing.Point(4, 421);
 			this.grp_zeroEditor.Name = "grp_zeroEditor";
 			this.grp_zeroEditor.Size = new System.Drawing.Size(728, 57);
 			this.grp_zeroEditor.TabIndex = 6;
@@ -186,7 +316,6 @@
 			this.btn_browseZeroEditor.Size = new System.Drawing.Size(105, 35);
 			this.btn_browseZeroEditor.TabIndex = 1;
 			this.btn_browseZeroEditor.Text = "Browse...";
-			this.btn_browseZeroEditor.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.btn_browseZeroEditor.UseVisualStyleBackColor = true;
 			this.btn_browseZeroEditor.Click += new System.EventHandler(this.btn_browseExe_Click);
 			// 
@@ -203,10 +332,11 @@
 			// 
 			// grp_editor
 			// 
-			this.grp_editor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.grp_editor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.grp_editor.Controls.Add(this.btn_browseEditor);
 			this.grp_editor.Controls.Add(this.txt_editor);
-			this.grp_editor.Location = new System.Drawing.Point(4, 265);
+			this.grp_editor.Location = new System.Drawing.Point(4, 358);
 			this.grp_editor.Name = "grp_editor";
 			this.grp_editor.Size = new System.Drawing.Size(728, 57);
 			this.grp_editor.TabIndex = 5;
@@ -222,7 +352,6 @@
 			this.btn_browseEditor.Size = new System.Drawing.Size(105, 35);
 			this.btn_browseEditor.TabIndex = 1;
 			this.btn_browseEditor.Text = "Browse...";
-			this.btn_browseEditor.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.btn_browseEditor.UseVisualStyleBackColor = true;
 			this.btn_browseEditor.Click += new System.EventHandler(this.btn_browseExe_Click);
 			// 
@@ -239,7 +368,8 @@
 			// 
 			// grp_debugger
 			// 
-			this.grp_debugger.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.grp_debugger.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.grp_debugger.Controls.Add(this.lab_debuggerArgs);
 			this.grp_debugger.Controls.Add(this.txt_debuggerArgs);
 			this.grp_debugger.Controls.Add(this.btn_browseDebuggerExe);
@@ -279,7 +409,6 @@
 			this.btn_browseDebuggerExe.Size = new System.Drawing.Size(105, 35);
 			this.btn_browseDebuggerExe.TabIndex = 1;
 			this.btn_browseDebuggerExe.Text = "Browse...";
-			this.btn_browseDebuggerExe.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.btn_browseDebuggerExe.UseVisualStyleBackColor = true;
 			this.btn_browseDebuggerExe.Click += new System.EventHandler(this.btn_browseExe_Click);
 			// 
@@ -337,7 +466,6 @@
 			this.btn_browseGameExe.Size = new System.Drawing.Size(105, 35);
 			this.btn_browseGameExe.TabIndex = 1;
 			this.btn_browseGameExe.Text = "Browse...";
-			this.btn_browseGameExe.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.btn_browseGameExe.UseVisualStyleBackColor = true;
 			this.btn_browseGameExe.Click += new System.EventHandler(this.btn_browseExe_Click);
 			// 
@@ -398,7 +526,7 @@
 			// 
 			this.groupBox2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.groupBox2.Controls.Add(this.flowLayoutPanel2);
-			this.groupBox2.Location = new System.Drawing.Point(401, 437);
+			this.groupBox2.Location = new System.Drawing.Point(401, 626);
 			this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -483,7 +611,7 @@
 			// 
 			this.groupBox4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.groupBox4.Controls.Add(this.flowLayoutPanel4);
-			this.groupBox4.Location = new System.Drawing.Point(12, 437);
+			this.groupBox4.Location = new System.Drawing.Point(12, 626);
 			this.groupBox4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.groupBox4.Name = "groupBox4";
 			this.groupBox4.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -621,7 +749,7 @@
 			// 
 			this.groupBox3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.groupBox3.Controls.Add(this.flowLayoutPanel3);
-			this.groupBox3.Location = new System.Drawing.Point(12, 627);
+			this.groupBox3.Location = new System.Drawing.Point(12, 816);
 			this.groupBox3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -678,7 +806,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btn_Cancel;
-			this.ClientSize = new System.Drawing.Size(778, 849);
+			this.ClientSize = new System.Drawing.Size(778, 1046);
 			this.Controls.Add(this.cont_Prefs);
 			this.Controls.Add(this.btn_Accept);
 			this.Controls.Add(this.btn_Cancel);
@@ -687,7 +815,7 @@
 			this.KeyPreview = true;
 			this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.MaximizeBox = false;
-			this.MaximumSize = new System.Drawing.Size(800, 1000);
+			this.MaximumSize = new System.Drawing.Size(800, 1200);
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(439, 734);
 			this.Name = "Preferences";
@@ -702,6 +830,10 @@
 			this.groupBox1.PerformLayout();
 			this.interfacePanel.ResumeLayout(false);
 			this.interfacePanel.PerformLayout();
+			this.groupBox5.ResumeLayout(false);
+			this.groupBox5.PerformLayout();
+			this.grp_modTools.ResumeLayout(false);
+			this.grp_modTools.PerformLayout();
 			this.grp_zeroEditor.ResumeLayout(false);
 			this.grp_zeroEditor.PerformLayout();
 			this.grp_editor.ResumeLayout(false);
@@ -779,5 +911,15 @@
 		private System.Windows.Forms.GroupBox grp_zeroEditor;
 		private System.Windows.Forms.Button btn_browseZeroEditor;
 		private System.Windows.Forms.TextBox txt_zeroEditor;
+		private System.Windows.Forms.GroupBox grp_modTools;
+		private System.Windows.Forms.Button btn_browseModTools;
+		private System.Windows.Forms.TextBox txt_modToolsLocation;
+		private System.Windows.Forms.Button btn_consoleCheck;
+		private System.Windows.Forms.GroupBox groupBox5;
+		private System.Windows.Forms.Label lab_pspGameFolder;
+		private System.Windows.Forms.TextBox txt_pspGameFolder;
+		private System.Windows.Forms.Button btn_browsePPSSPP;
+		private System.Windows.Forms.TextBox txt_PPSSPP;
+		private System.Windows.Forms.Button btn_browsePSPGameFolder;
 	}
 }

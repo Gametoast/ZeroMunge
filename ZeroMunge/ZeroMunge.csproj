@@ -135,6 +135,12 @@
     <Compile Include="Forms\EasyFilePicker.Designer.cs">
       <DependentUpon>EasyFilePicker.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FTPScriptForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FTPScriptForm.Designer.cs">
+      <DependentUpon>FTPScriptForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -147,11 +153,20 @@
     <Compile Include="Forms\SaveFileListPrompt.Designer.cs">
       <DependentUpon>SaveFileListPrompt.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\AltUIMungePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\AltUIMungePanel.Designer.cs">
+      <DependentUpon>AltUIMungePanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SoundMungeForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\SoundMungeForm.Designer.cs">
       <DependentUpon>SoundMungeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\StringInputDlg.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ThirdPartySoftware.cs">
       <SubType>Form</SubType>
@@ -165,7 +180,14 @@
     <Compile Include="Forms\Updates.Designer.cs">
       <DependentUpon>Updates.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\MissionLauncherForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MissionLauncherForm.Designer.cs">
+      <DependentUpon>MissionLauncherForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Modules\MungeFactory.cs" />
+    <Compile Include="Modules\Munger.cs" />
     <Compile Include="Modules\ProcessManager.cs" />
     <Compile Include="Modules\StringExt.cs" />
     <Compile Include="Modules\Tooltips.cs" />
@@ -191,6 +213,9 @@
     <EmbeddedResource Include="Forms\EasyFilePicker.resx">
       <DependentUpon>EasyFilePicker.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FTPScriptForm.resx">
+      <DependentUpon>FTPScriptForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
@@ -200,14 +225,23 @@
     <EmbeddedResource Include="Forms\SaveFileListPrompt.resx">
       <DependentUpon>SaveFileListPrompt.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AltUIMungePanel.resx">
+      <DependentUpon>AltUIMungePanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SoundMungeForm.resx">
       <DependentUpon>SoundMungeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\StringInputDlg.resx">
+      <DependentUpon>StringInputDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ThirdPartySoftware.resx">
       <DependentUpon>ThirdPartySoftware.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Updates.resx">
       <DependentUpon>Updates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MissionLauncherForm.resx">
+      <DependentUpon>MissionLauncherForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -238,6 +272,7 @@
     <None Include="Resources\license-Newtonsoft.Json.md" />
     <None Include="Resources\license-prettybin.md" />
     <None Include="Resources\license-Windows-API-Code-Pack-1.1.md" />
+    <EmbeddedResource Include="Resources\munge_MISSION.bat" />
     <None Include="Resources\preamble.md" />
     <None Include="Resources\software.json" />
     <None Include="ZeroMungeNameKey.pfx" />
@@ -282,6 +317,16 @@
     <Content Include="app_icon.ico" />
     <None Include="Resources\app_banner.jpg" />
     <None Include="Resources\styles.css" />
+    <None Include="Resources\CMD.jpg" />
+    <None Include="Resources\FolderOpen.png" />
+    <None Include="Resources\TextEditorIcon.png" />
+    <None Include="Resources\Debugger.png" />
+    <None Include="Resources\FolderOpen1.png" />
+    <None Include="Resources\ZeroEditorIcon.png" />
+    <None Include="Resources\BFII.png" />
+    <None Include="Resources\BFII_.png" />
+    <None Include="Resources\PPSSPP.png" />
+    <None Include="Resources\Debugger1.png" />
     <Content Include="ZeroMunge\abort.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

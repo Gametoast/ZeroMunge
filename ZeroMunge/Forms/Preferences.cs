@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
 
 namespace ZeroMunge
 {
@@ -69,6 +69,9 @@ namespace ZeroMunge
 				txt_gameExe.Text = prefs.GameDirectory + "\\BattlefrontII.exe";
 			txt_debuggerArgs.Text = prefs.DebuggerArgs;
 			txt_gameArgs.Text = prefs.GameExeArgs;
+			txt_modToolsLocation.Text = prefs.ModToolsLocation;
+			txt_PPSSPP.Text = prefs.PPSSPPLocation;
+			txt_pspGameFolder.Text = prefs.PSPGameLocation;
 		}
 
 
@@ -120,8 +123,24 @@ namespace ZeroMunge
 			FormTooltips.SetToolTip(btn_browseZeroEditor, Tooltips.Settings.PreferredZeroEditorPath);
 			FormTooltips.SetToolTip(grp_zeroEditor, Tooltips.Settings.PreferredZeroEditorPath);
 
+			FormTooltips.SetToolTip(txt_modToolsLocation, Tooltips.Settings.ModToolsDir);
+			FormTooltips.SetToolTip(btn_consoleCheck, Tooltips.Settings.ConsoleSupport);
+
 		}
 
+		private void SavePrefs()
+		{
+			// Save the numeric input values
+			prefs.LogPollingRate = (int)num_LogPollingRate.Value;
+			prefs.LogMaxLineCount = (int)num_LogMaxLineCount.Value;
+			prefs.GameExeArgs = txt_gameArgs.Text;
+			prefs.DebuggerArgs = txt_debuggerArgs.Text;
+			prefs.ModToolsLocation = txt_modToolsLocation.Text;
+			prefs.PPSSPPLocation = txt_PPSSPP.Text;
+			prefs.PSPGameLocation = txt_pspGameFolder.Text;
+
+			Utilities.SavePrefs(prefs);
+		}
 
 		/// <summary>
 		/// Destroy our prefs object and close the form.
@@ -132,19 +151,13 @@ namespace ZeroMunge
 			Close();
 		}
 
+#region Event handlers
 
 		// When the user clicks the OK button:
 		// Commit their set preferences by saving them to the application settings, then close the form.
 		private void btn_Accept_Click(object sender, EventArgs e)
 		{
-			// Save the numeric input values
-			prefs.LogPollingRate = (int)num_LogPollingRate.Value;
-			prefs.LogMaxLineCount = (int)num_LogMaxLineCount.Value;
-
-			prefs.GameExeArgs = txt_gameArgs.Text;
-			prefs.DebuggerArgs = txt_debuggerArgs.Text;
-
-			Utilities.SavePrefs(prefs);
+			SavePrefs();
 			CloseForm();
 		}
 
@@ -155,7 +168,6 @@ namespace ZeroMunge
 		{
 			CloseForm();
 		}
-
 
 		// When the user checks/unchecks one of the preference checkboxes:
 		// Store the checkbox's checked state in our prefs object.
@@ -244,71 +256,156 @@ namespace ZeroMunge
 			prefs.LogPrintTimestamps = chk_LogPrintTimestamps.Checked;
 		}
 
-        private void btn_browseExe_Click(object sender, EventArgs e)
-        {
+		private void btn_browseExe_Click(object sender, EventArgs e)
+		{
 			if (sender == this.btn_browseGameExe)
-				SetGameDirectory();
+				SetGameLocation();
 			else if (sender == this.btn_browseDebuggerExe)
-				PromptForDebuggerExe();
+				SetDebuggerLocation();
 			else if (sender == this.btn_browseEditor)
-				SetPreferredEditor();
+				SetEditorLocation();
 			else if (sender == this.btn_browseZeroEditor)
-				SetPreferredZeroEditor();
-        }
+				SetZeroEditorLocation();
+			else if (sender == btn_browseModTools)
+				SetModToolsLocation();
+			else if (sender == btn_browsePPSSPP)
+				SetPPSSPPLocation();
+			else if (sender == btn_browsePSPGameFolder)
+				SetPSPGameFolderLocation();
+		}
 
 
-        private void SetGameDirectory()
-        {
-            OpenFileDialog dlg = new OpenFileDialog();
-            dlg.RestoreDirectory = true;
-            dlg.Title = "Browse To Game exe";
-            dlg.Filter = "Game Exe file|BattlefrontII.exe";
-            dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+		private void txt_Leave(object sender, EventArgs e)
+		{
+			string newText = ((TextBox)sender).Text;
+			if (sender == txt_gameDebugger)
+			{
+				prefs.DebuggerExe = newText;
+			}
+			else if (sender == txt_gameExe)
+			{
+				String exePath = newText;
+				int lastSlash = exePath.LastIndexOf("\\");
+				prefs.GameDirectory = exePath.Substring(0, lastSlash);
+			}
+			else if (sender == txt_editor)
+			{
+				prefs.PreferredTextEditor = newText;
+			}
+			else if (sender == txt_zeroEditor)
+			{
+				prefs.PreferredZeroEditor = newText;
+			}
+		}
 
-            if (dlg.ShowDialog() == DialogResult.OK)
-            {
-                String exePath = dlg.FileName;
-                int lastSlash = exePath.LastIndexOf("\\");
-                prefs.GameDirectory = exePath.Substring(0, lastSlash);
-                this.txt_gameExe.Text = dlg.FileName;
-                this.Message += "Game path set to: " + prefs.GameDirectory +"\n";
-            }
-            dlg.Dispose();
-        }
+		private void btn_consoleCheck_Click(object sender, EventArgs e)
+		{
+			bool exists = CheckConsoleMungeSupport(txt_modToolsLocation.Text);
+			if (exists)
+			{
+				MessageBox.Show("Looks like you have the tools in place to munge for console");
+			}
+			else
+			{
+				MessageBox.Show("You do not have the tools in place to munge for console");
+			}
+		}
+#endregion Event handlers
+		private void SetModToolsLocation()
+		{
+			FolderBrowserDialog dlg = new FolderBrowserDialog();
+			dlg.RootFolder = Environment.SpecialFolder.MyComputer;
+			dlg.Description = "Browse for BF2_ModTools folder";
+			if (dlg.ShowDialog() == DialogResult.OK)
+			{
+				txt_modToolsLocation.Text = dlg.SelectedPath;
+				this.Message += "Set BF2 ModTools path to: " + dlg.SelectedPath;
+				CheckConsoleMungeSupport(txt_modToolsLocation.Text);
+			}
+			dlg.Dispose();
+		}
+		private void SetPSPGameFolderLocation()
+		{
+			OpenFileDialog dlg = new OpenFileDialog();
+			dlg.Title = "Browse to the 'UMD_DATA.BIN' file for the PSP game";
+			dlg.Filter = "PSP Game file 'UMD_DATA.BIN'|UMD_DATA.BIN";
+			dlg.RestoreDirectory = true;
 
-        private void PromptForDebuggerExe()
-        {
-            OpenFileDialog dlg = new OpenFileDialog();
-            dlg.RestoreDirectory = true;
-            dlg.Title = "Choose Debugger exe";
-            dlg.Filter = " Exe |*.exe";
-            dlg.InitialDirectory = prefs.GameDirectory;
+			if (dlg.ShowDialog() == DialogResult.OK)
+			{
+				this.txt_pspGameFolder.Text = dlg.FileName.Replace("UMD_DATA.BIN","");
+				this.Message += "Saving PPSSPP Location to " + dlg.FileName + "\n";
+			}
+			dlg.Dispose();
+		}
 
-            if (dlg.ShowDialog() == DialogResult.OK)
-            {
-                prefs.DebuggerExe = dlg.FileName;
-                this.txt_gameDebugger.Text = dlg.FileName;
-                this.Message += "Debugger path set to: " + prefs.GameDirectory + "\n";
-            }
-            dlg.Dispose();
-        }
+		private void SetPPSSPPLocation()
+		{
+			OpenFileDialog dlg = new OpenFileDialog();
+			dlg.Title = "Browse to PPSSPP exe";
+			dlg.Filter = "PPSSPP Exe file|PPSSPP*.exe";
+			dlg.RestoreDirectory = true;
 
-        private void SetPreferredEditor()
-        {
-            OpenFileDialog dlg = new OpenFileDialog();
+			if (dlg.ShowDialog() == DialogResult.OK)
+			{
+				this.txt_PPSSPP.Text = dlg.FileName;
+				this.Message += "Saving PPSSPP Location to " + dlg.FileName + "\n";
+			}
+			dlg.Dispose();
+		}
+
+		private void SetGameLocation()
+		{
+			OpenFileDialog dlg = new OpenFileDialog();
+			dlg.RestoreDirectory = true;
+			dlg.Title = "Browse To Game exe";
+			dlg.Filter = "Game Exe file|BattlefrontII.exe";
+			dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+
+			if (dlg.ShowDialog() == DialogResult.OK)
+			{
+				String exePath = dlg.FileName;
+				int lastSlash = exePath.LastIndexOf("\\");
+				prefs.GameDirectory = exePath.Substring(0, lastSlash);
+				this.txt_gameExe.Text = dlg.FileName;
+				this.Message += "Game path set to: " + prefs.GameDirectory + "\n";
+			}
+			dlg.Dispose();
+		}
+
+		private void SetDebuggerLocation()
+		{
+			OpenFileDialog dlg = new OpenFileDialog();
+			dlg.RestoreDirectory = true;
+			dlg.Title = "Choose Debugger exe";
+			dlg.Filter = " Exe |*.exe";
+			dlg.InitialDirectory = prefs.GameDirectory;
+
+			if (dlg.ShowDialog() == DialogResult.OK)
+			{
+				prefs.DebuggerExe = dlg.FileName;
+				this.txt_gameDebugger.Text = dlg.FileName;
+				this.Message += "Debugger path set to: " + prefs.GameDirectory + "\n";
+			}
+			dlg.Dispose();
+		}
+
+		private void SetEditorLocation()
+		{
+			OpenFileDialog dlg = new OpenFileDialog();
 			dlg.Title = "Browse to Preferred Text Editor exe";
 			dlg.RestoreDirectory = true;
 
-            if (dlg.ShowDialog() == DialogResult.OK)
-            {
-                prefs.PreferredTextEditor = dlg.FileName;
-                this.txt_editor.Text = dlg.FileName;
-                this.Message += "Saving Preferred editor to " + dlg.FileName + "\n";
-            }
-            dlg.Dispose();
-        }
+			if (dlg.ShowDialog() == DialogResult.OK)
+			{
+				prefs.PreferredTextEditor = dlg.FileName;
+				this.txt_editor.Text = dlg.FileName;
+				this.Message += "Saving Preferred editor to " + dlg.FileName + "\n";
+			}
+			dlg.Dispose();
+		}
 
-		private void SetPreferredZeroEditor()
+		private void SetZeroEditorLocation()
 		{
 			OpenFileDialog dlg = new OpenFileDialog();
 			dlg.Title = "Browse to Preferred Zero Editor exe";
@@ -323,27 +420,43 @@ namespace ZeroMunge
 			dlg.Dispose();
 		}
 
-		private void txt_Leave(object sender, EventArgs e)
+		public static bool CheckConsoleMungeSupport(string path)
 		{
-			string newText = ((TextBox)sender).Text;
-			if( sender == txt_gameDebugger)
+			if(!Directory.Exists(path))
 			{
-				prefs.DebuggerExe = newText;
+				MessageBox.Show("Please setup 'ModTools Location' in Preferences first.");
+				return false;
 			}
-			else if (sender == txt_gameExe)
+			bool retVal = true;
+			string modToolsPath = Utilities.EnsureTrailingSlash( path);
+
+			String xbox_textureMunge = modToolsPath + "ToolsFL\\bin\\Xbox_TextureMunge.exe";
+			if (!File.Exists(xbox_textureMunge))
 			{
-				String exePath = newText;
-				int lastSlash = exePath.LastIndexOf("\\");
-				prefs.GameDirectory = exePath.Substring(0, lastSlash);
+				retVal = false;
+				string message =
+@"Would you like to add munge support for XBOX, PS2 & PSP?
+Answering 'OK' will create the following :
+   ToolsFL\\bin\\XBOX_ModelMunge.exe
+   ToolsFL\\bin\\XBOX_TextureMunge.exe
+   ToolsFL\\bin\\XBOX_ShaderMunge.exe
+
+   ToolsFL\\bin\\ps2_ModelMunge.exe
+   ToolsFL\\bin\\ps2_TextureMunge.exe
+
+(copied from the 'PC' versions of these programs)";
+				if (MessageBox.Show(message, "Add console munge support?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+				{
+					File.Copy(modToolsPath + "ToolsFL\\bin\\PC_TextureMunge.exe", modToolsPath + "ToolsFL\\bin\\XBOX_TextureMunge.exe", true);
+					File.Copy(modToolsPath + "ToolsFL\\bin\\PC_TextureMunge.exe", modToolsPath + "ToolsFL\\bin\\PS2_TextureMunge.exe", true);
+
+					File.Copy(modToolsPath + "ToolsFL\\bin\\PC_ModelMunge.exe", modToolsPath + "ToolsFL\\bin\\XBOX_ModelMunge.exe", true);
+					File.Copy(modToolsPath + "ToolsFL\\bin\\PC_ModelMunge.exe", modToolsPath + "ToolsFL\\bin\\PS2_ModelMunge.exe", true);
+
+					File.Copy(modToolsPath + "ToolsFL\\bin\\PC_ShaderMunge.exe", modToolsPath + "ToolsFL\\bin\\XBOX_ShaderMunge.exe", true);
+				}
 			}
-			else if (sender == txt_editor)
-			{
-				prefs.PreferredTextEditor = newText;
-			}
-			else if( sender == txt_zeroEditor)
-			{
-				prefs.PreferredZeroEditor = newText;
-			}
+			return retVal;
 		}
 
 	}

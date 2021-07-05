@@ -60,6 +60,16 @@ namespace ZeroMunge
 			Abort
 		}
 
+		/// <summary>
+		/// Returns the input string with a '\\' to the end of the string if it doesn't already have it.
+		/// </summary>
+		public static string EnsureTrailingSlash(string input)
+		{
+			if (!input.EndsWith("\\"))
+				input += "\\";
+			return input;
+		}
+
 
 		/// <summary>
 		/// Extracts the attributes from an HTML node. 
@@ -731,7 +741,7 @@ namespace ZeroMunge
 				Trace.WriteLine(message);
 				if (mainForm != null)
 				{
-					mainForm.Log(message, ZeroMunge.LogType.Error);
+					mainForm.Log(message, LogType.Error);
 				}
 
 				return null;
@@ -805,7 +815,7 @@ namespace ZeroMunge
 				Trace.WriteLine(msg);
 				if (mainForm != null)
 				{
-					mainForm.Log(msg, ZeroMunge.LogType.Error);
+					mainForm.Log(msg, LogType.Error);
 				}
 			}
 			catch (NullReferenceException ex)
@@ -814,7 +824,7 @@ namespace ZeroMunge
 				Trace.WriteLine(msg);
 				if (mainForm != null)
 				{
-					mainForm.Log(msg, ZeroMunge.LogType.Error);
+					mainForm.Log(msg, LogType.Error);
 				}
 			}
 			catch (JsonReaderException ex)
@@ -823,7 +833,7 @@ namespace ZeroMunge
 				Trace.WriteLine(msg);
 				if (mainForm != null)
 				{
-					mainForm.Log(msg, ZeroMunge.LogType.Error);
+					mainForm.Log(msg, LogType.Error);
 				}
 			}
 
@@ -1079,7 +1089,7 @@ namespace ZeroMunge
 				if (sender is ZeroMunge)
 				{
 					ZeroMunge zm = sender as ZeroMunge;
-					zm.Log(message, ZeroMunge.LogType.Error);
+					zm.Log(message, LogType.Error);
 				}
 				else
 				{
@@ -1151,8 +1161,15 @@ namespace ZeroMunge
 				PreferredZeroEditor = Properties.Settings.Default.PreferredZeroEditor,
 				DebuggerExe = Properties.Settings.Default.DebuggerExe,
 				DebuggerArgs = Properties.Settings.Default.DebuggerArgs,
-				GameExeArgs = Properties.Settings.Default.GameExeArgs 
-		};
+				GameExeArgs = Properties.Settings.Default.GameExeArgs,
+				ModToolsLocation = Properties.Settings.Default.ModToolsLocation,
+				PSPGameLocation = Properties.Settings.Default.PSPGameLocation,
+				PPSSPPLocation = Properties.Settings.Default.PPSSPPLocation,
+				ProfileName = Properties.Settings.Default.ProfileName,
+				XboxCopyFolder = Properties.Settings.Default.XboxCopyFolder,
+				PS2CopyFolder = Properties.Settings.Default.PS2CopyFolder,
+				FTPDest = Properties.Settings.Default.FTPDest,
+			};
 
 			return prefs;
 		}
@@ -1185,8 +1202,13 @@ namespace ZeroMunge
 			Properties.Settings.Default.DebuggerExe = prefs.DebuggerExe;
 			Properties.Settings.Default.DebuggerArgs = prefs.DebuggerArgs;
 			Properties.Settings.Default.GameExeArgs = prefs.GameExeArgs;
-
-
+			Properties.Settings.Default.ModToolsLocation = prefs.ModToolsLocation;
+			Properties.Settings.Default.PSPGameLocation = prefs.PSPGameLocation;
+			Properties.Settings.Default.PPSSPPLocation = prefs.PPSSPPLocation;
+			Properties.Settings.Default.ProfileName = prefs.ProfileName;
+			Properties.Settings.Default.XboxCopyFolder = prefs.XboxCopyFolder;
+			Properties.Settings.Default.PS2CopyFolder = prefs.PS2CopyFolder;
+			Properties.Settings.Default.FTPDest = prefs.FTPDest;
 			Properties.Settings.Default.Save();
 		}
 	}
@@ -1230,11 +1252,18 @@ namespace ZeroMunge
 		public bool AutoLoadEnabled { get; set; }
 		public string LastSaveFilePath { get; set; }
 		public StringCollection RecentFiles { get; set; }
-        public String PreferredTextEditor { get; set; }
+		public String PreferredTextEditor { get; set; }
 		public String PreferredZeroEditor { get; set; }
 		public String DebuggerExe { get; set; }
 		public String DebuggerArgs { get; set; }
 		public String GameExeArgs { get; set; }
+		public String ModToolsLocation { get; set; }
+		public string PSPGameLocation { get; set; }
+		public string PPSSPPLocation { get; set; }
+		public string ProfileName { get; set; }
+		public string XboxCopyFolder { get; set; }
+		public string PS2CopyFolder { get; set; }
+		public string FTPDest { get; set; }
 	}
 
 	public class ReqChunk
@@ -1292,5 +1321,29 @@ namespace ZeroMunge
 			}
 			Debug.WriteLine("PrintAll(): END OF CHUNK");
 		}
+	}
+
+	public enum Platform
+	{
+		None,
+		PC,
+		XBOX,
+		PS2
+	}
+
+	public enum LogType
+	{
+		None,
+		Munge,
+		Info,
+		Update,
+		Warning,
+		Error
+	}
+	public interface Logger
+	{
+		void Log(string message);
+		void Log(string message, LogType logType);
+
 	}
 }

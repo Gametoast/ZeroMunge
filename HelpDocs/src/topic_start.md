@@ -21,9 +21,9 @@ Zero Munge includes the following features.
 - Log each script's output in real-time (with timestamps) to a log window and log file
 - Various methods of adding munge scripts to the file list ([**GO**](topic_gs.html#adding-munge-scripts-to-the-file-list))
 - Automatically copy each file's associated LVL file(s) to the appropriate directory
-- Easily create the munge folders/scripts for a side or world ([**GO**](topic_cmd_tools.html))
-- Apply the sound munge fix to a project directory ([**GO**](topic_cmd_tools.html))
-- Visual interface for modifying which sound folders get munged when sound is munged ([**GO**](topic_cmd_tools.html))
+- Easily create the munge folders/scripts for a side or world ([**GO**](topic_menu_tools.html))
+- Apply the sound munge fix to a project directory ([**GO**](topic_menu_tools.html))
+- Visual interface for modifying which sound folders get munged when sound is munged ([**GO**](topic_menu_tools.html))
 - Save and load different "presets" of the file list's contents
 - Auto-save and auto-load functionality for save files
 - Automatically check for updates and point user to latest release's download page
@@ -34,4 +34,4 @@ Click on a link below to view the help information for that topic.
 
 - [**Getting Started**](topic_gs.html)
 - [**User Interface**](topic_ui.html)
-- [**Commands**](topic_cmd.html)
+- [**Menus**](topic_menu.html)

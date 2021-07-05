@@ -13,18 +13,23 @@ Default=,"ZeroMungeHelp_TOC.hhc",,"src\topic_start.html",,,,,,0x2120,,0x3006,[16
 
 
 [FILES]
-src\topic_start.html
-src\topic_ui_filelist.html
-src\topic_cmd.html
-src\topic_cmd_actions.html
-src\topic_cmd_file.html
-src\topic_cmd_help.html
-src\topic_cmd_settings.html
-src\topic_cmd_tools.html
 src\topic_gs.html
+src\topic_menu.html
+src\topic_menu_actions.html
+src\topic_menu_file.html
+src\topic_menu_help.html
+src\topic_menu_platform.html
+src\topic_menu_preferences.html
+src\topic_menu_tools.html
+src\topic_start.html
 src\topic_ui.html
+src\topic_ui_actions.html
+src\topic_ui_alternate_ui.html
 src\topic_ui_easyfilepicker.html
+src\topic_ui_filelist.html
+src\topic_ui_launch_mission.html
+src\topic_ui_log.html
+src\topic_ui_make_ftp_script.html
 src\topic_ui_modifymungedsoundfolders.html
-
 [INFOTYPES]
 

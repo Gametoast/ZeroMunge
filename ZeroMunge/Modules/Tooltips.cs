@@ -20,15 +20,15 @@ namespace ZeroMunge
 
 		public static class FileList
 		{
-			public const string Run = "Sequentially execute each file in the file list.";
+			public const string Run = "Start the munge process. In the default 'list view' UI, each file will be executed sequentially.\n"+
+									  "In the 'alternate UI' view (F12), only the project for the specified 'munge folder' will be munged.";
 			public const string Cancel = "Stop processing files.  \n\nWARNING: Canceling a munge is strongly NOT recommended.";
 			public const string EasyFilePicker = "Open the Easy File Picker, which greatly simplifies the process of adding munge files to the file list.";
 			public const string AddFiles = "Open a prompt to add files to the file list.";
 			public const string AddFolders = "Open a prompt to select folders containing munge.bat files to add to the file list.";
-			public const string AddProject = "Open a prompt to select a project folder whose common munge.bat files will be added to the file list.";
+			public const string AddProject = "Open a prompt to select a project folder (the 'data_<MOD_ID>' folder).";
 			public const string RemoveFile = "Remove the selected files from the file list.";
 			public const string RemoveAllFiles = "Remove all files from the file list.";
-			public const string HelpButton = "Get help with the user interface.";
 		}
 
 		public static class Actions
@@ -38,6 +38,7 @@ namespace ZeroMunge
 			public const string OpenZeroEditor = "Launch Zero Editor.";
 			public const string OpenGameExe = "Launch Star Wars Battlefront II.";
 			public const string OpenGameFolder = "Open the 'GameData' folder.";
+			public const string OpenMungeLog = "Open the munge log (currently selected platform) in your preferred editor.";
 		}
 
 		public static class OutputLog
@@ -45,6 +46,7 @@ namespace ZeroMunge
 			public const string CopyLog = "Copy the contents of the output log window to the clipboard.";
 			public const string SaveLogAs = "Save the contents of the output log to a new file.";
 			public const string ClearLog = "Clear the contents of the output log.";
+			public const string OpenLog = "Open output the log in your preferred editor.";
 		}
 
 		public static class Tools
@@ -54,6 +56,7 @@ namespace ZeroMunge
 			public const string FixWorldMungeFile = "Check to see if a world's munge.bat script is set to munge the correct world and fix it if not.";
 			public const string FixSoundMungeFiles = "Apply the sound munge fixes to a project directory.";
 			public const string ModifyMungedSoundFolders = "Select which sound folders should be munged when sound is munged.";
+			public const string AddMission = "Add a mission to the current project. (adds req, lua files; updates mission.req)";
 		}
 
 		public static class SoundMungeForm
@@ -109,7 +112,55 @@ namespace ZeroMunge
 
 			public const string DebuggerArgs = "Arguments to be passed to the Debugger executable, like launch mission name.\nExamples:\ncor1c_con \t\t(built-in mission name)\n/win\t\t\t(windowed mode)\n/resolution 1920 1080\t(specify resolution)";
 			public const string GameExeArgs = "Arguments to be passed to the Game executable, like launch mission name.\nExamples:\ncor1c_con \t\t(built-in mission name)\n/win\t\t\t(windowed mode)\n/resolution 1920 1080\t(specify resolution)";
+			public const string ModToolsDir = "The path to 'BF2_ModTools'";
+			public const string ConsoleSupport = "Check/enable your ModTools for Console (XBOX,PS2/PSP) munge";
+		}
+
+		public static class AltUIPanel
+		{
+			public const string CheckShell = 
+				"If you're munging 'shell', typically you'll first need to copy the 'BF2_ModTools\\assets\\shell' folder to your 'data_ABC' folder.\n" +
+				"(munge.bat /SHELL)";
+			public const string CheckLoad = "Munge the loading screen data \n(munge.bat /LOAD)";
+			public const string CheckSound = "Sound will me munged when this is checked ( munge.bat /SOUND )";
+			public const string CheckMovies = "Movies will me munged when this is checked ( munge.bat /MOVIES )";
+			public const string CheckMissions = "If this is checked by itself, you are given the option to only munge mission.lvl (will prompt for creating 'mission only' batch file)";
+			public const string CheckCommon = "Munge common stuff [core.lvl, common.lvl, ingame.lvl, mission.lvl] ( munge.bat /COMMON )";
+			public const string CheckAddme =  "addme.script will be munged when this is checked ( mungeAddme.bat )";
+			public const string CheckCopyIfNewer= "Only copy a file if it is newer than the one already at the deployment location.";
+			public const string CheckAutoCopy = "For the PC Munge, automatically copy files after the munge is complete.";
+			public const string ButtonCopy = "Copy the files now. For PC, the addme.script will be placed at the root of the addon folder. The LVL files will be placed according to the 'normal' structure.";
+			public const string ButtonBrowseOutputFolder= "Browse to a folder that you want your files copied to.";
+			public const string GroupMungeFolder= "The target munge folder";
+			public const string OverrideDesc = "Run a batch file in the '_BUILD' folder instead of just 'munge' or 'clean'";
+			public const string ComboSide=  "Select the specific 'side' to munge.";
+			public const string ComboWorld= "Select the specific 'World' to munge.";
+			public const string GroupPlatform= "Select the platform to munge";
+			public const string CopyLocationTip =
+				"Location to copy files to (per platform). Will copy .lvl, .script, .txt and .mvs files.\n" +
+				"For PS2 and XBOX the files will be copied to the destination, preserving the file structure of the _LVL_<platform> folder.\n" +
+				"For 'PC', the files will be copied according to the PC file pattern.\n" +
+				"   'addme.script' will be placed at ...\\GameData\\addon\\<MOD_ID>\\addme.script.\n" +
+				"   The rest of the files will be copied to ...\\GameData\\addon\\<MOD_ID>\\data\\_LVL_PC\\\n";
 			
+		}
+
+		public static class MissionLauncher
+		{
+			public const string Mission = "The mission name; can be a shipped mission or one added with 'AddDownloadableContent(map,missionName,4)'";
+			public const string LaunchDebugger =  "The debugger will launch into the specified mission after you choose your profile.";
+			public const string Close =   "Closing this window will clean up the auto launch mission (addme)";
+			public const string PPSSPPAutoLaunch = "'auto launch' a mission using PPSSPP and the Alternate addon system for PSP\nGame contents must have been extracted to the file system and 'Alt addon' system must be setup.";
+			public const string AutoLaunchFileLocation = "The location of the autolaunch (addon) file.";
+		}
+
+		public static class FTPScriptForm
+		{
+			public const string Browse = "Browse To Local Folder";
+			public const string Source = "The source folder on your computer to copy from.";
+			public const string Dest = "IP address of the dest.";
+			public const string RemoteFolder = "The base folder location on the XBOX to transfer files to";
+			public const string GenerateScript = "Generate a batch file (and companion ftp instructions ) to copy the selected files to the destination.";
 		}
 
 		public static class HelpMenu
@@ -127,6 +178,9 @@ namespace ZeroMunge
 			public const string CheckForUpdates = "Check to see if a new release of Zero Munge is available.  \n\nNOTE: This requires an Internet connection.";
 			public const string Contact = "Send me an e-mail at marth8880@gmail.com  \n\nNOTE: If a default e-mail program isn't set up, this link probably won't do anything.";
 			public const string ThirdPartySoftware = "View a list of the third-party software used in Zero Munge.";
+			public const string GametoastGithub = "Open your browser to the Gametoast organization Github page";
+			public const string Gametoast = "Open your browser to the Gametoast website";
+			public const string Battlefront2API = "Open your browser to the Battlefront 2 Lua API ";
 		}
 
 		public static class SaveFileListPrompt
