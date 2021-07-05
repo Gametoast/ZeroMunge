@@ -398,32 +398,11 @@ namespace ZeroMunge
 		#region Main Window
 		private const string ZeroMungeLog = ".\\ZeroMunge_OutputLog.log";
 
-		//public Thread outputLogThread;
 
 		// When the ZeroMunge form is finished loading:
 		// Create the tray icon, initialize some stuff with the file list, and start a new output log.
 		private void ZeroMunge_Load(object sender, EventArgs e)
 		{
-			//outputLogThread = new Thread(() =>
-			//{
-			//	RichTextBox rtb_OutputLog = new RichTextBox
-			//	{
-			//		Font = new Font("Consolas", 8.25f, FontStyle.Regular),
-			//		ReadOnly = true,
-			//		TabIndex = 12,
-			//		TabStop = true,
-			//		WordWrap = false,
-			//		Dock = DockStyle.Fill,
-			//		Location = new Point(0, 0),
-			//		Size = new Size(651, 297)
-			//		//Parent = cont_Panels.Panel2
-			//	};
-			//	rtb_OutputLog.TextChanged += text_OutputLog_TextChanged;
-			//	rtb_OutputLog.LinkClicked += text_OutputLog_LinkClicked;
-			//	cont_Panels.Panel2.Controls.Add(rtb_OutputLog);
-			//});
-			//outputLogThread.Start();
-
 			stat_UpdateLink.Visible = false;
 
 			// Set the tray icon if it's enabled
@@ -1370,17 +1349,6 @@ namespace ZeroMunge
 		// ***************************
 		// ** OUTPUT LOG
 		// ***************************
-
-		#region Output Log : Fields
-
-
-		List<string> logLineCollection = new List<string>();
-		public bool notifyLogThread = false;
-		bool logThreadReady = true;
-
-		#endregion Output Log : Fields
-
-
 		#region Output Log : Logic
 
 		/// <summary>
@@ -1430,128 +1398,32 @@ namespace ZeroMunge
 			}
 			else
 			{
-				//Thread swThread = new Thread(() => {
-				string newLineText = "";
-
 				if (debugWriteLine)
-				{
 					Debug.WriteLine(message);
-				}
 
-				string timestamp = "";
-				if (prefs.LogPrintTimestamps)
-				{
-					timestamp = string.Concat(Utilities.GetTimestamp(), "  ");
-				}
-
-				string typeInfo = "";
-				if (logType != LogType.None)
-				{
-					typeInfo = string.Concat("[", logType.ToString(), "]\t");
-				}
-
-				// Assemble message
-				string messageToLog = string.Concat(timestamp, typeInfo, message, newLineText);
-
-				// Print message
-				//text_OutputLog.AppendText(messageToLog);
+				string messageToLog = String.Format("{0} [{1}]\t{2}\r\n", Utilities.GetTimestamp(), logType.ToString(), message);
 
 				// Log the message to the log file
 				if (prefs.OutputLogToFile)
-				{
-					StreamWriter sw = File.AppendText(string.Concat(Directory.GetCurrentDirectory(), @"\ZeroMunge_OutputLog.log"));
-					sw.WriteLine(messageToLog);
-					sw.Close();
-				}
+					File.AppendAllText(ZeroMungeLog, messageToLog);
 
-
-				// Remove the previous temporary blank line from the end if the log isn't empty
-				if (logLineCollection.Count > 0)
-				{
-					logLineCollection.RemoveAt(logLineCollection.Count - 1);
-				}
-
-				// Add the message to the line collection
-				logLineCollection.Add(messageToLog);
-
-				// Add a temporary new blank line to the end
-				logLineCollection.Add("");
-
-
-				// Remove the first line if the output log is full
-				if (logLineCollection.Count > prefs.LogMaxLineCount)
-				{
-					logLineCollection.RemoveAt(0);
-				}
-				//});
-				//swThread.Start();
-
-				if (ProcessManager.IsRunning())
-				{
-					notifyLogThread = true;
-				}
-				else
-				{
-					UpdateOutputLog();
-				}
+				// Log the message to the textbox
+				AppendToTextArea(messageToLog);
 			}
 		}
 
-
-		/// <summary>
-		/// Update the output log if the thread is ready.
-		/// </summary>
-		public void NotifyOutputLog()
+		private void AppendToTextArea(string msg)
 		{
-			if (logThreadReady)
+			text_OutputLog.AppendText(msg);
+			if(text_OutputLog.Lines.Length > prefs.LogMaxLineCount)
 			{
-				logThreadReady = false;
-				UpdateOutputLog();
+				// take the last 'n' lines
+				int n = prefs.LogMaxLineCount;
+				ArraySegment<String> seg = new ArraySegment<string>(text_OutputLog.Lines, text_OutputLog.Lines.Length - n, n);
+				text_OutputLog.Lines = seg.ToArray();
 			}
-		}
-
-
-		/// <summary>
-		/// Updates the Output Log with the text in the logLineCollection.
-		/// This method is executed on the worker thread and makes a thread-safe call on the RichTextBox control.
-		/// </summary>
-		public void UpdateOutputLog()
-		{
-			Debug.WriteLine(string.Concat(Utilities.GetTimestamp(), " : ", "UpdateOutputLog: Entered"));
-			UpdateOutputLog_Proc();
-		}
-
-		// This delegate enables asynchronous calls for setting the text property on the output log.
-		delegate void UpdateOutputLogCallback();
-
-		// WARNING: Don't call this directly, please call `UpdateOutputLog` instead.
-		public void UpdateOutputLog_Proc()
-		{
-			// InvokeRequired required compares the thread ID of the 
-			// calling thread to the thread ID of the creating thread. 
-			// If these threads are different, it returns true.
-			if (text_OutputLog.InvokeRequired)
-			{
-				UpdateOutputLogCallback cb = new UpdateOutputLogCallback(UpdateOutputLog_Proc);
-				BeginInvoke(cb);
-			}
-			else
-			{
-				// Display the new data in the control
-				text_OutputLog.Lines = logLineCollection.ToArray();
-
-				// Auto-scroll to the most recent line
-				text_OutputLog.Select(text_OutputLog.Text.Length, text_OutputLog.Text.Length);
-				text_OutputLog.ScrollToCaret();
-
-				if (ProcessManager.IsRunning())
-				{
-					// Only update the Output Log once every X milliseconds
-					Thread.Sleep(prefs.LogPollingRate);
-				}
-
-				logThreadReady = true;
-			}
+			text_OutputLog.SelectionStart = text_OutputLog.Text.Length;
+			text_OutputLog.ScrollToCaret();
 		}
 
 		#endregion Output Log : Logic
@@ -1783,11 +1655,6 @@ namespace ZeroMunge
 		/// Folder selection prompt for adding projects to the DataGridView.
 		/// </summary>
 		public CommonOpenFileDialog openDlg_AddProjectPrompt = new CommonOpenFileDialog();
-
-		/// <summary>
-		/// Folder selection prompt for selecting SWBF2's GameData directory.
-		/// </summary>
-		public CommonOpenFileDialog openDlg_SetGamePathPrompt = new CommonOpenFileDialog();
 
 		/// <summary>
 		/// Last directory user was in for the openDlg_SetStagingPrompt.
