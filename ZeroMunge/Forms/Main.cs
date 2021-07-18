@@ -4217,7 +4217,18 @@ namespace ZeroMunge
 				}
 
 				string fileContents = File.ReadAllText(filePath);
-				string nameInMungeFile = fileContents.Split(' ')[2];
+				string nameInMungeFile = "";
+				string[] mungeFileArgs = fileContents.Split(' ');
+
+				// Find world id argument
+				for (int i = 0; i < mungeFileArgs.Length - 1; i++)
+				{
+					if (mungeFileArgs[i].Contains("munge_world.bat"))
+					{
+						nameInMungeFile = mungeFileArgs[i + 1];
+						break;
+					}
+				}
 
 				if (nameInMungeFile.ToUpper() == worldName.ToUpper())
 				{
