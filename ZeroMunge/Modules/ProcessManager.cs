@@ -44,8 +44,6 @@ namespace ZeroMunge.Modules
 				sender.stat_JobStatus.Text = "Running";
 			}
 
-			Utilities.PlaySound(Utilities.SoundType.Start);
-
 			// Grab the list of checked files
 			fileList = files;
 
@@ -88,6 +86,8 @@ namespace ZeroMunge.Modules
 				}
 				sender.Log(errorMessage, LogType.Error);
 
+				Utilities.PlaySound(Utilities.SoundType.Abort);
+
 				// Re-enable the UI
 				sender.EnableUI(true);
 				isRunning = false;
@@ -97,6 +97,8 @@ namespace ZeroMunge.Modules
 			if (fileList.Count == 0) { return; }
 
 			// FINISH CHECKING FOR ROW ERRORS
+
+			Utilities.PlaySound(Utilities.SoundType.Start);
 
 			activeFile = 0;
 			procAborted = false;
