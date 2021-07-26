@@ -1624,6 +1624,7 @@ namespace ZeroMunge
 				menu_fixWorldMungeScriptsToolStripMenuItem.Enabled = enabled;
 				menu_fixSoundMungeFilesToolStripMenuItem.Enabled = enabled;
 				menu_modifyMungedSoundFoldersToolStripMenuItem.Enabled = enabled;
+				menu_addMission.Enabled = enabled;
 
 				// Log menu
 				menu_logSubToolStripMenuItem.Enabled = enabled;
