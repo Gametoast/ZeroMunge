@@ -550,17 +550,38 @@ namespace ZeroMunge
 				Flow_SetGameDirectory_Start();
 			}
 
-			// Auto-load the last save file
-			if (prefs.AutoLoadEnabled && prefs.LastSaveFilePath != "UNSET")
+			string[] args = Environment.GetCommandLineArgs();
+			string openProjectOnLaunch = "";
+
+			// Was a project path passed into the application?
+			if (args.Length > 1)
 			{
-				if (prefs.LastSaveFilePath != "" && File.Exists(prefs.LastSaveFilePath))
+				if (Directory.Exists(args[1]))
 				{
-					Log(string.Format("Auto-load is enabled. Loading save file: \"{0}\"", prefs.LastSaveFilePath), LogType.Info);
+					openProjectOnLaunch = args[1];
+					this.Log(string.Format("Project path was specified in application argument. Adding project found in {0}", openProjectOnLaunch));
 
-					//DataFilesContainer data = DeserializeData(prefs.LastSaveFilePath);
-					//LoadDataIntoFileList(data, prefs.LastSaveFilePath);
+					AddProject(openProjectOnLaunch);
+				}
+				else
+				{
+					this.Log(string.Format("Project path '{0}' was specified but cannot be found!", args[1]), LogType.Error);
+				}
+			}
+			else
+			{
+				// Auto-load the last save file
+				if (prefs.AutoLoadEnabled && prefs.LastSaveFilePath != "UNSET")
+				{
+					if (prefs.LastSaveFilePath != "" && File.Exists(prefs.LastSaveFilePath))
+					{
+						Log(string.Format("Auto-load is enabled. Loading save file: \"{0}\"", prefs.LastSaveFilePath), LogType.Info);
 
-					OpenFileListFile(prefs.LastSaveFilePath);
+						//DataFilesContainer data = DeserializeData(prefs.LastSaveFilePath);
+						//LoadDataIntoFileList(data, prefs.LastSaveFilePath);
+
+						OpenFileListFile(prefs.LastSaveFilePath);
+					}
 				}
 			}
 		}
@@ -3005,33 +3026,36 @@ namespace ZeroMunge
 			// Auto-detect the munge.bat file inside each selected folder and add it to the file list
 			if (openDlg_AddProjectPrompt.ShowDialog() == CommonFileDialogResult.Ok)
 			{
-				// Get the project ID
-				var projectID = Utilities.GetProjectID(openDlg_AddProjectPrompt.FileName);
-
-
-				// Add all common munge.bat files in the project folder
-				foreach (string file in addProject_CommonFiles)
-				{
-					// Store in editable field
-					var theFile = file;
-
-					// Is the current file the World munge.bat?
-					if (theFile.Contains("@#$"))
-					{
-						theFile = theFile.Replace("@#$", projectID);
-					}
-
-					// Assemble the complete file path of the munge.bat file
-					var path = openDlg_AddProjectPrompt.FileName + theFile;
-
-					// Save the current directory
-					addProjectLastDir = Utilities.GetFileDirectory(openDlg_AddProjectPrompt.FileName);
-
-					// Add the file to the list
-					AddFile(path);
-				}
+				AddProject(openDlg_AddProjectPrompt.FileName);
 			}
 			InitializeAlternateUI();
+		}
+
+		private void AddProject(string projectPath)
+		{
+			var projectID = Utilities.GetProjectID(projectPath);
+
+			// Add all common munge.bat files in the project folder
+			foreach (string file in addProject_CommonFiles)
+			{
+				// Store in editable field
+				var theFile = file;
+
+				// Is the current file the World munge.bat?
+				if (theFile.Contains("@#$"))
+				{
+					theFile = theFile.Replace("@#$", projectID);
+				}
+
+				// Assemble the complete file path of the munge.bat file
+				var path = projectPath + theFile;
+
+				// Save the current directory
+				addProjectLastDir = Utilities.GetFileDirectory(projectPath);
+
+				// Add the file to the list
+				AddFile(path);
+			}
 		}
 
 
