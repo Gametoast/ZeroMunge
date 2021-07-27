@@ -176,7 +176,12 @@ namespace ZeroMunge.Modules
 			//	sender.stat_JobStatus.Text = "Idle";
 			//}
 			Utilities.PlaySound(Utilities.SoundType.Success);
-			sender.ShowMungeLog(false, "Notepad.exe");
+			if (fileList.Count > 0 && !fileList[0].FileDir.EndsWith("\\_BUILD\\munge.bat", StringComparison.OrdinalIgnoreCase))
+			{
+				// We should only open the munge log if we are running the munge.bat(s) one by one;
+				// the main '_BUILD\\mung.bat' will already open the file munge log.
+				sender.ShowMungeLog(false, "Notepad.exe");
+			}
 		}
 
 		/// <summary>
