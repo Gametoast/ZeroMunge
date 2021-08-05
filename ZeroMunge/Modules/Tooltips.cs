@@ -144,7 +144,6 @@ namespace ZeroMunge
 				"For 'PC', the files will be copied according to the PC file pattern.\n" +
 				"   'addme.script' will be placed at ...\\GameData\\addon\\<MOD_ID>\\addme.script.\n" +
 				"   The rest of the files will be copied to ...\\GameData\\addon\\<MOD_ID>\\data\\_LVL_PC\\\n";
-			
 		}
 
 		public static class MissionLauncher

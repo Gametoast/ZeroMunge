@@ -130,7 +130,6 @@ namespace ZeroMunge
 
 			FormTooltips.SetToolTip(txt_modToolsLocation, Tooltips.Settings.ModToolsDir);
 			FormTooltips.SetToolTip(btn_consoleCheck, Tooltips.Settings.ConsoleSupport);
-
 		}
 
 		private void SavePrefs()
