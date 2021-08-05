@@ -8,9 +8,10 @@
 4. **File Path Browse** – Opens a prompt to browse for a new batch script.
 5. **Staging Directory** – Directory to which the Munged Files are copied after the batch script has finished executing.
 6. **Staging Directory Browse** – Opens a prompt to browse for a new Staging Directory.
-7. **Munged Files** – Names of files that will be copied to the Staging Directory after the batch script has finished executing. Each file name must be separated into its own line.
-8. **Munged Files Edit** – Opens a pop-up window to add/remove/edit names of Munged Files. Each file is separated into its own new line.
-9. **Context menu** – [See context menu section](topic_ui_context_menus.html)
+7. **Munge Directory** – Lets Zero Munge know where to copy the associated compiled LVL files from.
+8. **Munged Files** – Names of files that will be copied to the Staging Directory after the batch script has finished executing. Each file name must be separated into its own line.
+9. **Munged Files Edit** – Opens a pop-up window to add/remove/edit names of Munged Files. Each file is separated into its own new line.
+10. **Context menu** – [See context menu section](topic_ui_context_menus.html)
 
 ### Munged Files Edit
 

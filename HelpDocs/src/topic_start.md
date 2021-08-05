@@ -1,6 +1,6 @@
 ![Zero Munge](images/app_banner.jpg)
 
-**Zero Munge v1.2.0.1**  
+**Zero Munge v1.2.0**  
 **Copyright © 2021 Aaron Gilbert. All rights reserved.**    
 [**View project on GitHub**](https://github.com/Gametoast/ZeroMunge)
 
