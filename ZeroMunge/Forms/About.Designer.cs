@@ -56,9 +56,10 @@
 			// 
 			this.btn_Accept.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btn_Accept.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btn_Accept.Location = new System.Drawing.Point(377, 346);
+			this.btn_Accept.Location = new System.Drawing.Point(562, 511);
+			this.btn_Accept.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.btn_Accept.Name = "btn_Accept";
-			this.btn_Accept.Size = new System.Drawing.Size(75, 23);
+			this.btn_Accept.Size = new System.Drawing.Size(112, 35);
 			this.btn_Accept.TabIndex = 3;
 			this.btn_Accept.Text = "OK";
 			this.btn_Accept.UseVisualStyleBackColor = true;
@@ -70,57 +71,63 @@
 			this.flow_AppInfo.Controls.Add(this.lbl_BuildInfo);
 			this.flow_AppInfo.Controls.Add(this.label3);
 			this.flow_AppInfo.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flow_AppInfo.Location = new System.Drawing.Point(12, 131);
+			this.flow_AppInfo.Location = new System.Drawing.Point(18, 202);
+			this.flow_AppInfo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.flow_AppInfo.Name = "flow_AppInfo";
-			this.flow_AppInfo.Size = new System.Drawing.Size(299, 70);
+			this.flow_AppInfo.Size = new System.Drawing.Size(448, 108);
 			this.flow_AppInfo.TabIndex = 2;
 			// 
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(3, 0);
+			this.label1.Location = new System.Drawing.Point(4, 0);
+			this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.label1.Name = "label1";
-			this.label1.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
-			this.label1.Size = new System.Drawing.Size(65, 19);
+			this.label1.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
+			this.label1.Size = new System.Drawing.Size(95, 30);
 			this.label1.TabIndex = 0;
 			this.label1.Text = "Zero Munge";
 			// 
 			// lbl_BuildInfo
 			// 
 			this.lbl_BuildInfo.AutoSize = true;
-			this.lbl_BuildInfo.Location = new System.Drawing.Point(3, 19);
+			this.lbl_BuildInfo.Location = new System.Drawing.Point(4, 30);
+			this.lbl_BuildInfo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.lbl_BuildInfo.Name = "lbl_BuildInfo";
-			this.lbl_BuildInfo.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
-			this.lbl_BuildInfo.Size = new System.Drawing.Size(70, 19);
+			this.lbl_BuildInfo.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
+			this.lbl_BuildInfo.Size = new System.Drawing.Size(105, 30);
 			this.lbl_BuildInfo.TabIndex = 1;
 			this.lbl_BuildInfo.Text = "BUILD_INFO";
 			// 
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(3, 38);
+			this.label3.Location = new System.Drawing.Point(4, 60);
+			this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.label3.Name = "label3";
-			this.label3.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
-			this.label3.Size = new System.Drawing.Size(187, 19);
+			this.label3.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
+			this.label3.Size = new System.Drawing.Size(281, 30);
 			this.label3.TabIndex = 2;
 			this.label3.Text = "Developed by Aaron Gilbert && BAD-AL";
 			// 
 			// pnl_License
 			// 
 			this.pnl_License.Controls.Add(this.text_License);
-			this.pnl_License.Location = new System.Drawing.Point(3, 16);
+			this.pnl_License.Location = new System.Drawing.Point(4, 25);
+			this.pnl_License.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.pnl_License.Name = "pnl_License";
-			this.pnl_License.Size = new System.Drawing.Size(437, 117);
+			this.pnl_License.Size = new System.Drawing.Size(656, 158);
 			this.pnl_License.TabIndex = 3;
 			// 
 			// text_License
 			// 
 			this.text_License.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.text_License.Location = new System.Drawing.Point(0, 0);
+			this.text_License.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.text_License.Name = "text_License";
 			this.text_License.ReadOnly = true;
 			this.text_License.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.text_License.Size = new System.Drawing.Size(437, 117);
+			this.text_License.Size = new System.Drawing.Size(656, 158);
 			this.text_License.TabIndex = 0;
 			this.text_License.TabStop = false;
 			this.text_License.Text = "";
@@ -129,9 +136,10 @@
 			// lbl_LicensePre
 			// 
 			this.lbl_LicensePre.AutoSize = true;
-			this.lbl_LicensePre.Location = new System.Drawing.Point(3, 0);
+			this.lbl_LicensePre.Location = new System.Drawing.Point(4, 0);
+			this.lbl_LicensePre.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.lbl_LicensePre.Name = "lbl_LicensePre";
-			this.lbl_LicensePre.Size = new System.Drawing.Size(47, 13);
+			this.lbl_LicensePre.Size = new System.Drawing.Size(68, 20);
 			this.lbl_LicensePre.TabIndex = 4;
 			this.lbl_LicensePre.Text = "License:";
 			// 
@@ -142,9 +150,10 @@
 			this.flow_License.Controls.Add(this.lbl_LicensePre);
 			this.flow_License.Controls.Add(this.pnl_License);
 			this.flow_License.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flow_License.Location = new System.Drawing.Point(12, 207);
+			this.flow_License.Location = new System.Drawing.Point(18, 318);
+			this.flow_License.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.flow_License.Name = "flow_License";
-			this.flow_License.Size = new System.Drawing.Size(440, 133);
+			this.flow_License.Size = new System.Drawing.Size(660, 183);
 			this.flow_License.TabIndex = 4;
 			this.flow_License.WrapContents = false;
 			// 
@@ -155,19 +164,21 @@
 			this.flow_Links.Controls.Add(this.link_Contact);
 			this.flow_Links.Controls.Add(this.link_ThirdPartySoftware);
 			this.flow_Links.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flow_Links.Location = new System.Drawing.Point(317, 131);
+			this.flow_Links.Location = new System.Drawing.Point(476, 202);
+			this.flow_Links.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.flow_Links.Name = "flow_Links";
 			this.flow_Links.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-			this.flow_Links.Size = new System.Drawing.Size(135, 70);
+			this.flow_Links.Size = new System.Drawing.Size(202, 108);
 			this.flow_Links.TabIndex = 5;
 			// 
 			// link_Updates
 			// 
 			this.link_Updates.AutoSize = true;
-			this.link_Updates.Location = new System.Drawing.Point(36, 0);
+			this.link_Updates.Location = new System.Drawing.Point(56, 0);
+			this.link_Updates.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.link_Updates.Name = "link_Updates";
-			this.link_Updates.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
-			this.link_Updates.Size = new System.Drawing.Size(96, 19);
+			this.link_Updates.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
+			this.link_Updates.Size = new System.Drawing.Size(142, 30);
 			this.link_Updates.TabIndex = 0;
 			this.link_Updates.TabStop = true;
 			this.link_Updates.Text = "Check for Updates";
@@ -176,10 +187,11 @@
 			// link_Contact
 			// 
 			this.link_Contact.AutoSize = true;
-			this.link_Contact.Location = new System.Drawing.Point(88, 19);
+			this.link_Contact.Location = new System.Drawing.Point(133, 30);
+			this.link_Contact.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.link_Contact.Name = "link_Contact";
-			this.link_Contact.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
-			this.link_Contact.Size = new System.Drawing.Size(44, 19);
+			this.link_Contact.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
+			this.link_Contact.Size = new System.Drawing.Size(65, 30);
 			this.link_Contact.TabIndex = 1;
 			this.link_Contact.TabStop = true;
 			this.link_Contact.Text = "Contact";
@@ -188,10 +200,11 @@
 			// link_ThirdPartySoftware
 			// 
 			this.link_ThirdPartySoftware.AutoSize = true;
-			this.link_ThirdPartySoftware.Location = new System.Drawing.Point(30, 38);
+			this.link_ThirdPartySoftware.Location = new System.Drawing.Point(46, 60);
+			this.link_ThirdPartySoftware.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.link_ThirdPartySoftware.Name = "link_ThirdPartySoftware";
-			this.link_ThirdPartySoftware.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
-			this.link_ThirdPartySoftware.Size = new System.Drawing.Size(102, 19);
+			this.link_ThirdPartySoftware.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
+			this.link_ThirdPartySoftware.Size = new System.Drawing.Size(152, 30);
 			this.link_ThirdPartySoftware.TabIndex = 2;
 			this.link_ThirdPartySoftware.TabStop = true;
 			this.link_ThirdPartySoftware.Text = "Third-party Software";
@@ -203,9 +216,10 @@
 			this.img_Logo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.img_Logo.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.img_Logo.Image = ((System.Drawing.Image)(resources.GetObject("img_Logo.Image")));
-			this.img_Logo.Location = new System.Drawing.Point(12, 12);
+			this.img_Logo.Location = new System.Drawing.Point(18, 18);
+			this.img_Logo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.img_Logo.Name = "img_Logo";
-			this.img_Logo.Size = new System.Drawing.Size(440, 113);
+			this.img_Logo.Size = new System.Drawing.Size(659, 173);
 			this.img_Logo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.img_Logo.TabIndex = 1;
 			this.img_Logo.TabStop = false;
@@ -215,20 +229,21 @@
 			// About
 			// 
 			this.AcceptButton = this.btn_Accept;
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btn_Accept;
-			this.ClientSize = new System.Drawing.Size(464, 381);
+			this.ClientSize = new System.Drawing.Size(687, 560);
 			this.Controls.Add(this.flow_Links);
 			this.Controls.Add(this.flow_License);
 			this.Controls.Add(this.flow_AppInfo);
 			this.Controls.Add(this.img_Logo);
 			this.Controls.Add(this.btn_Accept);
 			this.KeyPreview = true;
+			this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.MaximizeBox = false;
-			this.MaximumSize = new System.Drawing.Size(480, 420);
+			this.MaximumSize = new System.Drawing.Size(709, 616);
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(480, 420);
+			this.MinimumSize = new System.Drawing.Size(709, 616);
 			this.Name = "About";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
