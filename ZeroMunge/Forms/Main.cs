@@ -4622,7 +4622,7 @@ namespace ZeroMunge
 		{
 			if (String.IsNullOrEmpty(prefs.GameDirectory))
 			{
-				MessageBox.Show("Game path not set. Set Game path to use this feature.", "Error");
+				MessageBox.Show("Game path not set. Set game path to use this feature.", "Error");
 				return;
 			}
 			string editor = GetEditor();
@@ -4634,7 +4634,7 @@ namespace ZeroMunge
 			}
 			else
 			{
-				MessageBox.Show(String.Format("Could not find '{0}'\r\nDid you Run the BF2_Modtools program yet?", logPath), "Warning");
+				MessageBox.Show(String.Format("Could not find '{0}'\r\nDid you run the BF2_Modtools program yet?", logPath), "Warning");
 			}
 		}
 
@@ -4666,7 +4666,7 @@ namespace ZeroMunge
 		{
 			if (String.IsNullOrEmpty(prefs.GameDirectory))
 			{
-				MessageBox.Show("Game path not set. Set Game path to use this feature.", "Error");
+				MessageBox.Show("Game path not set. Set game path in 'Preferences' to use this feature.", "Error");
 				return;
 			}
 			string programName = prefs.DebuggerExe;
@@ -4693,7 +4693,7 @@ namespace ZeroMunge
 		{
 			if (String.IsNullOrEmpty(prefs.GameDirectory))
 			{
-				MessageBox.Show("Game path not set. Set Game path to use this feature.", "Error");
+				MessageBox.Show("Game path not set. Set game path in 'Preferences' to use this feature.", "Error");
 				return;
 			}
 			string programName = prefs.GameDirectory + "\\BattlefrontII.exe";
@@ -4720,7 +4720,7 @@ namespace ZeroMunge
 		{
 			if (String.IsNullOrEmpty(prefs.GameDirectory))
 			{
-				MessageBox.Show("Game path not set. Set Game path in 'Preferences' to use this feature.", "Error");
+				MessageBox.Show("Game path not set. Set game path in 'Preferences' to use this feature.", "Error");
 				return;
 			}
 			this.Log("Opening Game Folder...", LogType.Info);
@@ -4845,13 +4845,13 @@ namespace ZeroMunge
 		{
 			if(String.IsNullOrEmpty( prefs.PreferredTextEditor ))
 			{
-				MessageBox.Show("Please Set Preferred Editor in 'Preferences' (to an editor that can open a folder, like Code or SublimeText)");
+				MessageBox.Show("Please set preferred editor in 'Preferences' (to an editor that can open a folder, like Code or SublimeText)");
 				return;
 			}
 			string folder = GetProjectFolderFromSelectedCell();
 			if (folder != null)
 			{
-				Log("Opening Project folder: "+ folder, LogType.Info);
+				Log("Opening project folder: " + folder, LogType.Info);
 				ProcessManager.RunCommand(prefs.PreferredTextEditor, "\"" + folder + "\"", folder);
 			}
 			else
@@ -4881,7 +4881,7 @@ namespace ZeroMunge
 					ProcessManager.RunCommand("Explorer.exe", "\"" + folder + "\"", folder);
 				}
 				else
-					MessageBox.Show("Folder does not exist:"+ folder+"\r\nDid you munge yet?", "Error");
+					MessageBox.Show("Folder does not exist: " + folder+"\r\nDid you munge yet?", "Error");
 			}
 			else
 				MessageBox.Show("Could not determine staging folder from selected Cell");
@@ -4945,11 +4945,11 @@ namespace ZeroMunge
 				"  3. Create <mission_name>.lua and open it in preferred editor.",
 				"ABCg_con.lua");
 			if (input == null)
-				return;// user canceled
+				return;	// user canceled
 			string projectFolder = GetCurrentProjectFolder();
-			if(projectFolder == null)
+			if (projectFolder == null)
 			{
-				Log("error determining project folder, no mission added.", LogType.Error);
+				Log("Error determining project folder, no mission added.", LogType.Error);
 				return;
 			}
 			if (input != null)
@@ -4978,7 +4978,7 @@ namespace ZeroMunge
 				missionFileName += ".lua";
 			DirectoryInfo commonFolder = new DirectoryInfo(modFolder + "Common");
 			FileInfo[] infos = commonFolder.GetFiles(missionFileName);
-			if (infos.Length > 0) throw new InvalidOperationException( "Error:, file already exists\r\n" + infos[0].FullName);
+			if (infos.Length > 0) throw new InvalidOperationException( "Error: File already exists\r\n" + infos[0].FullName);
 			
 			// create req file, update mission.req, create mission lua file
 			string reqFileName = commonFolder.FullName + "\\mission\\" + missionFileName.Replace(".lua", ".req");
@@ -5009,13 +5009,13 @@ namespace ZeroMunge
 
 			// update mission.req 
 			File.WriteAllText(missionReqs[0].FullName, missionReqText);
-			Log("Updaated mission.req ", LogType.Info);
+			Log("Updated mission.req ", LogType.Info);
 
 			// write the req file
 			File.WriteAllText(reqFileName, reqContent);
 			Log("Wrote " + reqFileName, LogType.Info);
 			// create the Lua file
-			if (!luaFileInfo.Directory.Exists) luaFileInfo.Directory.Create(); // create the folder if it does not exits
+			if (!luaFileInfo.Directory.Exists) luaFileInfo.Directory.Create(); // create the folder if it does not exist
 			File.WriteAllText(luaFileInfo.FullName, 
 				string.Format("--{0}\n--TODO: Update addme\n",luaFileInfo.Name));
 			string editor = GetEditor();
@@ -5085,7 +5085,7 @@ namespace ZeroMunge
 				FileInfo info = new FileInfo(mungeLog);
 				if (info.Length > 0)
 				{
-					Log("munge log not empty, showing munge log", LogType.Warning);
+					Log("Munge log not empty, showing munge log", LogType.Warning);
 					ProcessManager.RunCommand(editor, mungeLog, info.DirectoryName);
 				}
 				else if(verbose)

@@ -446,7 +446,7 @@ namespace ZeroMunge
 				retVal = false;
 				string message =
 @"Would you like to add munge support for XBOX, PS2 & PSP?
-Answering 'OK' will create the following :
+Answering 'Yes' will create the following :
    ToolsFL\\bin\\XBOX_ModelMunge.exe
    ToolsFL\\bin\\XBOX_TextureMunge.exe
    ToolsFL\\bin\\XBOX_ShaderMunge.exe
@@ -455,7 +455,7 @@ Answering 'OK' will create the following :
    ToolsFL\\bin\\ps2_TextureMunge.exe
 
 (copied from the 'PC' versions of these programs)";
-				if (MessageBox.Show(message, "Add console munge support?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+				if (MessageBox.Show(message, "Add console munge support?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
 				{
 					File.Copy(modToolsPath + "ToolsFL\\bin\\PC_TextureMunge.exe", modToolsPath + "ToolsFL\\bin\\XBOX_TextureMunge.exe", true);
 					File.Copy(modToolsPath + "ToolsFL\\bin\\PC_TextureMunge.exe", modToolsPath + "ToolsFL\\bin\\PS2_TextureMunge.exe", true);
