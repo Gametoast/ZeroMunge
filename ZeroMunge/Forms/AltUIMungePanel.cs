@@ -81,8 +81,8 @@ namespace ZeroMunge
         {
 			MungeDir = dir;
             LoadMungeOptions(dir);
-            combo_side.SelectedIndex = 1; //'NOTHING'
-            combo_world.SelectedIndex = 1;//'NOTHING'
+            combo_side.SelectedIndex = 1; // 'NOTHING'
+            combo_world.SelectedIndex = 1;	// 'NOTHING'
 		}
 
         private void SetToolTips()

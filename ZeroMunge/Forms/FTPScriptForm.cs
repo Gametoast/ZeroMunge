@@ -254,7 +254,7 @@ namespace ZeroMunge
 				File.WriteAllText(dlg.FileName, batchFileContents);
 				Log(string.Format("Saved FTP copy script to '{0}'",  ftpCommandFilename), LogType.Info);
 				Log(string.Format("Saved FTP copy batch file to '{0}'", dlg.FileName), LogType.Info);
-				SaveFtpAddress();// save ftp address if they actually create a script.
+				SaveFtpAddress();	// save ftp address if they actually create a script.
 			}
 			dlg.Dispose();
 		}

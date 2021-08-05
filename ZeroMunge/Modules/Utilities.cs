@@ -1347,6 +1347,5 @@ namespace ZeroMunge
 	{
 		void Log(string message);
 		void Log(string message, LogType logType);
-
 	}
 }

@@ -347,7 +347,7 @@ namespace ZeroMunge
 							) == DialogResult.Yes)
 						{
 							Assembly assembly = Assembly.GetExecutingAssembly();
-							//string[] names = assembly.GetManifestResourceNames();// uncomment to see resources in debugger
+							//string[] names = assembly.GetManifestResourceNames();	// uncomment to see resources in debugger
 							StreamReader reader = new StreamReader(assembly.GetManifestResourceStream("ZeroMunge.Resources.munge_MISSION.bat"));
 							string content = reader.ReadToEnd();
 							File.WriteAllText(missionOnlyMungeFile, content);
@@ -1189,7 +1189,7 @@ namespace ZeroMunge
 		/// </summary>
 		private void OpenWindow_EasyFilePicker()
 		{
-			menu_alternateUI.Checked = false;// force user back to default ui
+			menu_alternateUI.Checked = false;	// force user back to default ui
 
 			EasyFilePicker easyFilePickerForm = new EasyFilePicker();
 			if (easyFilePickerForm.ShowDialog() == DialogResult.OK)
@@ -3172,7 +3172,7 @@ namespace ZeroMunge
 		// Remove all files from the file list.
 		private void btn_RemoveAllFiles_Click(object sender, EventArgs e)
 		{
-			menu_alternateUI.Checked = false;// force user back to default ui
+			menu_alternateUI.Checked = false;	// force user back to default ui
 			lastCellChangeMethod = CellChangeMethod.Button;
 			ClearFileList();
 		}

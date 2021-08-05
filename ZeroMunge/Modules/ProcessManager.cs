@@ -374,7 +374,7 @@ namespace ZeroMunge.Modules
 					case Platform.XBOX: args = " XBOX "; break;
 				}
 			}
-			if (args == null) args = "";// so it gets Logged nicely below
+			if (args == null) args = "";	// so it gets Logged nicely below
 			// Initilialize process start info
 			ProcessStartInfo startInfo = new ProcessStartInfo(@filePath)
 			{
