@@ -1,8 +1,34 @@
 # Changelog
 
-All notable changes to Zero Munge will be documented in this file. Numbers enclosed in parentheses (#1) refer to [GitHub issues](https://github.com/marth8880/ZeroMunge/issues).
+All notable changes to Zero Munge will be documented in this file. Numbers enclosed in parentheses (#1) refer to [GitHub issues](https://github.com/Gametoast/ZeroMunge/issues).
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
+
+## [v1.2.0] - 2021-08-05
+
+### Added
+
+- Actions menu: Buttons to launch the game and debugger (with command line arguments), open game folder, open debug log, add new mission to project
+- XBOX, PS2/PSP munge support with options for copying files over FTP
+- Help menu: Buttons to go to Gametoast forums, Gametoast GitHub, and open the Battlefront II scripting API page
+- Alternate munge UI more similar to VisualMunge's
+- Context menu buttons for file grid: opening project in text editor, opening command line from _BUILD folder, opening staging directory, opening project folder
+- Project path can be provided as command line argument to load that project upon application load (overrides auto-loading feature) (#64)
+
+### Changed
+
+- Many various code refactors
+- Simplified flow for setting game directory
+- Munge log now opens at the end of a job instead of after each munge script
+- Failure sound should play when trying to munge with no files checked (#63)
+- More reliable world id detection (#55)
+
+### Fixed
+
+- Output Log performance is slow with large logs (#58)
+- Incorrect sound munge.bat is used (#53)
+- Easy File Picker: Adding a file when a file list row is selected causes that row to be overwritten (#52)
+- Bad threading usage
 
 ## [v1.1.0-beta] - 2018-09-02
 
