@@ -1358,7 +1358,7 @@
 			// 
 			this.menu_gametoastGithub.Name = "menu_gametoastGithub";
 			this.menu_gametoastGithub.Size = new System.Drawing.Size(315, 34);
-			this.menu_gametoastGithub.Text = "Gametoast Github";
+			this.menu_gametoastGithub.Text = "Gametoast GitHub";
 			this.menu_gametoastGithub.Click += new System.EventHandler(this.menu_gametoastGithub_Click);
 			// 
 			// toolStripSeparator7
