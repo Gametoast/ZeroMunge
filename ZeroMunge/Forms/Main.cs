@@ -417,8 +417,9 @@ namespace ZeroMunge
 				trayIcon.Visible = false;
 			}
 
+			col_MungeDir.Visible = prefs.ShowMungeOutputDir;
+
 			// Set the visibility of the debug columns in the file list
-			col_MungeDir.Visible = BUILD_TYPE == BuildType.Debug || BUILD_TYPE == BuildType.DebugClearSettings;
 			col_IsMungeScript.Visible = BUILD_TYPE == BuildType.Debug || BUILD_TYPE == BuildType.DebugClearSettings;
 			col_IsValid.Visible = BUILD_TYPE == BuildType.Debug || BUILD_TYPE == BuildType.DebugClearSettings;
 			button2.Visible = BUILD_TYPE == BuildType.Debug || BUILD_TYPE == BuildType.DebugClearSettings;
@@ -1216,13 +1217,28 @@ namespace ZeroMunge
 		/// </summary>
 		private void OpenWindow_Preferences()
 		{
+			bool prevShowMungeOutputDirState = prefs.ShowMungeOutputDir;
+
 			Preferences prefsForm = new Preferences();
 			prefsForm.StartPosition = FormStartPosition.CenterParent;
-			if (prefsForm.ShowDialog(this) == DialogResult.OK && !String.IsNullOrEmpty(prefsForm.Message))
+			if (prefsForm.ShowDialog(this) == DialogResult.OK)
 			{
-				string[] lines = prefsForm.Message.Split(new char[] { '\n' });
-				foreach (string line in lines)
-					Log(line, LogType.Info);
+				if (!String.IsNullOrEmpty(prefsForm.Message))
+				{
+					string[] lines = prefsForm.Message.Split(new char[] { '\n' });
+					foreach (string line in lines)
+						Log(line, LogType.Info);
+				}
+
+				// Reload our preferences
+				prefs = Utilities.LoadPrefs();
+
+				if (prefs.ShowMungeOutputDir != prevShowMungeOutputDirState)
+				{
+					col_MungeDir.Visible = prefs.ShowMungeOutputDir;
+				}
+
+				Log("Saving preferences", LogType.Info);
 			}
 			prefsForm.Dispose();
 		}

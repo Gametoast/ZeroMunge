@@ -1156,6 +1156,7 @@ namespace ZeroMunge
 				AutoSaveEnabled = Properties.Settings.Default.AutoSaveEnabled,
 				LastSaveFilePath = Properties.Settings.Default.LastSaveFilePath,
 				AutoLoadEnabled = Properties.Settings.Default.AutoLoadEnabled,
+				ShowMungeOutputDir = Properties.Settings.Default.ShowMungeOutputDir,
 				RecentFiles = Properties.Settings.Default.RecentFiles,
 				PreferredTextEditor = Properties.Settings.Default.PreferredTextEditor,
 				PreferredZeroEditor = Properties.Settings.Default.PreferredZeroEditor,
@@ -1196,6 +1197,7 @@ namespace ZeroMunge
 			Properties.Settings.Default.AutoSaveEnabled = prefs.AutoSaveEnabled;
 			Properties.Settings.Default.LastSaveFilePath = prefs.LastSaveFilePath;
 			Properties.Settings.Default.AutoLoadEnabled = prefs.AutoLoadEnabled;
+			Properties.Settings.Default.ShowMungeOutputDir = prefs.ShowMungeOutputDir;
 			Properties.Settings.Default.RecentFiles = prefs.RecentFiles;
 			Properties.Settings.Default.PreferredTextEditor = prefs.PreferredTextEditor;
 			Properties.Settings.Default.PreferredZeroEditor = prefs.PreferredZeroEditor;
@@ -1242,6 +1244,7 @@ namespace ZeroMunge
 		public bool PlayNotificationSounds { get; set; }
 		public bool AutoDetectStagingDir { get; set; }
 		public bool AutoDetectMungedFiles { get; set; }
+		public bool ShowMungeOutputDir { get; set; }
 		public int LogPollingRate { get; set; }
 		public int LogMaxLineCount { get; set; }
 		public bool OutputLogToFile { get; set; }

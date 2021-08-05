@@ -620,6 +620,7 @@
 			this.col_MungeDir.HeaderText = "Munge Directory";
 			this.col_MungeDir.MinimumWidth = 70;
 			this.col_MungeDir.Name = "col_MungeDir";
+			this.col_MungeDir.ToolTipText = "Lets Zero Munge know where to copy the associated compiled LVL files from.";
 			this.col_MungeDir.Width = 161;
 			// 
 			// col_MungedFiles

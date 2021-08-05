@@ -37,6 +37,9 @@ namespace ZeroMunge
 		{
 			SetToolTips();
 
+			btn_Accept.DialogResult = DialogResult.OK;
+			btn_Cancel.DialogResult = DialogResult.Cancel;
+
 			// Set the minimum, maximum, and increment values for the numeric input boxes
 			num_LogPollingRate.Minimum = PREFS_POLLING_RATE_MIN;
 			num_LogPollingRate.Maximum = PREFS_POLLING_RATE_MAX;
@@ -56,6 +59,7 @@ namespace ZeroMunge
 			chk_AutoDetectMungedFiles.Checked = prefs.AutoDetectMungedFiles;
 			chk_AutoSaveEnabled.Checked = prefs.AutoSaveEnabled;
 			chk_AutoLoadEnabled.Checked = prefs.AutoLoadEnabled;
+			chk_ShowMungeOutputDir.Checked = prefs.ShowMungeOutputDir;
 			num_LogPollingRate.Value = prefs.LogPollingRate;
 			num_LogMaxLineCount.Value = prefs.LogMaxLineCount;
 			chk_OutputLogToFile.Checked = prefs.OutputLogToFile;
@@ -92,6 +96,7 @@ namespace ZeroMunge
 			FormTooltips.SetToolTip(chk_AutoDetectMungedFiles, Tooltips.Settings.AutoDetectMungedFiles);
 			FormTooltips.SetToolTip(chk_AutoSaveEnabled, Tooltips.Settings.AutoSaveFileList);
 			FormTooltips.SetToolTip(chk_AutoLoadEnabled, Tooltips.Settings.AutoLoadLastSaveFile);
+			FormTooltips.SetToolTip(chk_ShowMungeOutputDir, Tooltips.Settings.ShowMungeDirectoryField);
 			FormTooltips.SetToolTip(lbl_LogPollingRate, string.Format(Tooltips.Settings.LogPollingRate + "{0}{1}{2}{3}", maxValueMsg, PREFS_POLLING_RATE_MIN, maxValueSeparator, PREFS_POLLING_RATE_MAX.ToString()));
 			FormTooltips.SetToolTip(num_LogPollingRate, string.Format(Tooltips.Settings.LogPollingRate + "{0}{1}{2}{3}", maxValueMsg, PREFS_POLLING_RATE_MIN, maxValueSeparator, PREFS_POLLING_RATE_MAX.ToString()));
 			FormTooltips.SetToolTip(lbl_LogMaxLineCount, string.Format(Tooltips.Settings.LogMaxLineCount + "{0}{1}{2}{3}", maxValueMsg, PREFS_MAX_LINE_COUNT_MIN, maxValueSeparator, PREFS_MAX_LINE_COUNT_MAX.ToString()));
@@ -219,6 +224,11 @@ namespace ZeroMunge
 		private void chk_AutoLoadEnabled_CheckedChanged(object sender, EventArgs e)
 		{
 			prefs.AutoLoadEnabled = chk_AutoLoadEnabled.Checked;
+		}
+
+		private void chk_ShowMungeOutputDir_CheckedChanged(object sender, EventArgs e)
+		{
+			prefs.ShowMungeOutputDir = chk_ShowMungeOutputDir.Checked;
 		}
 
 		private void chk_CheckForUpdatesOnStartup_CheckedChanged(object sender, EventArgs e)

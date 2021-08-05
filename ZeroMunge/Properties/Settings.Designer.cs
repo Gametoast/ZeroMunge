@@ -405,5 +405,17 @@ namespace ZeroMunge.Properties {
                 this["FTPDest"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowMungeOutputDir {
+            get {
+                return ((bool)(this["ShowMungeOutputDir"]));
+            }
+            set {
+                this["ShowMungeOutputDir"] = value;
+            }
+        }
     }
 }
