@@ -238,7 +238,7 @@ namespace ZeroMunge
 
 			if (dlg.ShowDialog() == DialogResult.OK)
 			{
-				string ftpFileContants = GenerateFtpCommandsForCurtrentState();
+				string ftpFileContants = GenerateFtpCommandsForCurrentState();
 				string ftpCommandFilename = dlg.FileName.Replace(".bat", ".ftp_commands.txt");
 				DirectoryInfo srcFolder = new DirectoryInfo(txt_sourceFolder.Text);
 				string batchFileContents =
@@ -271,7 +271,7 @@ namespace ZeroMunge
 			}
 		}
 
-		private string GenerateFtpCommandsForCurtrentState()
+		private string GenerateFtpCommandsForCurrentState()
 		{
 			StringBuilder builder = new StringBuilder();
 			string user = txt_userName.Text;
