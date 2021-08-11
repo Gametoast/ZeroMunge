@@ -490,7 +490,7 @@
 			this.chk_ShowTrayIcon.Location = new System.Drawing.Point(4, 5);
 			this.chk_ShowTrayIcon.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.chk_ShowTrayIcon.Name = "chk_ShowTrayIcon";
-			this.chk_ShowTrayIcon.Size = new System.Drawing.Size(265, 24);
+			this.chk_ShowTrayIcon.Size = new System.Drawing.Size(258, 24);
 			this.chk_ShowTrayIcon.TabIndex = 0;
 			this.chk_ShowTrayIcon.Text = "Show Tray Icon (requires restart)";
 			this.chk_ShowTrayIcon.UseVisualStyleBackColor = true;
@@ -504,7 +504,7 @@
 			this.chk_ShowNotificationPopups.Location = new System.Drawing.Point(4, 38);
 			this.chk_ShowNotificationPopups.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.chk_ShowNotificationPopups.Name = "chk_ShowNotificationPopups";
-			this.chk_ShowNotificationPopups.Size = new System.Drawing.Size(216, 24);
+			this.chk_ShowNotificationPopups.Size = new System.Drawing.Size(209, 24);
 			this.chk_ShowNotificationPopups.TabIndex = 1;
 			this.chk_ShowNotificationPopups.Text = "Show Notification Popups";
 			this.chk_ShowNotificationPopups.UseVisualStyleBackColor = true;
@@ -518,7 +518,7 @@
 			this.chk_PlayNotificationSounds.Location = new System.Drawing.Point(278, 5);
 			this.chk_PlayNotificationSounds.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.chk_PlayNotificationSounds.Name = "chk_PlayNotificationSounds";
-			this.chk_PlayNotificationSounds.Size = new System.Drawing.Size(206, 24);
+			this.chk_PlayNotificationSounds.Size = new System.Drawing.Size(199, 24);
 			this.chk_PlayNotificationSounds.TabIndex = 2;
 			this.chk_PlayNotificationSounds.Text = "Play Notification Sounds";
 			this.chk_PlayNotificationSounds.UseVisualStyleBackColor = true;
@@ -562,7 +562,7 @@
 			this.chk_AutoDetectStagingDir.Location = new System.Drawing.Point(4, 5);
 			this.chk_AutoDetectStagingDir.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.chk_AutoDetectStagingDir.Name = "chk_AutoDetectStagingDir";
-			this.chk_AutoDetectStagingDir.Size = new System.Drawing.Size(248, 24);
+			this.chk_AutoDetectStagingDir.Size = new System.Drawing.Size(241, 24);
 			this.chk_AutoDetectStagingDir.TabIndex = 3;
 			this.chk_AutoDetectStagingDir.Text = "Auto-Detect Staging Directory";
 			this.chk_AutoDetectStagingDir.UseVisualStyleBackColor = true;
@@ -576,7 +576,7 @@
 			this.chk_AutoDetectMungedFiles.Location = new System.Drawing.Point(4, 39);
 			this.chk_AutoDetectMungedFiles.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.chk_AutoDetectMungedFiles.Name = "chk_AutoDetectMungedFiles";
-			this.chk_AutoDetectMungedFiles.Size = new System.Drawing.Size(221, 24);
+			this.chk_AutoDetectMungedFiles.Size = new System.Drawing.Size(214, 24);
 			this.chk_AutoDetectMungedFiles.TabIndex = 4;
 			this.chk_AutoDetectMungedFiles.Text = "Auto-Detect Munged Files";
 			this.chk_AutoDetectMungedFiles.UseVisualStyleBackColor = true;
@@ -590,7 +590,7 @@
 			this.chk_AutoSaveEnabled.Location = new System.Drawing.Point(4, 73);
 			this.chk_AutoSaveEnabled.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.chk_AutoSaveEnabled.Name = "chk_AutoSaveEnabled";
-			this.chk_AutoSaveEnabled.Size = new System.Drawing.Size(168, 24);
+			this.chk_AutoSaveEnabled.Size = new System.Drawing.Size(161, 24);
 			this.chk_AutoSaveEnabled.TabIndex = 5;
 			this.chk_AutoSaveEnabled.Text = "Auto-Save File List";
 			this.chk_AutoSaveEnabled.UseVisualStyleBackColor = true;
@@ -604,7 +604,7 @@
 			this.chk_AutoLoadEnabled.Location = new System.Drawing.Point(4, 107);
 			this.chk_AutoLoadEnabled.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.chk_AutoLoadEnabled.Name = "chk_AutoLoadEnabled";
-			this.chk_AutoLoadEnabled.Size = new System.Drawing.Size(214, 24);
+			this.chk_AutoLoadEnabled.Size = new System.Drawing.Size(207, 24);
 			this.chk_AutoLoadEnabled.TabIndex = 6;
 			this.chk_AutoLoadEnabled.Text = "Auto-Load Last Save File";
 			this.chk_AutoLoadEnabled.UseVisualStyleBackColor = true;
@@ -616,7 +616,7 @@
 			this.chk_ShowMungeOutputDir.Location = new System.Drawing.Point(4, 141);
 			this.chk_ShowMungeOutputDir.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.chk_ShowMungeOutputDir.Name = "chk_ShowMungeOutputDir";
-			this.chk_ShowMungeOutputDir.Size = new System.Drawing.Size(233, 24);
+			this.chk_ShowMungeOutputDir.Size = new System.Drawing.Size(226, 24);
 			this.chk_ShowMungeOutputDir.TabIndex = 7;
 			this.chk_ShowMungeOutputDir.Text = "Show Munge Directory Field";
 			this.chk_ShowMungeOutputDir.UseVisualStyleBackColor = true;
@@ -740,7 +740,7 @@
 			this.chk_OutputLogToFile.Location = new System.Drawing.Point(4, 87);
 			this.chk_OutputLogToFile.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.chk_OutputLogToFile.Name = "chk_OutputLogToFile";
-			this.chk_OutputLogToFile.Size = new System.Drawing.Size(135, 24);
+			this.chk_OutputLogToFile.Size = new System.Drawing.Size(128, 24);
 			this.chk_OutputLogToFile.TabIndex = 9;
 			this.chk_OutputLogToFile.Text = "Output To File";
 			this.chk_OutputLogToFile.UseVisualStyleBackColor = true;
@@ -754,7 +754,7 @@
 			this.chk_LogPrintTimestamps.Location = new System.Drawing.Point(4, 121);
 			this.chk_LogPrintTimestamps.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.chk_LogPrintTimestamps.Name = "chk_LogPrintTimestamps";
-			this.chk_LogPrintTimestamps.Size = new System.Drawing.Size(157, 24);
+			this.chk_LogPrintTimestamps.Size = new System.Drawing.Size(150, 24);
 			this.chk_LogPrintTimestamps.TabIndex = 10;
 			this.chk_LogPrintTimestamps.Text = "Print Timestamps";
 			this.chk_LogPrintTimestamps.UseVisualStyleBackColor = true;
@@ -795,7 +795,7 @@
 			this.chk_CheckForUpdatesOnStartup.Location = new System.Drawing.Point(4, 5);
 			this.chk_CheckForUpdatesOnStartup.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.chk_CheckForUpdatesOnStartup.Name = "chk_CheckForUpdatesOnStartup";
-			this.chk_CheckForUpdatesOnStartup.Size = new System.Drawing.Size(255, 24);
+			this.chk_CheckForUpdatesOnStartup.Size = new System.Drawing.Size(248, 24);
 			this.chk_CheckForUpdatesOnStartup.TabIndex = 11;
 			this.chk_CheckForUpdatesOnStartup.Text = "Check For Updates On Startup";
 			this.chk_CheckForUpdatesOnStartup.UseVisualStyleBackColor = true;
@@ -809,7 +809,7 @@
 			this.chk_ShowUpdatePromptOnStartup.Location = new System.Drawing.Point(4, 39);
 			this.chk_ShowUpdatePromptOnStartup.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.chk_ShowUpdatePromptOnStartup.Name = "chk_ShowUpdatePromptOnStartup";
-			this.chk_ShowUpdatePromptOnStartup.Size = new System.Drawing.Size(269, 24);
+			this.chk_ShowUpdatePromptOnStartup.Size = new System.Drawing.Size(262, 24);
 			this.chk_ShowUpdatePromptOnStartup.TabIndex = 12;
 			this.chk_ShowUpdatePromptOnStartup.Text = "Show Update Prompt On Startup";
 			this.chk_ShowUpdatePromptOnStartup.UseVisualStyleBackColor = true;
@@ -838,7 +838,7 @@
 			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Preferences";
+			this.Text = "Preferences (Ctrl+S or \'OK\' to save)";
 			this.Load += new System.EventHandler(this.Preferences_Load);
 			this.cont_Prefs.ResumeLayout(false);
 			this.groupBox1.ResumeLayout(false);

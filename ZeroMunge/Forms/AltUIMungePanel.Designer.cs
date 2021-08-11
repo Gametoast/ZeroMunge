@@ -96,7 +96,7 @@
 			this.btn_xbox.Location = new System.Drawing.Point(153, 29);
 			this.btn_xbox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.btn_xbox.Name = "btn_xbox";
-			this.btn_xbox.Size = new System.Drawing.Size(79, 24);
+			this.btn_xbox.Size = new System.Drawing.Size(72, 24);
 			this.btn_xbox.TabIndex = 2;
 			this.btn_xbox.Text = "XBOX";
 			this.btn_xbox.UseVisualStyleBackColor = true;
@@ -108,7 +108,7 @@
 			this.btn_ps2.Location = new System.Drawing.Point(76, 29);
 			this.btn_ps2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.btn_ps2.Name = "btn_ps2";
-			this.btn_ps2.Size = new System.Drawing.Size(64, 24);
+			this.btn_ps2.Size = new System.Drawing.Size(57, 24);
 			this.btn_ps2.TabIndex = 1;
 			this.btn_ps2.Text = "PS2";
 			this.btn_ps2.UseVisualStyleBackColor = true;
@@ -121,7 +121,7 @@
 			this.btn_pc.Location = new System.Drawing.Point(9, 29);
 			this.btn_pc.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.btn_pc.Name = "btn_pc";
-			this.btn_pc.Size = new System.Drawing.Size(55, 24);
+			this.btn_pc.Size = new System.Drawing.Size(48, 24);
 			this.btn_pc.TabIndex = 0;
 			this.btn_pc.TabStop = true;
 			this.btn_pc.Text = "PC";
@@ -208,7 +208,7 @@
 			this.check_addme.Location = new System.Drawing.Point(111, 129);
 			this.check_addme.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.check_addme.Name = "check_addme";
-			this.check_addme.Size = new System.Drawing.Size(86, 24);
+			this.check_addme.Size = new System.Drawing.Size(79, 24);
 			this.check_addme.TabIndex = 19;
 			this.check_addme.Text = "Addme";
 			this.check_addme.UseVisualStyleBackColor = true;
@@ -222,7 +222,7 @@
 			this.check_missions.Location = new System.Drawing.Point(9, 98);
 			this.check_missions.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.check_missions.Name = "check_missions";
-			this.check_missions.Size = new System.Drawing.Size(96, 24);
+			this.check_missions.Size = new System.Drawing.Size(89, 24);
 			this.check_missions.TabIndex = 17;
 			this.check_missions.Text = "Missions";
 			this.check_missions.UseVisualStyleBackColor = true;
@@ -235,7 +235,7 @@
 			this.check_common.Location = new System.Drawing.Point(111, 98);
 			this.check_common.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.check_common.Name = "check_common";
-			this.check_common.Size = new System.Drawing.Size(99, 24);
+			this.check_common.Size = new System.Drawing.Size(92, 24);
 			this.check_common.TabIndex = 16;
 			this.check_common.Text = "Common";
 			this.check_common.UseVisualStyleBackColor = true;
@@ -246,7 +246,7 @@
 			this.check_movies.Location = new System.Drawing.Point(111, 68);
 			this.check_movies.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.check_movies.Name = "check_movies";
-			this.check_movies.Size = new System.Drawing.Size(84, 24);
+			this.check_movies.Size = new System.Drawing.Size(77, 24);
 			this.check_movies.TabIndex = 15;
 			this.check_movies.Text = "Movies";
 			this.check_movies.UseVisualStyleBackColor = true;
@@ -257,7 +257,7 @@
 			this.check_load.Location = new System.Drawing.Point(111, 32);
 			this.check_load.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.check_load.Name = "check_load";
-			this.check_load.Size = new System.Drawing.Size(71, 24);
+			this.check_load.Size = new System.Drawing.Size(64, 24);
 			this.check_load.TabIndex = 14;
 			this.check_load.Text = "Load";
 			this.check_load.UseVisualStyleBackColor = true;
@@ -268,7 +268,7 @@
 			this.check_sound.Location = new System.Drawing.Point(9, 68);
 			this.check_sound.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.check_sound.Name = "check_sound";
-			this.check_sound.Size = new System.Drawing.Size(82, 24);
+			this.check_sound.Size = new System.Drawing.Size(75, 24);
 			this.check_sound.TabIndex = 13;
 			this.check_sound.Text = "Sound";
 			this.check_sound.UseVisualStyleBackColor = true;
@@ -279,7 +279,7 @@
 			this.check_shell.Location = new System.Drawing.Point(9, 32);
 			this.check_shell.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.check_shell.Name = "check_shell";
-			this.check_shell.Size = new System.Drawing.Size(70, 24);
+			this.check_shell.Size = new System.Drawing.Size(63, 24);
 			this.check_shell.TabIndex = 12;
 			this.check_shell.Text = "Shell";
 			this.check_shell.UseVisualStyleBackColor = true;
@@ -329,13 +329,13 @@
 			this.cxt_menu_copyDest.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openCopyDestInExplorerToolStripMenuItem});
 			this.cxt_menu_copyDest.Name = "cxt_menu_copyDest";
-			this.cxt_menu_copyDest.Size = new System.Drawing.Size(313, 36);
+			this.cxt_menu_copyDest.Size = new System.Drawing.Size(228, 34);
 			// 
 			// openCopyDestInExplorerToolStripMenuItem
 			// 
 			this.openCopyDestInExplorerToolStripMenuItem.Image = global::ZeroMunge.Properties.Resources.FolderOpen1;
 			this.openCopyDestInExplorerToolStripMenuItem.Name = "openCopyDestInExplorerToolStripMenuItem";
-			this.openCopyDestInExplorerToolStripMenuItem.Size = new System.Drawing.Size(312, 32);
+			this.openCopyDestInExplorerToolStripMenuItem.Size = new System.Drawing.Size(227, 30);
 			this.openCopyDestInExplorerToolStripMenuItem.Text = "Open Copy Dest in Explorer";
 			this.openCopyDestInExplorerToolStripMenuItem.Click += new System.EventHandler(this.openCopyDestInExplorerToolStripMenuItem_Click);
 			// 
@@ -361,13 +361,13 @@
 			this.cxt_menu_mungeFolder.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openInExplorerToolStripMenuItem});
 			this.cxt_menu_mungeFolder.Name = "cxt_menu_mungeFolder";
-			this.cxt_menu_mungeFolder.Size = new System.Drawing.Size(225, 36);
+			this.cxt_menu_mungeFolder.Size = new System.Drawing.Size(171, 34);
 			// 
 			// openInExplorerToolStripMenuItem
 			// 
 			this.openInExplorerToolStripMenuItem.Image = global::ZeroMunge.Properties.Resources.FolderOpen1;
 			this.openInExplorerToolStripMenuItem.Name = "openInExplorerToolStripMenuItem";
-			this.openInExplorerToolStripMenuItem.Size = new System.Drawing.Size(224, 32);
+			this.openInExplorerToolStripMenuItem.Size = new System.Drawing.Size(170, 30);
 			this.openInExplorerToolStripMenuItem.Text = "Open in Explorer";
 			this.openInExplorerToolStripMenuItem.Click += new System.EventHandler(this.openInExplorerToolStripMenuItem_Click);
 			// 
@@ -377,7 +377,7 @@
 			this.check_useOverrideCommand.Location = new System.Drawing.Point(8, 29);
 			this.check_useOverrideCommand.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.check_useOverrideCommand.Name = "check_useOverrideCommand";
-			this.check_useOverrideCommand.Size = new System.Drawing.Size(94, 24);
+			this.check_useOverrideCommand.Size = new System.Drawing.Size(87, 24);
 			this.check_useOverrideCommand.TabIndex = 15;
 			this.check_useOverrideCommand.Text = "Override";
 			this.check_useOverrideCommand.UseVisualStyleBackColor = true;
@@ -400,20 +400,20 @@
 			this.cxt_menu_overrideCommand.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openInEditorToolStripMenuItem});
 			this.cxt_menu_overrideCommand.Name = "cxt_menu_overrideCommand";
-			this.cxt_menu_overrideCommand.Size = new System.Drawing.Size(208, 36);
+			this.cxt_menu_overrideCommand.Size = new System.Drawing.Size(159, 34);
 			// 
 			// openInEditorToolStripMenuItem
 			// 
 			this.openInEditorToolStripMenuItem.Image = global::ZeroMunge.Properties.Resources.TextEditorIcon;
 			this.openInEditorToolStripMenuItem.Name = "openInEditorToolStripMenuItem";
-			this.openInEditorToolStripMenuItem.Size = new System.Drawing.Size(207, 32);
+			this.openInEditorToolStripMenuItem.Size = new System.Drawing.Size(158, 30);
 			this.openInEditorToolStripMenuItem.Text = "Open in Editor";
 			this.openInEditorToolStripMenuItem.Click += new System.EventHandler(this.openInEditorToolStripMenuItem_Click);
 			// 
 			// btn_copy
 			// 
 			this.btn_copy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_copy.Location = new System.Drawing.Point(852, 84);
+			this.btn_copy.Location = new System.Drawing.Point(852, 81);
 			this.btn_copy.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.btn_copy.Name = "btn_copy";
 			this.btn_copy.Size = new System.Drawing.Size(112, 35);
@@ -425,13 +425,12 @@
 			// check_copyIfNewer
 			// 
 			this.check_copyIfNewer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.check_copyIfNewer.AutoSize = true;
 			this.check_copyIfNewer.Checked = true;
 			this.check_copyIfNewer.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.check_copyIfNewer.Location = new System.Drawing.Point(712, 97);
+			this.check_copyIfNewer.Location = new System.Drawing.Point(681, 89);
 			this.check_copyIfNewer.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.check_copyIfNewer.Name = "check_copyIfNewer";
-			this.check_copyIfNewer.Size = new System.Drawing.Size(132, 24);
+			this.check_copyIfNewer.Size = new System.Drawing.Size(160, 24);
 			this.check_copyIfNewer.TabIndex = 20;
 			this.check_copyIfNewer.Text = "Copy if Newer";
 			this.check_copyIfNewer.UseVisualStyleBackColor = true;
@@ -466,13 +465,12 @@
 			// check_autoCopy
 			// 
 			this.check_autoCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.check_autoCopy.AutoSize = true;
 			this.check_autoCopy.Checked = true;
 			this.check_autoCopy.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.check_autoCopy.Location = new System.Drawing.Point(613, 135);
+			this.check_autoCopy.Location = new System.Drawing.Point(681, 114);
 			this.check_autoCopy.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.check_autoCopy.Name = "check_autoCopy";
-			this.check_autoCopy.Size = new System.Drawing.Size(228, 24);
+			this.check_autoCopy.Size = new System.Drawing.Size(160, 59);
 			this.check_autoCopy.TabIndex = 21;
 			this.check_autoCopy.Text = "Copy after Munge (PC only)";
 			this.check_autoCopy.UseVisualStyleBackColor = true;
@@ -481,10 +479,11 @@
 			// btn_generateFTPScript
 			// 
 			this.btn_generateFTPScript.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_generateFTPScript.Location = new System.Drawing.Point(852, 124);
+			this.btn_generateFTPScript.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.btn_generateFTPScript.Location = new System.Drawing.Point(852, 121);
 			this.btn_generateFTPScript.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.btn_generateFTPScript.Name = "btn_generateFTPScript";
-			this.btn_generateFTPScript.Size = new System.Drawing.Size(112, 49);
+			this.btn_generateFTPScript.Size = new System.Drawing.Size(112, 52);
 			this.btn_generateFTPScript.TabIndex = 22;
 			this.btn_generateFTPScript.Text = "Make FTP Script";
 			this.btn_generateFTPScript.UseVisualStyleBackColor = true;
@@ -525,7 +524,6 @@
 			this.group_mungeFolder.ResumeLayout(false);
 			this.group_mungeFolder.PerformLayout();
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
         }
 
