@@ -12,7 +12,7 @@ namespace ZeroMunge.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.8.1.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.10.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -97,7 +97,7 @@ namespace ZeroMunge.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("08/05/2021 13:07:00")]
+        [global::System.Configuration.DefaultSettingValueAttribute("08/11/2021 19:01:00")]
         public global::System.DateTime Info_BuildDate {
             get {
                 return ((global::System.DateTime)(this["Info_BuildDate"]));
@@ -106,7 +106,7 @@ namespace ZeroMunge.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("345")]
+        [global::System.Configuration.DefaultSettingValueAttribute("346")]
         public int Info_BuildNum {
             get {
                 return ((int)(this["Info_BuildNum"]));
@@ -234,7 +234,7 @@ namespace ZeroMunge.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1.2.0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.2.1")]
         public string Info_Version {
             get {
                 return ((string)(this["Info_Version"]));

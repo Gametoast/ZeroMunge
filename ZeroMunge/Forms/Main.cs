@@ -1220,6 +1220,7 @@ namespace ZeroMunge
 			bool prevShowMungeOutputDirState = prefs.ShowMungeOutputDir;
 
 			Preferences prefsForm = new Preferences();
+			prefsForm.Logger = this;
 			prefsForm.StartPosition = FormStartPosition.CenterParent;
 			if (prefsForm.ShowDialog(this) == DialogResult.OK)
 			{

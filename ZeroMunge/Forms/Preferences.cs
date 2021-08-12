@@ -20,6 +20,8 @@ namespace ZeroMunge
 		public const int PREFS_MAX_LINE_COUNT_MAX = 2000;
 		public const int PREFS_MAX_LINE_COUNT_INC = 10;
 
+		internal Logger Logger { get; set; }
+
 		/// <summary>
 		/// Message to caller indicating what was set
 		/// </summary>
@@ -29,6 +31,15 @@ namespace ZeroMunge
 		public Preferences()
 		{
 			InitializeComponent();
+		}
+
+		protected override void OnKeyDown(KeyEventArgs e)
+		{
+			base.OnKeyDown(e);
+			if( e.KeyCode == Keys.S && e.Control)
+			{
+				SavePrefs();
+			}
 		}
 
 		public Prefs prefs = new Prefs();
@@ -144,6 +155,10 @@ namespace ZeroMunge
 			prefs.PSPGameLocation = txt_pspGameFolder.Text;
 
 			Utilities.SavePrefs(prefs);
+			if(Logger != null)
+			{
+				Logger.Log("Preferences Saved.", LogType.Info);
+			}
 		}
 
 		/// <summary>
